@@ -311,6 +311,7 @@ function ShowReactionsx({
               textAlign: "left",
               marginTop: "5px",
               fontSize: "1.7vh",
+
             }}
           >
             <img
@@ -344,11 +345,12 @@ function ShowReactionsx({
               style={{
                 cursor: "pointer",
                 paddingLeft: "15px",
+                padding: '5px',
                 display: "block",
                 marginTop: "2px",
-                fontWeight: "normal",
                 fontFamily: "Arial, Helvetica, sans-seri",
                 color: darkmodeReducer ? "#ffffff" : "#000000",
+                fontWeight: 'bold',
               }}
             >
               {post.username}

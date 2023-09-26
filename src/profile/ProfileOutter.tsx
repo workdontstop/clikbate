@@ -6,6 +6,7 @@ import { Billboard } from "./Billboard";
 import "./profile.css";
 import { Connect } from "./Connect";
 import { Profile } from "./Profile";
+import { ActualMenu } from "./ActualMenu";
 import Axios from "axios";
 import { CommentTemplate } from "../CommentTemplate";
 import { Upload } from "../upload/Upload";
@@ -22,8 +23,12 @@ import { ServerError } from "../log/ServerError";
 import { UserInfoUpdateMEMBERDATA } from "../log/actions/UserdataAction";
 import { UserInfoUpdateMEMBER } from "../log/actions/UserdataAction";
 import { Loader } from "./Loader";
-import { UpdateLoader } from ".././GlobalActions";
+import { UpdateLoader, UpdateMenuData } from ".././GlobalActions";
 import { Taskbar } from "./Taskbar";
+import { UpdateInteract } from ".././GlobalActions";
+
+
+
 
 import {
   Paper,
@@ -51,6 +56,8 @@ function ProfileOutter() {
 
   const dispatch = useDispatch();
 
+
+
   const [postData, setPostData] = useState<Array<any>>([]);
   const [postDatainner, setpostDatainner] = useState<Array<any>>([[]]);
   const [postDatainnerThumb, setpostDatainnerThumb] = useState<Array<any>>([
@@ -63,6 +70,7 @@ function ProfileOutter() {
 
   const [formtype] = useState<number>(1);
   const [showModalForm, setShowModalForm] = useState<boolean>(false);
+  const [showModalFormMenu, setShowModalFormMenu] = useState<boolean>(false);
 
   const [DiscussionImage, setDiscussionImage] = useState<Array<any>>([]);
 
@@ -196,6 +204,10 @@ function ProfileOutter() {
     }
   };
 
+
+
+
+
   useEffect(() => {
     ChangeProfile();
   }, [MemberProfileData, colorReducer, imageThumb, image, memeberPageid]);
@@ -230,40 +242,55 @@ function ProfileOutter() {
 
   useEffect(() => {
     setminiProfile(false);
-    if (memeberPageidReducer === 0) {
-      dispatch(UserInfoUpdateMEMBERDATA([]));
-      setallowCallMemberFeeds(true);
-    } else {
-      if (allowCallMemberFeeds) {
-        var valax = {
+
+    if (allowCallMemberFeeds) {
+
+
+      var valax = {
+        id: memeberPageidReducer,
+        id2: idReducer,
+      };
+
+      if (memeberPageidReducer === 0) {
+        dispatch(UserInfoUpdateMEMBERDATA([]));
+        valax = {
+          id: idReducer,
+          id2: idReducer,
+        };
+      } else {
+        valax = {
           id: memeberPageidReducer,
           id2: idReducer,
         };
-
-        Axios.post(`${REACT_APP_SUPERSTARZ_URL}/checkIsLoggedxx`, {
-          values: valax,
-        })
-          .then((response) => {
-            if (response.data.message === "logged in") {
-              dispatch(UserInfoUpdateMEMBERDATA(response.data.payload));
-              setshowProfiileData(false);
-              setScrollTo(0);
-              setShowLoader2(false);
-              callfeeds(response.data.payload.id);
-            } else if (response.data.message === "logged out") {
-              alert("app.tsx checkislogged logged out");
-            }
-          })
-          .catch(function (error) {
-            ///console.log("app.tsx checkislogged error");
-          });
-        ///console.log(MemberProfileData.[0]);
-      } else {
-        setallowCallMemberFeeds(true);
-        // alert("t");
       }
-    }
-  }, [REACT_APP_SUPERSTARZ_URL, dispatch, memeberPageidReducer]);
+
+
+
+
+      Axios.post(`${REACT_APP_SUPERSTARZ_URL}/checkIsLoggedxx`, {
+        values: valax,
+      })
+        .then((response) => {
+          if (response.data.message === "logged in") {
+
+            dispatch(UserInfoUpdateMEMBERDATA(response.data.payload));
+            setshowProfiileData(false);
+            setScrollTo(0);
+            setShowLoader2(false);
+            if (memeberPageidReducer === 0) {
+              callfeeds(0);
+            } else { callfeeds(response.data.payload.id); }
+
+          } else if (response.data.message === "logged out") {
+            alert("app.tsx checkislogged logged out");
+          }
+        })
+        .catch(function (error) {
+          ///console.log("app.tsx checkislogged error");
+        });
+      ///console.log(MemberProfileData.[0]);
+    } else { setallowCallMemberFeeds(true); }
+  }, [REACT_APP_SUPERSTARZ_URL, dispatch, memeberPageidReducer, allowCallMemberFeeds]);
 
   ///
   ///
@@ -415,7 +442,7 @@ function ProfileOutter() {
 
     setTimeout(() => {
       setx(true);
-    }, 50);
+    }, 500);
   }, []);
 
   /// CALL THIS ON NAVIGATE FROM COMMENTS TO USER PAGE -- CLOSES COMMENT WITHOUT CALLING HISTORY
@@ -647,6 +674,11 @@ function ProfileOutter() {
       }
     } else {
     }
+
+
+
+
+
   };
 
   const callpopstatewithoutdata = (
@@ -730,6 +762,12 @@ function ProfileOutter() {
     }
   };
 
+
+
+
+
+  ///
+
   ///
   ///
   ///
@@ -741,6 +779,8 @@ function ProfileOutter() {
       screenHeight: number;
       activateLoader: boolean;
       historyscroll: number;
+      interactContent: any;
+      interact: boolean;
     };
   }
 
@@ -748,7 +788,7 @@ function ProfileOutter() {
   ///
   ///
   /// GET SCREENHEIGHT FROM REDUX STORE
-  const { screenHeight, darkmode, snapStart, activateLoader, historyscroll } =
+  const { screenHeight, darkmode, snapStart, activateLoader, historyscroll, interactContent, interact } =
     useSelector((state: RootStateGlobalReducer) => ({
       ...state.GlobalReducer,
     }));
@@ -757,6 +797,13 @@ function ProfileOutter() {
   const snapStartReducer = snapStart;
   const activateLoaderReducer = activateLoader;
   const historyscrollReducer = historyscroll;
+  const interactContentReducer: any = interactContent;
+  const interactReducer = interact;
+
+
+
+
+
 
   ///
   ///
@@ -873,6 +920,14 @@ function ProfileOutter() {
         tt = "feeds_chronological";
       } else {
         tt = "profile";
+
+        ////alert('kkk');
+
+        ////POST LOAD CONTROL POINT
+
+        setTimeout(() => {
+          paperPostScrollRef.current.scrollTop = 0;
+        }, 1000);
       }
 
       Axios.post(
@@ -899,10 +954,46 @@ function ProfileOutter() {
     [idReducer, REACT_APP_SUPERSTARZ_URL, memeberPageidReducer]
   );
 
+
+
   ///
   ///
   ///
   useEffect(() => {
+    var data = '';
+
+    dispatch(UpdateMenuData(data));
+
+    if (memeberPageidReducer === 0) {
+
+      data = 'Feeds'
+
+
+    } else if (memeberPageidReducer === idReducer) {
+      data = 'Profile'
+    }
+    else {
+
+      data = MemberProfileDataReducer.username
+
+
+    }
+
+
+    setTimeout(() => { dispatch(UpdateMenuData(data)); }, 6000)
+
+
+
+  }, [memeberPageidReducer, MemberProfileDataReducer, idReducer]);
+
+
+
+
+  ///
+  ///
+  ///
+  useEffect(() => {
+    /// alert(idReducer);
     if (idReducer === 0) {
     } else {
       setTimeout(() => {
@@ -910,6 +1001,8 @@ function ProfileOutter() {
       }, 600);
     }
   }, [REACT_APP_SUPERSTARZ_URL, idReducer]);
+
+
 
   const breakPoints = {
     default: 2,
@@ -1289,8 +1382,8 @@ function ProfileOutter() {
               scrollSnapType: snapStartReducer
                 ? x
                   ? matchPc
-                    ? "none"
-                    : "none"
+                    ? "y mandatory  "
+                    : "y mandatory  "
                   : ""
                 : "",
               backgroundImage: PaperStyleReducer,
@@ -1817,6 +1910,8 @@ function ProfileOutter() {
 
 
                 <Menu
+                  setShowModalFormMenu={setShowModalFormMenu}
+                  postData={postData}
                   selectedImage={selectedImage}
                   setselectedImage={setselectedImage}
                   x={x}
@@ -1835,6 +1930,28 @@ function ProfileOutter() {
                 />
 
               </Grid>
+
+
+              <Grid
+                item
+                style={{
+                  height: "0px",
+                  zIndex: 5000,
+                  position: 'fixed',
+                  top: '0vh'
+                }}
+              >
+
+
+                <ActualMenu
+                  setsuperSettings={setsuperSettings}
+                  postData={postData}
+                  showModalFormMenu={showModalFormMenu}
+                  setshowModalFormMenu={setShowModalFormMenu} />
+
+              </Grid>
+
+
 
 
             </MuiThemeProvider>

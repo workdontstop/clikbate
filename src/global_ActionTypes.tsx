@@ -41,3 +41,7 @@ export const UPDATE_HIREACTION_TYPE = "UPDATE_HIREACTION_TYPE";
 
 export const CHANGE_UPLOAD_DATA = "CHANGE_UPLOAD_DATA";
 
+export const UPDATE_INTERACT = "UPDATE_INTERACT";
+
+export const UPDATE_MenuData = "UPDATE_MenuData";
+

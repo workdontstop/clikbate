@@ -87,7 +87,7 @@ function Profilex({
   );
 
 
-
+  const [ActiveCanvas, setActiveCanvas] = useState(0);
 
   const [itemOriginalPostHeight, setitemOriginalPostHeight] = useState<
     Array<number>
@@ -104,6 +104,8 @@ function Profilex({
   const [postbackheight] = useState<number>(postbackheighthold);
 
   const scrollTypeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+
 
   ///
   ///
@@ -371,7 +373,7 @@ function Profilex({
                 }
 
                 ///////////
-              }, 700);
+              }, 1000);
 
 
 
@@ -463,6 +465,9 @@ function Profilex({
   };
 
   const onPostsItemClicked = (index: number) => {
+
+
+    setActiveCanvas(index);
 
     if (itemCLICKED[index]) {
       const newclickArray = [...itemCLICKED];
@@ -646,6 +651,7 @@ function Profilex({
             paddingLeft: miniProfile ? (matchPc ? "10.5vw" : "3vw") : "0vw",
             paddingRight: miniProfile ? (matchPc ? "10.5vw" : "3vw") : "0vw",
             height: "auto",
+            marginTop: '5.5vh'
           }}
         >
           {postData.length > 0 ? (
@@ -716,6 +722,7 @@ function Profilex({
                   </div>
                   <div style={{ display: miniProfile ? "none" : "block", }}>
                     <Post
+                      ActiveCanvas={ActiveCanvas}
                       postItemsRef={postItemsRef}
                       postDatainnerInteraction2={postDatainnerInteraction2}
                       postDatainnerInteraction1={postDatainnerInteraction1}

@@ -93,8 +93,8 @@ function MiniPostx({
     transform: opacityController
       ? `translateY(0%)`
       : StopSpring
-      ? `translateY(0%)`
-      : `translateY(150%)`,
+        ? `translateY(0%)`
+        : `translateY(150%)`,
   });
 
   ///
@@ -193,8 +193,8 @@ function MiniPostx({
       ? "12%"
       : "12.5%"
     : matchTablet
-    ? "12.5%"
-    : "15%";
+      ? "12.5%"
+      : "15%";
 
   var optionsClass = "";
   var fontOptions = "";
@@ -210,7 +210,7 @@ function MiniPostx({
     fontOptions = "1.9rem";
   }
 
-  const calculateconnectPosition = useCallback(() => {}, []);
+  const calculateconnectPosition = useCallback(() => { }, []);
 
   return (
     <>
@@ -229,6 +229,8 @@ function MiniPostx({
         >
           {/*///////////////////////////////////////////////////////////////////////////POST DATA*/}
           <div>
+
+
             <animated.img
               onClick={() => {
                 setzoomClickedIndex(pey + 1);
@@ -240,7 +242,7 @@ function MiniPostx({
               }
               src={
                 postDatainner[pey][
-                  showIndex ? (sliderIndexMini > 400 ? 0 : sliderIndexMini) : 0
+                showIndex ? (sliderIndexMini > 400 ? 0 : sliderIndexMini) : 0
                 ]
               }
               alt="a superstarz post "

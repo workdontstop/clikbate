@@ -85,7 +85,7 @@ function Postx({
   postDatainnerInteraction2,
   itemInteractGo2,
   itemInteractGo1,
-  postItemsRef
+  postItemsRef, ActiveCanvas
 }: any) {
   const { REACT_APP_SUPERSTARZ_URL, REACT_APP_APPX_STATE } = process.env;
 
@@ -873,7 +873,9 @@ function Postx({
   const GoToMember = () => {
     if (memeberPageidReducer === post.sender) {
     } else {
+      ///
       dispatch(UserInfoUpdateMEMBER(post.sender));
+      //
       var tt = paperPostScrollRef.current.scrollTop;
 
       var n, d;
@@ -988,12 +990,15 @@ function Postx({
           {/*///////////////////////////////////////////////////////////////////////////POST DATA*/}
 
           <Slider
+
+            checkifClicked={checkifClicked}
             postItemsRef={postItemsRef}
             postDatainnerInteraction2={postDatainnerInteraction2[pey]}
             postDatainnerInteraction1={postDatainnerInteraction1[pey]}
             setsliderIndexMini={setsliderIndexMini}
             setzoomClickedIndex={setzoomClickedIndex}
             setminiProfile={setminiProfile}
+            ActiveCanvas={ActiveCanvas}
             type={0}
             ActiveAutoPlay={ActiveAutoPlay}
             setActiveAutoPlay={setActiveAutoPlay}

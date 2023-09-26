@@ -207,6 +207,7 @@ function Taskbarx({
               }}
             >
               <FilterMode
+                ratiox={ratiox}
                 closeUploadModal={uploadClose}
                 itemUploadRefThumb={itemUploadRefThumb}
                 itemUploadRefSD={itemUploadRefSD}

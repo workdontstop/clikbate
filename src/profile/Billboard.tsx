@@ -344,7 +344,7 @@ function Billboardx({
             ></Grid>
             {/*///////////////////////////////////////////////////////////////////////////BACKPAD BILLBOARD CURSOR ALIAS LAYOUT*/}
 
-            <Grid item md={12}></Grid>
+            <Grid item md={12} style={{ height: '0px', }}></Grid>
 
             {/*///////////////////////////////////////////////////////////////////////////BACKPAD BILLBOARD CONTROL DISPLAY ON DOUBLE CLICK*/}
 
@@ -492,8 +492,12 @@ function Billboardx({
               </Grid>
               {/*///////////////////////////////////////////////////////////////////////////FAVS*/}
 
+
+
+
               {/*///////////////////////////////////////////////////////////////////////////USERNAME*/}
               <Grid
+
                 item
                 xs={12}
                 style={{
@@ -503,6 +507,7 @@ function Billboardx({
                   textAlign: "right",
                   zIndex: 3,
                   height: "0px",
+
                 }}
               >
                 <span

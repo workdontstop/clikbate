@@ -18,7 +18,9 @@ import {
   HIPOSTDATA_FROMCOM,
   UPDATE_COMSCROLL,
   UPDATE_HIREACTION_TYPE,
-  CHANGE_UPLOAD_DATA
+  CHANGE_UPLOAD_DATA,
+  UPDATE_INTERACT,
+  UPDATE_MenuData
 } from "./global_ActionTypes";
 
 export function DarkmodeAction(newDarkModeData: boolean) {
@@ -154,7 +156,7 @@ export function UpdateReactType(Payload: any) {
 }
 
 
-export function UpdateUploadData(Payload: any,Payload2: any) {
+export function UpdateUploadData(Payload: any, Payload2: any) {
   return {
     type: CHANGE_UPLOAD_DATA,
     payload: Payload,
@@ -162,3 +164,20 @@ export function UpdateUploadData(Payload: any,Payload2: any) {
   };
 }
 
+
+export function UpdateInteract(Payload: String, Payload2: boolean) {
+  return {
+    type: UPDATE_INTERACT,
+    payload: Payload,
+    payload2: Payload2,
+  };
+}
+
+
+
+export function UpdateMenuData(Payload: String) {
+  return {
+    type: UPDATE_MenuData,
+    payload: Payload,
+  }
+};

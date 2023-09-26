@@ -42,7 +42,8 @@ function FilterModex({
   getSliderWidthNew,
   closeUploadModal,
   itemUploadRefThumb,
-  showAlll
+  showAlll,
+  ratiox
 }: any): JSX.Element {
   var newitemUploadRef = useRef<any>(null);
 
@@ -322,7 +323,9 @@ function FilterModex({
     if (getCropHeightRef.current && getCropHeightRef.current.clientWidth) {
       setFilterSliderHeight(getCropHeightRef.current.clientHeight);
       setFilterSliderHeight2(getCropHeightRef2.current.clientHeight);
-      setFilterSliderWidth(wi);
+      if (ratiox === 4) { setFilterSliderWidth(wi * 1.15); }
+      else if (ratiox === 5) { setFilterSliderWidth(wi * 1.3); } else { setFilterSliderWidth(wi); }
+
       setscreenWidth(getScreenWidthRef.current.clientWidth);
     }
   }, [wideimage]);
@@ -1008,6 +1011,7 @@ function FilterModex({
               }}
             >
               <Caption
+
                 interactContent={interactContentBlob}
                 setinteractContent={setinteractContentBlob}
                 interactContent2={interactContent2Blob}

@@ -78,7 +78,7 @@ function App(): JSX.Element {
   useEffect(() => {
     setTimeout(function () {
       setsuperLoad(false);
-    }, 4000);
+    }, 5000);
     document.title = "Clik Bate";
   }, []);
 

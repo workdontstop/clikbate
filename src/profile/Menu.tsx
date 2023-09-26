@@ -33,8 +33,10 @@ function Menux({
   setminiProfile,
   miniProfile,
   selectedImage,
-  setselectedImage
-
+  setselectedImage,
+  postData,
+  callfeeds,
+  setShowModalFormMenu
 }: any) {
   ///
   ///
@@ -62,19 +64,20 @@ function Menux({
 
   const menuTimer6 = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  ///
-  ///
-  ///
-  ///DARKMODE FROM REDUX
+
   interface RootStateGlobalReducer {
     GlobalReducer: {
       darkmode: boolean;
+      MenuData: String;
     };
   }
-  const { darkmode } = useSelector((state: RootStateGlobalReducer) => ({
+  const { darkmode, MenuData } = useSelector((state: RootStateGlobalReducer) => ({
     ...state.GlobalReducer,
   }));
+
   const darkmodeReducer = darkmode;
+
+  const MenuDataReducer = MenuData
 
   ///
   ///
@@ -105,8 +108,8 @@ function Menux({
       duration: 80,
     },
     opacity: shownav ? 1 : 0,
-    transform: shownav ? `translateY(-108%)` : `translateY(100%)`,
-    height: "0px",
+    transform: shownav ? `translateY(-10%)` : `translateY(-180%)`,
+
   });
 
   const jayme = useCallback(() => {
@@ -218,6 +221,8 @@ function Menux({
                     }}
                   >
                     <OptionsSlider
+                      callfeeds={callfeeds}
+                      postData={postData}
                       selectedImage={selectedImage}
                       setselectedImage={setselectedImage}
                       setsuperSettings={setsuperSettings}
@@ -260,6 +265,7 @@ function Menux({
                     <span
                       onClick={(e: any) => {
                         ////dispatch(UpdateOptionsTop(true));
+                        setShowModalFormMenu(true);
                       }}
                       className={
                         darkmodeReducer
@@ -284,7 +290,8 @@ function Menux({
                         height: "0px",
                       }}
                     >
-                      <span
+
+                      {MenuDataReducer === '' ? <>     < span
                         className={
                           darkmodeReducer
                             ? "text-superstarz-dark   text-superstarz-dark-colorA  "
@@ -296,21 +303,37 @@ function Menux({
                       >
                         Clik
                       </span>
-                      {' '}
-                      <span
-                        style={{
-                          color: darkmodeReducer ? "#ffe680" : "#ffcc00",
-                          opacity: darkmodeReducer ? "1" : "1",
+                        {' '}
+                        <span
+                          style={{
+                            color: darkmodeReducer ? "#ffe680" : "#ffcc00",
+                            opacity: darkmodeReducer ? "1" : "1",
 
-                        }}
-                        className={
-                          darkmodeReducer
-                            ? "text-superstarz-dark     text-superstarz-dark-colorB  "
-                            : "text-superstarz-light   text-superstarz-light-colorB   "
-                        }
-                      >
-                        Bate
-                      </span>
+                          }}
+                          className={
+                            darkmodeReducer
+                              ? "text-superstarz-dark     text-superstarz-dark-colorB  "
+                              : "text-superstarz-light   text-superstarz-light-colorB   "
+                          }
+                        >
+                          Bate
+                        </span></> :
+
+                        ////
+                        <span
+                          className={
+                            darkmodeReducer
+                              ? "text-superstarz-dark   text-superstarz-dark-colorA  "
+                              : "text-superstarz-light  text-superstarz-light-colorA  "
+                          }
+                          style={{
+                            color: darkmodeReducer ? "#eeeeee" : "#444444",
+                          }}
+                        >
+                          {MenuDataReducer}
+                        </span>
+                      }
+
                     </span>
                   </animated.div>
                 </Grid>{" "}
@@ -318,7 +341,8 @@ function Menux({
             </>
           )}
         </>
-      ) : null}
+      ) : null
+      }
     </>
   );
 }

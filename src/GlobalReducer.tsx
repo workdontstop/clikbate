@@ -18,7 +18,9 @@ import {
   HIPOSTDATA_FROMCOM,
   UPDATE_COMSCROLL,
   UPDATE_HIREACTION_TYPE,
-  CHANGE_UPLOAD_DATA
+  CHANGE_UPLOAD_DATA,
+  UPDATE_INTERACT,
+  UPDATE_MenuData
 } from "./global_ActionTypes";
 
 ////////////OPTIONS TOP SHOW  DATA////////////////
@@ -146,8 +148,8 @@ export const ButtonsLoginReducerLight = (
 ////////////PAPER LIGHTNDARK DATA////////////////
 const initialStatePaperLIGHTNDARK = {
   PaperStyleLight:
-    "linear-gradient(0deg,  rgb(200,205,205), rgb(250,250,250),rgb(190,195,190) )",
-  PaperStyleDark: "linear-gradient(0deg, rgb(30, 35, 35), rgb(45, 45, 45), rgb(25, 25, 25))",
+    "linear-gradient(0deg,  #ffffff, #ffffff,#ffffff )",
+  PaperStyleDark: "linear-gradient(0deg, #282c34, #242c34, #282c34)",
 };
 
 type MyPaperReducerLightnDark = typeof initialStatePaperLIGHTNDARK;
@@ -264,6 +266,9 @@ const initialState = {
   PostDataFromComment: [],
   CommentData: [],
   reactionType: 0,
+  interactContent: '',
+  interact: false,
+  MenuData: ''
   ////For example const initialState = { person: null as Person };
 };
 type MyGlobalReducer = typeof initialState;
@@ -273,6 +278,11 @@ export const GlobalReducer = (
   action: any
 ): MyGlobalReducer => {
   switch (action.type) {
+    case UPDATE_INTERACT:
+      return {
+        ...state, interactContent: action.payload,
+        interact: action.payload2
+      };
     case UPDATE_SCREEN_HEIGHT:
       return { ...state, screenHeight: action.payload };
     case UPDATE_DARKMODE:
@@ -308,6 +318,13 @@ export const GlobalReducer = (
         ...state,
         CommentData: action.payload,
       };
+
+    case UPDATE_MenuData:
+      return {
+        ...state,
+        MenuData: action.payload,
+      };
+
 
     default:
       return state;

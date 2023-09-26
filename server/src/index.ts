@@ -145,8 +145,8 @@ WHERE post = posts.id and user = ?)EmoIn,
          
          
         members.profile_image,members.username,color1,posts.id,sender,post_count,topic,
-caption,item1,thumb1,itemtype1,interact1a,interact1b,item2,thumb2,itemtype2,interact2a,interact2b,item3,thumb3,itemtype3,interact3a,interact3b,item4,thumb4,itemtype4,item5,thumb5,itemtype5,time  FROM posts inner join members on
- posts.sender = members.id   ORDER BY posts.id DESC LIMIT 20 `;
+caption,item1,thumb1,itemtype1,interact1a,interact1ax,interact1ay,interact1b,interact1bx,interact1by,item2,thumb2,itemtype2,interact2a,interact2ax,interact2ay,interact2b,interact2bx,interact2by,item3,thumb3,itemtype3,interact3a,interact3ax,interact3ay,interact3b,interact3bx,interact3by,item4,thumb4,itemtype4,item5,thumb5,itemtype5,time  FROM posts inner join members on
+ posts.sender = members.id   ORDER BY posts.id DESC LIMIT 20`;
 
 const updateColor = `UPDATE members SET  color1 = ? WHERE (id = ?)`;
 
@@ -159,7 +159,9 @@ const updateSticker = `INSERT INTO stickers (stickname,user) VALUES (?,?)`;
 const updatebillboardPic = `UPDATE members SET billboard1 = ?, billboardthumb1 = ?  WHERE (id = ?)`;
 const updatebillboardPic2 = `UPDATE members SET billboard2 = ?, billboardthumb2 = ?  WHERE (id = ?)`;
 
-const createpost = `INSERT INTO posts (sender,post_count,topic,caption,item1,thumb1,itemtype1,interact1a,interact1b,item2,thumb2,itemtype2,interact2a,interact2b,item3,thumb3,itemtype3,interact3a,interact3b,item4,thumb4,itemtype4,item5,thumb5,itemtype5,time) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`;
+const createpost = `INSERT INTO posts (sender,post_count,topic,caption,item1,thumb1,itemtype1,interact1a,interact1ax,interact1ay,
+  interact1b,interact1bx,interact1by,item2,thumb2,itemtype2,interact2a,interact2ax,interact2ay,interact2b,interact2bx,interact2by,item3,thumb3,itemtype3,
+  interact3a,interact3ax,interact3ay,interact3b,interact3bx,interact3by,item4,thumb4,itemtype4,item5,thumb5,itemtype5,time) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`;
 
 const createComment = `INSERT INTO comments (post,com,commented_by,date) VALUES (?,?,?,?)`;
 
@@ -731,6 +733,8 @@ app.post("/post_upload_data", async (req: any, res: any, next: any) => {
   var currentTime = new Date();
   const connection = mysql.createConnection(CONNECTION_CONFIG);
   const execQuery = util.promisify(connection.query.bind(connection));
+
+  console.log(values.I1x);
   try {
     await execQuery(createpost, [
       values.id,
@@ -740,20 +744,38 @@ app.post("/post_upload_data", async (req: any, res: any, next: any) => {
       values.all[0] ? values.all[0].imagedata : null,
       values.all[0] ? values.all[0].imagedataThumb : null,
       values.all[0] ? 1 : null,
+
       values.all[0] ? values.all[0].interact1 : null,
+      values.I1x ? values.I1x : null,
+      values.I1y ? values.I1y : null,
+
       values.all[0] ? values.all[0].interact2 : null,
+      values.I1bx ? values.I1bx : null,
+      values.I1by ? values.I1by : null,
 
       values.all[1] ? values.all[1].imagedata : null,
       values.all[1] ? values.all[1].imagedataThumb : null,
       values.all[1] ? 1 : null,
+
       values.all[1] ? values.all[1].interact1 : null,
+      values.I2x ? values.I2x : null,
+      values.I2y ? values.I2y : null,
+
       values.all[1] ? values.all[1].interact2 : null,
+      values.I2bx ? values.I2bx : null,
+      values.I2by ? values.I2by : null,
 
       values.all[2] ? values.all[2].imagedata : null,
       values.all[2] ? values.all[2].imagedataThumb : null,
       values.all[2] ? 1 : null,
+
       values.all[2] ? values.all[2].interact1 : null,
+      values.I3x ? values.I3x : null,
+      values.I3y ? values.I3y : null,
+
       values.all[2] ? values.all[2].interact2 : null,
+      values.I3bx ? values.I3bx : null,
+      values.I3by ? values.I3by : null,
 
       values.all[3] ? values.all[3].imagedata : null,
       values.all[3] ? values.all[3].imagedataThumb : null,
@@ -764,7 +786,8 @@ app.post("/post_upload_data", async (req: any, res: any, next: any) => {
       currentTime,
     ]);
     return res.send({ message: "images uploaded" });
-  } catch {
+  } catch (e: any) {
+    console.log(e);
     return res.send({ message: "images upload failed" });
   }
 });

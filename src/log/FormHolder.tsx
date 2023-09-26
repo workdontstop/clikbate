@@ -730,22 +730,12 @@ function FormHolderx({
                         setserverEmojiplain(true);
                         dispatch(HideLoaderAction());
                       } else if (response.data.payload) {
-                        /*  history.push({
-                pathname: "/supercheck",
-                state: { userdata: response.data.payload },
-              });*/
-                        ///console.log(response.data.payload);
-                        /// alert(loggedIn);
-                        dispatch(HideLoaderAction());
-                        dispatch(UserdataAction(response.data.payload));
 
-                        var colorboy = {
-                          color1: response.data.payload.usercolor1,
-                          color2: response.data.payload.usercolor2,
-                          colortype: response.data.payload.usercolortype,
-                        };
-                        dispatch(UpdateColorAction(colorboy, 1));
-                        dispatch(IsLoggedAction());
+
+
+
+                        window.location.reload();
+
                       } else {
                         setServerErrorData("something went wrong");
                         setServerErrorDisplay(1);

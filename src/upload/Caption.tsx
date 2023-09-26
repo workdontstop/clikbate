@@ -109,8 +109,19 @@ function Captionx({
   useEffect(() => {
     if (matchMobile || matchTablet) {
       setmatchTabletMobile(true);
+
     }
   }, []);
+
+
+
+
+  useEffect(() => {
+
+    console.log(cropInitialIn)
+
+  }, [cropInitialIn]);
+
 
   ///
   ///
@@ -180,6 +191,8 @@ function Captionx({
 
   const UpdatePostDatabaseStatus200 = (datak: any, b: any) => {
 
+    console.log(datak);
+
     // alert(finalImageData.length)
     Axios.post(`${REACT_APP_SUPERSTARZ_URL}/post_upload_data`, {
       values: datak,
@@ -245,7 +258,20 @@ function Captionx({
                     caption: captionvalues.caption,
                     id: idReducer,
                     all: s3finaldataAll,
+                    I1x: cropInitialIn[0].x,
+                    I1y: cropInitialIn[0].y,
+                    I1bx: cropInitialIn2[0].x,
+                    I1by: cropInitialIn2[0].y,
+                    I2x: cropInitialIn[1].x,
+                    I2y: cropInitialIn[1].y,
+                    I2bx: cropInitialIn2[1].x,
+                    I2by: cropInitialIn2[1].y,
+                    I3x: cropInitialIn[2].x,
+                    I3y: cropInitialIn[2].y,
+                    I3bx: cropInitialIn2[2].x,
+                    I3by: cropInitialIn2[2].y,
                   };
+
 
                   ///console.log(s3finaldataAll);
                   setsupeFilterLoadFadex(true);
@@ -282,13 +308,27 @@ function Captionx({
           };
           s3finaldataAll[i] = datak;
 
+
           if (i + 1 === finalImageData.length) {
             var datall = {
               topic: captionvalues.topic,
               caption: captionvalues.caption,
               id: idReducer,
               all: s3finaldataAll,
+              I1x: cropInitialIn[0].x,
+              I1y: cropInitialIn[0].y,
+              I1bx: cropInitialIn2[0].x,
+              I1by: cropInitialIn2[0].y,
+              I2x: cropInitialIn[1].x,
+              I2y: cropInitialIn[1].y,
+              I2bx: cropInitialIn2[1].x,
+              I2by: cropInitialIn2[1].y,
+              I3x: cropInitialIn[2].x,
+              I3y: cropInitialIn[2].y,
+              I3bx: cropInitialIn2[2].x,
+              I3by: cropInitialIn2[2].y,
             };
+
 
             ///console.log(s3finaldataAll);
             setsupeFilterLoadFadex(true);
@@ -307,7 +347,7 @@ function Captionx({
         /////////////////////////////////
       }
     },
-    [idReducer, s3finaldata, s3finaldataINT1, s3finaldataINT2, interactContent, interactContent2]
+    [idReducer, s3finaldata, s3finaldataINT1, s3finaldataINT2, interactContent, interactContent2, cropInitialIn, cropInitialIn2]
   );
 
 
@@ -454,7 +494,7 @@ function Captionx({
             left: "20vw",
             zIndex: 26,
           }}
-          label="Topic"
+          label="Caption"
           type="text"
           name="topic"
           variant="standard"
@@ -473,6 +513,7 @@ function Captionx({
             top: "45vh",
             left: "20vw",
             zIndex: 26,
+            display: 'none'
           }}
           label="Share Your Thoughts"
           type="text"

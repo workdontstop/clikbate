@@ -58,6 +58,7 @@ function AboutColorx({
     "#FF007F",
   ]);
 
+
   ///
   ///
   ///
@@ -250,9 +251,9 @@ function AboutColorx({
   if (clickcolortimer.current) {
     clearTimeout(clickcolortimer.current);
   }
-  clickcolortimer.current = setTimeout(() => {}, 3000);
+  clickcolortimer.current = setTimeout(() => { }, 3000);
 
-  const updateTextFeildValues = useCallback(() => {}, [
+  const updateTextFeildValues = useCallback(() => { }, [
     REACT_APP_SUPERSTARZ_URL,
     dispatch,
     colorboy,

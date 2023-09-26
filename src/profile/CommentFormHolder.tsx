@@ -107,6 +107,9 @@ function CommentFormHolderx({
 
   const paperPostScrollRefxx = useRef<any>(null);
 
+
+
+
   const callObserver = useCallback(() => {
     const observer = new IntersectionObserver((entries: any) => {
       const ent = entries[0];
@@ -219,9 +222,11 @@ function CommentFormHolderx({
       username: string;
       imageThumb: string;
       id: number;
+      memeberPageid: number;
+      MemberProfileData: any;
     };
   }
-  const { username, image, imageThumb, id } = useSelector(
+  const { username, image, imageThumb, id, memeberPageid, MemberProfileData } = useSelector(
     (state: RootStateReducerImage) => ({
       ...state.UserdataReducer,
     })
@@ -230,6 +235,8 @@ function CommentFormHolderx({
   const imageReducer = image;
   const imageReducerThumb = imageThumb;
   const idReducer = id;
+  const memeberPageidReducer = memeberPageid;
+  const MemberProfileDataReducer = MemberProfileData;
 
   const [GridZoomAx, setGridZoomAx] = useState<IGrid>(12);
 
@@ -497,6 +504,13 @@ function CommentFormHolderx({
     id: idReducer,
   };
 
+  var disboyReactionXMember: any = {
+    post: CommentPostid.id,
+    type: typeEmo,
+    limit: postlimit,
+    id: memeberPageidReducer === 0 ? idReducer : memeberPageidReducer,
+  };
+
   var disboyx: any = {
     commentId: CommentPostid.id,
     id: idReducer,
@@ -568,12 +582,22 @@ function CommentFormHolderx({
       connectTemplateGo === 1
         ? `fav_chronological`
         : connectTemplateGo === 2
-        ? `fan_chronological`
-        : `reaction_chronological`;
+          ? `fan_chronological`
+          : `reaction_chronological`;
+
+
+    var newval: any =
+      connectTemplateGo === 1
+        ? disboyReactionXMember
+        : connectTemplateGo === 2
+          ? disboyReactionXMember
+          : disboyReactionX;
+
+
 
     Axios.post(
       `${REACT_APP_SUPERSTARZ_URL}/${ss}`,
-      { values: disboyReactionX },
+      { values: newval },
       {
         withCredentials: true,
       }
@@ -602,8 +626,8 @@ function CommentFormHolderx({
       connectTemplateGo === 1
         ? `fav_chronological_more`
         : connectTemplateGo === 2
-        ? `fan_chronological_more`
-        : `reaction_chronological_more`;
+          ? `fan_chronological_more`
+          : `reaction_chronological_more`;
 
     Axios.post(
       `${REACT_APP_SUPERSTARZ_URL}/${ss}`,
@@ -744,11 +768,11 @@ function CommentFormHolderx({
                     ? MiniLayoutOverFlow && imageHeightoverflow
                       ? "24vh"
                       : imageHeightoverflow
-                      ? "12vh"
-                      : "3vh"
+                        ? "12vh"
+                        : "3vh"
                     : MiniLayoutOverFlow
-                    ? "10vh"
-                    : "0vh",
+                      ? "10vh"
+                      : "0vh",
                   position: "relative",
                   height: "20vh",
                   top: "0vh",
@@ -772,8 +796,8 @@ function CommentFormHolderx({
                     top: wideImage
                       ? "85%"
                       : imageHeightoverflow
-                      ? "190%"
-                      : "140%",
+                        ? "190%"
+                        : "140%",
                   }}
                   label="Start a Discussion"
                   margin="normal"
@@ -797,11 +821,11 @@ function CommentFormHolderx({
                     ? MiniLayoutOverFlow && imageHeightoverflow
                       ? "24vh"
                       : imageHeightoverflow
-                      ? "12vh"
-                      : "0vh"
+                        ? "12vh"
+                        : "0vh"
                     : MiniLayoutOverFlow
-                    ? "10vh"
-                    : "",
+                      ? "10vh"
+                      : "",
                   position: "relative",
                   height: "0px",
                   top: "0vh",
@@ -917,8 +941,8 @@ function CommentFormHolderx({
               display: reactionTemplateGo
                 ? "none"
                 : showComAddBack
-                ? "none"
-                : "block",
+                  ? "none"
+                  : "block",
               color: darkmodeReducer ? "#ffffff" : "#000000",
               fontSize: "2vw",
               opacity: 0.6,
@@ -927,12 +951,12 @@ function CommentFormHolderx({
                 zoomedModal && MiniLayoutOverFlow && imageHeightoverflow
                   ? "21%"
                   : zoomedModal && imageHeightoverflow
-                  ? "15%"
-                  : MiniLayoutOverFlow && imageHeightoverflow
-                  ? "11%"
-                  : zoomedModal
-                  ? "8%"
-                  : "4%",
+                    ? "15%"
+                    : MiniLayoutOverFlow && imageHeightoverflow
+                      ? "11%"
+                      : zoomedModal
+                        ? "8%"
+                        : "4%",
               right: "1vw",
               textAlign: "center",
             }}
@@ -944,12 +968,12 @@ function CommentFormHolderx({
               marginTop: wideImage
                 ? "27%"
                 : imageHeightoverflow
-                ? zoomedModal
-                  ? "42%"
-                  : "62%"
-                : zoomedModal
-                ? "32%"
-                : "45%",
+                  ? zoomedModal
+                    ? "42%"
+                    : "62%"
+                  : zoomedModal
+                    ? "32%"
+                    : "45%",
               height: "0px",
             }}
             className="modal-hold-signup"

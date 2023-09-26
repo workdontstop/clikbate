@@ -338,6 +338,75 @@
   font-family: Arial, Helvetica, sans-serif;
 }
 
+.fadeboyinOut {
+  -webkit-animation: fadeboyout-keyframe 2s linear 1 forwards; /* Safari 4+ */
+  -moz-animation: fadeboyout-keyframe 2s linear 1 forwards; /* Fx 5+ */
+  -o-animation: fadeboyout-keyframe 2s linear 1 forwards; /* Opera 12+ */
+  animation: fadeboyout-keyframe 2s linear 1 forwards; /* IE 10+, Fx 29+ */
+}
+
+@keyframes fadeboyout-keyframe {
+  0% {
+    opacity: 1;
+  }
+  25% {
+    opacity: 0.85;
+  }
+  50% {
+    opacity: 0.75;
+  }
+
+  65% {
+    opacity: 0.65;
+  }
+
+  75% {
+    opacity: 0.59;
+  }
+
+  85% {
+    opacity: 0.25;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+.fadeboyinInt {
+  -webkit-animation: fadeboyin-keyframe 2s linear 1 forwards; /* Safari 4+ */
+  -moz-animation: fadeboyin-keyframe 2s linear 1 forwards; /* Fx 5+ */
+  -o-animation: fadeboyin-keyframe 2s linear 1 forwards; /* Opera 12+ */
+  animation: fadeboyin-keyframe 2s linear 1 forwards; /* IE 10+, Fx 29+ */
+}
+
+@keyframes fadeboyin-keyframe {
+  0% {
+    opacity: 0;
+  }
+  25% {
+    opacity: 0.25;
+  }
+  50% {
+    opacity: 0.59;
+  }
+
+  65% {
+    opacity: 0.65;
+  }
+
+  75% {
+    opacity: 0.75;
+  }
+
+  85% {
+    opacity: 0.85;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
 .fadeboyin {
   -webkit-animation: fadeboyin-keyframe 5s linear 1 forwards; /* Safari 4+ */
   -moz-animation: fadeboyin-keyframe 5s linear 1 forwards; /* Fx 5+ */
@@ -444,11 +513,11 @@
 }
 
 .heartbeat {
-  -webkit-animation: heartbeat-keyframe 4s infinite;
-  -moz-animation: heartbeat-keyframe 4s infinite;
-  -o-animation: heartbeat-keyframe 4s infinite;
-  animation: heartbeat-keyframe 4s infinite;
-  transition: 4s transform ease-in;
+  -webkit-animation: heartbeat-keyframe 7.5s infinite;
+  -moz-animation: heartbeat-keyframe 7.5s infinite;
+  -o-animation: heartbeat-keyframe 7.5s infinite;
+  animation: heartbeat-keyframe 7.5s infinite;
+  transition: 7.5s transform ease-in;
 }
 @keyframes heartbeat-keyframe {
   0% {
@@ -456,12 +525,21 @@
     margin-right: 4px;
     font-size: 250%;
   }
-  30% {
+  25% {
+    margin-top: -2px;
+    font-size: 200%;
+  }
+  50% {
+    font-size: 160%;
+  }
+  75% {
     margin-top: -2px;
     font-size: 200%;
   }
   100% {
-    font-size: 160%;
+    margin-top: -4.5px;
+    margin-right: 4px;
+    font-size: 250%;
   }
 }
 
@@ -905,15 +983,15 @@
 .menutoplight {
   background-image: linear-gradient(
     to bottom,
-    rgba(245, 245, 245, 0.99),
-    rgba(245, 245, 245, 0.98)
+    rgba(245, 245, 245, 0.42),
+    rgba(245, 245, 245, 0.43)
   );
 }
 .menutopdark {
   background-image: linear-gradient(
     to bottom,
-    rgba(40, 40, 40, 0.99),
-    rgba(40, 40, 40, 0.98)
+    rgba(40, 40, 40, 0.42),
+    rgba(40, 40, 40, 0.43)
   );
 }
 
@@ -1010,37 +1088,46 @@
 .post-background-dark {
   background-image: linear-gradient(
     to top,
-    rgb(035, 035, 035, 0.38),
-    rgb(035, 035, 035, 0.37),
-    rgb(035, 035, 035, 0.36),
-    rgb(035, 035, 035, 0.35),
-    rgb(035, 035, 035, 0.34),
-    rgb(035, 035, 035, 0.33),
-    rgb(035, 035, 035, 0.32),
-    rgb(035, 035, 035, 0.31),
-    rgb(035, 035, 035, 0.3),
-    rgb(035, 035, 035, 0.29),
-    rgb(035, 035, 035, 0.28),
-    rgb(035, 035, 035, 0.27),
-    rgba(035, 035, 035, 0.26),
-    rgb(035, 035, 035, 0.25),
-    rgb(035, 035, 035, 0.24),
-    rgb(035, 035, 035, 0.23),
-    rgb(035, 035, 035, 0.22),
-    rgb(035, 035, 035, 0.21),
-    rgb(035, 035, 035, 0.2),
-    rgb(035, 035, 035, 0.17),
-    rgb(035, 035, 035, 0.13),
-    rgb(035, 035, 035, 0.11),
-    rgb(035, 035, 035, 0.09),
-    rgb(035, 035, 035, 0.08),
-    rgb(035, 035, 035, 0.07),
-    rgb(035, 035, 035, 0.06),
-    rgb(035, 035, 035, 0.05),
-    rgb(035, 035, 035, 0.03),
-    rgb(035, 035, 035, 0.02),
-    rgb(035, 035, 035, 0.01),
-    rgb(035, 035, 035, 0)
+    rgb(000, 000, 000, 0.48),
+    rgb(000, 000, 000, 0.47),
+    rgb(000, 000, 000, 0.46),
+    rgb(000, 000, 000, 0.45),
+    rgb(000, 000, 000, 0.44),
+    rgb(000, 000, 000, 0.43),
+    rgb(000, 000, 000, 0.42),
+    rgb(000, 000, 000, 0.41),
+    rgb(000, 000, 000, 0.4),
+    rgb(000, 000, 000, 0.38),
+    rgb(000, 000, 000, 0.37),
+    rgb(000, 000, 000, 0.36),
+    rgb(000, 000, 000, 0.35),
+    rgb(000, 000, 000, 0.34),
+    rgb(000, 000, 000, 0.33),
+    rgb(000, 000, 000, 0.32),
+    rgb(000, 000, 000, 0.31),
+    rgb(000, 000, 000, 0.3),
+    rgb(000, 000, 000, 0.29),
+    rgb(000, 000, 000, 0.28),
+    rgb(000, 000, 000, 0.27),
+    rgba(000, 000, 000, 0.26),
+    rgb(000, 000, 000, 0.25),
+    rgb(000, 000, 000, 0.24),
+    rgb(000, 000, 000, 0.23),
+    rgb(000, 000, 000, 0.22),
+    rgb(000, 000, 000, 0.21),
+    rgb(000, 000, 000, 0.2),
+    rgb(000, 000, 000, 0.17),
+    rgb(000, 000, 000, 0.13),
+    rgb(000, 000, 000, 0.11),
+    rgb(000, 000, 000, 0.09),
+    rgb(000, 000, 000, 0.08),
+    rgb(000, 000, 000, 0.07),
+    rgb(000, 000, 000, 0.06),
+    rgb(000, 000, 000, 0.05),
+    rgb(000, 000, 000, 0.03),
+    rgb(000, 000, 000, 0.02),
+    rgb(000, 000, 000, 0.01),
+    rgb(000, 000, 000, 0)
   );
 }
 
@@ -1156,6 +1243,49 @@
     rgb(250, 250, 250, 0.01),
     rgb(250, 250, 250, 0)
   );
+}
+
+@keyframes shake {
+  0% {
+    transform: translate(1px, 1px) rotate(0deg);
+  }
+  10% {
+    transform: translate(-1px, -2px) rotate(-1deg);
+  }
+  20% {
+    transform: translate(-3px, 0px) rotate(1deg);
+  }
+  30% {
+    transform: translate(3px, 2px) rotate(0deg);
+  }
+  40% {
+    transform: translate(1px, -1px) rotate(1deg);
+  }
+  50% {
+    transform: translate(-1px, 2px) rotate(-1deg);
+  }
+  60% {
+    transform: translate(-3px, 1px) rotate(0deg);
+  }
+  70% {
+    transform: translate(3px, 1px) rotate(-1deg);
+  }
+  80% {
+    transform: translate(-1px, -1px) rotate(1deg);
+  }
+  90% {
+    transform: translate(1px, 2px) rotate(0deg);
+  }
+  100% {
+    transform: translate(1px, -2px) rotate(-1deg);
+  }
+}
+
+.shake-effect {
+  animation: shake 0.82s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+  perspective: 1000px;
 }
 
 .spinnerEmo {
@@ -1935,4 +2065,24 @@ zuperxyinfo {
 .ReactCrop__crop-selection {
   width: 800px;
   height: 600px;
+}
+
+.no-highlight {
+  user-select: none;
+  -webkit-user-select: none; /* Safari */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* IE/Edge */
+}
+
+span.click-effect:hover {
+  background-color: rgba(
+    120,
+    120,
+    120,
+    0.1
+  ); /* Light grey background on hover */
+}
+
+span.click-effect:active {
+  background-color: rgba(0, 0, 0, 0); /* Your provided color on click */
 }

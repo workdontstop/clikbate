@@ -14,7 +14,7 @@ function SliderNumberx({
   startSlider,
   postDatainnerInteraction1,
   postDatainnerInteraction2,
-  HasInteractivity
+  HasInteractivity, startInteractivity,
 }: any): JSX.Element {
   const startplay = () => {
     if (ActiveAutoPlay[pey]) {
@@ -69,8 +69,8 @@ function SliderNumberx({
                 paddingLeft: HasInteractivity ? "0.9vw" : '10px',
                 paddingRight: HasInteractivity ? "0.9vw" : '10px',
                 backgroundColor: darkmodeReducer
-                  ? "rgba(81,81,81,0.76)"
-                  : "rgba(255,255,255,0.7) ",
+                  ? "rgba(41,41,41,0.86)"
+                  : "rgba(205,205,205,0.9) ",
                 borderRadius: "50%",
                 fontSize: "0.92vw",
                 display: total === 1 ? HasInteractivity ? 'block' : 'none' : 'block',
@@ -87,41 +87,49 @@ function SliderNumberx({
 
       {
         itemCLICKED[pey] ? (
-          total === 1 ? null : (
+          total === 0 ? null : (
             <>
               {" "}
               <div
+                onClick={startplay}
                 style={{
-                  cursor: "pointer",
                   position: "absolute",
                   zIndex: 30,
-                  right: 21,
-                  height: "0px",
+                  left: 30,
+                  cursor: "pointer",
                   top: "5vh",
                   fontFamily: "Arial, Helvetica, sans-serif",
                   fontWeight: "bolder",
                   opacity: "0.9",
+                  height: "0px",
                   padding: "0px",
                 }}
               >
                 <span
-                  className={darkmodeReducer ? "turdark" : "turlight"}
+                  className={HasInteractivity ? darkmodeReducer ? "turx heartbeat" : "turdark heartbeat" : darkmodeReducer ? "turx" : "turdark"}
                   style={{
                     padding: "7px",
-                    paddingLeft: "10px",
-                    paddingRight: "10px",
+                    paddingLeft: HasInteractivity ? "0.9vw" : '10px',
+                    paddingRight: HasInteractivity ? "0.9vw" : '10px',
                     backgroundColor: darkmodeReducer
-                      ? "rgba(51,51,51,0.76)"
-                      : "rgba(255,255,255,0.7) ",
-
+                      ? "rgba(41,41,41,0.86)"
+                      : "rgba(205,205,205,0.9) ",
                     borderRadius: "50%",
                     fontSize: "0.92vw",
-                    color: darkmodeReducer ? "#eeeeee" : "#111111 ",
-                  }}
+                    display: total === 1 ? HasInteractivity ? 'none' : 'none' : 'block',
+                    visibility: startInteractivity && HasInteractivity ? 'hidden' : 'visible',
+                    color: darkmodeReducer ? "#ffffff" : "#000000",
+                  }
+                  }
                 >
-                  {activeSlide + 1}
+                  <span style={{ opacity: HasInteractivity && total === 1 ? 0 : 1 }}>
+
+                    {activeSlide + 1}
+                  </span>
                 </span>
-              </div>{" "}
+              </div>
+
+
             </>
           )
         ) : null

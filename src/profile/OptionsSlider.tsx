@@ -66,7 +66,9 @@ function OptionsSliderx({
   setsuperSettings,
   selectedImage,
   setselectedImage,
-  setcropimage
+  setcropimage,
+  postData,
+
 }: any) {
   ///
   ///
@@ -144,8 +146,8 @@ function OptionsSliderx({
   ///
   ///OPTIONS SLIDER VARIABLES DISCRIBING ITEMS
   var optionsNameData = typeTop
-    ? ["SETTINGS", "UPLOAD", "FILTER", "ALBUMS", "PLAYLIST", "SHOWROOM"]
-    : ["FILTER", "ALBUMS", "PLAYLIST", "SHOWROOM", "SETTINGS", "UPLOAD"];
+    ? ["SETTINGS", "UPLOAD", "FEEDS", "GALLERY", "PLAYLIST", "SHOWROOM"]
+    : ["FEEDS", "GALLERY", "PLAYLIST", "SHOWROOM", "SETTINGS", "UPLOAD"];
 
   var UploadOptionsNameData = ["audio", "images", "interaction", "Continue"];
 
@@ -546,6 +548,8 @@ function OptionsSliderx({
         </>
       ) : typeUpload === 0 ? (
         <MenuInner
+
+          postData={postData}
           selectedImage={selectedImage}
           setselectedImage={setselectedImage}
           setcropimage={setcropimage}
