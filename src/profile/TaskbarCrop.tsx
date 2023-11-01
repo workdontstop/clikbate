@@ -439,7 +439,7 @@ function TaskbarCropx({
                         height: '0px',
                         display: ShowNumber ? 'block' : 'none',
                         fontFamily: ' Arial, Helvetica, sans- serif', fontWeight: 'bold', opacity: 0.65,
-                        padding: "0px", position: 'fixed', top: '40vh', fontSize: '15vh', zIndex: 20000000, left: '47.5%'
+                        padding: "0px", position: 'fixed', top: '40vh', fontSize: '15vh', zIndex: 20000000, left: matchMobile ? '40%' : '47.5%'
                     }}>
                     {ratiox}
                 </Grid>
@@ -587,7 +587,7 @@ function TaskbarCropx({
                     style={{
 
                         color: "#ffffff",
-                        fontSize: "3.8vw",
+                        fontSize: matchMobile ? '6vh' : "3.8vw",
                         position: "absolute",
                         opacity: optionscropshow2 ? 0.94 : 0,
                         borderRadius: '70%',
@@ -613,12 +613,12 @@ function TaskbarCropx({
                     }
                     style={{
                         color: "#ffffff",
-                        fontSize: "3.8vw",
+                        fontSize: matchMobile ? '6vh' : "3.8vw",
                         position: "absolute",
                         opacity: optionscropshow2 ? 0.94 : 0,
                         borderRadius: '70%',
                         top: '3.8vh',
-                        left: '48%',
+                        left: matchMobile ? '43%' : '48%',
                         right: "",
                         display: optionscropshow ? hideCrop ? 'none' : SaveCropData ? 'none' : hide ? 'none' : 'block' : 'none'
                     }}
@@ -644,12 +644,12 @@ function TaskbarCropx({
                     style={{
 
                         color: "#ffffff",
-                        fontSize: "3.8vw",
+                        fontSize: matchMobile ? '6vh' : "3.8vw",
                         position: "absolute",
                         opacity: optionscropshow2 ? 0.94 : 0,
                         borderRadius: '70%',
                         top: '3.8vh',
-                        left: '94%',
+                        left: matchMobile ? '83%' : '94%',
                         right: "",
                         display: optionscropshow ? hideCrop ? 'none' : SaveCropData ? 'none' : hide ? 'none' : 'block' : 'none'
                     }}

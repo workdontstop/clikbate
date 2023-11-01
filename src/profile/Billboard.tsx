@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { Grid, Box } from "@material-ui/core";
 
 import { DarkmodeToggleAction } from ".././GlobalActions";
-import { matchPc, matchTablet } from "../DetectDevice";
+import { matchMobile, matchPc, matchTablet } from "../DetectDevice";
 import { SliderBillboard } from "./SliderBillboard";
 import AddIcon from "@mui/icons-material/Add";
 import { usePalette } from "react-palette";
@@ -31,6 +31,8 @@ function Billboardx({
   setconnectTemplateGo,
   x,
   postData,
+  showModalFormMenu,
+  setshowModalFormMenu
 }: any): JSX.Element {
   ///
   ///
@@ -56,6 +58,7 @@ function Billboardx({
       favorites: number;
       memeberPageid: number;
       MemberProfileData: any;
+      billboardstate: number;
     };
   }
   const {
@@ -71,29 +74,32 @@ function Billboardx({
     favorites,
     memeberPageid,
     MemberProfileData,
+    billboardstate
   } = useSelector((state: RootStateReducerImage) => ({
     ...state.UserdataReducer,
   }));
 
   const [usernameReducer, setusernameReducer] = useState("");
 
+  const idReducer = id;
+  const imageReducer = image;
+
+  const billboard1Reducer = billboard1;
+  const billboardstateReducer = billboardstate;
+  const billboard2Reducer = billboard2;
+  const billboardthumb1Reducer = billboardthumb1;
+  const billboardthumb2Reducer = billboardthumb2;
+  const fansReducer = fans;
+
+
   const [quoteReducer, setquoteReducer] = useState("");
   const [favoritesReducer, setfavoritesReducer] = useState(0);
   const [hidefanReducer, sethidefanReducer] = useState(false);
 
+
   const [imageReducerThumb, setimageReducerThumb] = useState("");
 
-  const billboardImagesxx = [billboard1, billboard2];
-  const billboardImagesxxT = [billboardthumb1, billboardthumb2];
 
-  const billboardImageszz = [
-    MemberProfileData.userbillboard1,
-    MemberProfileData.userbillboard2,
-  ];
-  const billboardImageszzT = [
-    MemberProfileData.userbillboardthumb1,
-    MemberProfileData.userbillboardthumb2,
-  ];
 
   const billboardImagesnn = ["", ""];
 
@@ -102,8 +108,26 @@ function Billboardx({
   const [billboardthumbImages, setbillboardthumbImages] =
     useState(billboardImagesnn);
 
-  const ChangeProfile = () => {
-    if (memeberPageid === 0) {
+
+
+
+  const ChangeProfile = useCallback(() => {
+
+    var billboardImagesxx = [billboard1, billboard2];
+    var billboardImagesxxT = [billboardthumb1, billboardthumb2];
+
+    var billboardImageszz = [
+      MemberProfileData.userbillboard1,
+      MemberProfileData.userbillboard2,
+    ];
+    var billboardImageszzT = [
+      MemberProfileData.userbillboardthumb1,
+      MemberProfileData.userbillboardthumb2,
+    ];
+
+
+    if (memeberPageid === 0 || idReducer === memeberPageid) {
+
       setbillboardthumbImages(billboardImagesxxT);
       setbillboardImages(billboardImagesxx);
       setusernameReducer(username);
@@ -116,18 +140,27 @@ function Billboardx({
       setquoteReducer(MemberProfileData.userquote);
       setfavoritesReducer(MemberProfileData.favorites);
     }
-  };
+  }, [idReducer, memeberPageid, billboardstateReducer, billboard1, billboard2, username,
+    quote, favorites, billboardthumb1, billboardthumb2,
+    MemberProfileData.userbillboardthumb1, MemberProfileData.userbillboardthumb2,
+    MemberProfileData.userbillboard1, MemberProfileData.userbillboard2,
+    MemberProfileData.username, MemberProfileData.userquote, MemberProfileData.favorites]);
 
   useEffect(() => {
     ChangeProfile();
-    console.log(MemberProfileData);
-  }, [MemberProfileData]);
+
+  }, [MemberProfileData, idReducer, memeberPageid]);
 
   useEffect(() => {
     ChangeProfile();
   }, [image]);
 
-  var idReducer = id;
+
+  useEffect(() => {
+    ChangeProfile();
+  }, [billboardstateReducer, billboard1, billboard2]);
+
+
   useEffect(() => {
     if (memeberPageid === 0 || memeberPageid === idReducer) {
       sethidefanReducer(false);
@@ -136,13 +169,7 @@ function Billboardx({
     }
   }, [memeberPageid, MemberProfileData, idReducer]);
 
-  const imageReducer = image;
 
-  const billboard1Reducer = billboard1;
-  const billboard2Reducer = billboard2;
-  const billboardthumb1Reducer = billboardthumb1;
-  const billboardthumb2Reducer = billboardthumb2;
-  const fansReducer = fans;
 
   const [ShowBillboard, setShowBillboard] = useState<boolean>(false);
 
@@ -215,7 +242,7 @@ function Billboardx({
   var favclass = matchPc ? "favPc" : matchTablet ? "favTablet" : "favMobile";
   var fanclass = matchPc ? "fanPc" : matchTablet ? "fanTablet" : "fanMobile";
 
-  var fontConnectText = matchPc ? "1.03vw" : matchTablet ? "2.5vw" : "1.72vh";
+  var fontConnectText = matchPc ? "1.2vw" : matchTablet ? "2.5vw" : "1.92vh";
   var fontConnectnum = matchPc ? "1.75vw" : matchTablet ? "3.9vw" : "2.3vh";
 
   var billboardDynamicHeight = matchPc ? "70vh" : matchTablet ? "57vw" : "34vh";
@@ -243,19 +270,23 @@ function Billboardx({
   ///
   ///
   /// CLICK BILLBOARD OPEN ON DOUBLE CLICK
-  const ClickBillboard = (e: any) => {
-    switch (e.detail) {
-      case 2:
-        setShowBillboard(true);
-        break;
-      case 3:
-        setShowBillboard(true);
-        break;
-      case 4:
-        setShowBillboard(true);
-        break;
+  const ClickBillboard = useCallback((e: any) => {
+    if (showModalFormMenu) {
+      setshowModalFormMenu(false)
+    } else {
+      switch (e.detail) {
+        case 2:
+          setShowBillboard(true);
+          break;
+        case 3:
+          setShowBillboard(true);
+          break;
+        case 4:
+          setShowBillboard(true);
+          break;
+      }
     }
-  };
+  }, [showModalFormMenu]);
 
   ///
   ///
@@ -285,12 +316,17 @@ function Billboardx({
     fontOptions = "2.1rem";
   }
 
+
+
   ///hoverOverImageRef.current.style.background = "red";
 
   return (
     <>
       <>
+        <Grid item md={12} style={{ height: '0px', scrollSnapAlign: x ? "start" : "", }}></Grid>
         <Grid container className="dontallowhighlighting" style={{}}>
+
+
           {/*///////////////////////////////////////////////////////////////////////////BACKPAD BILLBOARD LIGHTINING/DARKEN*/}
           <Grid
             container
@@ -298,7 +334,9 @@ function Billboardx({
               position: "relative",
               top: "0em",
               width: "100%",
-              scrollSnapAlign: x ? "start" : "",
+
+
+
             }}
           >
             {/*///////////////////////////////////////////////////////////////////////////BACKPAD BILLBOARD CURSOR ALIAS LAYOUT*/}
@@ -316,10 +354,10 @@ function Billboardx({
               style={{
                 visibility: ShowBillboard ? "hidden" : "visible",
                 cursor: "copy",
-                zIndex: 2,
+                zIndex: showModalFormMenu ? 0 : 2,
                 position: "relative",
                 height: billboardDynamicHeight,
-                backgroundColor: darkmodeReducer
+                backgroundColor: showModalFormMenu ? "rgba(005, 005, 005, 0)" : darkmodeReducer
                   ? "rgba(005, 005, 005, 0.26)"
                   : "rgba(250, 250, 250, 0.23)",
                 borderRadius: "0px",
@@ -345,6 +383,7 @@ function Billboardx({
             {/*///////////////////////////////////////////////////////////////////////////BACKPAD BILLBOARD CURSOR ALIAS LAYOUT*/}
 
             <Grid item md={12} style={{ height: '0px', }}></Grid>
+
 
             {/*///////////////////////////////////////////////////////////////////////////BACKPAD BILLBOARD CONTROL DISPLAY ON DOUBLE CLICK*/}
 
@@ -396,7 +435,8 @@ function Billboardx({
                         ? "rgba(005, 005, 005, 0.29)"
                         : "rgba(255, 255, 255, 0.35)",
                       padding: "1px  ",
-                      opacity: "0.75",
+                      opacity: darkmodeReducer
+                        ? 0.7 : 0.73,
                       display: hidefanReducer ? "none" : "inline",
                     }}
                     className={
@@ -452,7 +492,8 @@ function Billboardx({
                         : "rgba(255, 255, 255, 0.35)",
 
                       padding: "1px  ",
-                      opacity: "0.75",
+                      opacity: darkmodeReducer
+                        ? 0.7 : 0.73,
                     }}
                     className={
                       darkmodeReducer
@@ -490,12 +531,16 @@ function Billboardx({
                   </span>
                 </Grid>
               </Grid>
+
+
               {/*///////////////////////////////////////////////////////////////////////////FAVS*/}
 
 
 
 
               {/*///////////////////////////////////////////////////////////////////////////USERNAME*/}
+
+
               <Grid
 
                 item
@@ -507,6 +552,7 @@ function Billboardx({
                   textAlign: "right",
                   zIndex: 3,
                   height: "0px",
+
 
                 }}
               >
@@ -545,9 +591,9 @@ function Billboardx({
                   style={{
                     cursor: "pointer",
                     color: darkmodeReducer ? "#dddddd" : "#0b111b",
-                    backgroundColor: darkmodeReducer
+                    backgroundColor: quoteReducer ? darkmodeReducer
                       ? "rgba(005, 005, 005, 0.45)"
-                      : "rgba(250, 250, 250, 0.7)",
+                      : "rgba(250, 250, 250, 0.7)" : ''
                   }}
                   className={
                     darkmodeReducer
@@ -555,7 +601,7 @@ function Billboardx({
                       : `fontfamilyArial ${name} turlight`
                   }
                 >
-                  {quoteReducer}
+                  {quoteReducer ? quoteReducer : ''}
                 </span>
               </Grid>
               {/*///////////////////////////////////////////////////////////////////////////FULLNAME OR QUOTES*/}
@@ -583,6 +629,8 @@ function Billboardx({
                 zIndex: 0,
               }}
             >
+
+
               <>
                 <input
                   onClick={click}
@@ -599,64 +647,7 @@ function Billboardx({
                 />
               </>
             </Grid>
-            <Grid
-              item
-              xs={12}
-              style={{
-                width: "100%",
-                height: "0px",
-                position: "absolute",
-                top: `-66vh`,
-                left: `${Bleft}vw`,
-                margin: "auto",
-                textAlign: "center",
-                zIndex: 200,
-                display: showbillone ? "block" : "none",
-              }}
-            >
-              {ShowBillboard ? (
-                <>
-                  <LooksOneIcon
-                    style={{
-                      fontSize: fontOptions1,
-                      color: "#ffffff",
-                      cursor: "pointer",
-                      opacity: 0.5,
-                    }}
-                    className="zuperkinginfo"
-                  />{" "}
-                </>
-              ) : null}
-            </Grid>
-            <Grid
-              item
-              xs={12}
-              style={{
-                width: "100%",
-                height: "0px",
-                position: "absolute",
-                top: `${Btop2}vh`,
-                left: `${Bleft}vw`,
-                margin: "auto",
-                textAlign: "center",
-                zIndex: 200,
-                display: showbilltwo ? "block" : "none",
-              }}
-            >
-              {ShowBillboard ? (
-                <>
-                  <LooksTwoIcon
-                    style={{
-                      fontSize: fontOptions1,
-                      color: "#ffffff",
-                      cursor: "pointer",
-                      opacity: 0.5,
-                    }}
-                    className="zuperkinginfo"
-                  />{" "}
-                </>
-              ) : null}
-            </Grid>
+
             <Grid
               item
               xs={12}
@@ -669,7 +660,8 @@ function Billboardx({
                 margin: "auto",
                 textAlign: "center",
                 zIndex: 20,
-                display: showbill ? "block" : "none",
+                display: showbill || showbilltwo || showbillone
+                  ? "block" : "none",
               }}
             >
               {" "}
@@ -681,7 +673,8 @@ function Billboardx({
                         fontSize: fontOptions,
                         color: "#ffffff",
                         cursor: "pointer",
-                        opacity: 0.5,
+                        opacity: 0.8,
+                        visibility: memeberPageid === 0 || memeberPageid === idReducer ? 'visible' : 'hidden',
                       }}
                       className="zuperkinginfo"
                     />{" "}

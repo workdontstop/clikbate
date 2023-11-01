@@ -351,6 +351,12 @@ function Superstickersx({
   const handleTouchStart = (e: any, type: any) => {
     ////mouseover(0);
 
+    if (matchMobile) {
+      e.stopPropagation();
+      e.preventDefault();
+    }
+
+
     setoptionsStickershow(false);
     if (type === 0) {
       setcropInitial({
@@ -371,7 +377,12 @@ function Superstickersx({
     }
   };
 
-  const handleTouchEnd = () => {
+  const handleTouchEnd = (e: any) => {
+    if (matchMobile) {
+      e.stopPropagation();
+      e.preventDefault();
+    }
+
     if (allowscrolltimer.current) {
       clearTimeout(allowscrolltimer.current);
     }
@@ -391,6 +402,11 @@ function Superstickersx({
   };
 
   const handleTouchDrag = (e: any, type: any) => {
+    if (matchMobile) {
+      e.stopPropagation();
+      e.preventDefault();
+    }
+
     if (Drag) {
       if (type === 0) {
         setcrop({
@@ -3472,7 +3488,7 @@ function Superstickersx({
             padding: "0px",
             margin: "auto",
             zIndex: 10,
-            position: "relative",
+
             display: stickerOPtionsDefault === 4 ? 'none' : 'block',
           }}
         />

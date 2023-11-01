@@ -217,10 +217,12 @@ function OptionsSliderx({
   ///CREATE OPTIONS SLIDER ANIMATION WITH  REACT SPRING
   const modalanimation = useSpring({
     config: {
-      mass: 2,
-      tension: 250,
-      friction: 12,
-    },
+      mass: 1,
+      tension: 1200,  // Doubled tension for quicker response
+      friction: 20,  // Reduced friction for faster slide
+    }
+
+    ,
     transform: `translateX(${ShowHideNegativeValue}${translate}px)`,
     height: "auto",
     display: "flex",
@@ -548,7 +550,6 @@ function OptionsSliderx({
         </>
       ) : typeUpload === 0 ? (
         <MenuInner
-
           postData={postData}
           selectedImage={selectedImage}
           setselectedImage={setselectedImage}

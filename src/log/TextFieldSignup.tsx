@@ -87,11 +87,13 @@ function TextFieldSignupx({
   if (size === "small" || size === "smallTablet") {
     if (emailType) {
       if (focus) {
+
         zindexE = 15;
-        zindexBackPlateE = 12;
+        zindexBackPlateE = 2;
         displayBackPlateE = "block";
       } else {
-        zindexE = 0;
+
+        zindexE = 1;
         zindexBackPlateE = 0;
         displayBackPlateE = "none";
       }
@@ -138,7 +140,8 @@ function TextFieldSignupx({
   ///
   ///TEXTFIELD BACK DROP ON FOCUS CLICK (MOBILE)
   const focusTextfield = (a: number) => {
-    if (size === "small" || size === "smallTablet") {
+
+    /**  if (size === "small" || size === "smallTablet") {
       if (a === 1) {
         setFocus(true);
         setShowFocusTextFieldByHidePadding(true);
@@ -146,7 +149,8 @@ function TextFieldSignupx({
         setFocus(false);
         setShowFocusTextFieldByHidePadding(false);
       }
-    }
+    }  */
+
   };
 
   ///
@@ -230,7 +234,7 @@ function TextFieldSignupx({
                 }}
               ></DialogContent>
               <TextField
-                onFocus={() => focusTextfield(1)}
+
                 onBlur={() => focusTextfield(0)}
                 size={sizex}
                 inputProps={{ style: { fontSize: font1 } }}
@@ -267,7 +271,7 @@ function TextFieldSignupx({
                 }}
               ></DialogContent>
               <TextField
-                onFocus={() => focusTextfield(1)}
+
                 onBlur={() => focusTextfield(0)}
                 size={sizex}
                 inputProps={{ style: { fontSize: font1 } }}

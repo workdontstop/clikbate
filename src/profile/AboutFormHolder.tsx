@@ -764,10 +764,18 @@ function AboutFormHolderx({
         /*MOBILE  MOBILE  MOBILE  MOBILE  MOBILE  MOBILEMOBILE  MOBILE  MOBILE  MOBILE  MOBILE  MOBILE  MOBILEMOBILE  MOBILE  MOBILE  MOBILE  MOBILE  MOBILE  MOBILEMOBILE  MOBILE  MOBILE  MOBILE  MOBILE  MOBILE  MOBILE  MOBILE*/
         <>
           <Grid container>
-            <Grid item xs={12} style={{ width: "150%" }}>
+            <Grid
+              item
+              xs={12}
+              style={{
+                width: "150%",
+                padding: "0px",
+
+              }}
+            >
               <ModalFormSignupError
                 focus={focusUsernameSign}
-                device="pc"
+                device="Mobile"
                 ErrorType={errorsSignupValues.inputedUsername}
                 textField="username"
                 errorFormChecking={errorFormChecking.inputedUsername}
@@ -792,9 +800,49 @@ function AboutFormHolderx({
                 rawSignupValues={rawSignupValues}
                 ShowSignupPasswordForaWhile={ShowSignupPasswordForaWhile}
                 signupShowPassword={signupShowPassword}
-                size="medium"
+                size="small"
                 emailType={false}
                 passwordType={false}
+                withHolder={WidthHolder}
+                checkSignupPasswordACTIVATE={checkSignupPasswordACTIVATE}
+              />
+              <TextFieldSignup
+                sourceType="ABOUT"
+                showFocusTextFieldByHidePadding={
+                  showFocusTextFieldByHidePadding
+                }
+                setShowFocusTextFieldByHidePadding={
+                  setShowFocusTextFieldByHidePadding
+                }
+                focus={focusUsernameSign}
+                setFocus={setFocusUsernameSign}
+                updateSignvalues={updateSignvalues}
+                rawSignupValues={rawSignupValues}
+                ShowSignupPasswordForaWhile={ShowSignupPasswordForaWhile}
+                signupShowPassword={signupShowPassword}
+                size="small"
+                emailType={true}
+                passwordType={false}
+                withHolder={WidthHolder}
+                checkSignupPasswordACTIVATE={checkSignupPasswordACTIVATE}
+              />
+              <TextFieldSignup
+                sourceType="ABOUT"
+                showFocusTextFieldByHidePadding={
+                  showFocusTextFieldByHidePadding
+                }
+                setShowFocusTextFieldByHidePadding={
+                  setShowFocusTextFieldByHidePadding
+                }
+                focus={focusUsernameSign}
+                setFocus={setFocusUsernameSign}
+                updateSignvalues={updateSignvalues}
+                rawSignupValues={rawSignupValues}
+                ShowSignupPasswordForaWhile={ShowSignupPasswordForaWhile}
+                signupShowPassword={signupShowPassword}
+                size="small"
+                emailType={false}
+                passwordType={true}
                 withHolder={WidthHolder}
                 checkSignupPasswordACTIVATE={checkSignupPasswordACTIVATE}
               />

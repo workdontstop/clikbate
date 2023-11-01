@@ -190,7 +190,10 @@ function ImageFilterinnerx({
 
     var x: number;
 
-    x = 0.7;
+    //////////////////
+    /////////////
+    ////////////
+    x = filtercolorMode;
 
     // Step 2: Reduce intensity of each RGB component by multiplying it by 0.8
     const reduceIntensity = (rgb: number[]): number[] => {
@@ -218,7 +221,7 @@ function ImageFilterinnerx({
 
 
   function FilterGradient(width: any, height: any, type: string) {
-    var filtercolorMode = 2;
+    var filtercolorMode = 0.7;
     var ctx = canvasRefdummy.current.getContext("2d");
     canvasRefdummy.current.height = height;
     canvasRefdummy.current.width = width;
@@ -298,23 +301,24 @@ function ImageFilterinnerx({
     } else {
     }
 
+
     if (type === "jentle") {
       const reducedColor1 = convertColor('#2c1f1f', filtercolorMode);
       const reducedColor2 = convertColor('#41243c', filtercolorMode);
       const reducedColor3 = convertColor('#272122', filtercolorMode);
-      gradient.addColorStop(0, reducedColor1);
-      gradient.addColorStop(0.4, reducedColor2);
-      gradient.addColorStop(1, reducedColor3);
+      gradient.addColorStop(0.1, reducedColor1);
+      gradient.addColorStop(0.2, reducedColor2);
+      gradient.addColorStop(0.8, reducedColor3);
     } else if (type === "mint") {
-      gradient.addColorStop(0.25, "#2c3431");
-      gradient.addColorStop(0.5, "#26483e");
-      gradient.addColorStop(0.75, "#232831");
-      gradient.addColorStop(1, "#273131");
+
+      gradient.addColorStop(0.5, "#21483e");
+      gradient.addColorStop(0.75, "#302831");
+      gradient.addColorStop(0.1, "#203131");
     } else if (type === "nebula") {
       const reducedColor1 = convertColor('#3b1858', filtercolorMode);
       const reducedColor2 = convertColor('#151569', filtercolorMode);
-      gradient.addColorStop(0, reducedColor1);
-      gradient.addColorStop(1, reducedColor2);
+      gradient.addColorStop(0.1, reducedColor1);
+      gradient.addColorStop(0.7, reducedColor2);
     } else if (type === "juice") {
       const reducedColor1 = convertColor('#242424', filtercolorMode);
       const reducedColor2 = convertColor('#313131', filtercolorMode);
@@ -335,22 +339,22 @@ function ImageFilterinnerx({
       const reducedColor2 = convertColor('#5c384c', filtercolorMode);
       const reducedColor3 = convertColor('#3e452f', filtercolorMode);
       const reducedColor4 = convertColor('#2e3c3f', filtercolorMode);
-      gradient.addColorStop(0.25, reducedColor1);
-      gradient.addColorStop(0.5, reducedColor2);
-      gradient.addColorStop(0.75, reducedColor3);
-      gradient.addColorStop(1, reducedColor4);
+      gradient.addColorStop(0.2, reducedColor1);
+      gradient.addColorStop(0.3, reducedColor2);
+      gradient.addColorStop(0.5, reducedColor3);
+      gradient.addColorStop(0.87, reducedColor4);
     } else if (type === "superstar") {
       const reducedColor1 = convertColor('#244a82', filtercolorMode);
       const reducedColor2 = convertColor('#4d3017', filtercolorMode);
-      gradient.addColorStop(0, reducedColor1);
-      gradient.addColorStop(1, reducedColor2);
+      gradient.addColorStop(0.2, reducedColor1);
+      gradient.addColorStop(0.8, reducedColor2);
     } else if (type === "fog") {
       const reducedColor1 = convertColor('#293746', filtercolorMode);
       const reducedColor2 = convertColor('#3a2922', filtercolorMode);
       const reducedColor3 = convertColor('#3b355d', filtercolorMode);
       gradient.addColorStop(0, reducedColor1);
-      gradient.addColorStop(0.6, reducedColor2);
-      gradient.addColorStop(1, reducedColor3);
+      gradient.addColorStop(0.4, reducedColor2);
+      gradient.addColorStop(0.8, reducedColor3);
     } else if (type === "vintage") {
       const reducedColor1 = convertColor('#111111', filtercolorMode);
       const reducedColor2 = convertColor('#222222', filtercolorMode);
@@ -361,8 +365,8 @@ function ImageFilterinnerx({
     } else if (type === "sahara") {
       const reducedColor1 = convertColor('#3b5910', filtercolorMode);
       const reducedColor2 = convertColor('#191d1b', filtercolorMode);
-      gradient.addColorStop(0, reducedColor1);
-      gradient.addColorStop(1, reducedColor2);
+      gradient.addColorStop(0.1, reducedColor1);
+      gradient.addColorStop(0.6, reducedColor2);
     } else {
     }
 
@@ -371,6 +375,13 @@ function ImageFilterinnerx({
     ctx.fillRect(0, 0, width, height);
 
     return ctx;
+
+
+
+
+
+
+
   }
 
 
@@ -438,13 +449,15 @@ function ImageFilterinnerx({
       var heightx: number;
       var width: number;
       var height: number;
-
+      /////////////////////////////////////////resolution//////////////////////////////////////////////
       var dynamicDimensions = matchMobile
-        ? window.innerHeight / 1.1
-        : window.innerHeight * 1.2;
+        ? window.innerHeight * 4.5
+        : window.innerHeight * 2;
       var dynamicDimensionsx = matchMobile
-        ? window.innerWidth * 1.5
-        : window.innerWidth / 1.1;
+        ? window.innerWidth * 4.5
+        : window.innerWidth * 1.8;
+      /////////////////////////////////////////resolution//////////////////////////////////////////////
+
 
       previewFileReadimage.onload = function () {
         const ctx = canvasRef.current.getContext("2d");
@@ -455,6 +468,9 @@ function ImageFilterinnerx({
             widthx = matchMobile ? 155 : 250;
             width = matchMobile ? 155 : 250;
           } else {
+
+
+
             if (resolution === "hd") {
               widthx = previewFileReadimage.naturalWidth;
               width = previewFileReadimage.naturalWidth;
@@ -513,9 +529,9 @@ function ImageFilterinnerx({
             ctx.filter = "contrast(1.2) brightness(0.91) saturate(104%)";
           } else if (type === "jentle") {
             ctx.filter =
-              "contrast(1.21) brightness(0.74) hue-rotate(20deg) saturate(90%) ";
+              "contrast(1.25) brightness(0.76) hue-rotate(20deg) saturate(90%) ";
           } else if (type === "mint") {
-            ctx.filter = "contrast(1.25) brightness(0.8)  saturate(135%)  ";
+            ctx.filter = "contrast(1.25) brightness(0.77)  saturate(135%)  ";
           } else if (type === "nebula") {
             ctx.filter = "contrast(1.1) brightness(1.03)";
           } else if (type === "juice") {
@@ -535,9 +551,9 @@ function ImageFilterinnerx({
             ctx.filter = "contrast(1.2) brightness(0.95) saturate(137%)";
           } else if (type === "moonshine") {
             ctx.filter =
-              "contrast(0.95) brightness(1.05) saturate(45%) blur(0px)";
+              "contrast(0.95) brightness(1.05.2) saturate(45%) blur(0px)";
           } else if (type === "vintage") {
-            ctx.filter = " contrast(1.2)  brightness(0.87)  saturate(38%)";
+            ctx.filter = " contrast(1.2)  brightness(0.87.6)  saturate(38%)";
           } else {
           }
 
@@ -712,8 +728,7 @@ function ImageFilterinnerx({
             } else if (
               type === "superstar" ||
               type === "rainbow" ||
-              type === "sahara" ||
-              type === "mint"
+              type === "sahara"
             ) {
               gradient.addColorStop(0, "rgba(255, 255, 255,0.002)");
               gradient.addColorStop(1, "rgba(255, 255, 255,0.001)");
@@ -750,15 +765,7 @@ function ImageFilterinnerx({
 
             ////////////composition
           } else if (type === "mint") {
-            ////////////composition
-            ctx.globalCompositeOperation = "overlay";
-            ctx.fillStyle = "#25302f18";
-            ctx.fillRect(0, 0, width, height);
-            ctx.globalCompositeOperation = "soft-light";
-            ctx.fillStyle = "#25302f18";
-            ctx.fillRect(0, 0, width, height);
 
-            ////////////composition
           } else if (type === "nebula") {
             ////////////composition
             ctx.globalCompositeOperation = "soft-light";

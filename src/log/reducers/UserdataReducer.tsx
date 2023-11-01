@@ -25,6 +25,7 @@ const initialState = {
   colorxx: "",
   quote: "",
   reg: 0,
+  billboardstate: 0,
   billboard1: "",
   billboardthumb1: "",
   billboard2: "",
@@ -51,11 +52,13 @@ export const UserdataReducer = (
       return {
         ...state,
         billboard1: action.payload.billboard1,
+        billboardstate: action.payload2,
       };
     case REQUEST_BILLBOARD_UPDATE2:
       return {
         ...state,
-        billboard2: action.payload.billboard1,
+        billboard2: action.payload.billboard2,
+        billboardstate: action.payload2,
       };
     case REQUEST_MEMBER:
       return {

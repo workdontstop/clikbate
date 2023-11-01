@@ -63,9 +63,19 @@ function ModalAboutLayoutx({
   const [serverEmojiplain, setserverEmojiplain] = useState<boolean>(true);
 
   const [sex, setsex] = useState<any>(null);
-
+  const [coll, setcoll] = useState(true);
 
   const [showColor, setshowColor] = useState(false);
+
+
+  useEffect(() => {
+    setcoll(false);
+
+    setTimeout(() => {
+      setcoll(true);
+
+    }, 2000)
+  }, [mobileZoom]);
 
   ///
   ///
@@ -141,6 +151,8 @@ function ModalAboutLayoutx({
   const colorReducerdark = colordark;
   const colortypeReducer = colortype;
 
+
+
   ///
   ///
   ///
@@ -153,9 +165,10 @@ function ModalAboutLayoutx({
       biography: string;
       memeberPageid: number;
       MemberProfileData: any;
+      quote: string;
     };
   }
-  const { id, image, imageThumb, biography, memeberPageid, MemberProfileData } = useSelector(
+  const { id, image, imageThumb, biography, memeberPageid, MemberProfileData, quote } = useSelector(
     (state: RootStateReducerImage) => ({
       ...state.UserdataReducer,
     })
@@ -166,6 +179,14 @@ function ModalAboutLayoutx({
   const biographyReducer = biography;
   const memeberPageidReducer = memeberPageid;
   const MemberProfileDataReducer = MemberProfileData;
+
+  const quoteReducer = quote;
+  ///MemberProfileData.userquote
+
+  useEffect(() => {
+
+    ///console.log(MemberProfileData.biography)
+  }, [MemberProfileData])
 
   const [showlogo, setshowlogo] = useState<boolean>(true);
 
@@ -228,10 +249,6 @@ function ModalAboutLayoutx({
   };
 
 
-  const coll = () => {
-
-
-  }
 
   return (
     <>
@@ -325,41 +342,10 @@ function ModalAboutLayoutx({
                       <Grid
                         item
                         xs={GridHolderA}
-                        style={{ zIndex: zIndexModalImageSmall }}
+                        style={{ zIndex: 200 }}
                       >
                         {" "}
-                        <Grid
-                          item
-                          xs={4}
-                          style={{
-                            zIndex: zIndexModalImageSmall,
-                            position: "fixed",
-                            top: "47%",
-                            left: "1.3vw",
-                            fontSize: zoomedModal ? "1.7vw" : "1.5vw",
-                            backgroundColor: "",
-                            width: "100%",
-                            height: "200px",
-                            fontFamily: "Arial, Helvetica, sans-serif",
-                            fontWeight: "bold",
-                            lineHeight: 1.48,
-                            overflow: "hidden",
-                            padding: "5px",
-                          }}
-                        >
-                          {" "}
-                          <span
-                            style={{
-                              color: darkmodeReducer ? "#eeeeee" : "#0b111b",
-                            }}
-                            className={textback}
-                          >
-                            <span style={{ opacity: 0.8 }}>
-                              {" "}
-                              {memeberPageidReducer === 0 ? biography : MemberProfileDataReducer.biography}
-                            </span>
-                          </span>
-                        </Grid>
+
                         <Grid
                           item
                           className="turabt"
@@ -414,6 +400,45 @@ function ModalAboutLayoutx({
                             display: memeberPageidReducer === idReducer || memeberPageidReducer === 0 ? 'block' : 'none',
                           }}
                         />{" "}
+
+
+                        <Grid
+                          item
+                          xs={7}
+                          sm={5}
+                          style={{
+
+                            position: "fixed",
+                            top: "39vh",
+                            left: "3.3vw",
+                            visibility: mobileZoom ? 'visible' : 'hidden',
+                            fontSize: '1.6vw',
+                            transition: 'opacity 6s ease',
+                            zIndex: 6000,
+                            width: "100%",
+                            height: "auto",
+                            fontFamily: "Arial, Helvetica, sans-serif",
+                            fontWeight: "bold",
+                            lineHeight: matchTablet ? 1.6 : 1.65,
+                            backgroundColor: '', overflow: 'auto'
+                          }}
+                        >
+                          {" "}
+                          <span
+                            style={{
+                              color: darkmodeReducer ? "#dddddd" : "#0b111b",
+                            }}
+                            className={textback}
+                          >
+                            {
+
+
+                              idReducer === memeberPageidReducer || memeberPageidReducer === 0 ? biographyReducer : MemberProfileData.biography
+
+
+                            }
+                          </span>
+                        </Grid>
                         <img
                           ref={reft}
                           onClick={zoomlogmodal}
@@ -452,8 +477,8 @@ function ModalAboutLayoutx({
                           }} className={showColor ? "element-bop" : ''} style={{
                             cursor: 'pointer',
                             display: showColor ? 'none' : 'block', position: 'relative',
-                            top: '9vh', borderRadius: '50%', height: '12vh', zIndex: 20,
-                            width: '12vh', backgroundColor: colorReducer, margin: 'auto'
+                            top: '9vh', borderRadius: '50%', height: '8vh', zIndex: 20, opacity: 0.5,
+                            width: '8vh', backgroundColor: colorReducer, margin: 'auto'
                           }}> </div>
                         </Grid>
 
@@ -514,9 +539,9 @@ function ModalAboutLayoutx({
           ) : (
             /*PC PC PC PC PC PC PC PC PC PC PC PC PC PC PC PC PC PC PC PC PC PC PC PC
         PC PC PC PC PC PC PC PC PC PC PC PC */ /*MOBILE MOBILE MOBILE MOBILE
-                                                                                                                                                                                                                                                                                                                                                                                                        MOBILE MOBILEMOBILE MOBILE MOBILE MOBILE MOBILE MOBILE MOBILEMOBILE MOBILE
-                                                                                                                                                                                                                                                                                                                                                                                                        MOBILE MOBILE MOBILE MOBILE MOBILEMOBILE MOBILE MOBILE MOBILE MOBILE
-                                                                                                                                                                                                                                                                                                                                                                                                        MOBILE MOBILE MOBILE*/
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    MOBILE MOBILEMOBILE MOBILE MOBILE MOBILE MOBILE MOBILE MOBILEMOBILE MOBILE
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    MOBILE MOBILE MOBILE MOBILE MOBILEMOBILE MOBILE MOBILE MOBILE MOBILE
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    MOBILE MOBILE MOBILE*/
             <DialogContent
               className="Hide-mobile-Scrollbar  fadermodal FormDialog-container-mobile dontallowhighlighting"
               ref={imagescrollRef}
@@ -536,6 +561,7 @@ function ModalAboutLayoutx({
                   }}
                 >
                   <Grid container>
+
                     <Grid
                       item
                       xs={12}
@@ -545,6 +571,98 @@ function ModalAboutLayoutx({
                         height: "auto",
                       }}
                     >
+                      <Grid
+                        item
+                        className="turabt"
+                        style={{
+                          color: "#ffffff",
+                          fontSize: "2.9vw",
+                          position: "fixed",
+                          width: "20%",
+                          top: "0.5vh",
+                          left: mobileZoom ? "42%" : "0%",
+                          height: "1vh",
+                          backgroundColor: colorReducer,
+                          borderBottomLeftRadius: "5px",
+                          borderBottomRightRadius: "5px",
+                        }}
+                      >
+                        {" "}
+                      </Grid>
+                      <label htmlFor="profilexx">
+                        <AddPhotoAlternateIcon
+                          className={
+                            darkmodeReducer
+                              ? "make-small-icons-clickable-darkab dontallowhighlighting zuperkingIcon "
+                              : "make-small-icons-clickable-lightab  dontallowhighlighting zuperkingIcon  "
+                          }
+                          style={{
+                            color: "#ffffff",
+                            fontSize: "7.9vh",
+                            position: "fixed",
+                            opacity: zoomedModal ? 0.3 : 0.4,
+                            top: "3vh",
+                            left: zoomedModal ? "1.8vw" : "25.8vw",
+                            display: memeberPageidReducer === idReducer || memeberPageidReducer === 0 ? 'block' : 'none',
+                          }}
+                        />{" "}
+                      </label>
+
+                      <EditTwoToneIcon
+                        className={
+                          darkmodeReducer
+                            ? "make-small-icons-clickable-darkab dontallowhighlighting zuperkingIcon "
+                            : "make-small-icons-clickable-lightab  dontallowhighlighting zuperkingIcon  "
+                        }
+                        style={{
+                          color: "#ffffff",
+                          fontSize: "7.9vh",
+                          position: "fixed",
+                          opacity: zoomedModal ? 0.3 : 0.4,
+                          top: zoomedModal ? "3vh" : "3vh",
+                          right: zoomedModal ? "1.5vw" : "",
+                          left: zoomedModal ? "" : "1.8vw",
+                          display: memeberPageidReducer === idReducer || memeberPageidReducer === 0 ? 'block' : 'none',
+                        }}
+                      />{" "}
+
+                      <Grid
+                        item
+                        xs={7}
+                        sm={6}
+                        style={{
+
+                          position: "absolute",
+                          top: "28vh",
+                          left: "3.3vw",
+                          display: mobileZoom ? 'block' : 'none',
+                          fontSize: aboutInfoFont,
+                          transition: 'opacity 6s ease',
+                          zIndex: 6000,
+                          width: "100%",
+                          height: "auto",
+                          fontFamily: "Arial, Helvetica, sans-serif",
+                          fontWeight: "bold",
+                          lineHeight: matchTablet ? 1.6 : 1.65,
+                          backgroundColor: '', overflow: 'auto'
+                        }}
+                      >
+                        {" "}
+                        <span
+                          style={{
+                            color: darkmodeReducer ? "#dddddd" : "#0b111b",
+                          }}
+                          className={textback}
+                        >
+                          {
+
+
+                            idReducer === memeberPageidReducer || memeberPageidReducer === 0 ? biographyReducer : MemberProfileData.biography
+
+
+                          }
+                        </span>
+                      </Grid>
                       <animated.img
                         onClick={clickMobileZoom}
                         onLoad={mobileImageOnLoad}
@@ -553,6 +671,8 @@ function ModalAboutLayoutx({
                         alt="SuperstarZ"
                         style={mobileLogmodalanimation}
                       />
+
+
                     </Grid>
                     <Grid
                       item
@@ -562,7 +682,7 @@ function ModalAboutLayoutx({
                       {" "}
                       <Paper
                         className="Hide-mobile-Scrollbar "
-                        onScroll={slide}
+                        //onScroll={slide}
                         ref={contentScrollRef}
                         style={{
                           overflow: "auto",
@@ -574,35 +694,7 @@ function ModalAboutLayoutx({
                         }}
                       >
                         {" "}
-                        <Grid
-                          item
-                          xs={7}
-                          sm={6}
-                          style={{
-                            zIndex: zIndexModalImageSmall,
-                            position: "fixed",
-                            top: "20%",
-                            left: "3.3vw",
-                            fontSize: aboutInfoFont,
-                            backgroundColor: "",
-                            width: "100%",
-                            height: "200px",
-                            fontFamily: "Arial, Helvetica, sans-serif",
-                            fontWeight: "bold",
-                            lineHeight: matchTablet ? 1.6 : 1.65,
-                          }}
-                        >
-                          {" "}
-                          <span
-                            style={{
-                              color: darkmodeReducer ? "#dddddd" : "#0b111b",
-                            }}
-                            className={textback}
-                          >
-                            Hi there , i love life and want to make it better. Try
-                            to stay positive when you feel down. Smile
-                          </span>
-                        </Grid>
+
                         <EditTwoToneIcon
                           className={
                             darkmodeReducer
@@ -620,19 +712,83 @@ function ModalAboutLayoutx({
                             left: mobileZoom ? "0vw" : EditIconLeft,
                           }}
                         />{" "}
-                        <Grid item xs={12} style={{ height: "6vh" }}></Grid>{" "}
-                        <Grid xs={12} item className={formHolder}>
-                          <Grid item xs={12}>
-                            <AboutColor zoomed={mobileZoom} />
+
+
+
+
+                        <Grid
+                          xs={12}
+                          item
+                          className="formholder"
+                          style={{
+                            padding: "0px",
+                            marginTop: zoomedModal ? "5vh" : "0px",
+                            visibility: coll ? 'visible' : 'hidden',
+                            display: 'none',
+                          }}
+                        >
+                          {showColor ? <AboutColor
+                            setcheckIfColorChanged={setcheckIfColorChanged}
+                            zoomed={zoomedModal}
+                            showModalForm={showModalForm}
+                          /> : null}
+
+
+                          <div onClick={() => {
+                            alert('...loading');
+                            /// setshowColor(true);
+                          }} className={showColor ? "element-bop" : ''} style={{
+                            cursor: 'pointer',
+                            display: showColor ? 'none' : 'block', position: 'relative',
+                            top: '2vh', borderRadius: '50%', height: '8vh', zIndex: 20,
+                            width: '8vh', backgroundColor: colorReducer, margin: 'auto', opacity: 0.3
+                          }}> </div>
+                        </Grid>
+
+
+                        <Grid
+                          xs={12}
+                          item
+                          className="formholder"
+                          style={{ padding: "0px" }}
+                        >
+                          <Grid
+                            item
+                            xs={12}
+                            className="center-content-vertically"
+                            style={{
+                              marginTop: mobileZoom ? "8vh" : '-4vh',
+                              padding: "0px",
+                              paddingTop: "10vh",
+
+                            }}
+                          >
+
+                            {memeberPageidReducer === idReducer || memeberPageidReducer === 0 ? <AboutFormHolder
+                              zoomedModal={zoomedModal}
+                              WidthHolder={WidthHolder}
+                              loginForm={false}
+                              setServerErrorData={setServerErrorData}
+                              setServerErrorDisplay={setServerErrorDisplay}
+                              setserverEmojiplain={setserverEmojiplain}
+                              checkSignupPasswordACTIVATE={
+                                checkSignupPasswordACTIVATE
+                              }
+                              setcheckSignupPasswordACTIVATE={
+                                setcheckSignupPasswordACTIVATE
+                              }
+                            /> : null}
+
                           </Grid>
                         </Grid>
+
                         <Grid item xs={12} style={{ height: "60vh" }}></Grid>{" "}
                       </Paper>
                     </Grid>
                   </Grid>
-                </Paper>
-              </animated.div>
-            </DialogContent>
+                </Paper >
+              </animated.div >
+            </DialogContent >
           ) /*MOBILE MOBILE MOBILE MOBILE MOBILE MOBILE MOBILE MOBILE MOBILE MOBILE
       MOBILEMOBILE MOBILE MOBILE MOBILE MOBILE MOBILE MOBILEMOBILE MOBILE MOBILE
       MOBILE MOBILE MOBILE MOBILE MOBILE MOBILE MOBILE*/

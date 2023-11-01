@@ -114,13 +114,14 @@ function TextFieldLoginx({
   ///
   ///TEXTFIELD BACK DROP ON FOCUS CLICK(MOBILE)
   const focusTextfield = (a: number) => {
-    if (size === "small" || size === "smallTablet") {
+    /**  if (size === "small" || size === "smallTablet") {
       if (a === 1) {
         setFocus(true);
       } else {
         setFocus(false);
       }
-    }
+    } */
+
   };
 
   ///

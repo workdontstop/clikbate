@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useState, useCallback } from "react";
 import { useSpring } from "react-spring";
 
-import { matchTablet } from "./DetectDevice";
+import { matchTablet, matchPc, matchMobile } from "./DetectDevice";
 
 import "./log/logCss.css";
 import { ICommentTemplate, IGrid } from "./log/log-Interfaces";
@@ -55,6 +55,9 @@ function CommentTemplatex({
   const CommentTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const [containerHeight, setcontainerHeight] = useState<number>(0);
+
+
+  const [showComAddBack, setshowComAddBack] = useState<boolean>(false);
 
   ///
   ///
@@ -145,7 +148,7 @@ function CommentTemplatex({
     config: {
       duration: 20,
     },
-    transition: "height 1s",
+    transition: "height 0.4s",
     opacity: mobileZoom ? 1 : 0.98,
     height: mobileZoom ? "100%" : matchTablet ? "23vh" : "15vh",
   });
@@ -177,6 +180,11 @@ function CommentTemplatex({
     },
     [formtype]
   );
+
+
+
+
+
   ///
   ///
   ///
@@ -193,28 +201,60 @@ function CommentTemplatex({
     }
   };
 
+
+
+
+
   ///
   ///
   ///
   /// SHOW A  ZOOMED/LOCKED  MODAL VIEW  MOBILE(CHANGE MOBILEZOOM WITH A CLICK)
   const clickMobileZoom = () => {
-    if (checkSignupPasswordACTIVATE) {
-      setcheckSignupPasswordACTIVATE(false);
+
+    if (showComAddBack) {
+
+
+      setshowComAddBack(false);
     } else {
-      if (mobileZoom) {
-        setCallMobileZoomLimiter(false);
-        setMobileZoom(false);
-        hideLogo();
+      if (idReducer === 0) {
+
+        if (checkSignupPasswordACTIVATE) {
+          setcheckSignupPasswordACTIVATE(false);
+        } else {
+          if (mobileZoom) {
+            setCallMobileZoomLimiter(false);
+            setMobileZoom(false);
+            hideLogo();
+          } else {
+            setCallMobileZoomLimiter(true);
+            setMobileZoom(true);
+            hideLogo();
+          }
+          //setMobileZoom(!mobileZoom);
+          if (contentScrollRef.current && contentScrollRef) {
+            autoScrollWindowNImage(0);
+          }
+        }
       } else {
-        setCallMobileZoomLimiter(true);
-        setMobileZoom(true);
-        hideLogo();
-      }
-      //setMobileZoom(!mobileZoom);
-      if (contentScrollRef.current && contentScrollRef) {
-        autoScrollWindowNImage(0);
+
+        if (mobileZoom) {
+
+          setCallMobileZoomLimiter(false);
+          setMobileZoom(false);
+          hideLogo();
+        } else {
+          setCallMobileZoomLimiter(true);
+          setMobileZoom(true);
+          hideLogo();
+        }
+        //setMobileZoom(!mobileZoom);
+        if (contentScrollRef.current && contentScrollRef) {
+          autoScrollWindowNImage(0);
+        }
       }
     }
+
+
   };
 
   ///
@@ -408,12 +448,16 @@ function CommentTemplatex({
   interface RootStateReducerImage {
     UserdataReducer: {
       image: string;
+      id: number;
     };
   }
-  const { image } = useSelector((state: RootStateReducerImage) => ({
+  const { image, id } = useSelector((state: RootStateReducerImage) => ({
     ...state.UserdataReducer,
   }));
   const imageReducer = image;
+  const idReducer = id;
+
+
 
   /// DYNAMIC MODAL LAYOUT VARIABLES
   ///
@@ -505,6 +549,7 @@ function CommentTemplatex({
     <>
       <meta name="apple-mobile-web-app-capable" content="yes" />
 
+
       {aboutTemp ? (
         showModalForm ? (
           <ModalAboutLayout
@@ -565,6 +610,8 @@ function CommentTemplatex({
           </Grid>
           (
           <ModalCommentLayout
+            setshowComAddBack={setshowComAddBack}
+            showComAddBack={showComAddBack}
             setcommentHistoryScroll={setcommentHistoryScroll}
             setCommentHistoryData={setCommentHistoryData}
             commentHistoryScroll={commentHistoryScroll}

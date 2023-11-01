@@ -32,8 +32,9 @@ import {
   UpdateHistory,
   UpdateCommentHistory,
   UpdatePostFromCom,
-  UpdateReactType,
+  UpdateReactType, Updatepagenum
 } from ".././GlobalActions";
+
 import Axios from "axios";
 
 function Postx({
@@ -50,6 +51,7 @@ function Postx({
   onPostsItemClicked,
   itemCLICKED,
   addpostDivRef,
+  addpostDivRefRoll,
   postDatainner,
   itemOriginalPostHeight,
   ActiveAutoPlay,
@@ -85,7 +87,11 @@ function Postx({
   postDatainnerInteraction2,
   itemInteractGo2,
   itemInteractGo1,
-  postItemsRef, ActiveCanvas
+  postItemsRef,
+  ActiveCanvas,
+
+
+
 }: any) {
   const { REACT_APP_SUPERSTARZ_URL, REACT_APP_APPX_STATE } = process.env;
 
@@ -115,6 +121,7 @@ function Postx({
 
   const [Ein, setEin] = useState(0);
 
+
   const profileImageref = useRef<any>();
 
   var allow4dev = "";
@@ -132,7 +139,14 @@ function Postx({
   const { ref, inView, entry } = useInView({
     /* Optional options */
     threshold: 0.95,
+
+
   });
+
+  /* onst scrollToRef = (ref: any) => {
+    TopRef.current.scrollIntoView({ behavior: 'smooth' });
+  };  */
+
 
   const startinview = useCallback(() => {
     if (inView) {
@@ -211,6 +225,9 @@ function Postx({
       }
     }, 500);
   }, [miniProfile, sliderIndexMini]);
+
+
+
 
   const [autoSlideDuration] = useState(6000);
 
@@ -395,6 +412,7 @@ function Postx({
     GlobalReducer: {
       darkmode: boolean;
       screenHeight: number;
+      pagenum: number;
     };
   }
 
@@ -402,7 +420,7 @@ function Postx({
   ///
   ///
   /// GET SCREENHEIGHT FROM REDUX STORE
-  const { screenHeight, darkmode } = useSelector(
+  const { screenHeight, darkmode, pagenum } = useSelector(
     (state: RootStateGlobalReducer) => ({
       ...state.GlobalReducer,
     })
@@ -410,6 +428,7 @@ function Postx({
 
   const screenHeightReducer = screenHeight;
   const darkmodeReducer = darkmode;
+  const pagenumReducer = pagenum;
 
   var textback = "";
   if (darkmodeReducer) {
@@ -609,6 +628,10 @@ function Postx({
     }
   };
 
+
+
+
+
   ///
   ///
   ///
@@ -619,7 +642,13 @@ function Postx({
   ///
   ///
   /// CLICK BILLBOARD OPEN ON DOUBLE CLICK
+
+
+
   const clickslider = (e: any) => {
+
+
+
     switch (e.detail) {
       case 1:
         checkifClicked();
@@ -634,6 +663,12 @@ function Postx({
         checkifClickedDouble();
         break;
     }
+
+
+
+
+
+
   };
 
   const calculateconnectPosition = useCallback(() => {
@@ -664,19 +699,19 @@ function Postx({
       : 6.5
     : matchTablet
       ? 20
-      : itemcroptype[pey] === 1
-        ? 8
-        : 10;
+      : itemcroptype[pey] === 3
+        ? 7
+        : 6.7;
 
   var emoNum3 = matchPc
     ? itemcroptype[pey] === 2
-      ? -4.5
-      : -1.5
+      ? -7.5
+      : -4.5
     : matchTablet
       ? 20
-      : itemcroptype[pey] === 1
-        ? 8
-        : 10;
+      : itemcroptype[pey] === 3
+        ? -3.3
+        : -4.7;
 
   var emoNum2 = matchPc
     ? itemcroptype[pey] === 2
@@ -705,18 +740,18 @@ function Postx({
     : matchTablet
       ? 20
       : itemcroptype[pey] === 1
-        ? 8
+        ? 10
         : 10;
 
   var emo2 = matchPc
     ? itemcroptype[pey] === 2
-      ? 15
-      : 12
+      ? 18
+      : 15
     : matchTablet
       ? 20
-      : itemcroptype[pey] === 1
-        ? 8
-        : 10;
+      : itemcroptype[pey] === 3
+        ? 14.5
+        : 16;
 
 
   var profilewidth = matchPc
@@ -726,9 +761,9 @@ function Postx({
     : matchTablet
       ? "12.5%"
       : "15%";
-  var postprofiletop = matchPc ? "8.2vh" : matchTablet ? "-9.3vh" : "-4.7vh";
+  var postprofiletop = matchPc ? "8.2vh" : matchTablet ? "-9.3vh" : "-5.7vh";
 
-  var postusernametop = matchPc ? "7vh" : matchTablet ? "-11.9vh" : "-5vh";
+  var postusernametop = matchPc ? "7vh" : matchTablet ? "-11.9vh" : "-7vh";
 
   var postusernamefont = matchPc ? "1vw" : matchTablet ? "2.32vh" : "1.7vh";
   var postusernameleft = matchPc ? "11.1%" : matchTablet ? "15.5%" : "20%";
@@ -871,6 +906,9 @@ function Postx({
   }
 
   const GoToMember = () => {
+
+    dispatch(Updatepagenum(0));
+
     if (memeberPageidReducer === post.sender) {
     } else {
       ///
@@ -888,6 +926,7 @@ function Postx({
           index: tt,
           data: postData,
           innerid: 0,
+          pagenumReducer: pagenumReducer,
         };
       } else {
         n = MemberProfileDataReducer.username;
@@ -897,6 +936,7 @@ function Postx({
           index: tt,
           data: postData,
           innerid: 0,
+          pagenumReducer: pagenumReducer,
         };
       }
 
@@ -908,6 +948,7 @@ function Postx({
         type: 1,
         id: post.sender,
         innerid: 0,
+        pagenumReducer: pagenumReducer,
       };
       window.history.pushState(dd, "", modalName);
     }
@@ -969,9 +1010,19 @@ function Postx({
 
   var PostTime = formatClikBateTime(post.time);
 
+
   return (
     <>
       <animated.div ref={ref} style={animationmenu}>
+        <div
+          ref={addpostDivRefRoll}
+          style={{
+            padding: "0px",
+            width: "100%",
+            height: '0px'
+
+          }}
+        ></div>
         <div
           ref={addpostDivRef}
           style={{
@@ -982,6 +1033,7 @@ function Postx({
             paddingLeft: matchMobile ? "0px" : "0.5px",
             paddingRight: matchMobile ? "0px" : "0.5px",
             paddingTop: "0px",
+
           }}
         >
 
@@ -991,6 +1043,7 @@ function Postx({
 
           <Slider
 
+            postDivRef={postDivRef}
             checkifClicked={checkifClicked}
             postItemsRef={postItemsRef}
             postDatainnerInteraction2={postDatainnerInteraction2[pey]}
@@ -1044,8 +1097,8 @@ function Postx({
             }}
 
             style={{
-              marginLeft: "46vw",
-              top: `5.2vh`,
+              marginLeft: matchMobile ? '90vw' : "46vw",
+              top: matchMobile ? '3.7vh' : `5.2vh`,
               fontWeight: 'bold',
               padding: "0px",
               cursor: "pointer",
@@ -1065,11 +1118,11 @@ function Postx({
               }
               style={{
                 position: 'absolute',
-                padding: Emopadcom,
-                paddingLeft: "10px",
-                paddingRight: "10px",
-                marginLeft: "1vw",
-                transform: Zoomx ? "scale(1.8)" : "scale(1)",
+                padding: matchMobile ? '1px' : Emopadcom,
+                paddingLeft: matchMobile ? '4px' : "10px",
+                paddingRight: matchMobile ? '4px' : "10px",
+                marginLeft: matchMobile ? '4vw' : "1vw",
+                transform: matchMobile ? Zoomx ? "scale(2)" : "scale(2.2)" : Zoomx ? "scale(2)" : "scale(1.2)",
                 transition: "transform 0.1s",
                 top: "-1.5vh",
                 zIndex: 22,
@@ -1080,7 +1133,7 @@ function Postx({
                       ? "rgba(51,51,51,0.76)"
                       : "rgba(255,255,255,0.7) ",
                 borderRadius: "50%",
-                fontSize: Emofontcom,
+                fontSize: matchMobile ? '1vh' : Emofontcom,
                 color: darkmodeReducer ? "#ffffff" : "#000000",
                 fontFamily: "Arial, Helvetica, sans-seri",
                 visibility:
@@ -1103,7 +1156,8 @@ function Postx({
               }}
               style={{
                 position: "relative",
-                transform: Zoomx ? "scale(1.8)" : "scale(1)",
+
+                transform: matchMobile ? Zoomx ? "scale(2)" : "scale(1.4)" : Zoomx ? "scale(2)" : "scale(1.2)",
                 transition: "transform 0.1s",
                 zIndex: 20,
                 verticalAlign: "middle",
@@ -1300,7 +1354,7 @@ function Postx({
                     }
                     style={{
                       padding: "2px",
-                      width: matchPc ? "1.8vw" : matchTablet ? "4vw" : "7.5vw",
+                      width: matchPc ? "1.8vw" : matchTablet ? "4vw" : "7vw",
                       height: matchPc ? "1.8vw" : matchTablet ? "3vh" : "4vh",
                       borderRadius: "50%",
                       margin: "auto",
@@ -1320,8 +1374,9 @@ function Postx({
                         padding: "0px",
                         objectFit: "contain",
                         borderRadius: "50%",
-                        transform: Zoom3 ? "scale(1.5)" : "scale(1)",
+                        transform: Zoom3 ? "scale(2)" : "scale(1.5)",
                         transition: "transform 0.1s",
+                        opacity: 0.6
                       }}
                     />
                   </span>
@@ -1365,7 +1420,7 @@ function Postx({
                     }
                     style={{
                       padding: "2px",
-                      width: matchPc ? "1.8vw" : matchTablet ? "4vw" : "7.5vw",
+                      width: matchPc ? "1.8vw" : matchTablet ? "4vw" : "7vw",
                       height: matchPc ? "1.8vw" : matchTablet ? "3vh" : "4vh",
                       borderRadius: "50%",
                       margin: "auto",
@@ -1385,7 +1440,8 @@ function Postx({
                         padding: "0px",
                         objectFit: "contain",
                         borderRadius: "50%",
-                        transform: Zoom4 ? "scale(1.5)" : "scale(1)",
+                        opacity: 0.6,
+                        transform: Zoom4 ? "scale(2)" : "scale(1.5)",
                         transition: "transform 0.1s",
                       }}
                     />
@@ -1527,8 +1583,8 @@ function Postx({
                   style={{
                     backgroundColor: emocolor,
                     padding: Emo3Num === 0 ? "0px" : "5px",
-                    opacity: darkmodeReducer ? 0.89 : 0.84,
-                    transform: Zoomx1 ? "scale(1.7)" : "scale(0.9)",
+                    opacity: darkmodeReducer ? 0.79 : 0.74,
+                    transform: matchMobile ? Zoomx1 ? "scale(1.4)" : "scale(0.7)" : Zoomx1 ? "scale(2.7)" : "scale(1)",
                     transition: "transform 0.1s",
                     cursor: "pointer",
                     top: `${emoNum3}vh`,
@@ -1537,7 +1593,7 @@ function Postx({
                     fontFamily: "Arial, Helvetica, sans-seri",
                     width: Emo3Num === 0 ? "0px" : "6%",
                     height: Emo3Num === 0 ? "0px" : "",
-                    marginLeft: "89%",
+                    marginLeft: matchMobile ? '76%' : "88%",
                     fontSize: "1.2vw",
                     fontWeight: "bold",
                     textAlign: "center",
@@ -1571,9 +1627,9 @@ function Postx({
                           : "turlight"
                     }
                     style={{
-                      padding: Emopad3,
-                      paddingLeft: "10px",
-                      paddingRight: "10px",
+                      padding: matchMobile ? '5px' : Emopad3,
+                      paddingLeft: matchMobile ? '10px' : "10px",
+                      paddingRight: matchMobile ? '10px' : "10px",
                       backgroundColor:
                         Emo3Num === 0 || Emo3Num === null
                           ? ""
@@ -1582,7 +1638,7 @@ function Postx({
                             : "rgba(255,255,255,0.7) ",
 
                       borderRadius: "50%",
-                      fontSize: Emofont3,
+                      fontSize: matchMobile ? '2.7vh' : Emofont3,
                       color: darkmodeReducer ? "#ffffff" : "#000000",
                     }}
                   >
@@ -1608,8 +1664,8 @@ function Postx({
                   style={{
                     backgroundColor: emocolor,
                     padding: Emo4Num === 0 ? "0px" : "5px",
-                    opacity: darkmodeReducer ? 0.89 : 0.84,
-                    transform: Zoomx2 ? "scale(1.7)" : "scale(0.9)",
+                    opacity: darkmodeReducer ? 0.79 : 0.74,
+                    transform: matchMobile ? Zoomx2 ? "scale(1.4)" : "scale(0.7)" : Zoomx2 ? "scale(2.7)" : "scale(1)",
                     transition: "transform 0.1s",
                     cursor: "pointer",
                     top: `${emoNum4}vh`,
@@ -1618,7 +1674,7 @@ function Postx({
                     fontFamily: "Arial, Helvetica, sans-seri",
                     width: Emo4Num === 0 ? "0px" : "6%",
                     height: Emo4Num === 0 ? "0px" : "",
-                    marginLeft: "89%",
+                    marginLeft: matchMobile ? '76%' : "88%",
                     fontSize: "1.2vw",
                     fontWeight: "bold",
                     textAlign: "center",
@@ -1652,9 +1708,9 @@ function Postx({
                           : "turlight"
                     }
                     style={{
-                      padding: Emopad4,
-                      paddingLeft: "10px",
-                      paddingRight: "10px",
+                      padding: matchMobile ? '5px' : Emopad3,
+                      paddingLeft: matchMobile ? '10px' : "10px",
+                      paddingRight: matchMobile ? '10px' : "10px",
                       backgroundColor:
                         Emo4Num === 0 || Emo4Num === null
                           ? ""
@@ -1663,7 +1719,7 @@ function Postx({
                             : "rgba(255,255,255,0.7)",
 
                       borderRadius: "50%",
-                      fontSize: Emofont4,
+                      fontSize: matchMobile ? '2.7vh' : Emofont4,
                       color: darkmodeReducer ? "#ffffff" : "#000000",
                     }}
                   >
@@ -1672,13 +1728,15 @@ function Postx({
                 </div>
                 {/*///////////////////////////////////////////////////////////////////////////REACTION NUMBERS*/}
 
+
+
                 {/*///////////////////////////////////////////////////////////////////////////BACKPAD CLICKABLE*/}
                 <div
                   onClick={clickslider}
                   style={{
                     opacity: darkmodeReducer ? 0.89 : 0.94,
                     cursor: "pointer",
-                    top: `-1vh`,
+                    top: matchMobile ? `-9vh` : `-1vh`,
                     position: "absolute",
                     zIndex: 6,
                     paddingLeft: "2vw",
@@ -1689,6 +1747,8 @@ function Postx({
                   }}
                 ></div>
                 {/*///////////////////////////////////////////////////////////////////////////BACKPAD CLICKABLE*/}
+
+
                 {/*///////////////////////////////////////////////////////////////////////////PROFILE-PIC*/}
 
                 <Connect
@@ -1786,6 +1846,16 @@ function Postx({
                         .
                       </span>
 
+                      <span
+                        style={{
+                          opacity: 0,
+                          fontSize: dotspace,
+
+
+                        }}
+                      >
+                        .
+                      </span>
 
 
                       <span
@@ -1817,8 +1887,8 @@ function Postx({
                             style={{
                               fontSize: postcirclefont,
                               color: post.color1,
-                              transform: BigCircle ? "scale(4)" : "scale(1.8)",
-                              transition: "transform 0.1s",
+                              transform: BigCircle ? "scale(5)" : "scale(3.8)", opacity: 0.6,
+                              transition: "transform 0.05s",
 
                             }}
                           />
@@ -1828,8 +1898,8 @@ function Postx({
                             style={{
                               fontSize: postcirclefont,
                               color: post.color1,
-                              transform: BigCircle ? "scale(4)" : "scale(1.8)",
-                              transition: "transform 0.1s",
+                              transform: BigCircle ? "scale(5)" : "scale(3.8)", opacity: 0.6,
+                              transition: "transform 0.05s",
                             }}
                           />
                         ) : (
@@ -1839,14 +1909,25 @@ function Postx({
 
                               fontSize: postcirclefont,
                               color: post.color1,
-                              transform: BigCircle ? "scale(4)" : "scale(1.8)",
-                              transition: "transform 0.1s",
+                              transform: matchMobile ? BigCircle ? "scale(5)" : "scale(3.8)" : BigCircle ? "scale(5)" : "scale(3)", opacity: 0.6,
+                              transition: "transform 0.05s",
 
                             }}
                           />
                         )}
 
                       </span>
+                      <span
+                        style={{
+                          opacity: 0,
+                          fontSize: dotspace,
+
+
+                        }}
+                      >
+                        .
+                      </span>
+
                       <span
                         style={{
                           opacity: 0,
@@ -1884,6 +1965,8 @@ function Postx({
                           opacity: 0.9,
                         }}
                       >
+
+
                         {" "}
                         {post.topic ? post.topic : "SuperstarZ"}{" "}
                         <span style={{ padding: "5px" }}>
@@ -1956,7 +2039,7 @@ function Postx({
                   }
                   style={{
                     top: postoptionstop,
-                    marginLeft: '43vw',
+                    marginLeft: matchMobile ? '84vw' : '43vw',
                     position: "relative",
                     transition: "all 350ms ease",
                     display: "flex",

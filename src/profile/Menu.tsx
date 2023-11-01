@@ -17,6 +17,8 @@ import SuperstarzIconDark from "../images/sd.png";
 import { UpdateOptionsTop } from ".././GlobalActions";
 import ZoomOutIcon from "@mui/icons-material/ZoomOut";
 
+import { UpdateMenuNav } from "../GlobalActions";
+
 function Menux({
   paperPostScrollRef,
   getSliderWidth,
@@ -36,7 +38,13 @@ function Menux({
   setselectedImage,
   postData,
   callfeeds,
-  setShowModalFormMenu
+  setShowModalFormMenu,
+  ShowBigPlay,
+  showModalFormMenu,
+  shownav,
+  setShownav,
+  showModalForm
+
 }: any) {
   ///
   ///
@@ -44,7 +52,11 @@ function Menux({
   /// USE DISPATCH
   const dispatch = useDispatch();
 
-  const [shownav, setShownav] = useState<boolean>(true);
+
+
+
+
+
 
   const [shownavTop, setShownavTop] = useState<boolean>(true);
 
@@ -69,15 +81,18 @@ function Menux({
     GlobalReducer: {
       darkmode: boolean;
       MenuData: String;
+
     };
   }
-  const { darkmode, MenuData } = useSelector((state: RootStateGlobalReducer) => ({
+  const { darkmode, MenuData, } = useSelector((state: RootStateGlobalReducer) => ({
     ...state.GlobalReducer,
   }));
 
   const darkmodeReducer = darkmode;
 
   const MenuDataReducer = MenuData
+
+
 
   ///
   ///
@@ -110,10 +125,18 @@ function Menux({
     opacity: shownav ? 1 : 0,
     transform: shownav ? `translateY(-10%)` : `translateY(-180%)`,
 
+
   });
 
-  const jayme = useCallback(() => {
 
+
+  const jayme = useCallback((e: any) => {
+
+
+    if (matchMobile) {
+      e.stopPropagation();
+      e.preventDefault();
+    }
 
     var datascroll: number = matchPc
       ? paperPostScrollRef.current.scrollTop
@@ -132,9 +155,15 @@ function Menux({
     }
 
     menuTimer5.current = setTimeout(function () {
-      setShownav(true);
+
+      if (ShowBigPlay) { } else {
+        ///dispatch(UpdateMenuNav(true));
+
+        setShownav(true);
+      }
       menuTimer2.current = setTimeout(function () {
         setShownav(false);
+        //// dispatch(UpdateMenuNav(false));
       }, 2800);
     }, 1250);
 
@@ -144,7 +173,7 @@ function Menux({
 
 
 
-  }, [
+  }, [ShowBigPlay,
     miniLayoutPost,
     window.scrollY,
     shownav,
@@ -155,7 +184,21 @@ function Menux({
     shownavTop,
     haltedTop,
     HidePostDataOnScroll,
+    showModalForm
   ]);
+
+
+
+  ///
+
+
+  const handleScroll = (e: any) => {
+
+    alert('j');
+    // Prevent scroll events from propagating to the parent element
+
+  };
+
 
   useEffect(() => {
     matchPc
@@ -204,12 +247,13 @@ function Menux({
                   zIndex: 11,
                 }}
               >
-                <Grid xs={12} item style={{ padding: "0px" }}>
+                <Grid xs={12} item style={{ padding: "0px", height: "0px", }}>
                   <Grid
                     item
                     component={Box}
                     display={{ xs: "none", md: "block" }}
                     md={2}
+                    style={{ padding: "0px", height: "0px", }}
                   ></Grid>
                   <Grid
                     item
@@ -217,6 +261,7 @@ function Menux({
                     md={12}
                     style={{
                       padding: "0px",
+                      height: "0px",
                       paddingRight: matchPc ? "0.8vw" : "0px",
                     }}
                   >
@@ -239,105 +284,162 @@ function Menux({
             </>
           ) : (
             <>
-              <Grid
-                container
-                style={{
-                  bottom: "7.4vh",
-                  position: "fixed",
-                  width: "100%",
-                  height: "0px",
-                  zIndex: 10,
-                  opacity: "1",
-                }}
-              >
-                {" "}
-                <Grid item xs={1} md={2} style={{ height: "0px" }}></Grid>
-                <Grid
-                  item
-                  xs={8}
-                  md={8}
+              {showModalFormMenu ? null :
+                ShowBigPlay ? null : <Grid
+                  container
                   style={{
+                    bottom: "7.4vh",
+                    position: "fixed",
+                    width: "100%",
                     height: "0px",
-                    marginTop: matchPc ? "-90vh" : "-60Vh",
+                    zIndex: 10,
+                    opacity: "1",
                   }}
                 >
-                  <animated.div style={animationmenu}>
-                    <span
-                      onClick={(e: any) => {
-                        ////dispatch(UpdateOptionsTop(true));
-                        setShowModalFormMenu(true);
-                      }}
-                      className={
-                        darkmodeReducer
-                          ? `menutopdark ${superFont} turdark zupermenudark  zuperkingIconPostLight `
-                          : `menutoplight ${superFont} turlight zupermenulight   zuperkingIconPostLightx`
-                      }
-                      style={{
-                        marginLeft: matchPc
-                          ? "10px"
-                          : matchTablet
-                            ? "30px"
-                            : "10px",
-                        paddingTop: "11px",
-                        paddingBottom: "13px",
-                        paddingLeft: matchPc ? "1.5vw" : "5vw",
-                        paddingRight: matchPc ? "1.5vw" : "5vw",
-                        borderRadius: "10px",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        textAlign: "center",
-                        cursor: "pointer",
-                        height: "0px",
-                      }}
-                    >
+                  {" "}
+                  <Grid item xs={1} md={2} style={{ height: "0px" }}></Grid>
+                  <Grid
+                    item
+                    xs={8}
+                    md={8}
+                    style={{
+                      height: "0px",
+                      marginTop: matchPc ? "-90vh" : "-76Vh",
 
-                      {MenuDataReducer === '' ? <>     < span
-                        className={
-                          darkmodeReducer
-                            ? "text-superstarz-dark   text-superstarz-dark-colorA  "
-                            : "text-superstarz-light  text-superstarz-light-colorA  "
-                        }
-                        style={{
-                          color: darkmodeReducer ? "#eeeeee" : "#444444",
-                        }}
-                      >
-                        Clik
-                      </span>
-                        {' '}
+                    }}
+                  >
+
+
+
+
+
+
+
+
+
+
+
+
+                    {MenuDataReducer === '' ? <>
+
+                      <animated.div style={{ ...animationmenu, height: '0px', display: shownav ? 'block' : 'none' }}>
                         <span
-                          style={{
-                            color: darkmodeReducer ? "#ffe680" : "#ffcc00",
-                            opacity: darkmodeReducer ? "1" : "1",
-
+                          onClick={(e: any) => {
+                            ////dispatch(UpdateOptionsTop(true));
+                            setShowModalFormMenu(true);
                           }}
                           className={
                             darkmodeReducer
-                              ? "text-superstarz-dark     text-superstarz-dark-colorB  "
-                              : "text-superstarz-light   text-superstarz-light-colorB   "
-                          }
-                        >
-                          Bate
-                        </span></> :
-
-                        ////
-                        <span
-                          className={
-                            darkmodeReducer
-                              ? "text-superstarz-dark   text-superstarz-dark-colorA  "
-                              : "text-superstarz-light  text-superstarz-light-colorA  "
+                              ? `menutopdark ${superFont} turdark zupermenudark  dontallowhighlighting zuperkingIconPostLight `
+                              : `menutoplight ${superFont} turlight zupermenulight  dontallowhighlighting zuperkingIconPostLightx`
                           }
                           style={{
-                            color: darkmodeReducer ? "#eeeeee" : "#444444",
+                            marginLeft: matchPc
+                              ? "10px"
+                              : matchTablet
+                                ? "30px"
+                                : "10px",
+                            paddingTop: "11px",
+                            paddingBottom: "13px",
+                            paddingLeft: matchPc ? "1.5vw" : "5vw",
+                            paddingRight: matchPc ? "1.5vw" : "5vw",
+                            borderRadius: "10px",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            textAlign: "center",
+                            cursor: "pointer",
+                            height: "0px",
                           }}
                         >
-                          {MenuDataReducer}
+
+                          <>     < span
+                            className={
+                              darkmodeReducer
+                                ? "text-superstarz-dark   text-superstarz-dark-colorA  "
+                                : "text-superstarz-light  text-superstarz-light-colorA  "
+                            }
+                            style={{
+                              color: darkmodeReducer ? "#eeeeee" : "#444444",
+                            }}
+                          >
+                            Clik
+                          </span>
+                            {' '}
+                            <span
+                              style={{
+                                color: darkmodeReducer ? "#ffe680" : "#ffcc00",
+                                opacity: darkmodeReducer ? "1" : "1",
+
+                              }}
+                              className={
+                                darkmodeReducer
+                                  ? "text-superstarz-dark     text-superstarz-dark-colorB  "
+                                  : "text-superstarz-light   text-superstarz-light-colorB   "
+                              }
+                            >
+                              Bate
+                            </span></>
+
+
                         </span>
-                      }
+                      </animated.div>  </> :
 
-                    </span>
-                  </animated.div>
-                </Grid>{" "}
-              </Grid>
+
+                      MenuDataReducer ? <> <animated.div style={{ ...animationmenu, height: '0px', display: shownav ? 'block' : 'none' }}>
+                        <span
+                          onClick={(e: any) => {
+                            ////dispatch(UpdateOptionsTop(true));
+                            setShowModalFormMenu(true);
+                          }}
+                          className={
+                            darkmodeReducer
+                              ? `menutopdark ${superFont} turdark zupermenudark  dontallowhighlighting zuperkingIconPostLight `
+                              : `menutoplight ${superFont} turlight zupermenulight   dontallowhighlighting  zuperkingIconPostLightx`
+                          }
+                          style={{
+                            marginLeft: matchPc
+                              ? "10px"
+                              : matchTablet
+                                ? "30px"
+                                : "10px",
+                            paddingTop: "11px",
+                            paddingBottom: "13px",
+                            paddingLeft: matchPc ? "1.5vw" : "5vw",
+                            paddingRight: matchPc ? "1.5vw" : "5vw",
+                            borderRadius: "10px",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            textAlign: "center",
+                            cursor: "pointer",
+                            height: "0px",
+                          }}
+                        >
+
+
+
+                          <span
+                            className={
+                              darkmodeReducer
+                                ? "text-superstarz-dark   text-superstarz-dark-colorA  "
+                                : "text-superstarz-light  text-superstarz-light-colorA  "
+                            }
+                            style={{
+                              color: darkmodeReducer ? "#eeeeee" : "#444444",
+                            }}
+                          >
+                            {MenuDataReducer}
+                          </span>
+
+
+                        </span>
+
+                      </animated.div></> : null
+                    }
+
+                  </Grid>{" "}
+                </Grid>
+              }
+
             </>
           )}
         </>

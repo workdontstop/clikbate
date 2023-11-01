@@ -20,7 +20,9 @@ import {
   UPDATE_HIREACTION_TYPE,
   CHANGE_UPLOAD_DATA,
   UPDATE_INTERACT,
-  UPDATE_MenuData
+  UPDATE_MenuData,
+  UPDATE_MenuNav,
+  UPDATE_pagenum
 } from "./global_ActionTypes";
 
 export function DarkmodeAction(newDarkModeData: boolean) {
@@ -178,6 +180,20 @@ export function UpdateInteract(Payload: String, Payload2: boolean) {
 export function UpdateMenuData(Payload: String) {
   return {
     type: UPDATE_MenuData,
+    payload: Payload,
+  }
+};
+
+export function UpdateMenuNav(Payload: boolean) {
+  return {
+    type: UPDATE_MenuNav,
+    payload: Payload,
+  }
+};
+
+export function Updatepagenum(Payload: number) {
+  return {
+    type: UPDATE_pagenum,
     payload: Payload,
   }
 };

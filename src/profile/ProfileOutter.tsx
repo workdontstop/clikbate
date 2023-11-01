@@ -6,7 +6,8 @@ import { Billboard } from "./Billboard";
 import "./profile.css";
 import { Connect } from "./Connect";
 import { Profile } from "./Profile";
-import { ActualMenu } from "./ActualMenu";
+import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
+import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import Axios from "axios";
 import { CommentTemplate } from "../CommentTemplate";
 import { Upload } from "../upload/Upload";
@@ -23,9 +24,10 @@ import { ServerError } from "../log/ServerError";
 import { UserInfoUpdateMEMBERDATA } from "../log/actions/UserdataAction";
 import { UserInfoUpdateMEMBER } from "../log/actions/UserdataAction";
 import { Loader } from "./Loader";
-import { UpdateLoader, UpdateMenuData } from ".././GlobalActions";
+import { UpdateLoader, UpdateMenuData, Updatepagenum } from ".././GlobalActions";
 import { Taskbar } from "./Taskbar";
 import { UpdateInteract } from ".././GlobalActions";
+import SlowMotionVideoIcon from '@material-ui/icons/SlowMotionVideo';
 
 
 
@@ -44,7 +46,7 @@ function ProfileOutter() {
   const { REACT_APP_SUPERSTARZ_URL, REACT_APP_APPX_STATE } = process.env;
 
   var billdefaultbill =
-    "https://superstarz-data-tank.s3.eu-west-2.amazonaws.com/fc284f4924c7405bb44ab8e2c3f05891";
+    "https://superstarz-data-tank.s3.eu-west-2.amazonaws.com/fc284f4924c7405bb44ab8e2c3f05891";///not used
 
   var allow4dev = "";
 
@@ -56,6 +58,69 @@ function ProfileOutter() {
 
   const dispatch = useDispatch();
 
+
+
+  useEffect(() => {
+
+    if (matchMobile) {
+      const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+
+        ///alert('jjj');
+        // Prompt the user before leaving the page
+        e.returnValue = 'Are you sure you want to leave?';
+      };
+
+      window.addEventListener('beforeunload', handleBeforeUnload);
+
+      return () => {
+        // Clean up the event listener when the component unmounts
+        window.removeEventListener('beforeunload', handleBeforeUnload);
+      };
+    }
+  }, []);
+
+  ///
+  ///
+  ///
+  /// INTERFACE/TYPES FOR SCREENHEIGHT AND DARKMODE
+  interface RootStateGlobalReducer {
+    GlobalReducer: {
+      snapStart: boolean;
+      darkmode: boolean;
+      screenHeight: number;
+      activateLoader: boolean;
+      historyscroll: number;
+      interactContent: any;
+      interact: boolean;
+      MenuData: String;
+      pagenum: number
+    };
+  }
+
+
+  const [shownav, setShownav] = useState<boolean>(true);
+  ///
+  ///
+  ///
+  /// GET SCREENHEIGHT FROM REDUX STORE
+  const { screenHeight, darkmode, snapStart, activateLoader, historyscroll, interactContent, interact, MenuData, pagenum } =
+    useSelector((state: RootStateGlobalReducer) => ({
+      ...state.GlobalReducer,
+    }));
+  const screenHeightReducer = screenHeight;
+  const darkmodeReducer = darkmode;
+  const snapStartReducer = snapStart;
+  const activateLoaderReducer = activateLoader;
+  const historyscrollReducer = historyscroll;
+  const interactContentReducer: any = interactContent;
+  const interactReducer = interact;
+  const MenuDataReducer = MenuData
+  const pagenumReducer = pagenum;
+
+
+
+
+  const [ShowBigPlay, setShowBigPlay] = useState(false);
 
 
   const [postData, setPostData] = useState<Array<any>>([]);
@@ -145,6 +210,8 @@ function ProfileOutter() {
 
   const [selectedImage, setselectedImage] = useState<Array<any>>([]);
 
+
+
   ///
   ///
   /// GET COLOR FROM REDUX STORE
@@ -192,6 +259,10 @@ function ProfileOutter() {
 
   const [BlockonFirstLoad, setBlockonFirstLoad] = useState(true);
 
+
+
+
+
   const ChangeProfile = () => {
     if (memeberPageid === 0) {
       setimageReducer(image);
@@ -204,11 +275,22 @@ function ProfileOutter() {
     }
   };
 
+  const [postPageLimit, setPostPageLimit] = useState<number | null>(0);
 
+  // Assuming temp is of type any (replace with your specific type)
+  const [newPostData, setNewPostData] = useState<any | null>(null);
 
+  // Assuming tempx is of type any (replace with your specific type)
+  const [newPostData2, setNewPostData2] = useState<any | null>(null);
+
+  // Assuming tempxx is of type any (replace with your specific type)
+  const [newPostData3, setNewPostData3] = useState<any | null>(null);
+
+  const [limit, setlimit] = useState<any>(0);
 
 
   useEffect(() => {
+    ////console.log(postData)
     ChangeProfile();
   }, [MemberProfileData, colorReducer, imageThumb, image, memeberPageid]);
 
@@ -244,8 +326,6 @@ function ProfileOutter() {
     setminiProfile(false);
 
     if (allowCallMemberFeeds) {
-
-
       var valax = {
         id: memeberPageidReducer,
         id2: idReducer,
@@ -267,6 +347,15 @@ function ProfileOutter() {
 
 
 
+
+
+
+
+
+
+
+
+
       Axios.post(`${REACT_APP_SUPERSTARZ_URL}/checkIsLoggedxx`, {
         values: valax,
       })
@@ -277,9 +366,10 @@ function ProfileOutter() {
             setshowProfiileData(false);
             setScrollTo(0);
             setShowLoader2(false);
+            ////  alert('kk');
             if (memeberPageidReducer === 0) {
-              callfeeds(0);
-            } else { callfeeds(response.data.payload.id); }
+              callfeeds(0, pagenumReducer);
+            } else { callfeeds(response.data.payload.id, pagenumReducer); }
 
           } else if (response.data.message === "logged out") {
             alert("app.tsx checkislogged logged out");
@@ -319,6 +409,7 @@ function ProfileOutter() {
   };
 
   const updateColor = useCallback(() => {
+
     colorboy = {
       color1: colorReducer,
       color2: "",
@@ -337,7 +428,7 @@ function ProfileOutter() {
           }
         })
         .catch(function (error) {
-          alert("profileoutter color  error");
+          ///  alert("profileoutter color  error");
         });
     }
   }, [
@@ -384,7 +475,7 @@ function ProfileOutter() {
 
   const OpenModalForm = useCallback(
     (type: any) => {
-      var dd = { type: 0, id: 0, innerid: 0 };
+      var dd = { type: 0, id: 0, innerid: 0, pagenumReducer: pagenumReducer };
       if (type === 1) {
         let modalName = "Biography";
         setaboutTemplateGo(true);
@@ -421,7 +512,7 @@ function ProfileOutter() {
       } else {
       }
     },
-    [showModalForm]
+    [showModalForm, pagenumReducer]
   );
 
   ///
@@ -460,6 +551,8 @@ function ProfileOutter() {
 
   const [HistoryDataMan, setHistoryDataMan] = useState<any>([]);
 
+
+
   useEffect(() => {
     var n, d;
     if (memeberPageidReducer === 0) {
@@ -469,10 +562,13 @@ function ProfileOutter() {
         id: 0,
         index: 0,
         innerid: 0,
+        pagenumReducer: pagenumReducer
+
+
       };
       window.history.replaceState(d, "", `${n}`);
     }
-  }, [idReducer, memeberPageidReducer]);
+  }, [idReducer, memeberPageidReducer, pagenumReducer]);
   ///
   ///
   ///
@@ -554,7 +650,9 @@ function ProfileOutter() {
     }
 
     var historyData = window.history.state.data;
-    var historyDatax = JSON.stringify(window.history.state.data);
+
+
+
 
     var historyDataAll = window.history.state.AllMemberData;
 
@@ -563,6 +661,15 @@ function ProfileOutter() {
     var comScroll = JSON.stringify(window.history.state.comScroll);
     let historycomScroll = parseInt(comScroll);
 
+
+    var limValuexx = JSON.stringify(window.history.state.pagenumReducer);
+    let limValue = 0;
+    if (parseInt(limValuexx)) limValue = parseInt(limValuexx);
+
+
+
+    ///var limValue = 0;
+    //// alert(limValue)
     ////////
 
     var comidhistoryData = window.history.state.comid;
@@ -571,12 +678,15 @@ function ProfileOutter() {
     var reactTypeHis = JSON.stringify(window.history.state.reactType);
     let historyreactTypeHis = parseInt(reactTypeHis);
 
+    dispatch(Updatepagenum(limValue));
+
     if (
       historyDataTypeInt === 0 ||
       historyDataTypeInt === 5 ||
       historyDataTypeInt === 7 ||
       historyDataTypeInt === 9
     ) {
+
       callpopstatewithoutdata(
         historyData,
         historyDataTypeInt,
@@ -584,7 +694,8 @@ function ProfileOutter() {
         DiscussionImagehistoryData,
         historycomOriginalData,
         historycomScroll,
-        historyreactTypeHis
+        historyreactTypeHis,
+        limValue
       );
     } else if (
       historyDataTypeInt === 1 ||
@@ -592,6 +703,8 @@ function ProfileOutter() {
       historyDataTypeInt === 8 ||
       historyDataTypeInt === 10
     ) {
+
+
       if (
 
         showModalUploadProfile ||
@@ -614,7 +727,9 @@ function ProfileOutter() {
 
           setshowProfiileData(false);
 
-          responsex(arr);
+          responsex(arr, limValue);
+
+
 
           if (historyDataTypeInt === 6) {
             setCommentHistoryData(historycomOriginalData);
@@ -688,7 +803,8 @@ function ProfileOutter() {
     d: any,
     dd: any,
     sr: any,
-    reactTy: any
+    reactTy: any,
+    limValue: any
   ) => {
     if (
       showModalUploadProfile ||
@@ -698,6 +814,7 @@ function ProfileOutter() {
     ) {
       CloseModalxx();
     } else {
+
       setStopBodyScroll(false);
       setShowModalUpload(false);
       dispatch(UserInfoUpdateMEMBER(0));
@@ -708,11 +825,11 @@ function ProfileOutter() {
         setHistoryDataMan(arr);
         setshowProfiileData(false);
 
-        responsex(arr);
+        responsex(arr, limValue);
       } else {
-        //alert("s");
+        // alert("s");
         setshowProfiileData(false);
-        callfeeds(0);
+        callfeeds(0, limValue);
       }
 
       if (ty == 5) {
@@ -747,7 +864,7 @@ function ProfileOutter() {
       ///Replace modal history state with previous history state
       window.history.back();
       setshowProfiileData(false);
-      callfeeds(0);
+      callfeeds(0, 0);
     } else if (DeviceBackButtonClicked === 3) {
       window.history.back();
       setbillboardserverswitch(true);
@@ -767,38 +884,6 @@ function ProfileOutter() {
 
 
   ///
-
-  ///
-  ///
-  ///
-  /// INTERFACE/TYPES FOR SCREENHEIGHT AND DARKMODE
-  interface RootStateGlobalReducer {
-    GlobalReducer: {
-      snapStart: boolean;
-      darkmode: boolean;
-      screenHeight: number;
-      activateLoader: boolean;
-      historyscroll: number;
-      interactContent: any;
-      interact: boolean;
-    };
-  }
-
-  ///
-  ///
-  ///
-  /// GET SCREENHEIGHT FROM REDUX STORE
-  const { screenHeight, darkmode, snapStart, activateLoader, historyscroll, interactContent, interact } =
-    useSelector((state: RootStateGlobalReducer) => ({
-      ...state.GlobalReducer,
-    }));
-  const screenHeightReducer = screenHeight;
-  const darkmodeReducer = darkmode;
-  const snapStartReducer = snapStart;
-  const activateLoaderReducer = activateLoader;
-  const historyscrollReducer = historyscroll;
-  const interactContentReducer: any = interactContent;
-  const interactReducer = interact;
 
 
 
@@ -832,7 +917,11 @@ function ProfileOutter() {
   ///
   ///DOT ENV DATA'
 
-  const responsex = (postdataRep: any) => {
+  const responsex = (postdataRep: any, postLim: any) => {
+
+    dispatch(Updatepagenum(postLim));
+
+
     postdataRep.forEach((obj: any) => {
       obj.itemheight = "auto";
       obj.itemrealheighthold = "0";
@@ -843,6 +932,7 @@ function ProfileOutter() {
       obj.onLoadDataOnce = false;
       obj.ActiveAutoPlay = true;
       obj.itemInteractGo = false;
+      obj.lim = postLim;
     });
 
     const newArrxt: any = [[...postDatainner]];
@@ -881,6 +971,12 @@ function ProfileOutter() {
         } else {
         }
 
+
+
+        setPostPageLimit(postdataRep[postdataRep.length - 1].id);
+
+
+
         if (i + 1 === postdataRep[index].post_count) {
           newArrxt[index] = newArrxtq;
           newArrxtThumb[index] = newArrxtqThumb;
@@ -894,8 +990,6 @@ function ProfileOutter() {
           setpostDatainnerInteraction1(newArrxt1);
           setpostDatainnerInteraction2(newArrxt2);
 
-
-
         }
         document.body.focus();
         /////
@@ -903,20 +997,32 @@ function ProfileOutter() {
       }
     });
     setPostData(postdataRep);
+
     setshowProfiileData(true);
   };
 
+
+
   const callfeeds = useCallback(
-    (aa: number) => {
+    (aa: number, postPageLimitx: any) => {
       var cboy = {
         id: idReducer,
         id2: idReducer,
         id3: aa,
+        postPageLimit: postPageLimitx
       };
+
+
+
+      dispatch(Updatepagenum(0));
+
+      dispatch(UpdateLoader(true));
+
 
       var tt = "";
 
       if (aa === 0) {
+
         tt = "feeds_chronological";
       } else {
         tt = "profile";
@@ -941,8 +1047,27 @@ function ProfileOutter() {
       )
         .then((response) => {
           if (response.data.message === "feeds fetched") {
+
+            if (postPageLimitx === 0) {
+              setlimit(0);
+            } else {
+              setlimit(postLim);
+            }
+
+
+            setshowProfiileData(false);
+            setPostData([]);
+
             var postdataRep = response.data.payload;
-            responsex(postdataRep);
+
+
+
+            var postLim = response.data.postPageLimit;
+
+            //alert(postLim)
+
+            responsex(postdataRep, postLim);
+
           } else if (response.data.message === "error in fetching feeds") {
             alert("Connection malfunction profile outter");
           }
@@ -960,27 +1085,25 @@ function ProfileOutter() {
   ///
   ///
   useEffect(() => {
+    var dataxx = '';
+    dispatch(UpdateMenuData(dataxx));
+
+
     var data = '';
-
-    dispatch(UpdateMenuData(data));
-
     if (memeberPageidReducer === 0) {
-
       data = 'Feeds'
-
-
     } else if (memeberPageidReducer === idReducer) {
       data = 'Profile'
     }
     else {
-
       data = MemberProfileDataReducer.username
-
-
     }
 
 
-    setTimeout(() => { dispatch(UpdateMenuData(data)); }, 6000)
+    setTimeout(() => {
+
+      dispatch(UpdateMenuData(data));
+    }, 6000)
 
 
 
@@ -988,6 +1111,43 @@ function ProfileOutter() {
 
 
 
+  const callPagination = useCallback(() => {
+    var time = 100;
+    if (memeberPageidReducer === 0) {
+
+      setTimeout(() => {
+        callfeeds(0, postPageLimit);
+      }, time);
+    } else {
+      setTimeout(() => {
+        callfeeds(memeberPageidReducer, postPageLimit);
+      }, time);
+
+    }
+
+
+
+  }, [postPageLimit, memeberPageidReducer])
+
+
+
+  const callPaginationx = useCallback(() => {
+    var time = 100;
+    if (memeberPageidReducer === 0) {
+
+      setTimeout(() => {
+        callfeeds(0, 0);
+      }, time);
+    } else {
+      setTimeout(() => {
+        callfeeds(memeberPageidReducer, 0);
+      }, time);
+
+    }
+
+
+
+  }, [postPageLimit, memeberPageidReducer])
 
   ///
   ///
@@ -997,8 +1157,10 @@ function ProfileOutter() {
     if (idReducer === 0) {
     } else {
       setTimeout(() => {
-        callfeeds(0);
+        callfeeds(0, 0);
       }, 600);
+
+
     }
   }, [REACT_APP_SUPERSTARZ_URL, idReducer]);
 
@@ -1039,7 +1201,7 @@ function ProfileOutter() {
       //pushstate add enteries to your history
       // uploadClose(1);
 
-      var dd = { type: 0, id: 0, innerid: 0 };
+      var dd = { type: 0, id: 0, innerid: 0, pagenumReducer: pagenumReducer };
 
       if (type === 1) {
         window.history.pushState(dd, "", "Upload_Profile");
@@ -1047,7 +1209,7 @@ function ProfileOutter() {
         window.history.pushState(dd, "", "Upload_Billboard");
       }
     },
-    [showModalUploadProfile]
+    [showModalUploadProfile, pagenumReducer]
   );
 
 
@@ -1058,13 +1220,13 @@ function ProfileOutter() {
       //pushstate add enteries to your history
       // uploadClose(1);
 
-      var dd = { type: 0, id: 0, innerid: 0 };
+      var dd = { type: 0, id: 0, innerid: 0, pagenumReducer: pagenumReducer };
 
       window.history.pushState(dd, "", "Editor");
 
 
     },
-    [showModalUploadTask]
+    [showModalUploadTask, pagenumReducer]
   );
 
   ///
@@ -1076,7 +1238,7 @@ function ProfileOutter() {
       setStopBodyScroll(true);
       setShowModalUpload(true);
       //pushstate add enteries to your history
-      var dd = { type: 0, id: 0, innerid: 0 };
+      var dd = { type: 0, id: 0, innerid: 0, pagenumReducer: pagenumReducer };
       window.history.pushState(dd, "", "Upload");
     }
 
@@ -1084,7 +1246,7 @@ function ProfileOutter() {
 
       OpenUploadModalTaskbar();
     }
-  }, [showModalUpload]);
+  }, [showModalUpload, pagenumReducer]);
 
   var widthProfilePic = matchPc ? "70%" : matchTablet ? "85%" : "42vw";
   var topProfilePic = matchPc ? "-20vh" : matchTablet ? "-13vh" : "-9vh";
@@ -1300,9 +1462,19 @@ function ProfileOutter() {
     var t = profileImageR.current.clientHeight;
     var v = profileImageR.current.clientWidth;
 
-    setprofileImagethumbTop(t - t / 1.07);
-    setprofileImagethumbLeft(v - v / 1);
+
+
+    if (matchMobile) {
+      setprofileImagethumbLeft(v - v / 0.98);
+      setprofileImagethumbTop(t - t / 1.02);
+
+    } else {
+      setprofileImagethumbLeft(v - v / 1);
+      setprofileImagethumbTop(t - t / 1.07);
+    }
+
   }, [profileImageR.current]);
+
 
   /*///////////////////////////////////////////////////////////////////////////CONNECT CALL BACK END*/
 
@@ -1324,7 +1496,7 @@ function ProfileOutter() {
         }
       })
       .catch(function (error) {
-        alert("post fav error");
+        //// alert("post fav error");
       });
   };
 
@@ -1332,6 +1504,7 @@ function ProfileOutter() {
     myId: idReducer,
     friendId: "", ////fill in on history integration
   };
+
 
   const callDelfav = () => {
     setAdded(100);
@@ -1344,7 +1517,7 @@ function ProfileOutter() {
         }
       })
       .catch(function (error) {
-        alert("post fav error");
+        ///alert("post fav error");
       });
   };
 
@@ -1360,6 +1533,17 @@ function ProfileOutter() {
     autoSlideDisplay = "none";
     sliderLoader = "";
   }
+
+  ////////////////////////////////////////////
+
+
+
+
+
+
+
+
+
 
   return (
     <>
@@ -1414,8 +1598,8 @@ function ProfileOutter() {
                         padding: "0px",
                         height: "100vh",
                         backgroundColor: darkmodeReducer
-                          ? "rgba(50,50,50, 0.3)"
-                          : "rgba(250,250,250, 0.25)",
+                          ? "rgba(30,20,30, 0.3)"
+                          : "rgba(210,210,200, 0.25)",
                         top: "0vh",
                         zIndex: "1000",
                       }}
@@ -1424,6 +1608,8 @@ function ProfileOutter() {
                 ) : null}
 
                 <Billboard
+                  setshowModalFormMenu={setShowModalFormMenu}
+                  showModalFormMenu={showModalFormMenu}
                   postData={postData}
                   setconnectTemplateGo={setconnectTemplateGo}
                   setDiscussionImage={setDiscussionImage}
@@ -1485,10 +1671,11 @@ function ProfileOutter() {
                       className={`  ${optionsClass}   `}
                       style={{
                         zIndex: 2,
-                        backgroundColor: ColorMemberReducer,
+                        backgroundColor: idReducer === memeberPageidReducer ? colorReducer : ColorMemberReducer,
                         left: `${profileImagethumbLeft}px`,
                         top: `${profileImagethumbTop}px`,
                         opacity: 0.7,
+                        visibility: showModalFormMenu ? 'hidden' : "visible",
                       }}
                     >
                       <Connect
@@ -1520,9 +1707,12 @@ function ProfileOutter() {
                         zIndex: 1,
                         objectFit: "contain",
                         width: "100%",
+                        left: showModalFormMenu ? '30vw' : "0px",
+                        top: showModalFormMenu ? '-30vh' : "0px",
                         borderRadius: "50%",
                         margin: "auto",
                         filter: "blur(4px)",
+                        visibility: matchMobile && showModalFormMenu ? 'hidden' : 'visible',
                       }}
                       src={`${imageReducerThumb}`}
                       alt="Superstarz Billboard "
@@ -1535,18 +1725,21 @@ function ProfileOutter() {
                       }}
                       className={
                         darkmodeReducer
-                          ? `turprofileDark image-gray-on-click`
-                          : ` turprofileLight image-gray-on-click`
+                          ? `turprofileLight image-gray-on-click`
+                          : ` turprofileDark image-gray-on-click`
                       }
                       style={{
                         cursor: "pointer",
                         position: "absolute",
-                        top: "0px",
+
                         zIndex: 1,
                         objectFit: "contain",
                         width: "100%",
                         borderRadius: "50%",
+                        left: showModalFormMenu ? '30vw' : "0px",
+                        top: showModalFormMenu ? '-30vh' : "0px",
                         margin: "auto",
+                        visibility: matchMobile && showModalFormMenu ? 'hidden' : 'visible',
                       }}
                       src={`${imageReducer}`}
                       alt="Superstarz Billboard "
@@ -1630,49 +1823,93 @@ function ProfileOutter() {
                 </Grid>
               ) : null}
 
-              <Grid item xs={12} style={{ padding: "0px" }}></Grid>
+
+
+              <Grid item xs={12} style={{
+                height: "0px",
+                width: '100%', position: "fixed", zIndex: 6, padding: "0px", paddingRight: '6.3vw', textAlign: 'right', bottom: '6vh',
+                opacity: '0.3', visibility: postData ? limit === 0 ? 'hidden' : shownav ? 'visible' : 'hidden' : 'hidden'
+              }}>
+                <ExpandLessIcon
+                  onClick={() => {
+
+                    setminiProfile(false);
+                    dispatch(UpdateLoader(true));
+                    setshowThisComponenet(true);
+
+
+                    callPaginationx();
+
+                  }}
+                  className={
+                    darkmodeReducer
+                      ? "make-small-icons-clickable-lightCrop turdark dontallowhighlighting zuperkingIcon "
+                      : "make-small-icons-clickable-darkCrop  turdark dontallowhighlighting zuperkingIcon  "
+                  }
+                  style={{
+                    fontSize:
+                      matchTablet || matchMobile ? "4.8vh" : "2.9vw",
+                    marginTop: '-6vh', padding: "0px",
+                  }}
+                />
+
+
+              </Grid>
 
               {showProfiileData ? (
-                <Profile
-                  postDatainnerInteraction1={postDatainnerInteraction1}
-                  postDatainnerInteraction2={postDatainnerInteraction2}
-                  StopMini={StopMini}
-                  setStopMini={setStopMini}
-                  ShowLoader2={ShowLoader2}
-                  setShowLoader2={setShowLoader2}
-                  setscrollLocation={setscrollLocation}
-                  showThisComponenet={showThisComponenet}
-                  setshowThisComponenet={setshowThisComponenet}
-                  ScrollTo={ScrollTo}
-                  settypeEmo={settypeEmo}
-                  setconnectTemplateGo={setconnectTemplateGo}
-                  setminiProfile={setminiProfile}
-                  miniProfile={miniProfile}
-                  sliderIndexMini={sliderIndexMini}
-                  setSliderIndexMini={setSliderIndexMini}
-                  zoomClickedIndex={zoomClickedIndex}
-                  setzoomClickedIndex={setzoomClickedIndex}
-                  setStopBodyScroll={setStopBodyScroll}
-                  miniLayoutPost={miniLayoutPost}
-                  setCommentPostid={setCommentPostid}
-                  setDiscussionImage={setDiscussionImage}
-                  x={x}
-                  setx={setx}
-                  showProfiileData={showProfiileData}
-                  getSliderWidthRef={getSliderWidthRef}
-                  OpenModalForm={OpenModalForm}
-                  getSliderWidth={getSliderWidth}
-                  postData={postData}
-                  formtype={formtype}
-                  showModalForm={showModalForm}
-                  CloseModalForm={CloseModalForm}
-                  aboutTemplateGo={aboutTemplateGo}
-                  commentTemplateGo={commentTemplateGo}
-                  postDatainner={postDatainner}
-                  postDatainnerThumb={postDatainnerThumb}
-                  paperPostScrollRef={paperPostScrollRef}
-                />
+                <Grid item xs={12} style={{
+                  position: "relative", zIndex: 1, padding: "0px"
+                }}>
+                  <Profile
+
+                    setShowBigPlay={setShowBigPlay}
+                    setsuperSettings={setsuperSettings}
+
+                    showModalFormMenu={showModalFormMenu}
+                    setshowModalFormMenu={setShowModalFormMenu}
+                    callPagination={callPagination}
+
+                    postDatainnerInteraction1={postDatainnerInteraction1}
+                    postDatainnerInteraction2={postDatainnerInteraction2}
+                    StopMini={StopMini}
+                    setStopMini={setStopMini}
+                    ShowLoader2={ShowLoader2}
+                    setShowLoader2={setShowLoader2}
+                    setscrollLocation={setscrollLocation}
+                    showThisComponenet={showThisComponenet}
+                    setshowThisComponenet={setshowThisComponenet}
+                    ScrollTo={ScrollTo}
+                    settypeEmo={settypeEmo}
+                    setconnectTemplateGo={setconnectTemplateGo}
+                    setminiProfile={setminiProfile}
+                    miniProfile={miniProfile}
+                    sliderIndexMini={sliderIndexMini}
+                    setSliderIndexMini={setSliderIndexMini}
+                    zoomClickedIndex={zoomClickedIndex}
+                    setzoomClickedIndex={setzoomClickedIndex}
+                    setStopBodyScroll={setStopBodyScroll}
+                    miniLayoutPost={miniLayoutPost}
+                    setCommentPostid={setCommentPostid}
+                    setDiscussionImage={setDiscussionImage}
+                    x={x}
+                    setx={setx}
+                    showProfiileData={showProfiileData}
+                    getSliderWidthRef={getSliderWidthRef}
+                    OpenModalForm={OpenModalForm}
+                    getSliderWidth={getSliderWidth}
+                    postData={postData}
+                    formtype={formtype}
+                    showModalForm={showModalForm}
+                    CloseModalForm={CloseModalForm}
+                    aboutTemplateGo={aboutTemplateGo}
+                    commentTemplateGo={commentTemplateGo}
+                    postDatainner={postDatainner}
+                    postDatainnerThumb={postDatainnerThumb}
+                    paperPostScrollRef={paperPostScrollRef}
+                  /></Grid>
               ) : null}
+
+
 
               <Grid
                 item
@@ -1910,6 +2147,11 @@ function ProfileOutter() {
 
 
                 <Menu
+                  showModalForm={showModalForm}
+                  shownav={shownav}
+                  setShownav={setShownav}
+                  showModalFormMenu={showModalFormMenu}
+                  ShowBigPlay={ShowBigPlay}
                   setShowModalFormMenu={setShowModalFormMenu}
                   postData={postData}
                   selectedImage={selectedImage}
@@ -1932,24 +2174,32 @@ function ProfileOutter() {
               </Grid>
 
 
-              <Grid
+              {ShowBigPlay ? <Grid
                 item
                 style={{
-                  height: "0px",
-                  zIndex: 5000,
                   position: 'fixed',
-                  top: '0vh'
+                  bottom: '3vh',
+                  zIndex: 4500,
+                  right: '5vw',
+
                 }}
               >
+                <SlowMotionVideoIcon
+                  className={`${darkmodeReducer
+                    ? "make-small-icons-clickable-darkMenu dontallowhighlighting zuperkingIcon"
+                    : "make-small-icons-clickable-lightMenu dontallowhighlighting zuperking"
+                    } blinking`}
+                  style={{
+                    fontSize: matchMobile ? '8.7vh' : '6vw',
+                    color: colorReducer
+                  }}
+                />
 
 
-                <ActualMenu
-                  setsuperSettings={setsuperSettings}
-                  postData={postData}
-                  showModalFormMenu={showModalFormMenu}
-                  setshowModalFormMenu={setShowModalFormMenu} />
+              </Grid> : null}
 
-              </Grid>
+
+
 
 
 
@@ -1957,7 +2207,8 @@ function ProfileOutter() {
             </MuiThemeProvider>
           </Paper>
         </>
-      ) : null}
+      ) : null
+      }
     </>
   );
 }

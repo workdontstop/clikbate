@@ -33,14 +33,14 @@ function LoginButtonsx({ OpenModalForm }: ILogButtons) {
     pad = darkmodeReducer ? "25px" : "27px";
     ///
   } else if (matchTablet) {
-    pad = "16px";
+    pad = "21.5px";
     buttonFont = "2vw";
     buttonTransform = " ";
     ///
   } else {
     buttonFont = "";
     buttonTransform = "scale(0.95)";
-    pad = "16px";
+    pad = "25px";
   }
 
   ///
@@ -102,7 +102,7 @@ function LoginButtonsx({ OpenModalForm }: ILogButtons) {
       container
       className={matchPc ? "containerloginpc" : "containerloginmobile "}
       item
-      style={{ marginTop: matchMobile ? "1.5vh" : "0px", padding: "0px" }}
+      style={{ marginTop: matchMobile ? "-2.5vh" : "0px", padding: "0px" }}
     >
       <Grid item xs={1} sm={3} md={2}></Grid>
 
@@ -126,6 +126,10 @@ function LoginButtonsx({ OpenModalForm }: ILogButtons) {
           Log In
         </Button>
       </Grid>
+
+      {matchMobile ? <Grid item xs={12} md={false}></Grid> : null}
+
+
       <Grid item xs={1} sm={3} md={2}></Grid>
 
       <Grid item className="buttonpad buttonshake" xs={10} sm={6} md={3}>

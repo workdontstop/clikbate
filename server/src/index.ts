@@ -22,7 +22,7 @@ const { uploadFileTos3, getFileStreamFroms3 } = require("./s3");
 
 if (process.env.APP_STATE === "dev") {
   const corsOptions = {
-    origin: "http://localhost:3000",
+    origin: "http://192.168.0.21:3000",
     credentials: true, //access-control-allow-credentials:true
     optionSuccessStatus: 200,
   };
@@ -67,7 +67,7 @@ const CONNECTION_CONFIG = {
 ///
 ///reg
 
-const register = `INSERT INTO members (username,password,email,billboard1,billboardthumb1,profile_image,profile_image_thumb,color1,color2,color_type,status,notification,tutorial,date,reg) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`;
+const register = `INSERT INTO members (username,password,email,billboard1,billboardthumb1,billboard2,billboardthumb2,profile_image,profile_image_thumb,color1,color2,color_type,status,notification,tutorial,date,reg) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`;
 ///
 ///login
 const login = `SELECT
@@ -109,7 +109,7 @@ const getstickers = `SELECT stickname FROM stickers  ORDER BY id DESC  LIMIT 30 
 
 ///checkIsLogged
 
-const posts = `SELECT
+const postsx = `SELECT
 
 
 (SELECT COUNT(*)   
@@ -148,6 +148,43 @@ WHERE post = posts.id and user = ?)EmoIn,
 caption,item1,thumb1,itemtype1,interact1a,interact1ax,interact1ay,interact1b,interact1bx,interact1by,item2,thumb2,itemtype2,interact2a,interact2ax,interact2ay,interact2b,interact2bx,interact2by,item3,thumb3,itemtype3,interact3a,interact3ax,interact3ay,interact3b,interact3bx,interact3by,item4,thumb4,itemtype4,item5,thumb5,itemtype5,time  FROM posts inner join members on
  posts.sender = members.id   ORDER BY posts.id DESC LIMIT 20`;
 
+const posts_more = `SELECT
+(SELECT COUNT(*)   
+  FROM fan
+ WHERE favid = posts.sender and userid = ?)favCount,
+
+
+(SELECT type
+FROM emotions 
+WHERE post = posts.id and user = ?)EmoIn,
+
+
+(SELECT COUNT(*) 
+          FROM comments 
+         WHERE post = posts.id)commentCount,
+
+
+      (SELECT COUNT(*) 
+          FROM emotions
+         WHERE post = posts.id and type=1)lovely, 
+         
+      (SELECT COUNT(*) 
+          FROM emotions
+         WHERE post = posts.id and type=2)cool, 
+
+            (SELECT COUNT(*) 
+          FROM emotions
+         WHERE post = posts.id and type=3)care, 
+
+            (SELECT COUNT(*) 
+          FROM emotions
+         WHERE post = posts.id and type=4)funny, 
+         
+         
+        members.profile_image,members.username,color1,posts.id,sender,post_count,topic,
+caption,item1,thumb1,itemtype1,interact1a,interact1ax,interact1ay,interact1b,interact1bx,interact1by,item2,thumb2,itemtype2,interact2a,interact2ax,interact2ay,interact2b,interact2bx,interact2by,item3,thumb3,itemtype3,interact3a,interact3ax,interact3ay,interact3b,interact3bx,interact3by,item4,thumb4,itemtype4,item5,thumb5,itemtype5,time  FROM posts inner join members on
+ posts.sender = members.id AND posts.id < ?    ORDER BY posts.id DESC LIMIT 20`;
+
 const updateColor = `UPDATE members SET  color1 = ? WHERE (id = ?)`;
 
 const updateBasicpage = `UPDATE members SET username = ?, quote=?, biography=?   WHERE (id = ?)`;
@@ -157,6 +194,7 @@ const updateProfilePic = `UPDATE members SET profile_image = ?, profile_image_th
 const updateSticker = `INSERT INTO stickers (stickname,user) VALUES (?,?)`;
 
 const updatebillboardPic = `UPDATE members SET billboard1 = ?, billboardthumb1 = ?  WHERE (id = ?)`;
+
 const updatebillboardPic2 = `UPDATE members SET billboard2 = ?, billboardthumb2 = ?  WHERE (id = ?)`;
 
 const createpost = `INSERT INTO posts (sender,post_count,topic,caption,item1,thumb1,itemtype1,interact1a,interact1ax,interact1ay,
@@ -173,6 +211,10 @@ const getComments = ` SELECT
  
  comments.id,members.id AS comUserId,members.profile_image,members.username,color1,com,comments.date  FROM comments inner join members on
  comments.commented_by = members.id WHERE comments.post = ?  ORDER BY comments.id DESC  LIMIT 90  `;
+
+const delPost = `DELETE FROM posts WHERE id = ?`;
+
+const delcom = `DELETE FROM comments WHERE id = ?`;
 
 const getMoreComments = `SELECT
 
@@ -284,8 +326,55 @@ WHERE post = posts.id and user = ?)EmoIn,
          
          
         members.profile_image,members.username,color1,posts.id,sender,post_count,topic,
-caption,item1,thumb1,itemtype1,item2,thumb2,itemtype2,item3,thumb3,itemtype3,item4,thumb4,itemtype4,item5,thumb5,itemtype5,time  FROM posts inner join members on
- posts.sender = members.id where posts.sender = ?  ORDER BY posts.id DESC LIMIT 50 `;
+caption,item1,thumb1,itemtype1,interact1a,interact1ax,interact1ay,interact1b,interact1bx,interact1by,item2,thumb2,itemtype2,interact2a,interact2ax,interact2ay,interact2b,interact2bx,interact2by,item3,thumb3,itemtype3,interact3a,interact3ax,interact3ay,interact3b,interact3bx,interact3by,item4,thumb4,itemtype4,item5,thumb5,itemtype5,time  FROM posts inner join members on
+ posts.sender = members.id    where posts.sender = ?  ORDER BY posts.id DESC LIMIT 20`;
+
+const profile_more = `SELECT
+
+
+(SELECT COUNT(*)   
+  FROM fan
+ WHERE favid = posts.sender and userid = ?)favCount,
+
+
+(SELECT type
+FROM emotions 
+WHERE post = posts.id and user = ?)EmoIn,
+
+
+(SELECT COUNT(*) 
+          FROM comments 
+         WHERE post = posts.id)commentCount,
+
+
+      (SELECT COUNT(*) 
+          FROM emotions
+         WHERE post = posts.id and type=1)lovely, 
+         
+      (SELECT COUNT(*) 
+          FROM emotions
+         WHERE post = posts.id and type=2)cool, 
+
+            (SELECT COUNT(*) 
+          FROM emotions
+         WHERE post = posts.id and type=3)care, 
+
+            (SELECT COUNT(*) 
+          FROM emotions
+         WHERE post = posts.id and type=4)funny, 
+         
+         
+        members.profile_image,members.username,color1,posts.id,sender,post_count,topic,
+caption,item1,thumb1,itemtype1,interact1a,interact1ax,interact1ay,interact1b,interact1bx,interact1by,item2,thumb2,itemtype2,interact2a,interact2ax,interact2ay,interact2b,interact2bx,interact2by,item3,thumb3,itemtype3,interact3a,interact3ax,interact3ay,interact3b,interact3bx,interact3by,item4,thumb4,itemtype4,item5,thumb5,itemtype5,time  FROM posts inner join members on
+ posts.sender = members.id where posts.sender = ? AND posts.id < ?  ORDER BY posts.id DESC LIMIT 20 `;
+
+const optionsval = `(SELECT thumb1 FROM posts WHERE sender = ? ORDER BY id DESC LIMIT 1)
+UNION ALL
+(SELECT thumb1 FROM posts ORDER BY id DESC LIMIT 1);
+`;
+
+const pool = mysql.createPool(CONNECTION_CONFIG);
+const execPoolQuery = util.promisify(pool.query.bind(pool));
 
 /////////
 ////////
@@ -294,73 +383,96 @@ caption,item1,thumb1,itemtype1,item2,thumb2,itemtype2,item3,thumb3,itemtype3,ite
 app.post("/profile", async (req: Request, res: Response) => {
   const { values } = req.body;
 
-  const connection = mysql.createConnection(CONNECTION_CONFIG);
-  const chronologicalQuery = util.promisify(connection.query.bind(connection));
-  try {
-    const chronologicaldata = await chronologicalQuery(profile, [
-      values.id,
-      values.id2,
-      values.id3,
-    ]);
+  if (values.postPageLimit == 0) {
+    try {
+      const chronologicaldata = await execPoolQuery(profile, [
+        values.id,
+        values.id2,
+        values.id3,
+      ]);
 
-    ///console.log(chronologicaldata[7].favCount);
-    return res.send({
-      ///gettingcookie: userSessionData,
-      message: "feeds fetched",
-      payload: chronologicaldata,
-    });
-  } catch (e: any) {
-    //console.log(e)
-    return res.send({ message: "error in fetching feeds" });
+      ///console.log(chronologicaldata[7].favCount);
+      return res.send({
+        ///gettingcookie: userSessionData,
+        message: "feeds fetched",
+        payload: chronologicaldata,
+        postPageLimit: values.postPageLimit,
+      });
+    } catch (e: any) {
+      console.log(e);
+      return res.send({ message: "error in fetching feeds" });
+    }
+  } else {
+    try {
+      const chronologicaldata = await execPoolQuery(profile_more, [
+        values.id,
+        values.id2,
+        values.id3,
+        values.postPageLimit,
+      ]);
+
+      ///console.log(chronologicaldata[7].favCount);
+      return res.send({
+        ///gettingcookie: userSessionData,
+        message: "feeds fetched",
+        payload: chronologicaldata,
+        postPageLimit: values.postPageLimit,
+      });
+    } catch (e: any) {
+      console.log(e);
+      return res.send({ message: "error in fetching feeds" });
+    }
   }
 });
 
-app.post("/checkIsLoggedxx", async (req: Request, res: Response) => {
-  const connection = mysql.createConnection(CONNECTION_CONFIG);
-  const loginQuery = util.promisify(connection.query.bind(connection));
-  const { values } = req.body;
-  try {
-    const logindata = await loginQuery(loginId, [values.id2, values.id]);
+app.post(
+  "/checkIsLoggedxx",
+  validateToken,
+  async (req: Request, res: Response) => {
+    const { values } = req.body;
+    console.log(validateToken);
+    try {
+      const logindata = await execPoolQuery(loginId, [values.id2, values.id]);
+      //console.log(logindata);
+      const payloadValue = {
+        id: logindata[0].id,
+        username: logindata[0].username,
+        userimage: logindata[0].profile_image,
+        userimagethumb: logindata[0].profile_image_thumb,
+        usercolor1: logindata[0].color1,
+        usercolor2: logindata[0].color2,
+        usercolortype: logindata[0].color_type,
+        userfirstname: logindata[0].first_name,
+        usersurname: logindata[0].sur_name,
+        userquote: logindata[0].quote,
+        userreg: logindata[0].reg,
+        userbillboard1: logindata[0].billboard1,
+        userbillboardthumb1: logindata[0].billboardthumb1,
+        userbillboard2: logindata[0].billboard2,
+        userbillboardthumb2: logindata[0].billboardthumb2,
+        biography: logindata[0].biography,
+        fans: logindata[0].fanCount,
+        favorites: logindata[0].favoriteCount,
+        connectCount: logindata[0].connectCount,
+      };
 
-    const payloadValue = {
-      id: logindata[0].id,
-      username: logindata[0].username,
-      userimage: logindata[0].profile_image,
-      userimagethumb: logindata[0].profile_image_thumb,
-      usercolor1: logindata[0].color1,
-      usercolor2: logindata[0].color2,
-      usercolortype: logindata[0].color_type,
-      userfirstname: logindata[0].first_name,
-      usersurname: logindata[0].sur_name,
-      userquote: logindata[0].quote,
-      userreg: logindata[0].reg,
-      userbillboard1: logindata[0].billboard1,
-      userbillboardthumb1: logindata[0].billboardthumb1,
-      userbillboard2: logindata[0].billboard2,
-      userbillboardthumb2: logindata[0].billboardthumb2,
-      biography: logindata[0].biography,
-      fans: logindata[0].fanCount,
-      favorites: logindata[0].favoriteCount,
-      connectCount: logindata[0].connectCount,
-    };
-
-    return res.send({
-      ///gettingcookie: userSessionData,
-      message: "logged in",
-      payload: payloadValue,
-    });
-  } catch {
-    return res.send({ message: "Wrong id" });
+      return res.send({
+        ///gettingcookie: userSessionData,
+        message: "logged in",
+        payload: payloadValue,
+      });
+    } catch (e: any) {
+      //console.log(e);
+      return res.send({ message: "Wrong id" });
+    }
   }
-});
+);
 
 app.post("/fan_chronological", async (req: Request, res: Response) => {
   const { values } = req.body;
-  const connection = mysql.createConnection(CONNECTION_CONFIG);
-  const chronologicalQuery = util.promisify(connection.query.bind(connection));
 
   try {
-    const chronologicaldata = await chronologicalQuery(getConnectionsFan, [
+    const chronologicaldata = await execPoolQuery(getConnectionsFan, [
       values.id,
       values.id,
     ]);
@@ -378,11 +490,9 @@ app.post("/fan_chronological", async (req: Request, res: Response) => {
 
 app.post("/fan_chronological_more", async (req: Request, res: Response) => {
   const { values } = req.body;
-  const connection = mysql.createConnection(CONNECTION_CONFIG);
-  const chronologicalQuery = util.promisify(connection.query.bind(connection));
 
   try {
-    const chronologicaldata = await chronologicalQuery(getMoreConnectionsFan, [
+    const chronologicaldata = await execPoolQuery(getMoreConnectionsFan, [
       values.id,
       values.id,
       values.limit,
@@ -400,11 +510,9 @@ app.post("/fan_chronological_more", async (req: Request, res: Response) => {
 
 app.post("/fav_chronological", async (req: Request, res: Response) => {
   const { values } = req.body;
-  const connection = mysql.createConnection(CONNECTION_CONFIG);
-  const chronologicalQuery = util.promisify(connection.query.bind(connection));
 
   try {
-    const chronologicaldata = await chronologicalQuery(getConnections, [
+    const chronologicaldata = await execPoolQuery(getConnections, [
       values.id,
       values.id,
     ]);
@@ -422,11 +530,9 @@ app.post("/fav_chronological", async (req: Request, res: Response) => {
 
 app.post("/fav_chronological_more", async (req: Request, res: Response) => {
   const { values } = req.body;
-  const connection = mysql.createConnection(CONNECTION_CONFIG);
-  const chronologicalQuery = util.promisify(connection.query.bind(connection));
 
   try {
-    const chronologicaldata = await chronologicalQuery(getMoreConnections, [
+    const chronologicaldata = await execPoolQuery(getMoreConnections, [
       values.id,
       values.id,
       values.limit,
@@ -445,10 +551,8 @@ app.post("/fav_chronological_more", async (req: Request, res: Response) => {
 app.post("/remove_fav", async (req: Request, res: Response) => {
   const { values } = req.body;
 
-  const connection = mysql.createConnection(CONNECTION_CONFIG);
-  const execQuery = util.promisify(connection.query.bind(connection));
   try {
-    await execQuery(removefav, [values.friendId, values.myId]);
+    await execPoolQuery(removefav, [values.friendId, values.myId]);
     return res.send({ message: "removed" });
   } catch (e: any) {
     ///console.log(e);
@@ -459,14 +563,12 @@ app.post("/remove_fav", async (req: Request, res: Response) => {
 app.post("/add_fav", async (req: Request, res: Response) => {
   const { values } = req.body;
 
-  const connection = mysql.createConnection(CONNECTION_CONFIG);
-  const execQuery = util.promisify(connection.query.bind(connection));
   var currentTime = new Date();
   var lock: any = `${values.myId}${values.friendId}`;
   let lockNum = parseInt(lock);
 
   try {
-    await execQuery(insertFav, [
+    await execPoolQuery(insertFav, [
       values.myId,
       values.friendId,
       lockNum,
@@ -481,11 +583,9 @@ app.post("/add_fav", async (req: Request, res: Response) => {
 
 app.post("/reaction_chronological", async (req: Request, res: Response) => {
   const { values } = req.body;
-  const connection = mysql.createConnection(CONNECTION_CONFIG);
-  const chronologicalQuery = util.promisify(connection.query.bind(connection));
 
   try {
-    const chronologicaldata = await chronologicalQuery(getReaction, [
+    const chronologicaldata = await execPoolQuery(getReaction, [
       values.id,
       values.post,
       values.type,
@@ -506,13 +606,9 @@ app.post(
   "/reaction_chronological_more",
   async (req: Request, res: Response) => {
     const { values } = req.body;
-    const connection = mysql.createConnection(CONNECTION_CONFIG);
-    const chronologicalQuery = util.promisify(
-      connection.query.bind(connection)
-    );
 
     try {
-      const chronologicaldata = await chronologicalQuery(getMoreReaction, [
+      const chronologicaldata = await execPoolQuery(getMoreReaction, [
         values.id,
         values.post,
         values.type,
@@ -533,10 +629,8 @@ app.post(
 app.put("/updateEmo", async (req: Request, res: Response) => {
   const { values } = req.body;
 
-  const connection = mysql.createConnection(CONNECTION_CONFIG);
-  const execQuery = util.promisify(connection.query.bind(connection));
   try {
-    await execQuery(updateEmo, [values.type, values.post, values.user]);
+    await execPoolQuery(updateEmo, [values.type, values.post, values.user]);
     return res.send({ message: "emo updated" });
   } catch {
     return res.send({ message: "emoFailed" });
@@ -546,14 +640,12 @@ app.put("/updateEmo", async (req: Request, res: Response) => {
 app.post("/insertEmo", async (req: Request, res: Response) => {
   const { values } = req.body;
 
-  const connection = mysql.createConnection(CONNECTION_CONFIG);
-  const execQuery = util.promisify(connection.query.bind(connection));
   var currentTime = new Date();
 
   var lock: any = `${values.post}${values.user}`;
   let lockNum = parseInt(lock);
   try {
-    await execQuery(insertEmo, [
+    await execPoolQuery(insertEmo, [
       values.post,
       values.user,
       values.type,
@@ -570,13 +662,9 @@ app.post(
   "/comments_chronological_more",
   async (req: Request, res: Response) => {
     const { values } = req.body;
-    const connection = mysql.createConnection(CONNECTION_CONFIG);
-    const chronologicalQuery = util.promisify(
-      connection.query.bind(connection)
-    );
 
     try {
-      const chronologicaldata = await chronologicalQuery(getMoreComments, [
+      const chronologicaldata = await execPoolQuery(getMoreComments, [
         values.id,
         values.commentId,
         values.limit,
@@ -593,13 +681,43 @@ app.post(
   }
 );
 
-app.post("/comments_chronological", async (req: Request, res: Response) => {
+app.post("/delPost", async (req: Request, res: Response) => {
   const { values } = req.body;
-  const connection = mysql.createConnection(CONNECTION_CONFIG);
-  const chronologicalQuery = util.promisify(connection.query.bind(connection));
 
   try {
-    const chronologicaldata = await chronologicalQuery(getComments, [
+    const chronologicaldata = await execPoolQuery(delPost, [values.id]);
+
+    return res.send({
+      ///gettingcookie: userSessionData,
+      message: "deleted post",
+    });
+  } catch (error) {
+    console.error("Error deleting comment:", error);
+    return res.status(500).send({ message: "Error deleting comment" });
+  }
+});
+
+app.post("/delcomments", async (req: Request, res: Response) => {
+  const { values } = req.body;
+
+  try {
+    const chronologicaldata = await execPoolQuery(delcom, [values.id]);
+
+    return res.send({
+      ///gettingcookie: userSessionData,
+      message: "deleted",
+    });
+  } catch (error) {
+    console.error("Error deleting comment:", error);
+    return res.status(500).send({ message: "Error deleting comment" });
+  }
+});
+
+app.post("/comments_chronological", async (req: Request, res: Response) => {
+  const { values } = req.body;
+
+  try {
+    const chronologicaldata = await execPoolQuery(getComments, [
       values.id,
       values.commentId,
     ]);
@@ -616,12 +734,11 @@ app.post("/comments_chronological", async (req: Request, res: Response) => {
 
 app.post("/Create_comment", async (req: Request, res: Response) => {
   const { values } = req.body;
-  const connection = mysql.createConnection(CONNECTION_CONFIG);
-  const execQuery = util.promisify(connection.query.bind(connection));
+
   var currentTime = new Date();
 
   try {
-    await execQuery(createComment, [
+    await execPoolQuery(createComment, [
       values.postid,
       values.inputedCom,
       values.id,
@@ -662,11 +779,9 @@ app.post("/get_signed_url_Sticker", async (req: any, res: any) => {
 
 app.post("/sticker_upload_data", async (req: Request, res: Response) => {
   const { values } = req.body;
-  const connection = mysql.createConnection(CONNECTION_CONFIG);
-  const execQuery = util.promisify(connection.query.bind(connection));
 
   try {
-    await execQuery(updateSticker, [values.imagedata, values.id]);
+    await execPoolQuery(updateSticker, [values.imagedata, values.id]);
     return res.send({ message: "sticker image data updated" });
   } catch {
     return res.send({ message: "Failed" });
@@ -682,11 +797,9 @@ app.post("/get_signed_url_4upload", async (req: any, res: any) => {
 
 app.put("/profile_upload_data", async (req: Request, res: Response) => {
   const { values } = req.body;
-  const connection = mysql.createConnection(CONNECTION_CONFIG);
-  const execQuery = util.promisify(connection.query.bind(connection));
 
   try {
-    await execQuery(updateProfilePic, [
+    await execPoolQuery(updateProfilePic, [
       values.imagedata,
       values.imagedataThumb,
       values.color,
@@ -702,17 +815,16 @@ app.put("/profile_upload_data", async (req: Request, res: Response) => {
 
 app.put("/billboard_upload_data", async (req: any, res: any, next: any) => {
   const { values } = req.body;
-  const connection = mysql.createConnection(CONNECTION_CONFIG);
-  const execQuery = util.promisify(connection.query.bind(connection));
+
   try {
-    if (values.type === 2) {
-      await execQuery(updatebillboardPic2, [
+    if (values.type === 0) {
+      await execPoolQuery(updatebillboardPic2, [
         values.imagedata,
         values.imagedataThumb,
         values.id,
       ]);
     } else {
-      await execQuery(updatebillboardPic, [
+      await execPoolQuery(updatebillboardPic, [
         values.imagedata,
         values.imagedataThumb,
         values.id,
@@ -731,12 +843,10 @@ app.post("/post_upload_data", async (req: any, res: any, next: any) => {
   const { values } = req.body;
 
   var currentTime = new Date();
-  const connection = mysql.createConnection(CONNECTION_CONFIG);
-  const execQuery = util.promisify(connection.query.bind(connection));
 
   console.log(values.I1x);
   try {
-    await execQuery(createpost, [
+    await execPoolQuery(createpost, [
       values.id,
       values.all.length,
       values.topic,
@@ -794,11 +904,9 @@ app.post("/post_upload_data", async (req: any, res: any, next: any) => {
 
 app.put("/update_basic", async (req: Request, res: Response) => {
   const { values } = req.body;
-  const connection = mysql.createConnection(CONNECTION_CONFIG);
-  const execQuery = util.promisify(connection.query.bind(connection));
 
   try {
-    await execQuery(updateBasicpage, [
+    await execPoolQuery(updateBasicpage, [
       values.inputedUsername,
       values.inputedQuote,
       values.inputedDescription,
@@ -812,11 +920,9 @@ app.put("/update_basic", async (req: Request, res: Response) => {
 
 app.put("/update_color", async (req: Request, res: Response) => {
   const { values } = req.body;
-  const connection = mysql.createConnection(CONNECTION_CONFIG);
-  const execQuery = util.promisify(connection.query.bind(connection));
 
   try {
-    await execQuery(updateColor, [values.color1, values.id]);
+    await execPoolQuery(updateColor, [values.color1, values.id]);
     return res.send({ message: "color updated" });
   } catch {
     return res.send({ message: "colorFailed" });
@@ -824,10 +930,8 @@ app.put("/update_color", async (req: Request, res: Response) => {
 });
 
 app.post("/feeds_stickers", async (req: Request, res: Response) => {
-  const connection = mysql.createConnection(CONNECTION_CONFIG);
-  const chronologicalQuery = util.promisify(connection.query.bind(connection));
   try {
-    const chronologicaldata = await chronologicalQuery(getstickers);
+    const chronologicaldata = await execPoolQuery(getstickers);
 
     return res.send({
       ///gettingcookie: userSessionData,
@@ -839,16 +943,11 @@ app.post("/feeds_stickers", async (req: Request, res: Response) => {
   }
 });
 
-app.post("/feeds_chronological", async (req: Request, res: Response) => {
+app.post("/OptionsPic", async (req: Request, res: Response) => {
   const { values } = req.body;
 
-  const connection = mysql.createConnection(CONNECTION_CONFIG);
-  const chronologicalQuery = util.promisify(connection.query.bind(connection));
   try {
-    const chronologicaldata = await chronologicalQuery(posts, [
-      values.id,
-      values.id2,
-    ]);
+    const chronologicaldata = await execPoolQuery(optionsval, [values]);
 
     ///console.log(chronologicaldata[7].favCount);
     return res.send({
@@ -859,6 +958,49 @@ app.post("/feeds_chronological", async (req: Request, res: Response) => {
   } catch (e: any) {
     //console.log(e)
     return res.send({ message: "error in fetching feeds" });
+  }
+});
+
+app.post("/feeds_chronological", async (req: Request, res: Response) => {
+  const { values } = req.body;
+
+  if (values.postPageLimit == 0) {
+    try {
+      const chronologicaldata = await execPoolQuery(postsx, [
+        values.id,
+        values.id2,
+      ]);
+
+      ///console.log(chronologicaldata[7].favCount);
+      return res.send({
+        ///gettingcookie: userSessionData,
+        message: "feeds fetched",
+        payload: chronologicaldata,
+        postPageLimit: values.postPageLimit,
+      });
+    } catch (e: any) {
+      //console.log(e)
+      return res.send({ message: "error in fetching feeds" });
+    }
+  } else {
+    try {
+      const chronologicaldata = await execPoolQuery(posts_more, [
+        values.id,
+        values.id2,
+        values.postPageLimit,
+      ]);
+
+      ///console.log(chronologicaldata[7].favCount);
+      return res.send({
+        ///gettingcookie: userSessionData,
+        message: "feeds fetched",
+        payload: chronologicaldata,
+        postPageLimit: values.postPageLimit,
+      });
+    } catch (e: any) {
+      //console.log(e)
+      return res.send({ message: "error in fetching feeds" });
+    }
   }
 });
 
@@ -926,10 +1068,8 @@ app.post(
     if (req.cookies.accesst) {
       const userSessionData: any = jwt_decode(req.cookies.accesst);
 
-      const connection = mysql.createConnection(CONNECTION_CONFIG);
-      const loginQuery = util.promisify(connection.query.bind(connection));
       try {
-        const logindata = await loginQuery(loginId, [
+        const logindata = await execPoolQuery(loginId, [
           userSessionData.id,
           userSessionData.id,
         ]);
@@ -994,10 +1134,9 @@ app.post(
       });
     } else {
       const username = req.body.value;
-      const connection = mysql.createConnection(CONNECTION_CONFIG);
-      const checkpassQuery = util.promisify(connection.query.bind(connection));
+
       try {
-        const checkresult = await checkpassQuery(checkpassword, [username]);
+        const checkresult = await execPoolQuery(checkpassword, [username]);
         const IdIsAvailable = checkresult[0].id;
         if (IdIsAvailable) {
           return res.send({ message: "username is not unique" });
@@ -1027,10 +1166,9 @@ app.post(
       });
     } else {
       const { values } = req.body;
-      const connection = mysql.createConnection(CONNECTION_CONFIG);
-      const loginQuery = util.promisify(connection.query.bind(connection));
+
       try {
-        const logindata = await loginQuery(login, [values.inputedUsername]);
+        const logindata = await execPoolQuery(login, [values.inputedUsername]);
         const DatabasePassword = logindata[0].password;
         const PasswordMatchResult = await bcrypt.compare(
           values.inputedPassword,
@@ -1120,16 +1258,17 @@ app.post(
 
       var color = colorHolder[colorans];
       var currentTime = new Date();
-      const connection = mysql.createConnection(CONNECTION_CONFIG);
-      const execQuery = util.promisify(connection.query.bind(connection));
+
       bcrypt.hash(values.inputedPassword, 10).then(async (hash: string) => {
         try {
-          const signupData = await execQuery(register, [
+          const signupData = await execPoolQuery(register, [
             values.inputedUsername,
             hash,
             values.inputedEmail,
             "https://superstarz-data-tank.s3.eu-west-2.amazonaws.com/fc284f4924c7405bb44ab8e2c3f05891",
             "https://superstarz-data-tank.s3.eu-west-2.amazonaws.com/94e85f77e13ff88e7deb98d65975f39a",
+            "https://superstarz-data-tank.s3.eu-west-2.amazonaws.com/27e942d28474c2e0bff656c338c563a5",
+            "https://superstarz-data-tank.s3.eu-west-2.amazonaws.com/d42140d57dc052276dd51af3f461e4f9",
             "https://superstarz-data-tank.s3.eu-west-2.amazonaws.com/98356ee74f016f6e019ec687d3a54982",
             "https://superstarz-data-tank.s3.eu-west-2.amazonaws.com/2c38be850a49ff355ba1e13a40ebe3f0",
             color,
@@ -1160,7 +1299,10 @@ app.post(
               "https://superstarz-data-tank.s3.eu-west-2.amazonaws.com/fc284f4924c7405bb44ab8e2c3f05891",
             userbillboardthumb1:
               "https://superstarz-data-tank.s3.eu-west-2.amazonaws.com/94e85f77e13ff88e7deb98d65975f39a",
-            userbillboard2: "",
+            userbillboard2:
+              "https://superstarz-data-tank.s3.eu-west-2.amazonaws.com/27e942d28474c2e0bff656c338c563a5",
+            userbillboardthumb2:
+              "https://superstarz-data-tank.s3.eu-west-2.amazonaws.com/d42140d57dc052276dd51af3f461e4f9",
             biography: "",
           };
 

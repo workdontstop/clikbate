@@ -186,7 +186,7 @@ function MiniPostx({
   var dotspace = matchPc ? "1.7vw" : matchTablet ? "1.9vh" : "1.9vh";
   var dotspace2 = matchPc ? "0.9vw" : matchTablet ? "1.9vh" : "1.9vh";
 
-  var postusernametop = matchPc ? "-6vh" : matchTablet ? "-11.9vh" : "-5vh";
+  var postusernametop = matchPc ? "-6vh" : matchTablet ? "-11.9vh" : "-2.5vh";
 
   var profilewidth = matchPc
     ? miniLayoutPost
@@ -225,6 +225,7 @@ function MiniPostx({
             paddingLeft: matchMobile ? "0px" : "0px",
             paddingRight: matchMobile ? "0px" : "0px",
             paddingTop: matchMobile ? "10px" : "3px",
+
           }}
         >
           {/*///////////////////////////////////////////////////////////////////////////POST DATA*/}
@@ -247,6 +248,7 @@ function MiniPostx({
               }
               alt="a superstarz post "
               style={{
+
                 cursor: "pointer",
                 width: "100%",
                 height: "auto",
@@ -260,13 +262,13 @@ function MiniPostx({
                   itemcroptype[pey] === 1 || itemcroptype[pey] === 2
                     ? "50% top"
                     : "50% 50",
-                zIndex: 1,
                 float: "left",
+
               }}
             />
           </div>
 
-          {/*///////////////////////////////////////////////////////////////////////////PROFILE-PIC*/}
+
 
           {/*///////////////////////////////////////////////////////////////////////////USERNAME AND TOPIC*/}
           <div
@@ -286,6 +288,7 @@ function MiniPostx({
               fontFamily: "Arial, Helvetica, sans-seri",
               marginLeft: postusernameleft,
               textAlign: "center",
+              left: matchMobile ? '2vw' : '0px',
               height: "0px",
             }}
           >
@@ -373,7 +376,7 @@ function MiniPostx({
               style={{
                 backgroundColor: `${post.color1}`,
                 zIndex: 2,
-                left: `1.6vh`,
+                left: matchMobile ? '-1.6vh' : `1.6vh`,
                 marginTop: `-4vh`,
                 opacity: 0.8,
                 position: "absolute",
@@ -394,10 +397,12 @@ function MiniPostx({
               src={`${post.profile_image}`}
               alt="a superstarz post "
               style={{
+                top: matchMobile ? '2vh' : '0px',
                 boxShadow: darkmodeReducer
                   ? "0 0 1px #555555"
                   : "0 0 3.5px #aaaaaa",
-                width: profilewidth,
+                left: matchMobile ? '-0.4vh' : `0px`,
+                width: matchMobile ? '18%' : profilewidth,
                 height: "auto",
                 padding: "0px",
                 objectFit: "contain",

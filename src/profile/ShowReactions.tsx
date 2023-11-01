@@ -35,7 +35,7 @@ import PanoramaFishEyeIcon from "@mui/icons-material/PanoramaFishEye";
 import HowToRegIcon from "@mui/icons-material/HowToReg";
 import DownloadDoneIcon from "@mui/icons-material/DownloadDone";
 import { UserInfoUpdateMEMBER } from "../log/actions/UserdataAction";
-import { UpdateLoader } from ".././GlobalActions";
+import { UpdateLoader, Updatepagenum } from ".././GlobalActions";
 
 import { Connect } from "./Connect";
 
@@ -78,8 +78,11 @@ function ShowReactionsx({
       CommentData: [];
       CommentScroll: 0;
       reactionType: 0;
+      pagenum: 0
     };
   }
+
+
 
   ///
   ///
@@ -97,6 +100,7 @@ function ShowReactionsx({
     CommentData,
     CommentScroll,
     reactionType,
+    pagenum
   } = useSelector((state: RootStateGlobalReducer) => ({
     ...state.GlobalReducer,
   }));
@@ -111,6 +115,7 @@ function ShowReactionsx({
   var CommentDataReducer = CommentData;
   var CommentScrollReducer = CommentScroll;
   var reactionTypeReducer = reactionType;
+  const pagenumReducer = pagenum;
 
   ///
   ///
@@ -178,6 +183,9 @@ function ShowReactionsx({
   }, [post]);
 
   const GoToMember = useCallback(() => {
+
+    dispatch(Updatepagenum(0));
+
     if (memeberPageidReducer === post.reactId) {
     } else {
       var n, d;
@@ -193,6 +201,7 @@ function ShowReactionsx({
           id: 0,
           index: historyscrollReducer,
           data: PostDataFromCommentReducer,
+          pagenumReducer: pagenumReducer,
           AllMemberData: 0,
           innerid: 0,
           comid: comIdReducer,
@@ -208,6 +217,7 @@ function ShowReactionsx({
           id: memeberPageidReducer,
           index: historyscrollReducer,
           data: PostDataFromCommentReducer,
+          pagenumReducer: pagenumReducer,
           AllMemberData: MemberProfileDataReducer,
           innerid: 0,
           comid: comIdReducer,
@@ -224,6 +234,7 @@ function ShowReactionsx({
         type: 1,
         id: post.reactId,
         innerid: 0,
+        pagenumReducer: pagenumReducer
       };
       window.history.pushState(dd, "", `${post.username}`);
       dispatch(UserInfoUpdateMEMBER(post.reactId));
@@ -245,9 +256,12 @@ function ShowReactionsx({
     CommentDataReducer,
     reactionTypeReducer,
     connectTemplateGo,
+    pagenumReducer
   ]);
 
   const GoToMemberLoaderUp = () => {
+
+    ///alert('yes');
     if (Timervv.current) {
       clearTimeout(Timervv.current);
     }

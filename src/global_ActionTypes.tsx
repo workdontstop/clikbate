@@ -45,3 +45,8 @@ export const UPDATE_INTERACT = "UPDATE_INTERACT";
 
 export const UPDATE_MenuData = "UPDATE_MenuData";
 
+export const UPDATE_MenuNav = "UPDATE_MenuNav";
+
+export const UPDATE_pagenum = "UPDATE_pagenum";
+
+

@@ -29,6 +29,25 @@ html {
   overscroll-behavior: smooth;
 }
 
+@keyframes colorAndPaddingAnimation {
+  0%,
+  100% {
+    opacity: 0; /* Starting background color */
+  }
+  50% {
+    opacity: 1;
+    /* Adjust as needed */
+  }
+}
+
+.animateColorAndPadding {
+  animation: colorAndPaddingAnimation 2s forwards;
+}
+
+.animateColorAndPadding {
+  animation: colorAndPaddingAnimation 0.5s infinite alternate; /* 4s duration to account for the full back-and-forth cycle */
+}
+
 .postscroll-light::-webkit-scrollbar {
   width: 0.8vw;
 }

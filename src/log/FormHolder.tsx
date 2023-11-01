@@ -260,7 +260,9 @@ function FormHolderx({
               };
               dispatch(UpdateColorAction(colorboy, 1));
 
-              dispatch(IsLoggedAction());
+              window.location.reload();
+
+              /// dispatch(IsLoggedAction());
             } else {
               setServerErrorData("user info could not be retrieved");
               setServerErrorDisplay(1);

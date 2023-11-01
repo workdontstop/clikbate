@@ -20,7 +20,9 @@ import {
   UPDATE_HIREACTION_TYPE,
   CHANGE_UPLOAD_DATA,
   UPDATE_INTERACT,
-  UPDATE_MenuData
+  UPDATE_MenuData,
+  UPDATE_MenuNav,
+  UPDATE_pagenum
 } from "./global_ActionTypes";
 
 ////////////OPTIONS TOP SHOW  DATA////////////////
@@ -148,8 +150,8 @@ export const ButtonsLoginReducerLight = (
 ////////////PAPER LIGHTNDARK DATA////////////////
 const initialStatePaperLIGHTNDARK = {
   PaperStyleLight:
-    "linear-gradient(0deg,  #ffffff, #ffffff,#ffffff )",
-  PaperStyleDark: "linear-gradient(0deg, #282c34, #242c34, #282c34)",
+    "linear-gradient(0deg,  #eeeeee, #eeeeee,#cccccc )",
+  PaperStyleDark: "linear-gradient(0deg, #282c34, #242c34, #0b1728)",
 };
 
 type MyPaperReducerLightnDark = typeof initialStatePaperLIGHTNDARK;
@@ -268,7 +270,9 @@ const initialState = {
   reactionType: 0,
   interactContent: '',
   interact: false,
-  MenuData: ''
+  MenuData: '',
+  menunav: true,
+  pagenum: 0
   ////For example const initialState = { person: null as Person };
 };
 type MyGlobalReducer = typeof initialState;
@@ -323,6 +327,18 @@ export const GlobalReducer = (
       return {
         ...state,
         MenuData: action.payload,
+      };
+
+    case UPDATE_MenuNav:
+      return {
+        ...state,
+        menunav: action.payload,
+      };
+
+    case UPDATE_pagenum:
+      return {
+        ...state,
+        pagenum: action.payload,
       };
 
 

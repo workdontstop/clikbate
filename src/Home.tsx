@@ -323,8 +323,8 @@ function Home(): JSX.Element {
     displayEmo5 = "inline";
   }
 
-  const updateColor = () => {};
-  const profilex = () => {};
+  const updateColor = () => { };
+  const profilex = () => { };
   return (
     <MuiThemeProvider theme={themeGeneralSettings}>
       <Paper
@@ -345,7 +345,7 @@ function Home(): JSX.Element {
                 className={icon}
                 src={appVariables.logoimage}
                 alt="SuperstarZ logo"
-                style={{ marginTop: "5vh", paddingBottom: "20px" }}
+                style={{ marginTop: "5vh", paddingBottom: "20px", opacity: 0.5 }}
               />
             </Grid>
 
@@ -354,7 +354,7 @@ function Home(): JSX.Element {
               <Typography
                 className="app-little-text-typography"
                 style={{
-                  padding: matchMobile ? "35px" : "0px",
+                  padding: matchMobile ? "15px" : "0px",
                 }}
               >
                 <span

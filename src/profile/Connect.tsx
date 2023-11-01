@@ -4,7 +4,7 @@ import Axios from "axios";
 import { Grid, Box } from "@material-ui/core";
 
 import { DarkmodeToggleAction } from ".././GlobalActions";
-import { matchPc, matchTablet } from "../DetectDevice";
+import { matchMobile, matchPc, matchTablet } from "../DetectDevice";
 import { SliderBillboard } from "./SliderBillboard";
 import AddIcon from "@mui/icons-material/Add";
 
@@ -340,11 +340,12 @@ function Connectx({
             style={{
               backgroundColor: `${post.color1}`,
               zIndex: 2,
-              left: `${profileImagethumbLeft}px`,
-              top: `${profileImagethumbTop}px`,
+              left: matchMobile ? '-3px' : `${profileImagethumbLeft}px`,
+              top: matchMobile ? `${profileImagethumbTop - 22}px` : `${profileImagethumbTop}px`,
               opacity: 0.8,
               position: "absolute",
               cursor: 'pointer',
+              transform: matchMobile ? 'scale(0.4)' : 'scale(1)',
             }}
           >
             {Added === 0 ? (
@@ -352,7 +353,7 @@ function Connectx({
                 {" "}
                 <AddIcon
                   style={{
-                    fontSize: fontOptions,
+                    fontSize: matchMobile ? '6vh' : fontOptions,
                     color: "#ffffff",
                   }}
                   className="zuperkinginfo "
@@ -363,7 +364,7 @@ function Connectx({
                 {" "}
                 <PanoramaFishEyeIcon
                   style={{
-                    fontSize: fontOptions,
+                    fontSize: matchMobile ? '6vh' : fontOptions,
                     color: "#ffffff",
                   }}
                   className="zuperkinginfo  changeOpacity"
@@ -374,7 +375,7 @@ function Connectx({
                 {" "}
                 <DownloadDoneIcon
                   style={{
-                    fontSize: fontOptions,
+                    fontSize: matchMobile ? '6vh' : fontOptions,
                     color: "#ffffff",
                   }}
                   className="zuperkinginfo"
@@ -413,13 +414,14 @@ function Connectx({
             style={{
               backgroundColor: `${zoomedModal ? " " : `${post.color1}`}`,
               zIndex: 2,
-              left: `${zoomedModal
-                ? wideImage
-                  ? "72"
-                  : "106"
-                : wideImage
-                  ? "20"
-                  : "25"
+              left:
+                `${zoomedModal
+                  ? wideImage
+                    ? "72"
+                    : "106"
+                  : wideImage
+                    ? "20"
+                    : "25"
                 }px`,
               top: `${zoomedModal
                 ? wideImage
@@ -492,7 +494,7 @@ function Connectx({
             style={{
               backgroundColor: `${post.color1}`,
               zIndex: 7,
-              left: wideImage
+              left: matchMobile ? '6vw' : wideImage
                 ? zoomedModal
                   ? `2vw`
                   : `1.2vw`

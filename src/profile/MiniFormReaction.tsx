@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect, useCallback } from "react";
 import { ArrowBillboard } from "./ArrowBillboard";
-import { matchPc } from "../DetectDevice";
+import { matchMobile, matchPc } from "../DetectDevice";
 import { Grid } from "@material-ui/core";
 import { animated, useTransition } from "react-spring";
 import { useSelector } from "react-redux";
@@ -30,10 +30,13 @@ function MiniFormReactionx({
   originalData,
   paperPostScrollRefxx,
   connectTemplateGo,
+  mobileZoom
 }: any): JSX.Element {
   const { REACT_APP_APPX_STATE } = process.env;
 
-  ///
+
+
+
   ///
   ///
   /// INTERFACE/TYPES FOR SCREENHEIGHT AND DARKMODE
@@ -70,8 +73,8 @@ function MiniFormReactionx({
               ? "postscroll-darkHiddenScrollRedesign"
               : "postscroll-darkHiddenScrollRedesign"
             : darkmodeReducer
-            ? "postscroll-darkm"
-            : "postscroll-lightm"
+              ? "postscroll-darkm"
+              : "postscroll-lightm"
         }
         style={{
           padding: "0vh",
@@ -85,24 +88,70 @@ function MiniFormReactionx({
               ? "5.6vw"
               : "8.3vw"
             : wideImage
-            ? "4.1vw"
-            : "4.8vw",
+              ? "4.1vw"
+              : "4.8vw",
           display: "grid",
           gridGap: "0px",
           gridAutoFlow: "row",
-          gridTemplateColumns: "30% 30% 30% 30%",
+          gridTemplateColumns: matchMobile ? mobileZoom ? "36% 36% 36%" : "27% 27% 27% 27%" : "30% 30% 30% 30%",
           width: "auto",
           height: zoomedModal
             ? wideImage
               ? "68vh"
               : "75vh"
             : wideImage
-            ? "46vh"
-            : "76vh",
+              ? "46vh"
+              : "76vh",
         }}
       >
         {commentDatax
           ? commentDatax.map((post: any, i: any) => (
+            <>
+              <ShowReactions
+                connectTemplateGo={connectTemplateGo}
+                paperPostScrollRefxx={paperPostScrollRefxx}
+                originalData={originalData}
+                CommentPostid={CommentPostid}
+                scrollLocation={scrollLocation}
+                postData={postData}
+                callObserver={callObserver}
+                length={commentDatax.length}
+                AddRef={lastItemElement}
+                post={post}
+                i={i}
+                zoomedModal={zoomedModal}
+                wideImage={wideImage}
+              />
+            </>
+          ))
+          : null}
+        {commentData
+          ? commentData.map((post: any, i: any) => (
+            <>
+              <div style={{}}>
+                <ShowReactions
+                  connectTemplateGo={connectTemplateGo}
+                  paperPostScrollRefxx={paperPostScrollRefxx}
+                  originalData={originalData}
+                  CommentPostid={CommentPostid}
+                  scrollLocation={scrollLocation}
+                  postData={postData}
+                  callObserver={callObserver}
+                  length={commentData.length}
+                  AddRef={lastItemElement}
+                  post={post}
+                  i={i}
+                  zoomedModal={zoomedModal}
+                  wideImage={wideImage}
+                />
+              </div>
+            </>
+          ))
+          : null}
+
+        {showComment2
+          ? commentData2
+            ? commentData2.map((post: any, i: any) => (
               <>
                 <ShowReactions
                   connectTemplateGo={connectTemplateGo}
@@ -112,7 +161,7 @@ function MiniFormReactionx({
                   scrollLocation={scrollLocation}
                   postData={postData}
                   callObserver={callObserver}
-                  length={commentDatax.length}
+                  length={commentData2.length}
                   AddRef={lastItemElement}
                   post={post}
                   i={i}
@@ -121,75 +170,29 @@ function MiniFormReactionx({
                 />
               </>
             ))
-          : null}
-        {commentData
-          ? commentData.map((post: any, i: any) => (
-              <>
-                <div style={{}}>
-                  <ShowReactions
-                    connectTemplateGo={connectTemplateGo}
-                    paperPostScrollRefxx={paperPostScrollRefxx}
-                    originalData={originalData}
-                    CommentPostid={CommentPostid}
-                    scrollLocation={scrollLocation}
-                    postData={postData}
-                    callObserver={callObserver}
-                    length={commentData.length}
-                    AddRef={lastItemElement}
-                    post={post}
-                    i={i}
-                    zoomedModal={zoomedModal}
-                    wideImage={wideImage}
-                  />
-                </div>
-              </>
-            ))
-          : null}
-
-        {showComment2
-          ? commentData2
-            ? commentData2.map((post: any, i: any) => (
-                <>
-                  <ShowReactions
-                    connectTemplateGo={connectTemplateGo}
-                    paperPostScrollRefxx={paperPostScrollRefxx}
-                    originalData={originalData}
-                    CommentPostid={CommentPostid}
-                    scrollLocation={scrollLocation}
-                    postData={postData}
-                    callObserver={callObserver}
-                    length={commentData2.length}
-                    AddRef={lastItemElement}
-                    post={post}
-                    i={i}
-                    zoomedModal={zoomedModal}
-                    wideImage={wideImage}
-                  />
-                </>
-              ))
             : null
           : null}
         {showComment3
           ? commentData3
             ? commentData3.map((post: any, i: any) => (
-                <>
-                  <ShowReactions
-                    connectTemplateGo={connectTemplateGo}
-                    paperPostScrollRefxx={paperPostScrollRefxx}
-                    originalData={originalData}
-                    CommentPostid={CommentPostid}
-                    scrollLocation={scrollLocation}
-                    postData={postData}
-                    callObserver={callObserver}
-                    length={commentData3.length}
-                    AddRef={lastItemElement}
-                    post={post}
-                    i={i}
-                    zoomedModal={zoomedModal}
-                    wideImage={wideImage}
-                  />
-                </>
-              ))
+              <>
+                <ShowReactions
+                  connectTemplateGo={connectTemplateGo}
+                  paperPostScrollRefxx={paperPostScrollRefxx}
+                  originalData={originalData}
+                  CommentPostid={CommentPostid}
+                  scrollLocation={scrollLocation}
+                  postData={postData}
+                  callObserver={callObserver}
+                  length={commentData3.length}
+                  AddRef={lastItemElement}
+                  post={post}
+                  i={i}
+                  zoomedModal={zoomedModal}
+                  wideImage={wideImage}
+                />
+              </>
+            ))
             : null
           : null}
         <>
@@ -203,7 +206,7 @@ function MiniFormReactionx({
             }}
           ></Grid>
         </>
-      </Grid>
+      </Grid >
     </>
   );
 }

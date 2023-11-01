@@ -18,6 +18,7 @@ import { UpdateInteract } from "../GlobalActions";
 import { useSpring } from "react-spring";
 import SearchIcon from '@material-ui/icons/Search';
 import PersonIcon from '@material-ui/icons/Person';
+import FaceIcon from '@material-ui/icons/Face';
 import SubjectIcon from '@material-ui/icons/Subject';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import TheatersIcon from '@material-ui/icons/Theaters';
@@ -26,11 +27,27 @@ import PhotoAlbumIcon from '@material-ui/icons/PhotoAlbum';
 import SettingsIcon from '@material-ui/icons/Settings';
 import {
   UpdateLoader,
-
+  Updatepagenum
 } from ".././GlobalActions";
 import { UserInfoUpdateMEMBER } from "../log/actions/UserdataAction";
+import SlowMotionVideoIcon from '@material-ui/icons/SlowMotionVideo';
 
-function ActualMenux({ showModalFormMenu, setshowModalFormMenu, postData, setsuperSettings }: any): JSX.Element {
+
+
+
+
+function ActualMenux({ showModalFormMenu, setshowModalFormMenu, postData, setsuperSettings, scrollToRef }: any): JSX.Element {
+
+
+
+  useEffect(() => {
+
+    setMovePlay(false);
+  }, [showModalFormMenu])
+
+  ////
+  ////
+  ////
   const styles = useSpring({
     from: { transform: "translateX(-100%)" },
     to: { transform: showModalFormMenu ? "translateX(0%)" : "translateX(-100%)" },
@@ -103,7 +120,7 @@ function ActualMenux({ showModalFormMenu, setshowModalFormMenu, postData, setsup
 
 
 
-  var MenuOptions = ["Search", "Profile", "My Feeds", "Notification", "Showroom", "Playlist", "Gallery", "Setting"];
+  var MenuOptions = ["Search", "My Profile", "My Feeds", "Notification", "Showroom", "Playlist", "Gallery", "Setting"];
 
 
 
@@ -111,7 +128,7 @@ function ActualMenux({ showModalFormMenu, setshowModalFormMenu, postData, setsup
   const Timer2 = useRef<ReturnType<typeof setTimeout> | null>(null);
   const Timervv = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  var menufont = '1.35vw';
+  var menufont = matchMobile ? '3.66vh' : '1.35vw';
 
   var colr = darkmodeReducer ? "#ffffff" : '#111111';
 
@@ -121,82 +138,23 @@ function ActualMenux({ showModalFormMenu, setshowModalFormMenu, postData, setsup
 
 
   const GoToMemberF = () => {
+    dispatch(Updatepagenum(0));
     dispatch(UserInfoUpdateMEMBER(-1));
     dispatch(UserInfoUpdateMEMBER(0));
 
-    var tt = 20;
 
-    var n, d;
-
-
-
-    n = MemberProfileDataReducer.username;
-    d = {
-      type: 1,
-      id: memeberPageidReducer,
-      index: tt,
-      data: postData,
-      innerid: 0,
-    };
-
-
-    window.history.replaceState(d, "", `${n}`);
-
-    let modalName = `${usernameReducer}`;
-
-    var dd = {
-      type: 1,
-      id: idReducer,
-      innerid: 0,
-    };
-
-
-
-
-
-    window.history.pushState(dd, "", modalName);
 
   };
 
 
   const GoToMemberP = () => {
-
+    dispatch(Updatepagenum(0));
     dispatch(UserInfoUpdateMEMBER(-1));
 
     dispatch(UserInfoUpdateMEMBER(idReducer));
 
     //
-    var tt = 20;
 
-    var n, d;
-
-
-
-    n = MemberProfileDataReducer.username;
-    d = {
-      type: 1,
-      id: memeberPageidReducer,
-      index: tt,
-      data: postData,
-      innerid: 0,
-    };
-
-
-    window.history.replaceState(d, "", `${n}`);
-
-    let modalName = `${usernameReducer}`;
-
-    var dd = {
-      type: 1,
-      id: idReducer,
-      innerid: 0,
-    };
-
-
-
-
-
-    window.history.pushState(dd, "", modalName);
 
   };
 
@@ -231,6 +189,37 @@ function ActualMenux({ showModalFormMenu, setshowModalFormMenu, postData, setsup
   };
 
 
+  ///
+  ///
+  /// GET COLOR FROM REDUX STORE
+  interface RootStateReducerColor {
+    GlobalReducerColor: {
+      color: string;
+      colordark: string;
+      colortype: number;
+    };
+  }
+  const { color, colordark, colortype } = useSelector(
+    (state: RootStateReducerColor) => ({
+      ...state.GlobalReducerColor,
+    })
+  );
+  const colorReducer = color;
+  const colorReducerdark = colordark;
+  const colortypeReducer = colortype;
+
+  const [MovePlay, setMovePlay] = useState(false);
+
+  const stylesxx = useSpring({
+    transform: MovePlay ? "translateX(475%) scale(5)" : "translateX(0%) scale(5)",
+    config: { tension: 280, friction: 60 }
+  });
+
+
+  const AnimatedIcon = animated(SlowMotionVideoIcon);
+
+
+
   return (
     <>
 
@@ -240,26 +229,27 @@ function ActualMenux({ showModalFormMenu, setshowModalFormMenu, postData, setsup
         onClick={() => {
 
           setshowModalFormMenu(false);
+
         }}
         style={{
           ...styles,
           width: '100%',
           height: '100vh',
-          backgroundColor: darkmodeReducer ? 'rgb(20, 20, 20, 0.32)' : 'rgb(255, 255, 255, 0.22)',
+          backgroundColor: darkmodeReducer ? 'rgb(20, 20, 20, 0.4)' : 'rgb(255, 255, 255, 0.48)',
           position: 'fixed',
           cursor: 'pointer',
           top: 0,
           left: 0
         }}
       >
-        {/* Menu content goes here */}
+
       </animated.div >
 
 
       <animated.div
         style={{
           ...styles,
-          width: '20%',
+          width: matchMobile ? '54%' : '20%',
           height: '100vh',
           backgroundImage: darkmodeReducer ? PaperStyleDark : PaperStyleLight,
           position: 'fixed',
@@ -272,8 +262,8 @@ function ActualMenux({ showModalFormMenu, setshowModalFormMenu, postData, setsup
           xs={12}
           className={
             darkmodeReducer
-              ? ` ${superFont}    dontallowhighlighting `
-              : ` ${superFont}   dontallowhighlighting `
+              ? ` ${superFont}  dontallowhighlighting `
+              : ` ${superFont}  dontallowhighlighting `
           }
           style={{
             height: '10vh',
@@ -286,7 +276,7 @@ function ActualMenux({ showModalFormMenu, setshowModalFormMenu, postData, setsup
 
 
           <Grid
-            xs={12} style={{ position: 'fixed', top: '2.8vh', zIndex: 1 }}>
+            xs={12} style={{ position: 'fixed', top: matchMobile ? '3vh' : '5.8vh', zIndex: 1 }}>
 
 
 
@@ -296,7 +286,7 @@ function ActualMenux({ showModalFormMenu, setshowModalFormMenu, postData, setsup
 
 
 
-            }} style={{ paddingLeft: '2vw', cursor: 'pointer' }}>
+            }} style={{ paddingLeft: '2.4vw', cursor: 'pointer' }}>
 
 
               < span
@@ -330,30 +320,121 @@ function ActualMenux({ showModalFormMenu, setshowModalFormMenu, postData, setsup
 
             </span>
           </Grid>
+
+
           <Grid
-            xs={12} style={{ position: 'fixed', top: '1vh', zIndex: 2, right: '0px' }}>
+            xs={12} style={{ position: 'fixed', top: matchMobile ? '1.2vh' : '4vh', zIndex: 2, right: '0px' }}>
 
 
 
             <div style={{ paddingRight: '1.2vw', }}>
 
 
-              <img src={image} onClick={() => {
+              <img src={image} title={usernameReducer} onClick={() => {
 
                 GoToMemberLoaderUpP();
 
 
-              }} style={{ cursor: 'pointer', width: '5vw', height: '5vw', borderRadius: '50%' }} />
+              }} style={{ cursor: 'pointer', width: matchMobile ? '9vh' : '5vw', height: matchMobile ? '9vh' : '5vw', borderRadius: '50%' }} />
 
             </div>
           </Grid>
 
 
+
+          {matchMobile ? null : <animated.div
+            onClick={() => {
+              setMovePlay(true);
+
+              setTimeout(() => {
+                setshowModalFormMenu(false);
+                scrollToRef();
+
+              }, 1500)
+
+            }}
+            style={{
+              ...stylesxx,
+              position: 'fixed',
+              top: matchMobile ? '18vh' : '17vh',
+              marginLeft: matchMobile ? '26vw' : '9vw',
+            }}
+          >
+            <SlowMotionVideoIcon
+
+              className={
+                darkmodeReducer
+                  ? "make-small-icons-clickable-darkMenu dontallowhighlighting zuperkingIcon"
+                  : "make-small-icons-clickable-lightMenu dontallowhighlighting zuperking"
+              }
+              style={{
+                fontSize: menufont,
+                color: colorReducer,
+                opacity: darkmodeReducer
+                  ? '0.8' : '0.4'
+              }}
+            />
+
+          </animated.div >}
+
+
+
+
+
+
+
+          {matchMobile ?
+
+            <animated.div
+              onClick={() => {
+                setMovePlay(true);
+
+                setTimeout(() => {
+                  setshowModalFormMenu(false);
+                  scrollToRef();
+
+                }, 1500)
+
+              }}
+              style={{
+                ...stylesxx,
+                position: 'fixed',
+                bottom: matchMobile ? '20.3vh' : '17vh',
+                marginLeft: matchMobile ? '26vw' : '9vw',
+              }}
+            >
+              <SlowMotionVideoIcon
+
+                className={
+                  darkmodeReducer
+                    ? "dontallowhighlighting "
+                    : "dontallowhighlighting"
+                }
+                style={{
+                  fontSize: '1.75vh',
+                  color: colorReducer,
+                  opacity: darkmodeReducer
+                    ? '0.8' : '0.4'
+                }}
+              />
+
+            </animated.div > : null}
+
+
+
+
+
+
+
+
+
+
+
           <Grid
-            xs={12} style={{ position: 'fixed', top: '17vh', zIndex: 20, right: '0px', width: '100%' }}>
+            xs={12} style={{ position: 'fixed', top: matchMobile ? '12vh' : '27vh', zIndex: 20, right: '0px', width: '100%' }}>
 
             <Grid
-              xs={12} style={{ width: '100%', alignContent: 'center', display: 'grid', opacity: '0.9' }}>
+              xs={12} style={{ width: '100%', alignContent: 'center', display: 'grid', opacity: '0.59' }}>
 
 
               {
@@ -400,7 +481,9 @@ function ActualMenux({ showModalFormMenu, setshowModalFormMenu, postData, setsup
                           color: colr,
                           fontSize: menufont,
                           marginLeft: pushh,
-                          transform: 'scale(1.9)',
+                          paddingTop: matchMobile ? '11px' : '',
+                          transform: 'scale(1.9)', opacity: '0.3',
+
                         }}
                       />
                     </span> : null}
@@ -408,7 +491,7 @@ function ActualMenux({ showModalFormMenu, setshowModalFormMenu, postData, setsup
 
 
                     {i === 1 ? <span>
-                      <PersonIcon
+                      <FaceIcon
                         className={
                           darkmodeReducer
                             ? "make-small-icons-clickable-darkab dontallowhighlighting zuperkingIcon "
@@ -418,6 +501,7 @@ function ActualMenux({ showModalFormMenu, setshowModalFormMenu, postData, setsup
                           color: colr,
                           fontSize: menufont,
                           marginLeft: pushh,
+                          paddingTop: matchMobile ? '11px' : '',
                           transform: 'scale(1.9)'
                         }}
                       />
@@ -437,6 +521,7 @@ function ActualMenux({ showModalFormMenu, setshowModalFormMenu, postData, setsup
                             color: colr,
                             fontSize: menufont,
                             marginLeft: pushh,
+                            paddingTop: matchMobile ? '11px' : '',
                             transform: 'scale(1.9)'
                           }}
                         />
@@ -457,7 +542,8 @@ function ActualMenux({ showModalFormMenu, setshowModalFormMenu, postData, setsup
                           color: colr,
                           fontSize: menufont,
                           marginLeft: pushh,
-                          transform: 'scale(1.9)',
+                          paddingTop: matchMobile ? '11px' : '',
+                          transform: 'scale(1.9)', opacity: '0.3'
                         }}
                       />
                     </span>
@@ -477,7 +563,8 @@ function ActualMenux({ showModalFormMenu, setshowModalFormMenu, postData, setsup
                           color: colr,
                           fontSize: menufont,
                           marginLeft: pushh,
-                          transform: 'scale(1.9)',
+                          paddingTop: matchMobile ? '11px' : '',
+                          transform: 'scale(1.9)', opacity: '0.3'
                         }}
                       />
                     </span> : null}
@@ -495,7 +582,8 @@ function ActualMenux({ showModalFormMenu, setshowModalFormMenu, postData, setsup
                           color: colr,
                           fontSize: menufont,
                           marginLeft: pushh,
-                          transform: 'scale(1.9)',
+                          paddingTop: matchMobile ? '11px' : '',
+                          transform: 'scale(1.9)', opacity: '0.3'
                         }}
                       />
                     </span> : null}
@@ -514,7 +602,8 @@ function ActualMenux({ showModalFormMenu, setshowModalFormMenu, postData, setsup
                           color: darkmodeReducer ? "#ffffff" : '#777777',
                           fontSize: menufont,
                           marginLeft: pushh,
-                          transform: 'scale(1.9)',
+                          paddingTop: matchMobile ? '11px' : '',
+                          transform: 'scale(1.9)', opacity: '0.3'
 
                         }}
                       />
@@ -533,7 +622,11 @@ function ActualMenux({ showModalFormMenu, setshowModalFormMenu, postData, setsup
                           color: colr,
                           fontSize: menufont,
                           marginLeft: pushh,
-                          transform: 'scale(1.9)'
+                          paddingTop: matchMobile ? '11px' : '',
+                          transform: 'scale(1.9)',
+
+
+
 
                         }}
                       />
@@ -547,11 +640,10 @@ function ActualMenux({ showModalFormMenu, setshowModalFormMenu, postData, setsup
 
                       style={{
                         color: colr,
-                        fontSize: "1.3vw",
-                        marginLeft: '5vw',
+                        fontSize: matchMobile ? '2.33vh' : "1.2vw",
 
-
-
+                        marginLeft: matchMobile ? '10vw' : '5vw',
+                        opacity: i === 1 || i === 2 || i === 7 ? '1' : '0.3'
                       }}>
                       {Title}
                     </span>
@@ -567,7 +659,7 @@ function ActualMenux({ showModalFormMenu, setshowModalFormMenu, postData, setsup
           </Grid>
 
 
-        </Grid>
+        </Grid >
 
 
 

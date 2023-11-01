@@ -52,15 +52,17 @@ export function UserInfoUpdateMEMBER(data: number) {
 }
 
 export function UserInfoUpdateBILLBOARD(data: any, typex: any) {
-  if (typex === 2) {
-    return {
-      type: REQUEST_BILLBOARD_UPDATE2,
-      payload: data,
-    };
-  } else {
+  if (typex === 1) {
     return {
       type: REQUEST_BILLBOARD_UPDATE,
       payload: data,
+      paload2: typex
+    };
+  } else {
+    return {
+      type: REQUEST_BILLBOARD_UPDATE2,
+      payload: data,
+      paload2: typex
     };
   }
 }

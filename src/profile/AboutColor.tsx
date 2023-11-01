@@ -174,7 +174,10 @@ function AboutColorx({
   };
 
   const updateColor = useCallback(
+
     (type: number) => {
+
+      setcheckIfColorChanged(false);
       colorboy = {
         color1: ColorData[type],
         color2: "",

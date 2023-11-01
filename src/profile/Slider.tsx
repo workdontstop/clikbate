@@ -10,6 +10,7 @@ import ZoomOutIcon from "@mui/icons-material/ZoomOut";
 import { Loader } from "./Loader";
 import { UpdateInteract } from ".././GlobalActions";
 
+
 function Sliderx({
   slides,
   slidesThumb,
@@ -46,7 +47,9 @@ function Sliderx({
   postDatainnerInteraction1,
   postDatainnerInteraction2,
   postItemsRef,
-  ActiveCanvas, checkifClicked
+  ActiveCanvas,
+  checkifClicked,
+  postDivRef,
 }: any): JSX.Element {
   const [sliderDuration] = useState(1500);
 
@@ -80,6 +83,10 @@ function Sliderx({
   const callAutoPlayAgainTimer = useRef<ReturnType<typeof setTimeout> | null>(
     null
   );
+
+
+  const [showSpin, setshowSpin] = useState(false);
+
 
   const SlideimageRef = useRef<HTMLImageElement>(null);
 
@@ -282,10 +289,10 @@ function Sliderx({
 
   const [data, setdata] = useState(null);
   const [canvasInteractWidth, setcanvasInteractWidth] = useState(0);
+  const [canvasInteractheight, setcanvasInteractheight] = useState(0);
   const [imageWidthcss, setimageWidthcss] = useState(0);
   const [imageHeightcss, setimageHeightcss] = useState(0);
 
-  const canvasRefIn: any = useRef(null);
 
 
 
@@ -298,24 +305,37 @@ function Sliderx({
   }, [data])
 
 
+  const canvasRefIn: any = useRef(null);
 
-  const ScaleCoOrdinates = useCallback((event: any, type: any) => {
+
+  const ScaleCoOrdinates = useCallback((event, type) => {
     if (canvasRefIn.current) {
       const rect = canvasRefIn.current.getBoundingClientRect();
       const scaleX = canvasRefIn.current.width / rect.width;
       const scaleY = canvasRefIn.current.height / rect.height;
-      return {
-        x: (event.clientX - rect.left) * scaleX,
-        y: (event.clientY - rect.top) * scaleY
-      };
+
+      let x, y;
+
+      if (matchMobile) {
+        // Handle touch events
+        if (event.touches && event.touches.length > 0) {
+          x = (event.touches[0].clientX - rect.left) * scaleX;
+          y = (event.touches[0].clientY - rect.top) * scaleY;
+        }
+      } else {
+        // Handle mouse events
+        x = (event.clientX - rect.left) * scaleX;
+        y = (event.clientY - rect.top) * scaleY;
+      }
+
+      return { x, y };
     } else {
       return {
         x: 0,
         y: 0
       };
     }
-  }, [])
-
+  }, [matchMobile]);
 
 
   const callInteract = useCallback(() => {
@@ -328,16 +348,22 @@ function Sliderx({
     previewFileReadimage.src = slides[sliderIndex];
 
     previewFileReadimage.onload = () => {
+      const ratio = previewFileReadimage.naturalHeight / previewFileReadimage.naturalWidth;
+      const width = window.innerHeight / ratio;
+      const ratiox = previewFileReadimage.naturalWidth / previewFileReadimage.naturalHeight;
+      const hei = window.innerWidth / ratiox;
+      setcanvasInteractWidth(width);
+      setcanvasInteractheight(hei)
+      setimageWidthcss(postDivRef.current[pey].clientWidth);
+      setimageHeightcss(postDivRef.current[pey].clientHeight);
+
+
       if (data !== previewFileReadimage) {
         setdata(previewFileReadimage);
       }
-      const ratio = previewFileReadimage.naturalHeight / previewFileReadimage.naturalWidth;
-      const width = window.innerHeight / ratio;
-      setcanvasInteractWidth(width);
-      setimageWidthcss(postItemsRef.current[pey].clientWidth);
-      setimageHeightcss(postItemsRef.current[pey].clientHeight);
+
     };
-  }, [slides, sliderIndex, postItemsRef]);
+  }, [slides, sliderIndex, postItemsRef, postDivRef]);
 
 
   const acttii = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -353,13 +379,30 @@ function Sliderx({
 
 
 
+  const [Tutorial, setTutorial] = useState(false);
 
 
   useLayoutEffect(() => {
     if (itemCLICKED[pey]) {
-
+      ////alert('kk');
 
       if (HasInteractivity) {
+
+        if (matchMobile) {
+
+
+
+
+          if (tti.current) {
+            clearTimeout(tti.current);
+          }
+
+          setTutorial(true);
+          tti.current = setTimeout(() => {
+            setTutorial(false);
+          }, 12000)
+        }
+
         if (showIntImage) { } else {
           ////load interact image
           setshowIntImage(true);
@@ -375,20 +418,34 @@ function Sliderx({
 
       }
       ////check for interaction and display canvas image flip
-    }
-  }, [itemCLICKED[pey], HasInteractivity, showIntImage]);
+    } else {
 
+      setTutorial(false);
+    }
+  }, [itemCLICKED[pey], HasInteractivity, showIntImage, postDivRef]);
+
+
+  const tti = useRef<ReturnType<typeof setTimeout> | null>(null);
 
 
   const interacttime = useRef<ReturnType<typeof setTimeout> | null>(null);
   const interacttime2 = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const bh = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [fadeout, setfadeout] = useState(false);
 
 
+  const [pause, setpause] = useState(false);
 
-  useEffect(() => {
+
+
+
+  const IntClose = useCallback(() => {
+
 
     if (interact) {
+
+
+      setpause(false);
 
       setHideCann(true);
 
@@ -412,26 +469,50 @@ function Sliderx({
           ///  dispatch(UpdateInteract('', false));
           setinteract(false);
           setinteractContent('');
-
           setfadeout(false);
-
-
         }, 1800)
-
-
-
-      }, 4000)
+      }, 10000)
 
 
     } else {
 
       setHideCann(false)
     }
+  }, [interact]);
+
+
+
+  useEffect(() => {
+
+    IntClose();
 
   }, [interact]);
 
 
   const [HideCann, setHideCann] = useState(false);
+
+  const sc = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+
+  const spin = () => {
+
+    setshowSpin(true);
+
+    if (sc.current) {
+      clearTimeout(sc.current);
+    }
+    sc.current = setTimeout(() => {
+      setshowSpin(false);
+    }, 10000)
+
+  }
+
+
+
+
+
+
+
 
   const drawInteraction = useCallback((typex: any, event: any, clicked: number) => {
 
@@ -445,21 +526,29 @@ function Sliderx({
       canvasRefIn.current.height = window.innerHeight;
       canvasRefIn.current.width = canvasInteractWidth;
 
+
       requestAnimationFrame(() => {
         context.drawImage(data, 0, 0, canvasInteractWidth, window.innerHeight);
 
+        var offsety = 0;
+
+        var screenWidth = window.innerWidth * 0.94;
+        var pictureWidth = canvasInteractWidth;
+        var offsetX = (screenWidth - pictureWidth) / 2;
+
+        if (matchMobile) {
 
 
-        const screenWidth = window.innerWidth * 0.94;
-        const pictureWidth = canvasInteractWidth;
-        const offsetX = (screenWidth - pictureWidth) / 2;
+          offsetX = window.innerWidth * 0.94;
+
+        }
 
         const xx = cropInitialIn[0].x - offsetX;
-        const yy = cropInitialIn[0].y;
+        const yy = cropInitialIn[0].y - offsety;
 
 
         const xxw = cropInitialIn2[0].x - offsetX;
-        const yyw = cropInitialIn2[0].y;
+        const yyw = cropInitialIn2[0].y - offsety
         const r = 35;
 
         context.beginPath();
@@ -569,7 +658,7 @@ function Sliderx({
               /// alert(`xx: ${xx}, xnew: ${xnew}`);
 
               /// dispatch(UpdateInteract(post.interact1b, true));
-
+              spin();
               setinteract(true);
               setinteractContent(post.interact1b);
 
@@ -579,7 +668,7 @@ function Sliderx({
               /// alert(`xx: ${xx}, xnew: ${xnew}`);
 
 
-
+              spin();
               setinteract(true);
               setinteractContent(post.interact1a);
 
@@ -595,7 +684,7 @@ function Sliderx({
             } else { }
           } else { }
 
-
+          //alert(imageHeightcss);
 
 
 
@@ -603,7 +692,7 @@ function Sliderx({
 
       });
     }
-  }, [data, imageWidthcss, imageHeightcss, interact]);
+  }, [data, imageWidthcss, imageHeightcss, interact,]);
 
 
 
@@ -745,6 +834,46 @@ function Sliderx({
 
   return (
     <>
+
+
+      <Grid
+        item
+
+
+        xs={12}
+        style={{
+          position: "fixed",
+          top: '3vh',
+          padding: "0px",
+          zIndex: '200'
+        }}
+      >
+
+
+        {Tutorial ? <Grid
+          item
+          onClick={() => {
+            setTutorial(false);
+          }}
+
+          xs={6}
+          style={{
+            padding: "10px",
+            backgroundColor: '#00ccff',
+            borderRadius: '8%',
+            fontFamily: 'sans-serif',
+            fontWeight: 'bold'
+          }}
+        >
+
+          Mobile Interaction Still In Development, Coming Soon 😊
+        </Grid> : null}
+
+
+      </Grid  >
+
+
+
       <Grid
         item
         onTouchStart={In}
@@ -810,10 +939,24 @@ function Sliderx({
             />
           </span>
         </div>{" "}
-        {slides.length > 0 ? (
 
+
+        {showSpin ?
+          <Grid item xs={12} style={{ position: 'fixed', zIndex: 100, padding: '3vh' }}>
+            <div className="spinner zuperxyinfo" style={{
+              borderTop: `8px solid ${post.color1}`, boxShadow: `0 0 8.5px, ${post.color1}`
+            }}></div>
+          </Grid> :
+          null
+        }
+
+
+
+        {slides.length > 0 ? (
           interactContent ? null :
             <SliderNumber
+              ActiveCanvas={ActiveCanvas}
+              post={post}
               HasInteractivity={HasInteractivity}
               postDatainnerInteraction1={postDatainnerInteraction1}
               postDatainnerInteraction2={postDatainnerInteraction2}
@@ -838,10 +981,14 @@ function Sliderx({
         />
         {transitions((style, i) => (
           <div key={i}>
+
             <animated.img
               onLoad={(e: any) => {
                 onPostsItemload(e, pey, i);
+
+
               }}
+
               onMouseDown={clickslider}
               ref={addPostItemsRef}
               className={
@@ -869,10 +1016,10 @@ function Sliderx({
                 filter: "blur(0px)",
               }}
             />
+
             <animated.img
-              onLoad={(e: any) => {
-                // onPostsItemload(e, pey, i);
-              }}
+
+
               onMouseDown={clickslider}
               className={
                 darkmodeReducer ? "turlightpostdark" : "turlightpostlight"
@@ -925,9 +1072,22 @@ function Sliderx({
 
               <img className={fadeout ? "fadeboyinOut" : "fadeboyinInt"}
                 src={interactContent}
+                onClick={() => {
+                  ///  alert('kk')
+
+                  setinteract(false);
+                  setinteractContent('');
+                  setfadeout(false);
+
+
+                  if (sc.current) {
+                    clearTimeout(sc.current);
+                  }
+
+                  setshowSpin(false);
+                }}
                 style={{
-
-
+                  cursor: 'pointer',
                   height: "100%",
                   objectFit: 'contain',
                   zIndex: 50,
@@ -966,9 +1126,11 @@ function Sliderx({
 
           <img
             src={post.interact1a}
+            onClick={() => {
+
+
+            }}
             style={{
-
-
               height: "100%",
               objectFit: 'contain',
               zIndex: 50,
@@ -991,9 +1153,10 @@ function Sliderx({
 
           <img
             src={post.interact1b}
+
             style={{
 
-
+              cursor: 'pointer',
               height: "100%",
               objectFit: 'contain',
               zIndex: 50,

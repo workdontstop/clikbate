@@ -1,11 +1,12 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 
 import { animated } from "react-spring";
 import { matchPc, matchTablet, matchMobile } from "../DetectDevice";
-
+import Axios from "axios";
 import { Scrollbars } from "react-custom-scrollbars-2";
 
 import EditTwoToneIcon from "@mui/icons-material/EditTwoTone";
+import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
 
 import { AboutColor } from "./AboutColor";
@@ -74,6 +75,9 @@ function ModalCommentLayoutx({
   CommentHistoryData,
   setcommentHistoryScroll,
   setCommentHistoryData,
+  showComAddBack,
+  setshowComAddBack
+
 }: any): JSX.Element {
   ///alert(containerHeight);
   ///
@@ -83,7 +87,11 @@ function ModalCommentLayoutx({
   const [serverErrorData, setServerErrorData] = useState<string | null>(null);
   const [serverErrorDisplay, setServerErrorDisplay] = useState<number>(4);
   const [serverEmojiplain, setserverEmojiplain] = useState<boolean>(true);
-  const [showComAddBack, setshowComAddBack] = useState<boolean>(false);
+
+
+  const { REACT_APP_SUPERSTARZ_URL, REACT_APP_APPX_STATE } = process.env;
+
+
 
   const [sex, setsex] = useState<any>(null);
 
@@ -261,6 +269,35 @@ function ModalCommentLayoutx({
 
 
 
+  const [showdelete, setshowdelete] = useState(false);
+
+
+  const DelPost = useCallback(() => {
+
+    var colorboy = {
+      id: CommentPostid.id,
+    };
+
+    Axios.post(
+      `${REACT_APP_SUPERSTARZ_URL}/delPost`,
+      { values: colorboy },
+
+    )
+      .then((response) => {
+        if (response.data.message === "deleted post") {
+
+          window.location.reload();
+
+
+        }
+      })
+      .catch(function (error) {
+        /////alert(error);
+      });
+
+  }, [CommentPostid]);
+
+
   return (
     <>
       {
@@ -282,6 +319,117 @@ function ModalCommentLayoutx({
                 serverErrorData={serverErrorData}
               />
 
+              {CommentPostid.sender === idReducer ? <MoreHorizIcon
+                onClick={() => {
+
+                  setshowdelete(true)
+                }}
+                className={
+                  darkmodeReducer
+                    ? "make-small-icons-clickable-darkab dontallowhighlighting zuperkingIcon "
+                    : "make-small-icons-clickable-lightab  dontallowhighlighting zuperkingIcon  "
+                }
+                style={{
+                  color: "#ffffff",
+                  fontSize: "2.9vw",
+                  position: "fixed",
+                  opacity: zoomedModal ? 0.3 : 0.4,
+                  top: zoomedModal ? "3vh" : "4vh",
+                  left: "1.8vw",
+                  zIndex: 200,
+
+                }}
+              /> : null}
+
+
+              {showdelete ? <>
+
+                <Grid
+                  item
+                  xs={12}
+                  style={{
+                    position: "fixed",
+                    height: "110%",
+                    padding: '0px',
+                    width: '100%',
+                    top: '-3vh',
+                    backgroundColor: darkmodeReducer ? 'rgb(10,10,10,0.8)' : 'rgb(255,255,255,0.6)',
+                    color: darkmodeReducer ? '#dddddd' : '#444444',
+                    zIndex: '2000',
+                    fontFamily: 'sans-serif'
+
+                  }}
+                >
+
+
+
+
+                  <Grid
+                    item
+                    xs={12}
+                    style={{
+                      position: "relative",
+                      padding: '0px',
+                      fontSize: '4vh',
+                      top: '5vh',
+                      margin: 'auto',
+                      textAlign: 'center',
+                      fontWeight: 'bolder',
+                      opacity: 0.9
+
+                    }}
+                  >
+                    Delete This Post
+
+                  </Grid>
+
+                  <Grid
+                    item
+
+                    xs={12}
+                    style={{
+                      position: "relative",
+
+                      padding: '0px',
+                      top: '30vh',
+                      margin: 'auto',
+                      textAlign: 'center'
+
+                    }}
+                  >
+                    <span onClick={() => {
+
+                      DelPost();
+                    }} className={
+                      darkmodeReducer
+                        ? "make-small-icons-clickable-darkMenu dontallowhighlighting zuperkingIcon"
+                        : "make-small-icons-clickable-lightMenu dontallowhighlighting zuperking"
+                    } style={{ padding: '4vh' }}>Yes</span>
+
+                  </Grid>
+
+
+                  <Grid
+                    item
+                    xs={12}
+                    style={{
+                      position: "relative",
+
+                      padding: '0px',
+                      top: '58vh',
+                      margin: 'auto',
+                      textAlign: 'center'
+
+                    }}
+                  >
+
+                    <span onClick={() => { setshowdelete(false) }} className={
+                      darkmodeReducer
+                        ? "make-small-icons-clickable-darkMenu dontallowhighlighting zuperkingIcon"
+                        : "make-small-icons-clickable-lightMenu dontallowhighlighting zuperking"
+                    } style={{ padding: '4vh' }}>No</span>
+                  </Grid>
+                </Grid ></> : null}
               <DialogContent
                 className={`${fadeSlidingimage} modalImageCustomSlider FormDialog-containerx dontallowhighlighting`}
                 onClick={onBackgroundFocus}
@@ -374,6 +522,7 @@ function ModalCommentLayoutx({
                             }}
                           >
                             <CommentFormHolder
+                              mobileZoom={mobileZoom}
                               setcommentHistoryScroll={setcommentHistoryScroll}
                               setCommentHistoryData={setCommentHistoryData}
                               commentHistoryScroll={commentHistoryScroll}
@@ -419,9 +568,9 @@ function ModalCommentLayoutx({
           ) : (
             /*PC PC PC PC PC PC PC PC PC PC PC PC PC PC PC PC PC PC PC PC PC PC PC PC
         PC PC PC PC PC PC PC PC PC PC PC PC */ /*MOBILE MOBILE MOBILE MOBILE
-                                                                                    MOBILE MOBILEMOBILE MOBILE MOBILE MOBILE MOBILE MOBILE MOBILEMOBILE MOBILE
-                                                                                    MOBILE MOBILE MOBILE MOBILE MOBILEMOBILE MOBILE MOBILE MOBILE MOBILE
-                                                                                    MOBILE MOBILE MOBILE*/
+                                                                                                                                                                                                                                                                                                                                                                                                                                            MOBILE MOBILEMOBILE MOBILE MOBILE MOBILE MOBILE MOBILE MOBILEMOBILE MOBILE
+                                                                                                                                                                                                                                                                                                                                                                                                MOBILE MOBILE MOBILE MOBILE MOBILEMOBILE MOBILE MOBILE MOBILE MOBILE
+                                                                                                                                                                                                                                                                                                                                                                                                MOBILE MOBILE MOBILE*/
             <DialogContent
               className="Hide-mobile-Scrollbar  fadermodal FormDialog-container-mobile dontallowhighlighting"
               ref={imagescrollRef}
@@ -433,6 +582,7 @@ function ModalCommentLayoutx({
                 backgroundImage: PaperStyleReducer,
               }}
             >
+
               <animated.div style={modalanimation}>
                 <Paper
                   style={{
@@ -453,7 +603,9 @@ function ModalCommentLayoutx({
                       <animated.img
                         onClick={clickMobileZoom}
                         onLoad={mobileImageOnLoad}
-                        src={`${imageReducer}`}
+                        src={
+                          connectTemplateGo > 0 ? memeberPageid === 0 ? imageReducer : MemberProfileData.userimage : DiscussionImage[0]
+                        }
                         className="modalMobileImageStyle slow-Div-Change"
                         alt="SuperstarZ"
                         style={mobileLogmodalanimation}
@@ -467,7 +619,7 @@ function ModalCommentLayoutx({
                       {" "}
                       <Paper
                         className="Hide-mobile-Scrollbar "
-                        onScroll={slide}
+                        ///  onScroll={slide}
                         ref={contentScrollRef}
                         style={{
                           overflow: "auto",
@@ -478,58 +630,55 @@ function ModalCommentLayoutx({
                           marginTop: "-1.9px",
                         }}
                       >
-                        {" "}
-                        <Grid
-                          item
-                          xs={7}
-                          sm={6}
-                          style={{
-                            zIndex: zIndexModalImageSmall,
-                            position: "fixed",
-                            top: "20%",
-                            left: "3.3vw",
-                            fontSize: aboutInfoFont,
-                            backgroundColor: "",
-                            width: "100%",
-                            height: "200px",
-                            fontFamily: "Arial, Helvetica, sans-serif",
-                            fontWeight: "bold",
-                            lineHeight: matchTablet ? 1.6 : 1.65,
-                          }}
-                        >
-                          {" "}
-                          <span
-                            style={{
-                              color: darkmodeReducer ? "#dddddd" : "#0b111b",
-                            }}
-                            className={textback}
-                          >
-                            Hi there , i love life and want to make it better. Try
-                            to stay positive when you feel down. Smile
-                          </span>
-                        </Grid>
-                        <EditTwoToneIcon
-                          className={
-                            darkmodeReducer
-                              ? "make-small-icons-clickable-darkab dontallowhighlighting zuperkinginfo "
-                              : "make-small-icons-clickable-lightab  dontallowhighlightingzuperkinginfo  "
-                          }
-                          style={{
-                            color: "#ffffff",
-                            fontSize: matchTablet ? "5.8vh" : "  4.8vh",
-                            position: "fixed",
-                            display: mobileZoom ? "none" : "block",
-                            opacity: showlogo ? "" : "0",
-                            top: mobileZoom ? "0vh" : EditIconTop,
-                            right: mobileZoom ? "0vw" : EditIconRight,
-                            left: mobileZoom ? "0vw" : EditIconLeft,
-                          }}
-                        />{" "}
+
                         <Grid item xs={12} style={{ height: "6vh" }}></Grid>{" "}
                         <Grid xs={12} item className={formHolder}>
-                          <Grid item xs={12}>
-                            <AboutColor zoomed={mobileZoom} />
+
+                          <Grid
+                            item
+                            xs={12}
+                            style={{
+                              padding: "0px",
+                            }}
+                          >
+                            <CommentFormHolder
+                              mobileZoom={mobileZoom}
+                              setcommentHistoryScroll={setcommentHistoryScroll}
+                              setCommentHistoryData={setCommentHistoryData}
+                              commentHistoryScroll={commentHistoryScroll}
+                              CommentHistoryData={CommentHistoryData}
+                              DiscussionImage={DiscussionImage}
+                              postData={postData}
+                              scrollLocation={scrollLocation}
+                              typeEmo={typeEmo}
+                              connectTemplateGo={connectTemplateGo}
+                              ModalImageRef={ModalImageRef}
+                              reactionTemplateGo={reactionTemplateGo}
+                              containerHeight={containerHeight}
+                              CommentPostid={CommentPostid}
+                              CommentTimer={CommentTimer}
+                              setFeedbackshow={setFeedbackshow}
+                              setFeedBackData={setFeedBackData}
+                              showComAddBack={showComAddBack}
+                              setshowComAddBack={setshowComAddBack}
+                              wideImage={wideImage}
+                              MiniLayoutOverFlow={MiniLayoutOverFlow}
+                              zoomedModal={zoomedModal}
+                              WidthHolder={WidthHolder}
+                              loginForm={false}
+                              setServerErrorData={setServerErrorData}
+                              setServerErrorDisplay={setServerErrorDisplay}
+                              setserverEmojiplain={setserverEmojiplain}
+                              checkSignupPasswordACTIVATE={
+                                checkSignupPasswordACTIVATE
+                              }
+                              setcheckSignupPasswordACTIVATE={
+                                setcheckSignupPasswordACTIVATE
+                              }
+                              imageHeightoverflow={imageHeightoverflow}
+                            />
                           </Grid>
+
                         </Grid>
                         <Grid item xs={12} style={{ height: "60vh" }}></Grid>{" "}
                       </Paper>

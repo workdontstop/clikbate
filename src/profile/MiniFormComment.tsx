@@ -29,6 +29,7 @@ function MiniFormCommentx({
   postData,
   originalData,
   paperPostScrollRefxx,
+  mobileZoom
 }: any): JSX.Element {
   const { REACT_APP_APPX_STATE } = process.env;
 
@@ -66,12 +67,13 @@ function MiniFormCommentx({
             ? "postscroll-dark"
             : "postscroll-light"
           : darkmodeReducer
-          ? "postscroll-darkm"
-          : "postscroll-lightm"
+            ? "postscroll-darkm"
+            : "postscroll-lightm"
       }
       style={{
         height: `${containerHeight - 79}px`,
-        padding: "0vh",
+        paddingLeft: mobileZoom ? "1vh" : '0vh',
+        paddingRight: mobileZoom ? "1vh" : '0vh',
         position: "relative",
         overflowY: "auto",
         overflowX: `hidden`,
@@ -109,95 +111,95 @@ function MiniFormCommentx({
       </Grid>
       {commentDatax
         ? commentDatax.map((post: any, i: any) => (
-            <>
-              <ShowComments
-                paperPostScrollRefxx={paperPostScrollRefxx}
-                originalData={originalData}
-                CommentPostid={CommentPostid}
-                DiscussionImage={DiscussionImage}
-                scrollLocation={scrollLocation}
-                postData={postData}
-                paperPostScrollRef={paperPostScrollRef}
-                callObserver={callObserver}
-                length={commentDatax.length}
-                AddRef={lastItemElement}
-                post={post}
-                i={i}
-                zoomedModal={zoomedModal}
-                wideImage={wideImage}
-              />
-            </>
-          ))
+          <>
+            <ShowComments
+              paperPostScrollRefxx={paperPostScrollRefxx}
+              originalData={originalData}
+              CommentPostid={CommentPostid}
+              DiscussionImage={DiscussionImage}
+              scrollLocation={scrollLocation}
+              postData={postData}
+              paperPostScrollRef={paperPostScrollRef}
+              callObserver={callObserver}
+              length={commentDatax.length}
+              AddRef={lastItemElement}
+              post={post}
+              i={i}
+              zoomedModal={zoomedModal}
+              wideImage={wideImage}
+            />
+          </>
+        ))
         : null}
       {commentData
         ? commentData.map((post: any, i: any) => (
-            <>
-              <ShowComments
-                paperPostScrollRefxx={paperPostScrollRefxx}
-                originalData={originalData}
-                CommentPostid={CommentPostid}
-                DiscussionImage={DiscussionImage}
-                scrollLocation={scrollLocation}
-                postData={postData}
-                paperPostScrollRef={paperPostScrollRef}
-                callObserver={callObserver}
-                length={commentData.length}
-                AddRef={lastItemElement}
-                post={post}
-                i={i}
-                zoomedModal={zoomedModal}
-                wideImage={wideImage}
-              />
-            </>
-          ))
+          <>
+            <ShowComments
+              paperPostScrollRefxx={paperPostScrollRefxx}
+              originalData={originalData}
+              CommentPostid={CommentPostid}
+              DiscussionImage={DiscussionImage}
+              scrollLocation={scrollLocation}
+              postData={postData}
+              paperPostScrollRef={paperPostScrollRef}
+              callObserver={callObserver}
+              length={commentData.length}
+              AddRef={lastItemElement}
+              post={post}
+              i={i}
+              zoomedModal={zoomedModal}
+              wideImage={wideImage}
+            />
+          </>
+        ))
         : null}
       {showComment2
         ? commentData2
           ? commentData2.map((post: any, i: any) => (
-              <>
-                <ShowComments
-                  paperPostScrollRefxx={paperPostScrollRefxx}
-                  originalData={originalData}
-                  CommentPostid={CommentPostid}
-                  DiscussionImage={DiscussionImage}
-                  scrollLocation={scrollLocation}
-                  postData={postData}
-                  paperPostScrollRef={paperPostScrollRef}
-                  callObserver={callObserver}
-                  length={commentData2.length}
-                  AddRef={lastItemElement}
-                  post={post}
-                  i={i}
-                  zoomedModal={zoomedModal}
-                  wideImage={wideImage}
-                />
-              </>
-            ))
+            <>
+              <ShowComments
+                paperPostScrollRefxx={paperPostScrollRefxx}
+                originalData={originalData}
+                CommentPostid={CommentPostid}
+                DiscussionImage={DiscussionImage}
+                scrollLocation={scrollLocation}
+                postData={postData}
+                paperPostScrollRef={paperPostScrollRef}
+                callObserver={callObserver}
+                length={commentData2.length}
+                AddRef={lastItemElement}
+                post={post}
+                i={i}
+                zoomedModal={zoomedModal}
+                wideImage={wideImage}
+              />
+            </>
+          ))
           : null
         : null}
 
       {showComment3
         ? commentData3
           ? commentData3.map((post: any, i: any) => (
-              <>
-                <ShowComments
-                  paperPostScrollRefxx={paperPostScrollRefxx}
-                  originalData={originalData}
-                  CommentPostid={CommentPostid}
-                  DiscussionImage={DiscussionImage}
-                  scrollLocation={scrollLocation}
-                  postData={postData}
-                  paperPostScrollRef={paperPostScrollRef}
-                  callObserver={callObserver}
-                  length={commentData3.length}
-                  AddRef={lastItemElement}
-                  post={post}
-                  i={i}
-                  zoomedModal={zoomedModal}
-                  wideImage={wideImage}
-                />
-              </>
-            ))
+            <>
+              <ShowComments
+                paperPostScrollRefxx={paperPostScrollRefxx}
+                originalData={originalData}
+                CommentPostid={CommentPostid}
+                DiscussionImage={DiscussionImage}
+                scrollLocation={scrollLocation}
+                postData={postData}
+                paperPostScrollRef={paperPostScrollRef}
+                callObserver={callObserver}
+                length={commentData3.length}
+                AddRef={lastItemElement}
+                post={post}
+                i={i}
+                zoomedModal={zoomedModal}
+                wideImage={wideImage}
+              />
+            </>
+          ))
           : null
         : null}
       <>

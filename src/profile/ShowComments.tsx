@@ -8,7 +8,7 @@ import { TextFieldSignup } from "../log/TextFieldSignup";
 import { ModalFormSignupError } from "../log/ModalFormSignupError";
 import { ModalFormLoginError } from "../log/ModalFormLoginError";
 import { Button, Grid } from "@material-ui/core";
-import { matchPc, matchTablet } from "../DetectDevice";
+import { matchMobile, matchPc, matchTablet } from "../DetectDevice";
 import { RootStateOrAny, useSelector, useDispatch } from "react-redux";
 import { IsLoggedAction } from "../log/actions/IsLoggedAction";
 import { UserdataAction } from "../log/actions/UserdataAction";
@@ -33,8 +33,9 @@ import AddIcon from "@mui/icons-material/Add";
 import DownloadDoneIcon from "@mui/icons-material/DownloadDone";
 import PanoramaFishEyeIcon from "@mui/icons-material/PanoramaFishEye";
 import { UserInfoUpdateMEMBER } from "../log/actions/UserdataAction";
-import { UpdateLoader } from ".././GlobalActions";
+import { UpdateLoader, Updatepagenum } from ".././GlobalActions";
 import { Connect } from "./Connect";
+
 
 ///Axios.defaults.withCredentials = true;
 
@@ -56,6 +57,10 @@ function ShowCommentsx({
   const { REACT_APP_SUPERSTARZ_URL, REACT_APP_APPX_STATE } = process.env;
 
   const dispatch = useDispatch();
+
+  const [showdelete, setshowdelete] = useState(false);
+
+
 
   ///
   ///
@@ -99,6 +104,7 @@ function ShowCommentsx({
       PostDataFromComment: [];
       CommentData: [];
       CommentScroll: 0;
+      pagenum: 0;
     };
   }
 
@@ -117,6 +123,7 @@ function ShowCommentsx({
     PostDataFromComment,
     CommentData,
     CommentScroll,
+    pagenum
   } = useSelector((state: RootStateGlobalReducer) => ({
     ...state.GlobalReducer,
   }));
@@ -130,6 +137,7 @@ function ShowCommentsx({
   var DiscussionImageReducer = DiscussionImage;
   var CommentDataReducer = CommentData;
   var CommentScrollReducer = CommentScroll;
+  const pagenumReducer = pagenum;
   const Timervv = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
@@ -161,6 +169,10 @@ function ShowCommentsx({
   }, [post]);
 
   const GoToMember = useCallback(() => {
+
+    dispatch(Updatepagenum(0));
+
+
     if (memeberPageidReducer === post.comUserId) {
     } else {
       var n, d;
@@ -176,6 +188,7 @@ function ShowCommentsx({
           id: 0,
           index: historyscrollReducer,
           data: PostDataFromCommentReducer,
+          pagenumReducer: pagenumReducer,
           AllMemberData: 0,
           innerid: 0,
           comid: comIdReducer,
@@ -190,6 +203,7 @@ function ShowCommentsx({
           id: memeberPageidReducer,
           index: historyscrollReducer,
           data: PostDataFromCommentReducer,
+          pagenumReducer: pagenumReducer,
           AllMemberData: MemberProfileDataReducer,
           innerid: 0,
           comid: comIdReducer,
@@ -205,6 +219,7 @@ function ShowCommentsx({
         type: 1,
         id: post.comUserId,
         innerid: 0,
+        pagenumReducer: pagenumReducer,
       };
       window.history.pushState(dd, "", `${post.username}`);
       dispatch(UserInfoUpdateMEMBER(post.comUserId));
@@ -224,6 +239,7 @@ function ShowCommentsx({
     DiscussionImageReducer,
     PostDataFromCommentReducer,
     CommentDataReducer,
+    pagenumReducer
   ]);
 
   const GoToMemberLoaderUp = () => {
@@ -239,8 +255,124 @@ function ShowCommentsx({
     }, 1000);
   };
 
+
+
+  const DelCo = useCallback(() => {
+
+    var colorboy = {
+      id: post.id,
+    };
+
+    Axios.post(
+      `${REACT_APP_SUPERSTARZ_URL}/delcomments`,
+      { values: colorboy },
+
+    )
+      .then((response) => {
+        if (response.data.message === "deleted") {
+
+          window.history.back();
+
+        }
+      })
+      .catch(function (error) {
+        /////alert(error);
+      });
+
+  }, [post]);
+
+
+
   return (
     <>
+      {showdelete ? <>
+
+        <Grid
+          item
+          xs={12}
+          style={{
+            position: "absolute",
+            height: "100%",
+            padding: '0px',
+            width: '100%',
+            top: '-3vh',
+            backgroundColor: darkmodeReducer ? 'rgb(10,10,10,0.8)' : 'rgb(255,255,255,0.6)',
+            color: darkmodeReducer ? '#dddddd' : '#444444',
+            zIndex: '200',
+            fontFamily: 'sans-serif'
+
+          }}
+        >
+
+
+
+
+          <Grid
+            item
+            xs={12}
+            style={{
+              position: "relative",
+              padding: '0px',
+
+              top: '5vh',
+              margin: 'auto',
+              textAlign: 'center',
+              fontWeight: 'bolder',
+              opacity: 0.9
+
+            }}
+          >
+            Confirm  Delete
+
+          </Grid>
+
+          <Grid
+            item
+
+            xs={12}
+            style={{
+              position: "relative",
+
+              padding: '0px',
+              top: '20vh',
+              margin: 'auto',
+              textAlign: 'center'
+
+            }}
+          >
+            <span onClick={() => {
+
+              DelCo();
+            }} className={
+              darkmodeReducer
+                ? "make-small-icons-clickable-darkMenu dontallowhighlighting zuperkingIcon"
+                : "make-small-icons-clickable-lightMenu dontallowhighlighting zuperking"
+            } style={{ padding: '4vh' }}>Yes</span>
+
+          </Grid>
+
+
+          <Grid
+            item
+            xs={12}
+            style={{
+              position: "relative",
+
+              padding: '0px',
+              top: '48vh',
+              margin: 'auto',
+              textAlign: 'center'
+
+            }}
+          >
+
+            <span onClick={() => { setshowdelete(false) }} className={
+              darkmodeReducer
+                ? "make-small-icons-clickable-darkMenu dontallowhighlighting zuperkingIcon"
+                : "make-small-icons-clickable-lightMenu dontallowhighlighting zuperking"
+            } style={{ padding: '4vh' }}>No</span>
+          </Grid>
+        </Grid ></> : null}
       <Grid
         item
         xs={12}
@@ -250,13 +382,13 @@ function ShowCommentsx({
           color: darkmodeReducer ? "#ffffff" : "#000000",
           fontFamily: "Arial, Helvetica, sans-seri",
           padding: "0px",
-          paddingRight: zoomedModal ? "0vh" : "2vh",
-          paddingLeft: zoomedModal ? "0vh" : "2vh",
+          paddingRight: matchMobile ? '0px' : zoomedModal ? "0vh" : "2vh",
+          paddingLeft: matchMobile ? '0px' : zoomedModal ? "0vh" : "2vh",
           paddingBottom: zoomedModal ? "4.2vh" : "4.3vh",
         }}
       >
         <span> </span>
-        <span style={{ display: "flex", alignItems: "center" }}>
+        <span style={{ display: "flex", alignItems: "center", marginLeft: matchMobile ? '-2vh' : '0px' }}>
           <Connect
             GoToMember={GoToMember}
             Added={Added}
@@ -270,7 +402,7 @@ function ShowCommentsx({
             post={post}
             wideImage={wideImage}
           />{" "}
-          <span style={{ width: "80%" }}>
+          <span style={{ width: matchMobile ? '68%' : "80%", backgroundColor: '', textAlign: 'left', marginLeft: matchMobile ? '4vw' : '0px' }}>
             {" "}
             <span
               onClick={() => {
@@ -281,24 +413,25 @@ function ShowCommentsx({
                 opacity: 0.9,
                 display: "block",
                 fontWeight: "bold",
-                fontSize: zoomedModal ? "0.7vw" : "0.9vw",
-                paddingLeft: "1.3vh",
+                fontSize: matchMobile ? '2vh' : zoomedModal ? "0.7vw" : "0.9vw",
+                paddingLeft: matchMobile ? '0px' : "1.3vh",
+
               }}
             >
               {post.username}
             </span>
-            <span style={{ marginLeft: "0.8vw" }}>
+            <span style={{ marginLeft: matchMobile ? '0px' : "0.8vw" }}>
               {" "}
               <CircleIcon
                 style={{
-                  fontSize: "0.5vw",
+                  fontSize: matchMobile ? '1vh' : "0.5vw",
                   color: post.color1,
                 }}
               />{" "}
             </span>
             <span
               style={{
-                fontSize: zoomedModal ? "1.1vw" : "0.9vw",
+                fontSize: matchMobile ? '2vh' : zoomedModal ? "1.1vw" : "0.9vw",
                 opacity: 0.7,
               }}
             >
@@ -306,21 +439,28 @@ function ShowCommentsx({
               {post.com}{" "}
             </span>
           </span>{" "}
-          <QuickreplyIcon
+
+          {post.comUserId === idReducer ? <QuickreplyIcon
+
+            onClick={() => {
+              setshowdelete(true)
+            }}
             className={
               darkmodeReducer
                 ? ` zuperkingIconPostLight`
                 : `zuperkingIconPostDark`
             }
             style={{
+              cursor: 'pointer',
               top: "0vh",
               color: post.color1,
               position: "relative",
-              fontSize: "1.5vw",
+              fontSize: matchMobile ? '3.6vh' : "1.5vw",
               opacity: 0.26,
-              left: zoomedModal ? "-4vw" : "0px",
+              left: matchMobile ? '-1vw' : zoomedModal ? "-4vw" : "0px",
             }}
-          />{" "}
+          /> : null}
+
         </span>
       </Grid>
     </>

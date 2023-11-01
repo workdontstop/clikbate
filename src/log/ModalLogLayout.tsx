@@ -315,9 +315,9 @@ function ModalLogLayoutx({
           ) : (
             /*PC PC PC PC PC PC PC PC PC PC PC PC PC PC PC PC PC PC PC PC PC PC PC PC
         PC PC PC PC PC PC PC PC PC PC PC PC */ /*MOBILE MOBILE MOBILE MOBILE
-                        MOBILE MOBILEMOBILE MOBILE MOBILE MOBILE MOBILE MOBILE MOBILEMOBILE MOBILE
-                        MOBILE MOBILE MOBILE MOBILE MOBILEMOBILE MOBILE MOBILE MOBILE MOBILE
-                        MOBILE MOBILE MOBILE*/
+                                        MOBILE MOBILEMOBILE MOBILE MOBILE MOBILE MOBILE MOBILE MOBILEMOBILE MOBILE
+                                        MOBILE MOBILE MOBILE MOBILE MOBILEMOBILE MOBILE MOBILE MOBILE MOBILE
+                                        MOBILE MOBILE MOBILE*/
             <DialogContent
               className="Hide-mobile-Scrollbar  fadermodal FormDialog-container-mobile dontallowhighlighting"
               ref={imagescrollRef}
@@ -372,7 +372,7 @@ function ModalLogLayoutx({
                       {" "}
                       <Paper
                         className="Hide-mobile-Scrollbar "
-                        onScroll={slide}
+                        ///  onScroll={slide}
                         ref={contentScrollRef}
                         style={{
                           overflow: "auto",

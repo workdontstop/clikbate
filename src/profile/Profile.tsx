@@ -8,6 +8,8 @@ import $ from "jquery";
 
 import { matchPc, matchTablet, matchMobile } from "../DetectDevice";
 import { RootStateOrAny, useSelector, useDispatch } from "react-redux";
+
+import { ActualMenu } from "./ActualMenu";
 import {
   Paper,
   Grid,
@@ -60,16 +62,27 @@ function Profilex({
   StopMini,
   setStopMini,
   postDatainnerInteraction1,
-  postDatainnerInteraction2
+  postDatainnerInteraction2,
+
+  callPagination,
+  setShowBigPlay,
+  setsuperSettings,
+  showModalFormMenu,
+  setshowModalFormMenu
 }: any) {
   const [countAutoplay, setcountAutoplay] = useState<number>(0);
 
   const dispatch = useDispatch();
 
-  const postDivRef = useRef<any>([]);
-  const postDivRefx = useRef<any>([]);
+  const postDivRef = useRef<any[]>([]);
 
   const postItemsRef = useRef<any>([]);
+
+
+
+
+  const canvasRefIn: any = useRef(null);
+
   ///
 
   const [second, setsecond] = useState<any>(0);
@@ -85,6 +98,90 @@ function Profilex({
   const [itemInteractGo, setitemInteractGo] = useState<Array<boolean>>(
     []
   );
+
+  const lastItemElement = useRef<any>();
+
+  const [showMoreIndicator, setshowMoreIndicator] = useState(false);
+
+  const [lastIndicatorPush, setlastIndicatorPush] = useState(false);
+
+  const [lastIndicatorPushH, setlastIndicatorPushH] = useState(37);
+
+
+  useEffect(() => {
+
+    if (showProfiileData) {
+      if (postData.length < 20) { } else {
+        setTimeout(() => {
+
+          // Initialize the observer in the effect
+          const observer = new IntersectionObserver((entries: any) => {
+            const ent = entries[0];
+            if (ent.isIntersecting) {
+
+              if (sTimer.current) {
+                clearTimeout(sTimer.current);
+              }
+
+              if (sTimer2.current) {
+                clearTimeout(sTimer2.current);
+              }
+
+              if (sTimer3.current) {
+                clearTimeout(sTimer3.current);
+              }
+
+              sTimer.current = setTimeout(() => {
+                setshowMoreIndicator(true)
+
+                sTimer2.current = setTimeout(() => {
+
+                  dispatch(UpdateLoader(true));
+                  setshowThisComponenet(true);
+                  setminiProfile(false);
+                  callPagination();
+
+
+
+
+
+
+                }, 1400)
+
+
+              }, 200)
+
+
+            } else {
+              if (sTimer.current) {
+                clearTimeout(sTimer.current);
+              }
+
+              if (sTimer2.current) {
+                clearTimeout(sTimer2.current);
+              }
+
+
+              setshowMoreIndicator(false)
+              ///setmoreFeeds(false);
+            }
+          });
+
+          if (lastItemElement.current) {
+            observer.observe(lastItemElement.current);
+          }
+
+          // Cleanup function to disconnect the observer
+          return () => {
+            observer.disconnect();
+          };
+        }, 4500)
+      }
+    }
+
+
+  }, [lastItemElement, postData, showProfiileData]); // Re-run the effect when dependencies change
+
 
 
   const [ActiveCanvas, setActiveCanvas] = useState(0);
@@ -103,12 +200,17 @@ function Profilex({
 
   const [postbackheight] = useState<number>(postbackheighthold);
 
+  const sTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const sTimer2 = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const sTimer3 = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+
   const scrollTypeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
 
 
-  ///
-  ///
   ///
   /// INTERFACE/TYPES FOR SCREENHEIGHT AND DARKMODE
   interface RootStateGlobalReducer {
@@ -116,6 +218,8 @@ function Profilex({
       darkmode: boolean;
       screenHeight: number;
       activateLoader: boolean;
+      pagenum: number
+
     };
   }
 
@@ -123,7 +227,7 @@ function Profilex({
   ///
   ///
   /// GET SCREENHEIGHT FROM REDUX STORE
-  const { screenHeight, darkmode, activateLoader } = useSelector(
+  const { screenHeight, darkmode, activateLoader, pagenum } = useSelector(
     (state: RootStateGlobalReducer) => ({
       ...state.GlobalReducer,
     })
@@ -131,6 +235,8 @@ function Profilex({
   const screenHeightReducer = screenHeight;
   const darkmodeReducer = darkmode;
   const activateLoaderReducer = activateLoader;
+  const pagenumReducer = pagenum;
+
 
   ///
   ///
@@ -139,6 +245,15 @@ function Profilex({
     if (itemsRef && !postItemsRef.current.includes(itemsRef)) {
       postItemsRef.current.push(itemsRef);
     }
+    ////console.log(postItemsRef.current[1]);
+  };
+
+
+  const addpostDivRefRoll = (divRef: any) => {
+    if (divRef && !postDivRefRoll.current.includes(divRef)) {
+      postDivRefRoll.current.push(divRef);
+    }
+
     ////console.log(postItemsRef.current[1]);
   };
 
@@ -234,154 +349,192 @@ function Profilex({
       }, 30);
     }
 
-    setTimeout(function () {
-      setshowThisComponenet(false);
-    }, 1000);
   };
 
   const onPostsItemload = useCallback(
     (e: any, index: number, itemnum: number) => {
-      if (onLoadDataOnce[index]) {
-      } else {
 
 
-        ///
-        if (activateLoaderReducer) {
-          dispatch(UpdateLoader(false));
-        }
+      ///
 
-        if (ScrollTo === index) {
-          navvScroll();
-        }
-        if (itemnum === 0) {
-          if (postItemsRef.current[index]) {
-            var imageHeight = postItemsRef.current[index].clientHeight;
 
+      if (ScrollTo === index) {
+        navvScroll();
+      }
+      if (itemnum === 0) {
+        if (postItemsRef.current[index]) {
+          var imageHeight = postItemsRef.current[index].clientHeight;
+
+          ///////////////////////////////
+
+          newArraa[index] = `${imageHeight}px`;
+          setitemheight(newArraa);
+          ///////////////////////////////
+
+          ///////////////////////////////
+
+          var newh = imageHeight / 1.042 - postbackheighthold;
+          newArrx[index] = `${newh}`;
+          setitemheighthold(newArrx);
+          ///////////////////////////////
+
+          newArrayFinalPostHeight[index] = imageHeight;
+          setitemFinalPostHeight(newArrayFinalPostHeight);
+
+          ///////////////////////////////
+
+          newArrayitemOriginalPostHeight[index] = imageHeight;
+          setitemOriginalPostHeight(newArrayitemOriginalPostHeight);
+          ///////////////////////////////
+
+          var choppedHeight = percentage(screenHeightReducer, 101);
+
+          var choppedwidth = percentage(
+            screenHeightReducer,
+            matchPc ? 55 : matchTablet ? 52 : 35
+          );
+
+          if (imageHeight < choppedwidth) {
+            /////WIDE IMAGE SET
+
+            newArr[index] = `${choppedwidth}px`;
+            setitemheight(newArr);
             ///////////////////////////////
 
-            newArraa[index] = `${imageHeight}px`;
-            setitemheight(newArraa);
-            ///////////////////////////////
-
-            ///////////////////////////////
-
-            var newh = imageHeight / 1.042 - postbackheighthold;
+            var newh = choppedwidth / 1.015 - postbackheighthold;
             newArrx[index] = `${newh}`;
             setitemheighthold(newArrx);
+            ////////////////////////////
             ///////////////////////////////
 
-            newArrayFinalPostHeight[index] = imageHeight;
+            newArrxq[index] = 1;
+            setitemcroptype(newArrxq);
+
+
+            ////////////////////////////
+            ///////////////////////////////
+
+            newArrayFinalPostHeight[index] = choppedwidth;
             setitemFinalPostHeight(newArrayFinalPostHeight);
+          } else if (imageHeight > choppedHeight) {
+            /////LONG IMAGE SET
 
+            newArr[index] = `${choppedHeight}px`;
+            setitemheight(newArr);
             ///////////////////////////////
 
-            newArrayitemOriginalPostHeight[index] = imageHeight;
-            setitemOriginalPostHeight(newArrayitemOriginalPostHeight);
+            var newh = choppedHeight / 1 - postbackheighthold;
+            newArrx[index] = `${newh}`;
+            setitemheighthold(newArrx);
+            ////////////////////////////////
             ///////////////////////////////
 
-            var choppedHeight = percentage(screenHeightReducer, 101);
+            newArrxq[index] = 2;
+            setitemcroptype(newArrxq);
+            ///////////////////////////////
 
-            var choppedwidth = percentage(
-              screenHeightReducer,
-              matchPc ? 55 : matchTablet ? 52 : 35
-            );
-
-            if (imageHeight < choppedwidth) {
-              /////WIDE IMAGE SET
-
-              newArr[index] = `${choppedwidth}px`;
-              setitemheight(newArr);
+            newArrayFinalPostHeight[index] = choppedHeight;
+            setitemFinalPostHeight(newArrayFinalPostHeight);
+            ///////////////////////////////
+          } else {
+            var imageWidth = postItemsRef.current[index].clientWidth;
+            if (imageWidth > imageHeight) {
               ///////////////////////////////
 
-              var newh = choppedwidth / 1.015 - postbackheighthold;
+              var newh = imageHeight / 1.066 - postbackheighthold;
               newArrx[index] = `${newh}`;
               setitemheighthold(newArrx);
-              ////////////////////////////
+              ///////////////////////////////
               ///////////////////////////////
 
-              newArrxq[index] = 1;
+              newArrxq[index] = 3;
               setitemcroptype(newArrxq);
-              ////////////////////////////
-              ///////////////////////////////
 
-              newArrayFinalPostHeight[index] = choppedwidth;
-              setitemFinalPostHeight(newArrayFinalPostHeight);
-            } else if (imageHeight > choppedHeight) {
-              /////LONG IMAGE SET
 
-              newArr[index] = `${choppedHeight}px`;
-              setitemheight(newArr);
-              ///////////////////////////////
-
-              var newh = choppedHeight / 1 - postbackheighthold;
-              newArrx[index] = `${newh}`;
-              setitemheighthold(newArrx);
-              ////////////////////////////////
-              ///////////////////////////////
-
-              newArrxq[index] = 2;
-              setitemcroptype(newArrxq);
-              ///////////////////////////////
-
-              newArrayFinalPostHeight[index] = choppedHeight;
-              setitemFinalPostHeight(newArrayFinalPostHeight);
               ///////////////////////////////
             } else {
-              var imageWidth = postItemsRef.current[index].clientWidth;
-              if (imageWidth > imageHeight) {
-                ///////////////////////////////
+              ///////////////////////////////
 
-                var newh = imageHeight / 1.066 - postbackheighthold;
-                newArrx[index] = `${newh}`;
-                setitemheighthold(newArrx);
-                ///////////////////////////////
-                ///////////////////////////////
-
-                newArrxq[index] = 3;
-                setitemcroptype(newArrxq);
-                ///////////////////////////////
-              } else {
-                ///////////////////////////////
-
-                newArrxq[index] = 4;
-                setitemcroptype(newArrxq);
-                ///////////////////////////////
-              }
-            }
-            ///////////////////////////////
-
-            newArrxy[index] = true;
-            setonLoadDataOnce(newArrxy);
-            ///////////////////////////////
-
-            if (postData.length - 1 === index) {
-              ////
-              navvScroll();
-              ///
-              ///
-
-              setTimeout(function () {
-                ///setx(true);
-                /// setSliderIndexMini(sliderIndex);
-                //// setzoomClickedIndex(pey + 1);
-
-                if (StopMini) {
-
-                  setStopMini(false)
-                } else {
-                  setminiProfile(true);
-                }
-
-                ///////////
-              }, 1000);
-
-
-
-
-
+              newArrxq[index] = 4;
+              setitemcroptype(newArrxq);
+              ///////////////////////////////
             }
           }
+          ///////////////////////////////
+
+          newArrxy[index] = true;
+          setonLoadDataOnce(newArrxy);
+          ///////////////////////////////
+
+
+
+          if (StopMini || pagenumReducer === 0) { } else {
+            if (postData[0].lim > 0 && index === 0) {
+              setTimeout(function () {
+
+
+                postDivRef.current[0].scrollIntoView({
+                  behavior: "smooth",
+                  block: "start",
+                });
+                postDivRefx.current[0].scrollIntoView({
+                  behavior: "smooth",
+                  block: "start",
+                });
+
+
+
+                ///////////
+              }, 1100);
+            }
+          }
+
+
+          if (postData.length - 1 === index) {
+
+
+
+
+
+            /**  if (activateLoaderReducer) {
+                            dispatch(UpdateLoader(false));
+                          } */
+
+            ////
+            navvScroll();
+            ///
+            ///
+
+            dispatch(UpdateLoader(true));
+            setTimeout(function () {
+
+              if (StopMini) {
+                setStopMini(false)
+              } else {
+                setminiProfile(true);
+              }
+              ///////////
+            }, 2000);
+
+
+            setTimeout(function () {
+
+              setlastIndicatorPushH(22 + 37);
+              setlastIndicatorPush(true);
+
+
+              setshowThisComponenet(false);
+              dispatch(UpdateLoader(false));
+              ///////////
+            }, 4000);
+
+
+
+
+
+          }
         }
+
       }
     },
     [StopMini,
@@ -391,6 +544,9 @@ function Profilex({
       itemFinalPostHeight,
       showProfiileData,
       activateLoaderReducer,
+      postItemsRef,
+      postData,
+      pagenumReducer
     ]
   );
 
@@ -443,7 +599,7 @@ function Profilex({
   };
 
   const AUTOSlideLongImages = (index: number) => {
-    freesnap();
+    ////freesnap();
     if (itemcroptype[index] === 2) {
       scrollLongPicTimerx.current = setTimeout(() => {
         if (paperPostScrollRef.current) {
@@ -464,21 +620,43 @@ function Profilex({
     }
   };
 
-  const onPostsItemClicked = (index: number) => {
 
+
+  const onPostsItemClicked = useCallback((index: number) => {
+
+    setindexRoll(index);
+
+    clearAllTimers();
 
     setActiveCanvas(index);
 
     if (itemCLICKED[index]) {
+
+
+
+      dispatch(SnapToggleAction(true));
+
+
+      if (snapTimer.current) {
+        clearTimeout(snapTimer.current);
+      }
+      snapTimer.current = setTimeout(function () { }, 3000);
+
+
+
       const newclickArray = [...itemCLICKED];
       newclickArray[index] = false;
       setitemCLICKED(newclickArray);
       postitemSHOWFULLHEIGHT(index, 1);
       scrollToPost(index);
     } else {
-      if (matchMobile) {
-        freesnap();
-      }
+
+
+
+      dispatch(SnapToggleAction(false));
+
+
+
       AUTOSlideLongImages(index);
       if (scrollTypeTimer.current) {
         clearTimeout(scrollTypeTimer.current);
@@ -490,7 +668,12 @@ function Profilex({
       postitemSHOWFULLHEIGHT(index, 0);
       scrollToPost(index);
     }
-  };
+
+
+  }, [itemCLICKED]
+  );
+
+
 
   ///
   ///
@@ -609,22 +792,121 @@ function Profilex({
     closeUploadModal(1);
   }, [showModalUpload, closeUploadModal]);
 
+
+
+
+
+
+
+
+
+
   useEffect(() => {
     /// miniProfile ? setx(false) : setx(true);
   }, [miniProfile]);
 
   useEffect(() => {
+
+
     setTimeout(function () {
       dispatch(UpdateLoader(false));
       if (showThisComponenet) setshowThisComponenet(false);
-    }, 3000);
+    }, 7500);
 
     setTimeout(function () {
       if (ShowLoader2) {
         setShowLoader2(false);
       }
     }, 1500);
+
+
+
   }, [postData]);
+
+
+
+
+
+
+  const TopRef = useRef<any>();
+
+
+
+  const [indexRoll, setindexRoll] = useState(0);
+
+  const postDivRefRoll = useRef<any[]>([]);
+
+
+
+  const tyTimer = useRef<ReturnType<typeof setTimeout>[]>([]);
+
+  const [AllowRoll, setAllowRoll] = useState(false);
+
+  const clearAllTimers = () => {
+    tyTimer.current.forEach(timer => {
+      if (timer !== null) {
+        clearTimeout(timer);
+      }
+    });
+    tyTimer.current = [];
+    setShowBigPlay(false);
+  }
+
+
+  const postDivRefx = useRef<any>([]);
+
+
+
+  const scrollToRef = useCallback(() => {
+
+    var Limit: number = postData.length;
+
+    var Time = 0;
+
+    for (let i = 0; i <= Limit; i++) {  // <= 20 to include the reset to the first post
+      if (i > indexRoll) {
+        Time = Time + 4500;
+        setShowBigPlay(true);
+
+        tyTimer.current[i] = setTimeout(() => {
+
+          if (i === Limit) {
+            // Reset to the first post after reaching the last post
+            postDivRefx.current[Limit < 3 ? Limit : Limit - 3].scrollIntoView({
+              behavior: "smooth",
+              block: "start",
+            });
+            //
+            postDivRefRoll.current[Limit < 3 ? Limit : Limit - 3].scrollIntoView({
+              behavior: "smooth",
+              block: "start",
+            });
+            setShowBigPlay(false);
+          } else {
+            postDivRefx.current[i].scrollIntoView({
+              behavior: "smooth",
+              block: "start",
+            });
+            //
+            postDivRefRoll.current[i].scrollIntoView({
+              behavior: "smooth",
+              block: "start",
+            });
+          }
+
+
+        }, Time - 4500);
+      }
+    }
+
+  }, [AllowRoll, indexRoll, postData]);
+
+
+  /////////////////////////////////////////////////////////////
+
+
+
+
 
   return (
     <>
@@ -636,7 +918,7 @@ function Profilex({
             position: "fixed",
             width: "100%",
             padding: "0px",
-            height: "0%",
+            height: "0px",
             zIndex: 20000,
             top: "0px",
             cursor: "pointer",
@@ -645,11 +927,33 @@ function Profilex({
 
         <Grid
           item
+          style={{
+            height: "0px",
+            zIndex: 500000000000,
+            position: 'fixed',
+            top: '0vh'
+          }}
+        >
+          <ActualMenu
+            scrollToRef={scrollToRef}
+            setsuperSettings={setsuperSettings}
+            postData={postData}
+            showModalFormMenu={showModalFormMenu}
+            setshowModalFormMenu={setshowModalFormMenu} />
+
+        </Grid>
+
+
+
+        <Grid
+          ref={TopRef}
+          className="parent-containerEffect  effect"
+          item
           xs={12}
           style={{
             padding: "0px",
-            paddingLeft: miniProfile ? (matchPc ? "10.5vw" : "3vw") : "0vw",
-            paddingRight: miniProfile ? (matchPc ? "10.5vw" : "3vw") : "0vw",
+            paddingLeft: miniProfile ? (matchPc ? "10.5vw" : "0vw") : "0vw",
+            paddingRight: miniProfile ? (matchPc ? "10.5vw" : "0vw") : "0vw",
             height: "auto",
             marginTop: '5.5vh'
           }}
@@ -657,7 +961,7 @@ function Profilex({
           {postData.length > 0 ? (
             <Masonry
               columns={matchPc ? 2 : miniProfile ? 2 : 1}
-              spacing={miniProfile && matchMobile ? 1 : miniProfile ? 4 : 0}
+              spacing={miniProfile && matchMobile ? 0 : miniProfile ? 4 : 0}
               style={{
                 padding: "0px",
               }}
@@ -719,9 +1023,20 @@ function Profilex({
                       AUTOSlideLongImages={AUTOSlideLongImages}
                       scrollToPostx={scrollToPostx}
                     />
+                    <Grid
+                      item
+                      xs={12}
+                      style={{
+                        marginTop: "20px",
+                        height: matchMobile ? "30px" : ' 10px',
+                      }}
+                    ></Grid>
                   </div>
-                  <div style={{ display: miniProfile ? "none" : "block", }}>
+
+                  <div key={i} style={{ display: miniProfile ? "none" : "block", }}>
                     <Post
+                      addpostDivRefRoll={addpostDivRefRoll}
+                      canvasRefIn={canvasRefIn}
                       ActiveCanvas={ActiveCanvas}
                       postItemsRef={postItemsRef}
                       postDatainnerInteraction2={postDatainnerInteraction2}
@@ -771,14 +1086,60 @@ function Profilex({
                       setActiveAutoPlay={setActiveAutoPlay}
                       AUTOSlideLongImages={AUTOSlideLongImages}
                       scrollToPost={scrollToPost}
-                    />
+                    /> <Grid
+                      item
+                      xs={12}
+                      style={{
+                        marginTop: "0px",
+                        height: "0.5vh",
+                      }}
+                    ></Grid>
                   </div>
+
                 </div>
               ))}
             </Masonry>
           ) : null}
         </Grid>
-      </Grid>
+
+
+
+
+        <Grid
+          container
+          xs={12}
+
+        >
+
+          <Grid
+            item
+            xs={2}>
+          </Grid>
+
+
+          <Grid
+            item
+            className="animateColorAndPadding"
+            xs={8}
+            ref={lastItemElement}
+            style={{
+              visibility: showMoreIndicator ? 'visible' : 'hidden',
+              marginTop: lastIndicatorPush ? `${lastIndicatorPushH}vh` : "37vh",
+              height: "7px",
+              backgroundColor: 'blue'
+            }}
+          ></Grid>
+
+
+        </Grid>
+
+
+
+
+
+
+
+      </Grid >
     </>
   );
 }

@@ -8,7 +8,7 @@ import { TextFieldSignup } from "../log/TextFieldSignup";
 import { ModalFormSignupError } from "../log/ModalFormSignupError";
 import { ModalFormLoginError } from "../log/ModalFormLoginError";
 import { Button, Grid } from "@material-ui/core";
-import { matchPc, matchTablet } from "../DetectDevice";
+import { matchMobile, matchPc, matchTablet } from "../DetectDevice";
 import { RootStateOrAny, useSelector, useDispatch } from "react-redux";
 import { IsLoggedAction } from "../log/actions/IsLoggedAction";
 import { UserdataAction } from "../log/actions/UserdataAction";
@@ -66,6 +66,7 @@ function CommentFormHolderx({
   CommentHistoryData,
   setcommentHistoryScroll,
   setCommentHistoryData,
+  mobileZoom
 }: any) {
   const dispatch = useDispatch();
 
@@ -111,23 +112,31 @@ function CommentFormHolderx({
 
 
   const callObserver = useCallback(() => {
-    const observer = new IntersectionObserver((entries: any) => {
-      const ent = entries[0];
-      console.log(ent.isIntersecting);
-      setmoreFeeds(ent.isIntersecting);
-    });
-    if (reactionTemplateGo) {
-      if (reactionData) {
-        if (lastItemElement.current || lastItemElement) {
-          observer.observe(lastItemElement.current);
+
+    if (commentData.length > 29) {
+      const observer = new IntersectionObserver((entries: any) => {
+
+        const ent = entries[0];
+        console.log(ent.isIntersecting);
+        setmoreFeeds(ent.isIntersecting);
+      });
+
+
+      if (reactionTemplateGo) {
+        if (reactionData) {
+          if (lastItemElement.current || lastItemElement) {
+            observer.observe(lastItemElement.current);
+          }
+        }
+      } else {
+        if (commentData) {
+          if (lastItemElement.current || lastItemElement) {
+            observer.observe(lastItemElement.current);
+          }
         }
       }
-    } else {
-      if (commentData) {
-        if (lastItemElement.current || lastItemElement) {
-          observer.observe(lastItemElement.current);
-        }
-      }
+
+
     }
   }, [lastItemElement, commentData, reactionData, reactionTemplateGo]);
 
@@ -831,6 +840,8 @@ function CommentFormHolderx({
                   top: "0vh",
                 }}
               >
+
+
                 <ChevronLeftIcon
                   className={
                     darkmodeReducer
@@ -840,9 +851,46 @@ function CommentFormHolderx({
                   style={{
                     color: darkmodeReducer ? "#ffffff" : "#999999",
                     fontSize: "2.9vw",
-                    opacity: darkmodeReducer ? 0.2 : 0.4,
+                    ////  opacity: darkmodeReducer ? 0.2 : 0.4,
+                    opacity: 0.05
                   }}
-                />{" "}
+                />
+
+
+                <span style={{
+                  position: "absolute",
+                  right:
+                    reactionTemplateGo ?
+                      connectTemplateGo === 1 ? '42%' : connectTemplateGo === 2 ? '46%' :
+                        typeEmo === 3 ? '45%' : '45%'
+                      : '40%',
+                  opacity: reactionTemplateGo ? connectTemplateGo === 1 ? '0.9' : connectTemplateGo === 2 ? '0.9' :
+                    typeEmo === 3 ? darkmodeReducer ? 0.6 : 0.7 : darkmodeReducer ? 0.5 : 0.6
+                    : '0.9',
+                  fontFamily: "Arial, Helvetica, sans-serif",
+                  top: '1.8vh',
+                  fontSize: '2vh',
+                  background: darkmodeReducer ?
+                    "linear-gradient(to right, #777777 50%, #555555 50%)" :
+                    "linear-gradient(to right, #aaaaaa 50%, #888888 50%)",
+                  WebkitBackgroundClip: "text",
+                  backgroundClip: "text",
+                  color:
+                    reactionTemplateGo ? connectTemplateGo === 1 ? 'transparent' : connectTemplateGo === 2 ? 'transparent' :
+                      typeEmo === 3 ? darkmodeReducer ? '#fac8de' : "#fc056f" : darkmodeReducer ? 'yellow' : "#855201"
+                      : 'transparent',
+                  fontWeight: 'bold'
+                }}>
+
+
+                  {reactionTemplateGo ?
+                    connectTemplateGo === 1 ? 'Favorites' : connectTemplateGo === 2 ? 'Fans' :
+                      typeEmo === 3 ? 'Loves' : 'Likes'
+                    : 'Comments'}
+
+
+                </span>
+
                 <ChevronRightIcon
                   className={
                     darkmodeReducer
@@ -850,7 +898,8 @@ function CommentFormHolderx({
                       : "make-small-icons-clickable-lightcm  dontallowhighlighting   "
                   }
                   style={{
-                    opacity: darkmodeReducer ? 0.2 : 0.4,
+                    ////  opacity: darkmodeReducer ? 0.2 : 0.4,
+                    opacity: 0.05,
                     color: darkmodeReducer ? "#ffffff" : "#999999",
                     fontSize: "2.9vw",
                     position: "absolute",
@@ -878,6 +927,7 @@ function CommentFormHolderx({
                 >
                   {reactionTemplateGo ? (
                     <MiniFormReaction
+                      mobileZoom={mobileZoom}
                       connectTemplateGo={connectTemplateGo}
                       paperPostScrollRefxx={paperPostScrollRefxx}
                       originalData={originalData}
@@ -903,6 +953,7 @@ function CommentFormHolderx({
                     />
                   ) : (
                     <MiniFormComment
+                      mobileZoom={mobileZoom}
                       paperPostScrollRefxx={paperPostScrollRefxx}
                       originalData={originalData}
                       postData={postData}
@@ -1012,10 +1063,282 @@ function CommentFormHolderx({
       ) : (
         /*MOBILE  MOBILE  MOBILE  MOBILE  MOBILE  MOBILEMOBILE  MOBILE  MOBILE  MOBILE  MOBILE  MOBILE  MOBILEMOBILE  MOBILE  MOBILE  MOBILE  MOBILE  MOBILE  MOBILEMOBILE  MOBILE  MOBILE  MOBILE  MOBILE  MOBILE  MOBILE  MOBILE*/
         <>
-          <Grid container></Grid>
+
+
+
+
+
+          {showComAddBack ? (
+            <>
+              {/*///////////////////////////////////////////////////////////////////////////ADD COM TEXTFIELD*/}
+              <Grid
+                item
+                xs={12}
+                style={{
+                  width: '100%',
+                  padding: "0vh",
+                  marginTop: "-15vh",
+                  position: "relative",
+                  height: "20vh",
+                  top: "0vh",
+                  display: "flex",
+                  justifyContent: "center",
+                }}
+              >
+                <TextField
+                  multiline
+                  onFocus={() => focusTextfield(1)}
+                  onBlur={() => focusTextfield(0)}
+                  size="medium"
+                  inputProps={{ style: { fontSize: "20px" } }}
+                  InputLabelProps={{ style: { fontSize: "15px" } }}
+                  style={{
+                    width: "100%",
+                    paddingBottom: "0px",
+                    zIndex: 100,
+                    opacity: TextFieldOpacity,
+                    textAlign: "center",
+                    top: "100%",
+                    padding: '0px'
+                  }}
+                  label="Start a Discussion"
+                  margin="normal"
+                  name="findcomment"
+                  type="text"
+                  onChange={updateComment}
+                  value={inputedComment}
+                />
+              </Grid>
+
+              <Grid
+                container
+                style={{
+                  opacity: checkSignupPasswordACTIVATE ? 0 : 1,
+                  position: "fixed",
+                  marginTop: "16vh",
+                  height: "0px",
+                  zIndex: 40000
+                }}
+
+              >
+
+                <Grid
+                  item
+                  className="buttonpad buttonshake"
+                  xs={8}
+                  style={{ display: showComAddBack ? "block" : "block" }}
+                >
+
+
+                  <Button
+                    style={{
+                      fontSize: buttonFont,
+                      transform: buttonTransform,
+                      padding: pad,
+                      borderRadius: "50px",
+                      MozBoxShadow: MozBoxShadowReducerSign,
+                      WebkitBoxShadow: WebkitBoxShadowReducerSign,
+                      boxShadow: boxShadowReducerSign,
+                      visibility: updatebuttonShow,
+                      left: '-5vw'
+                    }}
+                    onClick={() => {
+                      signmeup();
+                    }}
+                    fullWidth={true}
+                    variant="contained"
+                    size="large"
+                    color="secondary"
+                  >
+                    Share
+                  </Button>
+                </Grid>{" "}
+              </Grid>{" "}
+              {/*///////////////////////////////////////////////////////////////////////////ADD COM TEXTFIELD*/}
+            </>
+          ) : (
+            <>
+              <Grid container>
+                <Grid
+                  item
+                  xs={12}
+                  style={{
+                    padding: "0vh",
+                    marginTop: "-3vh",
+                    position: "relative",
+                    height: "0px",
+                    top: "0vh",
+                  }}
+                >
+                  <span
+                    style={{
+                      position: "absolute",
+                      right: reactionTemplateGo
+                        ? connectTemplateGo === 1
+                          ? "42%"
+                          : connectTemplateGo === 2
+                            ? "46%"
+                            : typeEmo === 3
+                              ? "45%"
+                              : "45%"
+                        : "40%",
+                      marginRight: postlimit === 0 ? "-10vw" : "",
+                      opacity: reactionTemplateGo
+                        ? connectTemplateGo === 1
+                          ? "0.9"
+                          : connectTemplateGo === 2
+                            ? "0.9"
+                            : typeEmo === 3
+                              ? darkmodeReducer
+                                ? 0.6
+                                : 0.7
+                              : darkmodeReducer
+                                ? 0.5
+                                : 0.6
+                        : "0.9",
+                      fontFamily: "Arial, Helvetica, sans-serif",
+                      top: "-1vh",
+                      fontSize: "2vh",
+                      background: darkmodeReducer
+                        ? "linear-gradient(to right, #777777 50%, #555555 50%)"
+                        : "linear-gradient(to right, #aaaaaa 50%, #888888 50%)",
+                      WebkitBackgroundClip: "text",
+                      backgroundClip: "text",
+                      color: reactionTemplateGo
+                        ? connectTemplateGo === 1
+                          ? "transparent"
+                          : connectTemplateGo === 2
+                            ? "transparent"
+                            : typeEmo === 3
+                              ? darkmodeReducer
+                                ? "#fac8de"
+                                : "#fc056f"
+                              : darkmodeReducer
+                                ? "yellow"
+                                : "#855201"
+                        : "transparent",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    {reactionTemplateGo
+                      ? connectTemplateGo === 1
+                        ? "Favorites"
+                        : connectTemplateGo === 2
+                          ? "Fans"
+                          : typeEmo === 3
+                            ? "Loves"
+                            : "Likes"
+                      : "Comments"}
+                  </span>
+
+                  <Grid
+                    item
+                    xs={12}
+                    style={{
+                      padding: "0vh",
+                      position: "relative",
+                      height: "8vh",
+                      overflow: "hidden",
+                    }}
+                  ></Grid>
+                  <Grid
+                    container
+                    style={{
+                      padding: zoomedModal ? "0vh" : "0vh",
+                      marginTop: "-5vh",
+                      height: "auto",
+                      overflow: "hidden",
+                    }}
+                  >
+                    {reactionTemplateGo ? (
+                      <MiniFormReaction
+                        mobileZoom={mobileZoom}
+                        connectTemplateGo={connectTemplateGo}
+                        paperPostScrollRefxx={paperPostScrollRefxx}
+                        originalData={originalData}
+                        scrollLocation={scrollLocation}
+                        DiscussionImage={DiscussionImage}
+                        CommentPostid={CommentPostid}
+                        ModalImageRef={ModalImageRef}
+                        containerHeight={containerHeight}
+                        blinkenx={blinkenx}
+                        showCommentLoader={showCommentLoader}
+                        Datax={Datax}
+                        zoomedModal={zoomedModal}
+                        wideImage={wideImage}
+                        commentDatax={reactionDatax}
+                        callObserver={callObserver}
+                        commentData={reactionData}
+                        lastItemElement={lastItemElement}
+                        showComment2={showComment2}
+                        commentData2={reactionData2}
+                        showComment3={showComment3}
+                        commentData3={reactionData3}
+                        postData={postData}
+                      />
+                    ) : (
+                      <MiniFormComment
+                        mobileZoom={mobileZoom}
+                        paperPostScrollRefxx={paperPostScrollRefxx}
+                        originalData={originalData}
+                        postData={postData}
+                        scrollLocation={scrollLocation}
+                        DiscussionImage={DiscussionImage}
+                        CommentPostid={CommentPostid}
+                        containerHeight={containerHeight}
+                        blinkenx={blinkenx}
+                        showCommentLoader={showCommentLoader}
+                        Datax={Datax}
+                        zoomedModal={zoomedModal}
+                        wideImage={wideImage}
+                        commentDatax={commentDatax}
+                        callObserver={callObserver}
+                        commentData={commentData}
+                        lastItemElement={lastItemElement}
+                        showComment2={showComment2}
+                        commentData2={commentData2}
+                        showComment3={showComment3}
+                        commentData3={commentData3}
+                      />
+                    )}
+                    <CommentIcon
+                      onClick={startAddComment}
+                      className={
+                        darkmodeReducer
+                          ? "make-small-icons-clickable-darkab dontallowhighlighting zuperkingIcon "
+                          : "make-small-icons-clickable-lightab  dontallowhighlighting   "
+                      }
+                      style={{
+                        display: reactionTemplateGo
+                          ? "none"
+                          : showComAddBack
+                            ? "none"
+                            : "block",
+                        color: darkmodeReducer ? "#ffffff" : "#000000",
+                        fontSize: "5vh",
+                        opacity: matchMobile ? 0.8 : 0.6,
+                        position: "fixed",
+                        top: "3vh",
+                        right: "1vw",
+                        textAlign: "center",
+                      }}
+                    />{" "}
+
+                  </Grid>
+                </Grid>
+              </Grid>
+            </>
+          )}
+
+
+
         </>
-      )}
+      )
+      }
+
     </>
+
+
     /*MOBILE  MOBILE  MOBILE  MOBILE  SIGNUP MOBILE  MOBILEMOBILE  MOBILE  MOBILE  MOBILE  MOBILE  MOBILE  MOBILEMOBILE  MOBILE  MOBILE  MOBILE  MOBILE  MOBILE  MOBILEMOBILE  MOBILE  MOBILE  MOBILE  MOBILE  MOBILE  MOBILE  MOBILE*/
   );
 }

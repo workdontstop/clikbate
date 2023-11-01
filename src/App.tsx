@@ -202,7 +202,7 @@ function App(): JSX.Element {
                   className={icon}
                   src={logoimage}
                   alt="SuperstarZ logo"
-                  style={{ textAlign: "center" }}
+                  style={{ textAlign: "center", opacity: 0.5 }}
                 />
               </Grid>
 

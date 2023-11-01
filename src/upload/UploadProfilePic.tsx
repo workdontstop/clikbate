@@ -199,22 +199,22 @@ function UploadProfilePicx({
             if (WideImageCheck) {
               setmyCropWidth(
                 getCropHeightRefsingle.current.clientHeight * hdcanvasvalue +
-                  getCropHeightRefsingle.current.clientHeight * 0
+                getCropHeightRefsingle.current.clientHeight * 0
               );
 
               setmyCropHeight(
                 getCropHeightRefsingle.current.clientHeight * hdcanvasvalue -
-                  getCropHeightRefsingle.current.clientHeight * 0.22
+                getCropHeightRefsingle.current.clientHeight * 0.22
               );
             } else {
               setmyCropWidth(
                 getCropHeightRefsingle.current.clientHeight * hdcanvasvalue +
-                  getCropHeightRefsingle.current.clientHeight * 0.2
+                getCropHeightRefsingle.current.clientHeight * 0.2
               );
 
               setmyCropHeight(
                 getCropHeightRefsingle.current.clientHeight * hdcanvasvalue -
-                  getCropHeightRefsingle.current.clientHeight * 0.32
+                getCropHeightRefsingle.current.clientHeight * 0.32
               );
             }
           }
@@ -406,6 +406,7 @@ function UploadProfilePicx({
       id: number;
       username: string;
       billboard1: string;
+      billboardstate: number;
     };
   }
 
@@ -413,7 +414,7 @@ function UploadProfilePicx({
   ///
   ///
   /// GET SCREENHEIGHT FROM REDUX STORE
-  const { id, username, billboard1 } = useSelector(
+  const { id, username, billboard1, billboardstate } = useSelector(
     (state: RootUserdataReducer) => ({
       ...state.UserdataReducer,
     })
@@ -422,6 +423,7 @@ function UploadProfilePicx({
   const idReducer = id;
   const usernameReducer = username;
   const billboard1Reducer = billboard1;
+  const billboardstateReducer = billboardstate;
 
   function blobToBase64(blob: any) {
     return new Promise((resolve, _) => {
@@ -488,17 +490,25 @@ function UploadProfilePicx({
             if (allow) {
               let imagelink = urlx.split("?")[0];
 
-              var billtype = 1;
-              if (billboard1Reducer !== billdefaultbill) {
-                billtype = 2;
+
+
+              var bi = 0;
+
+              if (billboardstateReducer === 0) {
+
+                bi = 1;
+              } else {
+
+                bi = 0;
               }
 
               if (billboard) {
+
                 var zzaatak = {
                   imagedata: s3finaldatax[0],
                   imagedataThumb: imagelink,
                   id: idReducer,
-                  type: billtype,
+                  type: bi,
                 };
 
                 UpdateBillboardDatabaseStatus200(zzaatak, b);
@@ -535,7 +545,7 @@ function UploadProfilePicx({
           alert("caption erroerrr");
         });
     },
-    [idReducer, s3finaldatax, billboard1Reducer]
+    [idReducer, s3finaldatax, billboard1Reducer, billboardstateReducer]
   );
 
   const UpdateBillboardDatabaseStatus200 = (datak: any, b: any) => {
@@ -549,7 +559,9 @@ function UploadProfilePicx({
 
           const data = {
             billboard1: b,
+            billboard2: b,
           };
+
           dispatch(UserInfoUpdateBILLBOARD(data, datak.type));
           uploadClose(3);
         }
@@ -881,8 +893,8 @@ function UploadProfilePicx({
                     ? " dontallowhighlighting modal-containerDarkmob"
                     : " dontallowhighlighting  modal-containerLightmob "
                   : darkmodeReducer
-                  ? " dontallowhighlighting modal-containerDark  postscroll-dark "
-                  : " dontallowhighlighting  modal-containerLight  postscroll-light "
+                    ? " dontallowhighlighting modal-containerDark  postscroll-dark "
+                    : " dontallowhighlighting  modal-containerLight  postscroll-light "
               }
               style={{
                 padding: "0px",
@@ -898,8 +910,8 @@ function UploadProfilePicx({
                     typex === "Profile"
                       ? "13.6vh"
                       : WideImageCheck
-                      ? "33vh"
-                      : "43vh",
+                        ? "33vh"
+                        : "43vh",
                   margin: "auto",
                   width: `100%`,
                   height: "0px",
