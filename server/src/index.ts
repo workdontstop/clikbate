@@ -29,7 +29,7 @@ if (process.env.APP_STATE === "dev") {
   app.use(cors());
 } else {
   const corsOptions = {
-    origin: "http://clikbate.com",
+    origin: ["https://clikbate.com", "https://www.clikbate.com"],
     credentials: true, //access-control-allow-credentials:true
     optionSuccessStatus: 200,
   };
@@ -430,48 +430,44 @@ app.post("/profile", async (req: Request, res: Response) => {
   }
 });
 
-app.post(
-  "/checkIsLoggedxx",
-  validateToken,
-  async (req: Request, res: Response) => {
-    const { values } = req.body;
-    console.log(validateToken);
-    try {
-      const logindata = await execPoolQuery(loginId, [values.id2, values.id]);
-      //console.log(logindata);
-      const payloadValue = {
-        id: logindata[0].id,
-        username: logindata[0].username,
-        userimage: logindata[0].profile_image,
-        userimagethumb: logindata[0].profile_image_thumb,
-        usercolor1: logindata[0].color1,
-        usercolor2: logindata[0].color2,
-        usercolortype: logindata[0].color_type,
-        userfirstname: logindata[0].first_name,
-        usersurname: logindata[0].sur_name,
-        userquote: logindata[0].quote,
-        userreg: logindata[0].reg,
-        userbillboard1: logindata[0].billboard1,
-        userbillboardthumb1: logindata[0].billboardthumb1,
-        userbillboard2: logindata[0].billboard2,
-        userbillboardthumb2: logindata[0].billboardthumb2,
-        biography: logindata[0].biography,
-        fans: logindata[0].fanCount,
-        favorites: logindata[0].favoriteCount,
-        connectCount: logindata[0].connectCount,
-      };
+app.post("/checkIsLoggedxx", async (req: Request, res: Response) => {
+  const { values } = req.body;
 
-      return res.send({
-        ///gettingcookie: userSessionData,
-        message: "logged in",
-        payload: payloadValue,
-      });
-    } catch (e: any) {
-      //console.log(e);
-      return res.send({ message: "Wrong id" });
-    }
+  try {
+    const logindata = await execPoolQuery(loginId, [values.id2, values.id]);
+    //console.log(logindata);
+    const payloadValue = {
+      id: logindata[0].id,
+      username: logindata[0].username,
+      userimage: logindata[0].profile_image,
+      userimagethumb: logindata[0].profile_image_thumb,
+      usercolor1: logindata[0].color1,
+      usercolor2: logindata[0].color2,
+      usercolortype: logindata[0].color_type,
+      userfirstname: logindata[0].first_name,
+      usersurname: logindata[0].sur_name,
+      userquote: logindata[0].quote,
+      userreg: logindata[0].reg,
+      userbillboard1: logindata[0].billboard1,
+      userbillboardthumb1: logindata[0].billboardthumb1,
+      userbillboard2: logindata[0].billboard2,
+      userbillboardthumb2: logindata[0].billboardthumb2,
+      biography: logindata[0].biography,
+      fans: logindata[0].fanCount,
+      favorites: logindata[0].favoriteCount,
+      connectCount: logindata[0].connectCount,
+    };
+
+    return res.send({
+      ///gettingcookie: userSessionData,
+      message: "logged in",
+      payload: payloadValue,
+    });
+  } catch (e: any) {
+    //console.log(e);
+    return res.send({ message: "Wrong id" });
   }
-);
+});
 
 app.post("/fan_chronological", async (req: Request, res: Response) => {
   const { values } = req.body;

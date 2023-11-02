@@ -99,7 +99,7 @@ function App(): JSX.Element {
           };
           dispatch(UpdateColorAction(colorboy, 1));
         } else if (response.data.message === "logged out") {
-          alert("app.tsx checkislogged logged out");
+          ///alert("app.tsx checkislogged logged out");
         }
       })
       .catch(function (error) {
