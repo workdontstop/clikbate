@@ -959,7 +959,7 @@ app.post("/keepmeloggedin", validateToken, (req, res) => __awaiter(void 0, void 
         return res.send({ message: "cookie null" });
     }
 }));
-app.post("/checkIsLogged", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+app.post("/checkIsLogged", validateToken, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     if (req.cookies.accesst) {
         const userSessionData = jwt_decode_1.default(req.cookies.accesst);
         try {
