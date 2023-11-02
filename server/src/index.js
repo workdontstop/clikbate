@@ -31,7 +31,7 @@ if (process.env.APP_STATE === "dev") {
     const corsOptions = {
         //// origin: "http://localhost:3000",
         credentials: true,
-        optionSuccessStatus: 200,
+        optionsSuccessStatus: 200,
     };
     app.use(cors());
 }
@@ -39,7 +39,7 @@ else {
     const corsOptions = {
         origin: ["https://clikbate.com", "https://www.clikbate.com"],
         credentials: true,
-        optionSuccessStatus: 200,
+        optionsSuccessStatus: 200,
     };
     app.use(cors(corsOptions));
 }
