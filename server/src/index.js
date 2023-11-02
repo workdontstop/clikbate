@@ -37,7 +37,7 @@ if (process.env.APP_STATE === "dev") {
 }
 else {
     const corsOptions = {
-        origin: "http://clikbate.com",
+        origin: ["https://clikbate.com", "https://www.clikbate.com"],
         credentials: true,
         optionSuccessStatus: 200,
     };
