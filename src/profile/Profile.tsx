@@ -353,11 +353,7 @@ function Profilex({
 
   const onPostsItemload = useCallback(
     (e: any, index: number, itemnum: number) => {
-
-
       ///
-
-
       if (ScrollTo === index) {
         navvScroll();
       }
@@ -906,6 +902,7 @@ function Profilex({
 
 
 
+  const [Added, setAdded] = useState(100);
 
 
   return (
@@ -952,18 +949,20 @@ function Profilex({
           xs={12}
           style={{
             padding: "0px",
-            paddingLeft: miniProfile ? (matchPc ? "10.5vw" : "0vw") : "0vw",
-            paddingRight: miniProfile ? (matchPc ? "10.5vw" : "0vw") : "0vw",
+            paddingLeft: miniProfile ? (matchPc ? "6vw" : "0vw") : "0vw",
+            paddingRight: miniProfile ? (matchPc ? "6vw" : "0vw") : "0vw",
             height: "auto",
-            marginTop: '5.5vh'
+            marginTop: '5.5vh',
+            marginLeft: miniProfile && matchPc ? '5.5vw' : '0px',
           }}
         >
           {postData.length > 0 ? (
             <Masonry
               columns={matchPc ? 2 : miniProfile ? 2 : 1}
-              spacing={miniProfile && matchMobile ? 0 : miniProfile ? 4 : 0}
+              spacing={miniProfile && matchMobile ? 0 : miniProfile ? 16 : 0}
               style={{
                 padding: "0px",
+
               }}
             >
               {postData.map((post: any, i: any) => (
@@ -971,16 +970,22 @@ function Profilex({
                   key={i}
                   style={{
                     position: "relative",
-                    scrollSnapAlign: x ? "start" : "",
+
                   }}
                 >
                   <div
                     style={{
                       display: miniProfile ? "block" : "none",
                       marginTop: "-5px",
+
                     }}
                   >
                     <MiniPost
+                      setAdded={setAdded}
+                      Added={Added}
+                      postDatainnerInteraction2={postDatainnerInteraction2}
+                      postDatainnerInteraction1={postDatainnerInteraction1}
+                      paperPostScrollRef={paperPostScrollRef}
                       setSliderIndexMini={setSliderIndexMini}
                       sliderIndexMini={sliderIndexMini}
                       zoomClickedIndex={zoomClickedIndex}
@@ -1028,13 +1033,15 @@ function Profilex({
                       xs={12}
                       style={{
                         marginTop: "20px",
-                        height: matchMobile ? "30px" : ' 10px',
+                        height: matchMobile ? "8.2vh" : ' 1vh',
                       }}
                     ></Grid>
                   </div>
 
                   <div key={i} style={{ display: miniProfile ? "none" : "block", }}>
                     <Post
+                      setAdded={setAdded}
+                      Added={Added}
                       addpostDivRefRoll={addpostDivRefRoll}
                       canvasRefIn={canvasRefIn}
                       ActiveCanvas={ActiveCanvas}

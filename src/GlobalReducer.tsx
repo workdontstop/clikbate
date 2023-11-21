@@ -22,7 +22,8 @@ import {
   UPDATE_INTERACT,
   UPDATE_MenuData,
   UPDATE_MenuNav,
-  UPDATE_pagenum
+  UPDATE_pagenum,
+  UPDATE_signin
 } from "./global_ActionTypes";
 
 ////////////OPTIONS TOP SHOW  DATA////////////////
@@ -150,7 +151,7 @@ export const ButtonsLoginReducerLight = (
 ////////////PAPER LIGHTNDARK DATA////////////////
 const initialStatePaperLIGHTNDARK = {
   PaperStyleLight:
-    "linear-gradient(0deg,  #eeeeee, #eeeeee,#cccccc )",
+    "linear-gradient(0deg,  #999999, #999999,#999999 )",
   PaperStyleDark: "linear-gradient(0deg, #282c34, #242c34, #0b1728)",
 };
 
@@ -272,7 +273,8 @@ const initialState = {
   interact: false,
   MenuData: '',
   menunav: true,
-  pagenum: 0
+  pagenum: 0,
+  SignIn: true,
   ////For example const initialState = { person: null as Person };
 };
 type MyGlobalReducer = typeof initialState;
@@ -341,6 +343,11 @@ export const GlobalReducer = (
         pagenum: action.payload,
       };
 
+    case UPDATE_signin:
+      return {
+        ...state,
+        SignIn: action.payload,
+      };
 
     default:
       return state;

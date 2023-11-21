@@ -177,7 +177,7 @@ function Taskbarx({
 
 
         style={{
-          ...animation, width: '94%',
+          ...animation, width: '100%',
           height: "100vh",
           position: "fixed",
           top: '-0vh',

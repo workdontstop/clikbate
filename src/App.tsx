@@ -14,6 +14,8 @@ import { Grid, GridSize } from "@material-ui/core";
 import SuperstarzIconLight from "./images/s.png";
 import SuperstarzIconDark from "./images/sd.png";
 import ProfileOutter from "./profile/ProfileOutter";
+import { UserdataAction } from "./log/actions/UserdataAction";
+import { ActivateLoaderAction, HideLoaderAction } from "./GlobalActions";
 
 function App(): JSX.Element {
   ///
@@ -85,6 +87,47 @@ function App(): JSX.Element {
   ///
   ///
   ///MODAL ZOOMED STATE
+
+  const initialLogValuexx = {
+    inputedUsername: "Guest",
+    inputedPassword: "Gggggggg$",
+  };
+
+  const [cleanLoginValuesxx, setCleanLoginValuesxx] =
+    useState(initialLogValuexx);
+
+  const GuestLogin = () => {
+    /// dispatch(ActivateLoaderAction());
+    Axios.post(
+      `${REACT_APP_SUPERSTARZ_URL}/loging`,
+      {
+        values: cleanLoginValuesxx,
+      },
+      { withCredentials: true }
+    )
+      .then((response) => {
+
+        if (response.data.payload) {
+          dispatch(HideLoaderAction());
+          dispatch(UserdataAction(response.data.payload));
+
+          var colorboy = {
+            color1: response.data.payload.usercolor1,
+            color2: response.data.payload.usercolor2,
+            colortype: response.data.payload.usercolortype,
+          };
+          dispatch(UpdateColorAction(colorboy, 1));
+          window.location.reload();
+        }
+
+      })
+      .catch(function (error) {
+        console.log("Guest Login Error");
+      });
+
+    ///alert("app.tsx checkislogged logged out");
+  }
+
   useEffect(() => {
     Axios.post(`${REACT_APP_SUPERSTARZ_URL}/checkIsLogged`)
       .then((response) => {
@@ -99,11 +142,11 @@ function App(): JSX.Element {
           };
           dispatch(UpdateColorAction(colorboy, 1));
         } else if (response.data.message === "logged out") {
-          ///alert("app.tsx checkislogged logged out");
+          GuestLogin();
         }
       })
       .catch(function (error) {
-        console.log("app.tsx checkislogged error");
+        GuestLogin();
       });
   }, [REACT_APP_SUPERSTARZ_URL, dispatch]);
 
@@ -202,7 +245,7 @@ function App(): JSX.Element {
                   className={icon}
                   src={logoimage}
                   alt="SuperstarZ logo"
-                  style={{ textAlign: "center", opacity: 0.5 }}
+                  style={{ textAlign: "center", opacity: darkmodeReducer ? 0.2 : matchMobile ? 0.17 : 0.3 }}
                 />
               </Grid>
 

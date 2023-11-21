@@ -214,6 +214,48 @@ function Menux({
 
 
 
+  ///
+  ///
+  /// GET LOGGED USER DATA FROM REDUX STORE
+  interface RootStateReducerImage {
+    UserdataReducer: {
+      image: string;
+      imageThumb: string;
+      id: number;
+      username: string;
+      memeberPageid: number;
+      MemberProfileData: any;
+    };
+  }
+  const { username, image, imageThumb, id, memeberPageid, MemberProfileData } =
+    useSelector((state: RootStateReducerImage) => ({
+      ...state.UserdataReducer,
+    }));
+
+  const idReducer = id;
+  const [Signup, setSignup] = useState(false);
+
+  const Timer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+
+  useEffect(() => {
+
+
+    if (idReducer === 150) {
+
+      if (Timer.current) {
+        clearTimeout(Timer.current);
+      }
+
+      Timer.current = setTimeout(() => {
+        setSignup(true)
+      }, 10000);
+
+    } else {
+      setSignup(false)
+    }
+
+  }, [MenuDataReducer, idReducer])
 
 
 
@@ -427,7 +469,7 @@ function Menux({
                               color: darkmodeReducer ? "#eeeeee" : "#444444",
                             }}
                           >
-                            {MenuDataReducer}
+                            {Signup ? 'Sign In' : MenuDataReducer}
                           </span>
 
 

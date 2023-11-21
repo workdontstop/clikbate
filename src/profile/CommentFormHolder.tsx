@@ -110,6 +110,25 @@ function CommentFormHolderx({
 
 
 
+  const [hideTopz, sethideTopz] = useState(false);
+
+
+
+
+  useEffect(() => {
+
+
+    if (showCommentLoader) {
+      sethideTopz(true);
+    } else {
+      sethideTopz(false);
+    }
+
+
+  }, [showCommentLoader])
+
+
+
 
   const callObserver = useCallback(() => {
 
@@ -1172,6 +1191,7 @@ function CommentFormHolderx({
                 >
                   <span
                     style={{
+                      visibility: hideTopz ? 'hidden' : 'visible',
                       position: "absolute",
                       right: reactionTemplateGo
                         ? connectTemplateGo === 1
@@ -1218,6 +1238,7 @@ function CommentFormHolderx({
                                 : "#855201"
                         : "transparent",
                       fontWeight: "bold",
+
                     }}
                   >
                     {reactionTemplateGo

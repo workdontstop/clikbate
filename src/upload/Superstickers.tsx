@@ -871,7 +871,14 @@ function Superstickersx({
   ]);
 
 
+
+
+
+  const [interactHeightResolution, setinteractHeightResolution] = useState(window.innerHeight);
+
   const [canvasInteractWidth, setcanvasInteractWidth] = useState(0);
+
+  const [canvasInteractWidthCss, setcanvasInteractWidthCss] = useState(0);
 
 
   const [Touched, setTouched] = useState(0);
@@ -884,7 +891,19 @@ function Superstickersx({
 
   const [StopTouch, setStopTouch] = useState(false);
 
+  useEffect(() => {
 
+    if (interactContent[index] || interactContent2[index]) {
+      if (cropInitialIn.x === 0) {
+      } else {
+        //// setTimeout(() => {
+        // setinteractHeightResolution(window.innerHeight * 0.2);
+        ///// }, 2000)
+      }
+    }
+
+
+  }, [cropInitialIn, interactContent, interactContent2])
 
   const handleTouchStartIn = useCallback((e: any, type: any) => {
     ////mouseover(0);
@@ -892,27 +911,59 @@ function Superstickersx({
     if (StopTouch) { }
     else {
 
+
+
+      var zx = type === 0 ? e.clientX : e.touches[0].clientX;
+      var zy = type === 0 ? e.clientY : e.touches[0].clientY;
+
+      const canvasWidth = canvasRefIn.current.width; // Get the canvas width
+      const xCoordinate = zx; // The current X coordinate of the arc
+      const xTravelPercentage = (xCoordinate / canvasWidth) * 100;
+
+
+      const canvasHeight = canvasRefIn.current.height; // Get the canvas height
+      const yCoordinate = zy; // The current Y coordinate of the arc
+      const yTravelPercentage = (yCoordinate / canvasHeight) * 100;
+
+
+      const newCropInitialIn = {
+        x: xTravelPercentage,
+        y: yTravelPercentage,
+      };
+
+
+      const newCropInitialIn2 = {
+        x: xTravelPercentage,
+        y: yTravelPercentage,
+      };
+
+
+
       // console.log(e.clientX);
       if (interactContent[index] || interactContent2[index]) {
 
 
         var context = canvasRefIn.current.getContext("2d");
         const pictureWidth = canvasInteractWidth;
-        const screenWidth = window.innerWidth * 0.94;
+
         const offsetX = (screenWidth - pictureWidth) / 2;
 
-        if (context.isPointInPath(e.clientX - offsetX, e.clientY)) {
+
+
+
+        if (context.isPointInPath(e.clientX, e.clientY)) {
 
           if (Touched === 1 || Touched === 2) { } else { calldraw(3, e.clientX, e.clientY, 0); }
+
+
         } else {
 
           if (interactContent[index]) {
 
           } else {
-            const newCropInitialIn = {
-              x: type === 0 ? e.clientX : e.touches[0].clientX,
-              y: type === 0 ? e.clientY : e.touches[0].clientY,
-            };
+
+
+
 
             // Update the array at the specified index or add a new element if the index is not present
             setcropInitialIn((prevArray: any) => {
@@ -938,10 +989,7 @@ function Superstickersx({
           } else {
 
 
-            const newCropInitialIn2 = {
-              x: type === 0 ? e.clientX : e.touches[0].clientX,
-              y: type === 0 ? e.clientY : e.touches[0].clientY,
-            };
+
 
             // Update the array at the specified index or add a new element if the index is not present
             setcropInitialIn2((prevArray: any) => {
@@ -960,10 +1008,8 @@ function Superstickersx({
 
 
       } else {
-        const newCropInitialIn = {
-          x: type === 0 ? e.clientX : e.touches[0].clientX,
-          y: type === 0 ? e.clientY : e.touches[0].clientY,
-        };
+
+
 
         // Update the array at the specified index or add a new element if the index is not present
         setcropInitialIn((prevArray: any) => {
@@ -985,7 +1031,7 @@ function Superstickersx({
 
 
 
-  }, [interactContent[index], interactContent2[index], Touched, canvasRefIn, canvasInteractWidth, StopTouch])
+  }, [interactContent[index], interactContent2[index], Touched, canvasRefIn, canvasInteractWidth, StopTouch, interactHeightResolution])
 
 
   const fileInputRef2 = useRef<HTMLInputElement | null>(null);
@@ -1040,8 +1086,12 @@ function Superstickersx({
       }
       var ratio =
         previewFileReadimage.naturalHeight / previewFileReadimage.naturalWidth;
-      var width = window.innerHeight / ratio;
+      var width = interactHeightResolution / ratio;
       setcanvasInteractWidth(width);
+
+      var ratiox = previewFileReadimage.naturalHeight / previewFileReadimage.naturalWidth;
+      var widthCss = window.innerHeight / ratiox;
+      setcanvasInteractWidthCss(widthCss);
 
       ///use this
     };
@@ -1064,6 +1114,14 @@ function Superstickersx({
 
     }, 500)
   }, [Touched]);
+
+
+
+
+  const isEdge = /Edg/i.test(navigator.userAgent);
+  const isFirefox = /Firefox/i.test(navigator.userAgent);
+
+  var screenWidth = window.innerWidth;
 
 
 
@@ -1116,14 +1174,14 @@ function Superstickersx({
 
 
 
-      canvasRefIn.current.height = window.innerHeight;
+      canvasRefIn.current.height = interactHeightResolution;
       canvasRefIn.current.width = canvasInteractWidth;
 
 
       requestAnimationFrame(() => {
-        context.drawImage(dat, 0, 0, canvasInteractWidth, window.innerHeight);
+        context.drawImage(dat, 0, 0, canvasInteractWidth, interactHeightResolution);
         // Get the screen width
-        const screenWidth = window.innerWidth * 0.94;
+
 
         // Get the picture width (adjust this according to your specific scenario)
         const pictureWidth = canvasInteractWidth;
@@ -1133,10 +1191,12 @@ function Superstickersx({
 
         // Use cropInitialIn.y directly for offsetY as it works perfectly
 
-        // Adjust the coordinates of ctx.arc() based on the offset
-        const xx = cropInitialIn[index].x - offsetX;
 
-        const xx2 = cropInitialIn2[index].x - offsetX;
+
+        // Adjust the coordinates of ctx.arc() based on the offset
+        const xx = cropInitialIn[index].x;
+        const xx2 = cropInitialIn2[index].x;
+
 
         var yy = cropInitialIn[index].y;
         var yy2 = cropInitialIn2[index].y;
@@ -1144,26 +1204,68 @@ function Superstickersx({
 
 
 
+
+
+
+
+        // Calculate the X-coordinate
+        const xCoordinate = (xx / 100) * canvasInteractWidth;
+        var x2 = xCoordinate;
+
+
+
+        const yCoordinate = (yy / 100) * interactHeightResolution;
+        var y2 = yCoordinate;
+
+
+
+
+        // Calculate the X-coordinate
+        const xCoordinateb = (xx2 / 100) * canvasInteractWidth;
+        var x2b = xCoordinateb;
+
+
+
+        const yCoordinateb = (yy2 / 100) * interactHeightResolution;
+        var y2b = yCoordinateb;
+
+
+
+
+
+
+
+
         if (interactContent[index] && mode === 0 || interactContent2[index] && mode === 0) {
 
 
           if (interactContent[index]) {
+
+
+
+
             /////typex filps between zero and one for blinking efect
             if (typex === 0 || typex === 3) {
               context.beginPath();
-              context.arc(xx, yy, r, 0, Math.PI * 2);
-              var clikarc1 = context.isPointInPath(x - offsetX, y);
+              context.arc(x2, y2, r, 0, Math.PI * 2);
+              var clikarc1 = context.isPointInPath(x, y);
               context.fillStyle = `rgba(250, 250,250,0.3)`;
               context.closePath();
               context.fill();
               context.lineWidth = 2;
               context.strokeStyle = "#333333";
               context.stroke();
+
+
+
+
+
+
             }
             else if (typex === 1) {
               context.beginPath();
-              context.arc(xx, yy, r, 0, Math.PI * 2);
-              var clikarc1 = context.isPointInPath(x - offsetX, y);
+              context.arc(x2, y2, r, 0, Math.PI * 2);
+              var clikarc1 = context.isPointInPath(x, y);
               context.fillStyle = `rgba(250, 250,250,0.0)`;
               context.closePath();
               context.fill();
@@ -1181,8 +1283,8 @@ function Superstickersx({
             /////typex filps between zero and one for blinking efect
             if (typex === 0 || typex === 3) {
               context.beginPath();
-              context.arc(xx2, yy2, r, 0, Math.PI * 2);
-              var clikarc2 = context.isPointInPath(x - offsetX, y);
+              context.arc(x2b, y2b, r, 0, Math.PI * 2);
+              var clikarc2 = context.isPointInPath(x, y);
               context.fillStyle = `rgba(250, 250,250,0.3)`;
               context.closePath();
               context.fill();
@@ -1192,8 +1294,8 @@ function Superstickersx({
             }
             else if (typex === 1) {
               context.beginPath();
-              context.arc(xx2, yy2, r, 0, Math.PI * 2);
-              var clikarc2 = context.isPointInPath(x - offsetX, y);
+              context.arc(x2b, y2b, r, 0, Math.PI * 2);
+              var clikarc2 = context.isPointInPath(x, y);
               context.fillStyle = `rgba(250, 250,250,0.0)`;
               context.closePath();
               context.fill();
@@ -1294,7 +1396,20 @@ function Superstickersx({
             }
             ///////////////
           }
+
+
+
         }
+
+
+        if (interactContent[index] || interactContent2[index]) {
+          if (cropInitialIn.x === 0) {
+          } else {
+            ///canvasRefIn.current.style.width = `${canvasInteractWidthCss}px`;
+            /// canvasRefIn.current.style.height = `${window.innerHeight}px`;
+          }
+        }
+
 
 
 
@@ -1302,7 +1417,7 @@ function Superstickersx({
       ///use this
     }
 
-  }, [dat, cropInitialIn, cropInitialIn2, interactContent2, interactContent, canvasRefIn, showArc, canvasInteractWidth, Touched]);
+  }, [dat, cropInitialIn, cropInitialIn2, interactContent2, interactContent, canvasRefIn, showArc, canvasInteractWidth, interactHeightResolution, Touched, canvasInteractWidthCss]);
 
 
 
@@ -1320,7 +1435,7 @@ function Superstickersx({
       } else { calldraw(0, 0, 0, 0); }
 
     }
-  }, [dat, Touched, canvasInteractWidth]);
+  }, [dat, Touched, canvasInteractWidth, interactHeightResolution]);
 
 
 
@@ -3449,7 +3564,7 @@ function Superstickersx({
             position: 'relative',
             zIndex: 11,
             top: '0vh',
-            margin: 'auto',
+            margin: 'left',
             display: stickerOPtionsDefault === 4 ? 'block' : 'none',
 
           }}

@@ -345,7 +345,7 @@ function Home(): JSX.Element {
                 className={icon}
                 src={appVariables.logoimage}
                 alt="SuperstarZ logo"
-                style={{ marginTop: "5vh", paddingBottom: "20px", opacity: 0.5 }}
+                style={{ marginTop: "5vh", paddingBottom: "20px", opacity: darkmodeReducer ? 0.2 : matchMobile ? 0.12 : 0.24 }}
               />
             </Grid>
 

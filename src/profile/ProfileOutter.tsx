@@ -14,7 +14,7 @@ import { Upload } from "../upload/Upload";
 import { UploadProfilePic } from "../upload/UploadProfilePic";
 import AddIcon from "@mui/icons-material/Add";
 import { OptionsSlider } from "./OptionsSlider";
-import { UpdateNavFilterReducer } from "../GlobalActions";
+import { UpdateNavFilterReducer, UpdateSign } from "../GlobalActions";
 import { UpdateNavCropReducer } from "../GlobalActions";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { DarkmodeToggleAction } from ".././GlobalActions";
@@ -29,7 +29,7 @@ import { Taskbar } from "./Taskbar";
 import { UpdateInteract } from ".././GlobalActions";
 import SlowMotionVideoIcon from '@material-ui/icons/SlowMotionVideo';
 
-
+import { LoginButtons } from "../log/LogButtons";
 
 
 import {
@@ -93,7 +93,8 @@ function ProfileOutter() {
       interactContent: any;
       interact: boolean;
       MenuData: String;
-      pagenum: number
+      pagenum: number;
+      SignIn: boolean
     };
   }
 
@@ -103,7 +104,7 @@ function ProfileOutter() {
   ///
   ///
   /// GET SCREENHEIGHT FROM REDUX STORE
-  const { screenHeight, darkmode, snapStart, activateLoader, historyscroll, interactContent, interact, MenuData, pagenum } =
+  const { screenHeight, darkmode, snapStart, activateLoader, historyscroll, interactContent, interact, MenuData, pagenum, SignIn } =
     useSelector((state: RootStateGlobalReducer) => ({
       ...state.GlobalReducer,
     }));
@@ -116,6 +117,7 @@ function ProfileOutter() {
   const interactReducer = interact;
   const MenuDataReducer = MenuData
   const pagenumReducer = pagenum;
+  const SignInReducer = SignIn;
 
 
 
@@ -133,7 +135,7 @@ function ProfileOutter() {
 
   const getSliderWidthRef = useRef<HTMLDivElement>(null);
 
-  const [formtype] = useState<number>(1);
+
   const [showModalForm, setShowModalForm] = useState<boolean>(false);
   const [showModalFormMenu, setShowModalFormMenu] = useState<boolean>(false);
 
@@ -473,6 +475,10 @@ function ProfileOutter() {
     []
   );
 
+
+  const [formtype, setFormtype] = useState<number>(1);
+
+
   const OpenModalForm = useCallback(
     (type: any) => {
       var dd = { type: 0, id: 0, innerid: 0, pagenumReducer: pagenumReducer };
@@ -483,7 +489,34 @@ function ProfileOutter() {
         setShowModalForm(true);
 
         window.history.pushState(dd, "", modalName);
-      } else if (type === 2) {
+      }
+      else if (type === 9000 || type === 8000) {
+        setconnectTemplateGo(0);
+
+        setcommentTemplateGo(false);
+        setreactionTemplateGo(false);
+        setaboutTemplateGo(false);
+
+
+        if (type === 9000) {
+          setFormtype(0);
+        } else {
+          setFormtype(1);
+        }
+
+
+        let modalName;
+        if (type === 9000) {
+          modalName = "SignUp";
+        } else {
+          modalName = "LogIn";
+        }
+
+        setStopBodyScroll(true);
+        setShowModalForm(true);
+        window.history.pushState(dd, "", modalName);
+      }
+      else if (type === 2) {
         setconnectTemplateGo(0);
         let modalName = "Discussion";
         setreactionTemplateGo(false);
@@ -531,9 +564,6 @@ function ProfileOutter() {
   useEffect(() => {
     setx(false);
 
-    setTimeout(() => {
-      setx(true);
-    }, 500);
   }, []);
 
   /// CALL THIS ON NAVIGATE FROM COMMENTS TO USER PAGE -- CLOSES COMMENT WITHOUT CALLING HISTORY
@@ -795,6 +825,8 @@ function ProfileOutter() {
 
 
   };
+
+
 
   const callpopstatewithoutdata = (
     historyData: any,
@@ -1541,6 +1573,12 @@ function ProfileOutter() {
 
 
 
+  const isEdge = /Edg/i.test(navigator.userAgent);
+  const isFirefox = /Firefox/i.test(navigator.userAgent);
+
+
+
+
 
 
 
@@ -1563,13 +1601,7 @@ function ProfileOutter() {
                   : "postscroll-lightm"
             }
             style={{
-              scrollSnapType: snapStartReducer
-                ? x
-                  ? matchPc
-                    ? "y mandatory  "
-                    : "y mandatory  "
-                  : ""
-                : "",
+
               backgroundImage: PaperStyleReducer,
               borderRadius: "0px",
               height: "100vh",
@@ -1621,6 +1653,7 @@ function ProfileOutter() {
                   billboardx={billboardx}
                   x={x}
                 />
+                <Grid item md={12} style={{ height: '0px', }}></Grid>
 
                 <Grid
                   item
@@ -1721,7 +1754,14 @@ function ProfileOutter() {
                     <img
                       ref={profileImageR}
                       onClick={() => {
-                        OpenModalForm(1);
+
+                        if (idReducer === 150) {
+                          dispatch(UpdateSign(true));
+                        } else {
+                          OpenModalForm(1);
+                        }
+
+
                       }}
                       className={
                         darkmodeReducer
@@ -1953,8 +1993,8 @@ function ProfileOutter() {
                         padding: "0px",
                         backgroundColor: darkmodeReducer
                           ? "rgba(50,50,50,0.85)"
-                          : "rgba(250,250,250,0.75)",
-                        height: "26vh",
+                          : "rgba(200,200,200,0.75)",
+                        height: "50%",
                         marginTop: "22vh",
                         textAlign: "center",
                         justifyContent: "center",
@@ -1988,14 +2028,14 @@ function ProfileOutter() {
                             ? "1.1vw"
                             : matchTablet
                               ? "2vh"
-                              : "1.8vh",
+                              : "1.9vh",
                           fontWeight: "bolder",
                           fontFamily: "Arial, Helvetica, sans-serif",
 
                           color: darkmodeReducer ? "#dddddd" : "#0b111b",
                         }}
                       >
-                        theme
+                        Theme
                       </Grid>
                     </Grid>
                     <Grid
@@ -2004,8 +2044,8 @@ function ProfileOutter() {
                         padding: "0px",
                         backgroundColor: darkmodeReducer
                           ? "rgba(50,50,50,0.85)"
-                          : "rgba(250,250,250,0.75)",
-                        height: "26vh",
+                          : "rgba(200,200,200,0.75)",
+                        height: "50%",
                         marginTop: "22vh",
                         textAlign: "center",
                         justifyContent: "center",
@@ -2037,19 +2077,74 @@ function ProfileOutter() {
                             ? "1.1vw"
                             : matchTablet
                               ? "2vh"
-                              : "1.8vh",
+                              : "1.9vh",
                           fontWeight: "bolder",
                           fontFamily: "Arial, Helvetica, sans-serif",
-
                           color: darkmodeReducer ? "#dddddd" : "#0b111b",
                         }}
                       >
-                        log out
+                        Log Out
                       </Grid>
                     </Grid>
                   </Grid>{" "}
                 </>
               ) : null}
+
+
+
+
+              <Grid
+                className="dontallowhighlighting"
+                item
+                onClick={() => {
+                  dispatch(UpdateInteract('', false));
+                }}
+                style={{
+                  cursor: 'pointer',
+                  height: "100vh",
+                  position: 'fixed',
+                  top: '0vh',
+                  width: '100vw',
+                  zIndex: 3000000,
+                  textAlign: 'center',
+                  backgroundColor: darkmodeReducer
+                    ? "rgb(20,20,20,0.52)"
+                    : "rgb(210,210,210,0.45)",
+                  display: interactReducer ? 'block' : 'none',
+                  alignItems: 'center',
+
+
+                }}
+              >
+                {matchMobile ? <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '85vh' }}>
+                  <img
+                    onClick={() => {
+                      dispatch(UpdateInteract('', false));
+                    }}
+                    className="dontallowhighlighting"
+                    src={interactContentReducer}
+                    style={{
+                      cursor: 'pointer',
+                      height: 'auto',
+                      width: '100vw',
+                      maxWidth: '100%',
+                      margin: 'auto',
+                      position: 'relative',
+                    }}
+                    alt="Your Alt Text"
+                  />
+                </div>
+                  : <img onClick={() => {
+                    dispatch(UpdateInteract('', false));
+                  }}
+                    className="dontallowhighlighting" src={interactContentReducer}
+                    style={{
+                      cursor: 'pointer', margin: 'auto', height: '100vh',
+                      width: 'auto'
+                    }} />
+                }
+              </Grid>
+
 
               <Grid
                 item
@@ -2058,6 +2153,7 @@ function ProfileOutter() {
                   zIndex: 100,
                 }}
               >
+
                 <div
                   className="zuperxyinfo"
                   style={{
@@ -2172,6 +2268,65 @@ function ProfileOutter() {
                 />
 
               </Grid>
+
+
+
+
+
+              {
+                matchMobile ?
+
+                  <Grid
+                    item
+                    style={{
+                      height: "35vh",
+                      width: '100%',
+                      marginLeft: '0px',
+                      zIndex: 5,
+                      position: 'fixed',
+                      transition: 'ease-in',
+
+                      paddingTop: '4.5vh',
+                      bottom: '0vh',
+                      backgroundColor: darkmodeReducer
+                        ? "rgba(50,50,50,0.85)"
+                        : "rgba(200,200,200,0.75)",
+
+                      borderTopRightRadius: '5vh',
+                      borderTopLeftRadius: '5vh',
+                      display: idReducer === 150 ? SignInReducer ? 'block' : 'none' : 'none',
+
+                    }}
+                  >
+                    <LoginButtons OpenModalForm={OpenModalForm} />
+                  </Grid>
+                  :
+
+                  <Grid
+                    item
+                    style={{
+                      height: "20vh",
+                      width: '50%',
+                      marginLeft: '25vw',
+                      zIndex: 5,
+                      position: 'fixed',
+                      bottom: '0vh',
+                      backgroundColor: darkmodeReducer
+                        ? "rgba(50,50,50,0.85)"
+                        : "rgba(200,200,200,0.75)",
+
+                      borderTopRightRadius: '5vh',
+                      borderTopLeftRadius: '5vh',
+                      display: idReducer === 150 ? SignInReducer ? 'block' : 'none' : 'none',
+
+                    }}
+                  >
+
+                    <LoginButtons OpenModalForm={OpenModalForm} />
+                  </Grid>
+              }
+
+
 
 
               {ShowBigPlay ? <Grid

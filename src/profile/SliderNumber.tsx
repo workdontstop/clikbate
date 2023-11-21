@@ -21,7 +21,6 @@ function SliderNumberx({
   startInteractivity,
   post,
   ActiveCanvas,
-
 }: any): JSX.Element {
   const startplay = () => {
     if (ActiveAutoPlay[pey]) {
@@ -83,7 +82,7 @@ function SliderNumberx({
     <>
 
       {showSpin ?
-        <Grid item xs={12} style={{ position: 'fixed', zIndex: 100, padding: '3vh' }}>
+        <Grid item xs={12} style={{ position: 'absolute', zIndex: 100, padding: '3vh' }}>
           <div className="spinner zuperxyinfo" style={{
             borderTop: `8px solid ${post.color1}`, boxShadow: `0 0 8.5px, ${post.color1}`
           }}></div>

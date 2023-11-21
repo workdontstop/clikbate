@@ -36,6 +36,9 @@ import {
 } from ".././GlobalActions";
 
 import Axios from "axios";
+import { UpdateSign } from "../GlobalActions";
+
+
 
 function Postx({
   pey,
@@ -492,10 +495,10 @@ function Postx({
   }, [onLoadDataOnce, LImiter]);
 
   const flashBlackAndWhite = () => {
-    postDivRef.current[pey].style.filter = "grayscale(100%)";
+    //// postDivRef.current[pey].style.filter = "grayscale(100%)";
 
     setTimeout(function () {
-      postDivRef.current[pey].style.filter = "none";
+      /// postDivRef.current[pey].style.filter = "none";
     }, 500);
   };
 
@@ -772,7 +775,7 @@ function Postx({
   var dotspace = matchPc ? "1.7vw" : matchTablet ? "1.9vh" : "1.9vh";
   var dotspace2 = matchPc ? "0.9vw" : matchTablet ? "1.9vh" : "1.9vh";
 
-  var posttopicfont = matchPc ? "1.15vw" : matchTablet ? "1.8vh" : "1.6vh";
+  var posttopicfont = matchPc ? "1.35vw" : matchTablet ? "1.8vh" : "1.65vh";
 
   var postcaptiontop = matchPc ? "-1.85vh" : matchTablet ? "-9.2vh" : "-9.6vh";
   var postcaptionfont = matchPc ? "1.2vw" : matchTablet ? "2.35vh" : "1.82vh";
@@ -1023,6 +1026,7 @@ function Postx({
 
           }}
         ></div>
+
         <div
           ref={addpostDivRef}
           style={{
@@ -1042,7 +1046,7 @@ function Postx({
           {/*///////////////////////////////////////////////////////////////////////////POST DATA*/}
 
           <Slider
-
+            paperPostScrollRef={paperPostScrollRef}
             postDivRef={postDivRef}
             checkifClicked={checkifClicked}
             postItemsRef={postItemsRef}
@@ -1107,7 +1111,14 @@ function Postx({
           >
             <span
               onClick={() => {
-                commentClicked();
+
+                if (idReducer === 150) {
+                  dispatch(UpdateSign(true));
+                } else {
+                  commentClicked();
+
+                }
+
               }}
               className={
                 Emo2Num === 0 || Emo2Num === null
@@ -1152,7 +1163,14 @@ function Postx({
                   : "  dontallowhighlighting zuperkingIcon  zuperkingIconPostLight"
               }
               onClick={() => {
-                commentClicked();
+
+                if (idReducer === 150) {
+                  dispatch(UpdateSign(true));
+                } else {
+                  commentClicked();
+
+                }
+
               }}
               style={{
                 position: "relative",
@@ -1174,15 +1192,7 @@ function Postx({
           {itemCLICKED[pey] ? null : (
             <>
               <div
-                className={
-                  darkmodeReducer
-                    ? miniLayoutPost
-                      ? ""
-                      : "post-background-dark"
-                    : miniLayoutPost
-                      ? ""
-                      : "post-background-light"
-                }
+                className='post-background-dark'
                 style={{
                   height: `${postbackheight / 1.03}px`,
                   marginTop: `-${postbackheight / 1.03}px`,
@@ -1326,8 +1336,15 @@ function Postx({
                     setZoomBigEmo3(false);
                   }}
                   onClick={() => {
-                    startSpin3();
-                    CallEmoBackend(3);
+
+
+                    if (idReducer === 150) {
+                      dispatch(UpdateSign(true));
+                    } else {
+                      startSpin3();
+                      CallEmoBackend(3);
+                    }
+
                   }}
                   item
                   xs={12}
@@ -1350,7 +1367,7 @@ function Postx({
                     className={
                       Spincare === 0
                         ? `${themepadding}`
-                        : `${themepadding} spinnerEmo`
+                        : `${themepadding} spinnerEmott`
                     }
                     style={{
                       padding: "2px",
@@ -1376,7 +1393,7 @@ function Postx({
                         borderRadius: "50%",
                         transform: Zoom3 ? "scale(2)" : "scale(1.5)",
                         transition: "transform 0.1s",
-                        opacity: 0.6
+                        opacity: 1
                       }}
                     />
                   </span>
@@ -1392,8 +1409,14 @@ function Postx({
                     setZoomBigEmo4(false);
                   }}
                   onClick={() => {
-                    startSpin4();
-                    CallEmoBackend(4);
+                    if (idReducer === 150) {
+                      dispatch(UpdateSign(true));
+
+                    } else {
+                      startSpin4();
+                      CallEmoBackend(4);
+                    }
+
                   }}
                   item
                   xs={12}
@@ -1416,7 +1439,7 @@ function Postx({
                     className={
                       Spinfun === 0
                         ? `${themepadding}`
-                        : `${themepadding} spinnerEmo`
+                        : `${themepadding} spinnerEmott`
                     }
                     style={{
                       padding: "2px",
@@ -1440,7 +1463,7 @@ function Postx({
                         padding: "0px",
                         objectFit: "contain",
                         borderRadius: "50%",
-                        opacity: 0.6,
+                        opacity: 1,
                         transform: Zoom4 ? "scale(2)" : "scale(1.5)",
                         transition: "transform 0.1s",
                       }}
@@ -1734,7 +1757,7 @@ function Postx({
                 <div
                   onClick={clickslider}
                   style={{
-                    opacity: darkmodeReducer ? 0.89 : 0.94,
+                    opacity: 0,
                     cursor: "pointer",
                     top: matchMobile ? `-9vh` : `-1vh`,
                     position: "absolute",
@@ -1810,6 +1833,7 @@ function Postx({
                           fontWeight: "bold",
                           fontSize: postusernamefont,
                           cursor: 'pointer',
+                          fontStyle: 'italic',
                         }}
                       >
                         {post.username}
@@ -1864,6 +1888,14 @@ function Postx({
                           setzoomClickedIndex(pey + 1);
                           setminiProfile(true);
                         }}
+
+                        onTouchStart={() => {
+                          setBigCircle(true);
+                        }}
+                        onTouchEnd={() => {
+                          setBigCircle(false);
+                        }}
+
                         onMouseOver={() => {
                           setBigCircle(true);
                         }}
@@ -1906,7 +1938,6 @@ function Postx({
                           <CircleIcon
                             className="zuperkingtur"
                             style={{
-
                               fontSize: postcirclefont,
                               color: post.color1,
                               transform: matchMobile ? BigCircle ? "scale(5)" : "scale(3.8)" : BigCircle ? "scale(5)" : "scale(3)", opacity: 0.6,
@@ -1966,9 +1997,17 @@ function Postx({
                         }}
                       >
 
+                        {
+                          //////////////////caption
+                        }
 
-                        {" "}
-                        {post.topic ? post.topic : "SuperstarZ"}{" "}
+                        <span style={{ fontStyle: 'italic' }}>      {post.topic ? post.topic : "SuperstarZ"}{" "}</span>
+
+
+                        {
+                          ////////////////  caption
+                        }
+
                         <span style={{ padding: "5px" }}>
                           <CircleIcon
                             onClick={() => {

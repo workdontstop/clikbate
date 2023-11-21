@@ -6,6 +6,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { UpdateAlertReducer } from ".././GlobalActions";
 
 import "./logCss.css";
+import { matchPc, matchTablet, matchMobile } from "../DetectDevice";
 
 function ServerErrorx({
   device,
@@ -66,16 +67,17 @@ function ServerErrorx({
   var severerrorEmoji = "";
   var severerrorEmojiLeft = "";
 
-  if (device === "pc") {
-    severerrorData = "1.25vw";
-    severerrorEmoji = "1.6vw";
-    severerrorEmojiLeft = "";
-  } else if (device === "mobile") {
+
+  if (matchMobile) {
     severerrorData = "2.2vh";
     severerrorEmoji = "2.7vh";
     severerrorEmojiLeft = "4vw";
   } else {
+    severerrorData = "1.25vw";
+    severerrorEmoji = "1.6vw";
+    severerrorEmojiLeft = "";
   }
+
 
   if (darkmodeReducer) {
     ErrorColor = "rgb(34, 34, 34, 0.05)";
@@ -135,7 +137,7 @@ function ServerErrorx({
                     className="sever-error-data"
                     style={{
                       fontSize: severerrorData,
-                      paddingLeft: "1px",
+                      paddingLeft: "3vw",
                     }}
                     xs={11}
                     sm={10}

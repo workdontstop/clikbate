@@ -121,6 +121,11 @@ function Connectx({
       myId: idReducer,
       friendId: post.sender,
     };
+  } else if (PostCon === 2) {
+    valax = {
+      myId: idReducer,
+      friendId: post.sender,
+    };
   } else if (Comment === 1) {
     valax = {
       myId: idReducer,
@@ -387,7 +392,7 @@ function Connectx({
             onClick={Click}
             ref={profileImageref}
             onLoad={calculateconnectPosition}
-            className={darkmodeReducer ? "turpostDark" : "turpostLight"}
+            className={darkmodeReducer ? "turpostDark" : "turpostDark"}
             src={`${post.profile_image}`}
             alt="a superstarz post "
             style={{
@@ -406,6 +411,97 @@ function Connectx({
           />
         </div>
       ) : null}
+
+
+      {PostCon === 2 ? (
+        <div
+          className="zuperxyinfo"
+          style={{
+            opacity: 1,
+            top: postprofiletop,
+            position: "relative",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "left",
+            zIndex: 1,
+            paddingLeft: matchPc ? "1.4vw" : matchTablet ? "2.3vw" : "2.1vw",
+            height: "0px",
+            fontFamily: "Arial, Helvetica, sans-seri",
+          }}
+        >
+          <Grid
+            className={`${optionsClass}`}
+            style={{
+              backgroundColor: `${post.color1}`,
+              zIndex: 2,
+              left: matchMobile ? '-3.8vw' : `${profileImagethumbLeft + 18}px`,
+              top: matchMobile ? `${profileImagethumbTop - 45}px` : `${profileImagethumbTop}px`,
+              opacity: 0.8,
+              position: "absolute",
+              cursor: 'pointer',
+              transform: matchMobile ? 'scale(0.4)' : 'scale(1)',
+            }}
+          >
+            {Added === 0 ? (
+              <>
+                {" "}
+                <AddIcon
+                  style={{
+                    fontSize: matchMobile ? '6vh' : fontOptions,
+                    color: "#ffffff",
+                  }}
+                  className="zuperkinginfo "
+                />{" "}
+              </>
+            ) : Added === 100 ? (
+              <>
+                {" "}
+                <PanoramaFishEyeIcon
+                  style={{
+                    fontSize: matchMobile ? '6vh' : fontOptions,
+                    color: "#ffffff",
+                  }}
+                  className="zuperkinginfo  changeOpacity"
+                />{" "}
+              </>
+            ) : (
+              <>
+                {" "}
+                <DownloadDoneIcon
+                  style={{
+                    fontSize: matchMobile ? '6vh' : fontOptions,
+                    color: "#ffffff",
+                  }}
+                  className="zuperkinginfo"
+                />{" "}
+              </>
+            )}
+          </Grid>
+          <img
+            onClick={Click}
+            ref={profileImageref}
+            onLoad={calculateconnectPosition}
+            className={darkmodeReducer ? "turpostDark" : "turpostDark"}
+            src={`${post.profile_image}`}
+            alt="a superstarz post "
+            style={{
+              top: matchMobile ? '0.5vh' : '4.5vh',
+              cursor: "pointer",
+              boxShadow: darkmodeReducer
+                ? "0 0 1px #555555"
+                : "0 0 3.5px #aaaaaa",
+              width: matchMobile ? '16vw' : '4.8vw',
+              height: "auto",
+              padding: "0px",
+              objectFit: "contain",
+              borderRadius: "50%",
+              position: "relative",
+              zIndex: 1,
+            }}
+          />
+        </div>
+      ) : null}
+
 
       {Comment === 1 ? (
         <>

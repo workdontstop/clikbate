@@ -221,7 +221,7 @@ function ImageFilterinnerx({
 
 
   function FilterGradient(width: any, height: any, type: string) {
-    var filtercolorMode = 0.7;
+    var filtercolorMode = 0.35;
     var ctx = canvasRefdummy.current.getContext("2d");
     canvasRefdummy.current.height = height;
     canvasRefdummy.current.width = width;

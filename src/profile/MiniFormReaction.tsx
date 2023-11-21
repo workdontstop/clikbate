@@ -93,7 +93,7 @@ function MiniFormReactionx({
           display: "grid",
           gridGap: "0px",
           gridAutoFlow: "row",
-          gridTemplateColumns: matchMobile ? mobileZoom ? "36% 36% 36%" : "27% 27% 27% 27%" : "30% 30% 30% 30%",
+          gridTemplateColumns: matchMobile ? mobileZoom ? "27% 27% 27% 27%" : "36% 36% 36%" : zoomedModal ? "25% 25% 25% 25% 25%" : "30% 30% 30% 30%",
           width: "auto",
           height: zoomedModal
             ? wideImage

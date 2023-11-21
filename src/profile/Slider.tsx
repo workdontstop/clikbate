@@ -1,4 +1,10 @@
-import React, { useState, useRef, useCallback, useEffect, useLayoutEffect } from "react";
+import React, {
+  useState,
+  useRef,
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+} from "react";
 import { Arrow } from "./Arrow";
 import { Dots } from "./Dots";
 import { SliderNumber } from "./SliderNumber";
@@ -9,7 +15,6 @@ import { matchMobile, matchPc, matchTablet } from "../DetectDevice";
 import ZoomOutIcon from "@mui/icons-material/ZoomOut";
 import { Loader } from "./Loader";
 import { UpdateInteract } from ".././GlobalActions";
-
 
 function Sliderx({
   slides,
@@ -50,16 +55,13 @@ function Sliderx({
   ActiveCanvas,
   checkifClicked,
   postDivRef,
+  paperPostScrollRef,
 }: any): JSX.Element {
   const [sliderDuration] = useState(1500);
 
   const aRef: any = useRef(null);
 
-
-
-
   const dispatch = useDispatch();
-
 
   var allow4dev = "";
   const { REACT_APP_APPX_STATE } = process.env;
@@ -73,6 +75,10 @@ function Sliderx({
   /// const getWidth = () => window.innerWidth;
   ///var newGetWidth = getWidth() * slides.length;
 
+  const InteractTimerxx = useRef<ReturnType<typeof setTimeout> | null>(
+    null
+  );
+
   const waitChangeIndexTimer = useRef<ReturnType<typeof setTimeout> | null>(
     null
   );
@@ -84,9 +90,7 @@ function Sliderx({
     null
   );
 
-
   const [showSpin, setshowSpin] = useState(false);
-
 
   const SlideimageRef = useRef<HTMLImageElement>(null);
 
@@ -98,6 +102,8 @@ function Sliderx({
   const [ZoomOutBigger, setZoomOutBigger] = useState<boolean>(false);
 
   const [miniH, setminiH] = useState<number>(50);
+
+  const [InteractedDark, setInteractedDark] = useState(false);
 
   ///
   ///
@@ -116,9 +122,7 @@ function Sliderx({
 
   ///
 
-
-  const [interactContent, setinteractContent] = useState('');
-
+  const [interactContent, setinteractContent] = useState("");
 
   const [interact, setinteract] = useState(false);
 
@@ -133,7 +137,6 @@ function Sliderx({
       screenHeight: number;
       activateLoader: boolean;
       historyscroll: number;
-
     };
   }
 
@@ -141,16 +144,20 @@ function Sliderx({
   ///
   ///
   /// GET SCREENHEIGHT FROM REDUX STORE
-  const { screenHeight, darkmode, snapStart, activateLoader, historyscroll } =
-    useSelector((state: RootStateGlobalReducer) => ({
-      ...state.GlobalReducer,
-    }));
+  const {
+    screenHeight,
+    darkmode,
+    snapStart,
+    activateLoader,
+    historyscroll,
+  } = useSelector((state: RootStateGlobalReducer) => ({
+    ...state.GlobalReducer,
+  }));
   const screenHeightReducer = screenHeight;
   const darkmodeReducer = darkmode;
   const snapStartReducer = snapStart;
   const activateLoaderReducer = activateLoader;
   const historyscrollReducer = historyscroll;
-
 
   ///
   ///
@@ -183,7 +190,6 @@ function Sliderx({
       setTimeout(function () {
         stopSlider(0);
       }, 1500);
-
     }
   }, [ActiveAutoPlay[pey]]);
 
@@ -237,9 +243,6 @@ function Sliderx({
     }
   };
 
-
-
-
   const tiim = useRef<ReturnType<typeof setTimeout> | null>(null);
   const TouchTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -247,11 +250,20 @@ function Sliderx({
 
   const [Touched, setTouched] = useState(0);
 
-  const [cropInitialIn, setcropInitialIn] = useState([{ x: post.interact1ax, y: post.interact1ay }, { x: post.interact2ax, y: post.interact2ay }, { x: post.interact3ax, y: post.interact3ay }]);
+  const [cropInitialIn, setcropInitialIn] = useState([
+    { x: post.interact1ax, y: post.interact1ay },
+    { x: post.interact2ax, y: post.interact2ay },
+    { x: post.interact3ax, y: post.interact3ay },
+  ]);
 
-  const [cropInitialIn2, setcropInitialIn2] = useState([{ x: post.interact1bx, y: post.interact1by }, { x: post.interact2bx, y: post.interact2by }, { x: post.interact3bx, y: post.interact3by }]);
 
-  const [showIntImage, setshowIntImage] = useState(false)
+  const [cropInitialIn2, setcropInitialIn2] = useState([
+    { x: post.interact1bx, y: post.interact1by },
+    { x: post.interact2bx, y: post.interact2by },
+    { x: post.interact3bx, y: post.interact3by },
+  ]);
+
+  const [showIntImage, setshowIntImage] = useState(false);
 
   const [HasInteractivity, setHasInteractivity] = useState(false);
 
@@ -265,27 +277,22 @@ function Sliderx({
     return urlPattern.test(str);
   };
 
-
   useEffect(() => {
     //console.log(postDatainnerInteraction1[0])
 
     postDatainnerInteraction1.map((str: any, index: any) => {
-
       if (containsURL(str)) {
-        setHasInteractivity(true)
+        setHasInteractivity(true);
         ///alert('kk')
       }
-    })
+    });
 
     postDatainnerInteraction2.map((str: any, index: any) => {
       if (containsURL(str)) {
-        setHasInteractivity(true)
+        setHasInteractivity(true);
       }
-    })
-
-
-
-  }, [postDatainnerInteraction1, postDatainnerInteraction2, itemCLICKED])
+    });
+  }, [postDatainnerInteraction1, postDatainnerInteraction2, itemCLICKED]);
 
   const [data, setdata] = useState(null);
   const [canvasInteractWidth, setcanvasInteractWidth] = useState(0);
@@ -293,78 +300,103 @@ function Sliderx({
   const [imageWidthcss, setimageWidthcss] = useState(0);
   const [imageHeightcss, setimageHeightcss] = useState(0);
 
+  const handleTouchStartIn = useCallback(
+    (event: any, type: any) => {
+      if (data) {
+        drawInteraction(0, event, 1);
+      }
+    },
+    [data]
+  );
 
-
-
-
-
-  const handleTouchStartIn = useCallback((event: any, type: any) => {
-    if (data) {
-      drawInteraction(0, event, 1);
-    }
-  }, [data])
-
-
+  const pic: any = useRef(null);
   const canvasRefIn: any = useRef(null);
 
+  const ScaleCoOrdinates = useCallback(
+    (event, type) => {
+      if (canvasRefIn.current) {
+        const rect = canvasRefIn.current.getBoundingClientRect();
+        const scaleX = canvasRefIn.current.width / rect.width;
+        const scaleY = canvasRefIn.current.height / rect.height;
 
-  const ScaleCoOrdinates = useCallback((event, type) => {
-    if (canvasRefIn.current) {
-      const rect = canvasRefIn.current.getBoundingClientRect();
-      const scaleX = canvasRefIn.current.width / rect.width;
-      const scaleY = canvasRefIn.current.height / rect.height;
+        let x, y;
 
-      let x, y;
+        if (matchMobile) {
+          // Handle touch events
+          if (event && event.touches && event.touches.length > 0) {
 
-      if (matchMobile) {
-        // Handle touch events
-        if (event.touches && event.touches.length > 0) {
-          x = (event.touches[0].clientX - rect.left) * scaleX;
-          y = (event.touches[0].clientY - rect.top) * scaleY;
+
+            x = (event.touches[0].clientX - rect.left) * scaleX;
+            y = (event.touches[0].clientY - rect.top) * scaleY;
+
+            // Now you can use x and y in your code
+          }
+        } else {
+          // Handle mouse events
+          x = (event.clientX - rect.left) * scaleX;
+          y = (event.clientY - rect.top) * scaleY;
         }
-      } else {
-        // Handle mouse events
-        x = (event.clientX - rect.left) * scaleX;
-        y = (event.clientY - rect.top) * scaleY;
-      }
 
-      return { x, y };
-    } else {
-      return {
-        x: 0,
-        y: 0
-      };
+        return { x, y };
+      } else {
+        return {
+          x: 0,
+          y: 0,
+        };
+      }
+    },
+    [matchMobile]
+  );
+
+
+
+  const [interactHeightResolution, setinteractHeightResolution] = useState(window.innerHeight * 1.2);
+
+  useEffect(() => {
+    setinteractHeightResolution(window.innerHeight * 1.6);
+  }, [matchPc])
+
+
+  useEffect(() => {
+
+    if (matchMobile) {
+      setinteractHeightResolution(window.innerHeight * 2);
     }
-  }, [matchMobile]);
+
+  }, [matchMobile])
 
 
   const callInteract = useCallback(() => {
     if (!canvasRefIn.current) return;
 
     const context = canvasRefIn.current.getContext("2d");
-    context.clearRect(0, 0, canvasRefIn.current.width, canvasRefIn.current.height);
+    context.clearRect(
+      0,
+      0,
+      canvasRefIn.current.width,
+      canvasRefIn.current.height
+    );
     const previewFileReadimage: any = new Image();
 
     previewFileReadimage.src = slides[sliderIndex];
 
     previewFileReadimage.onload = () => {
-      const ratio = previewFileReadimage.naturalHeight / previewFileReadimage.naturalWidth;
-      const width = window.innerHeight / ratio;
-      const ratiox = previewFileReadimage.naturalWidth / previewFileReadimage.naturalHeight;
-      const hei = window.innerWidth / ratiox;
+      const ratio =
+        previewFileReadimage.naturalHeight / previewFileReadimage.naturalWidth;
+      const width = interactHeightResolution / ratio;
+      const ratiox =
+        previewFileReadimage.naturalWidth / previewFileReadimage.naturalHeight;
+      const hei = window.innerHeight / ratiox;
       setcanvasInteractWidth(width);
-      setcanvasInteractheight(hei)
+      setcanvasInteractheight(hei);
       setimageWidthcss(postDivRef.current[pey].clientWidth);
       setimageHeightcss(postDivRef.current[pey].clientHeight);
-
 
       if (data !== previewFileReadimage) {
         setdata(previewFileReadimage);
       }
-
     };
-  }, [slides, sliderIndex, postItemsRef, postDivRef]);
-
+  }, [slides, sliderIndex, postItemsRef, postDivRef, interactHeightResolution]);
 
   const acttii = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -376,75 +408,56 @@ function Sliderx({
     }
   }, [data]);
 
-
-
-
   const [Tutorial, setTutorial] = useState(false);
-
 
   useLayoutEffect(() => {
     if (itemCLICKED[pey]) {
+
+      ///stop interaction first 
+      setinteract(false);
+      setinteractContent("");
+      setfadeout(false);
+      ///stop interaction first 
+
       ////alert('kk');
 
       if (HasInteractivity) {
 
-        if (matchMobile) {
 
 
 
 
-          if (tti.current) {
-            clearTimeout(tti.current);
-          }
-
-          setTutorial(true);
-          tti.current = setTimeout(() => {
-            setTutorial(false);
-          }, 12000)
-        }
-
-        if (showIntImage) { } else {
+        if (showIntImage) {
+        } else {
           ////load interact image
           setshowIntImage(true);
         }
 
-
         setTimeout(() => {
           setInteractClicked(true);
           callInteract();
-        }, 1500)
-
-
-
+        }, 1500);
       }
       ////check for interaction and display canvas image flip
     } else {
-
-      setTutorial(false);
+      setinteract(false);
+      setinteractContent("");
+      setfadeout(false);
+      ///setTutorial(false);
     }
   }, [itemCLICKED[pey], HasInteractivity, showIntImage, postDivRef]);
 
-
   const tti = useRef<ReturnType<typeof setTimeout> | null>(null);
-
 
   const interacttime = useRef<ReturnType<typeof setTimeout> | null>(null);
   const interacttime2 = useRef<ReturnType<typeof setTimeout> | null>(null);
   const bh = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [fadeout, setfadeout] = useState(false);
 
-
   const [pause, setpause] = useState(false);
 
-
-
-
   const IntClose = useCallback(() => {
-
-
     if (interact) {
-
-
       setpause(false);
 
       setHideCann(true);
@@ -456,9 +469,7 @@ function Sliderx({
         clearTimeout(interacttime2.current);
       }
 
-
       interacttime.current = setTimeout(() => {
-
         setfadeout(true);
 
         if (interacttime2.current) {
@@ -468,34 +479,24 @@ function Sliderx({
         interacttime2.current = setTimeout(() => {
           ///  dispatch(UpdateInteract('', false));
           setinteract(false);
-          setinteractContent('');
+          setinteractContent("");
           setfadeout(false);
-        }, 1800)
-      }, 10000)
-
-
+        }, 1800);
+      }, 10000);
     } else {
-
-      setHideCann(false)
+      setHideCann(false);
     }
   }, [interact]);
 
-
-
   useEffect(() => {
-
     IntClose();
-
   }, [interact]);
-
 
   const [HideCann, setHideCann] = useState(false);
 
   const sc = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-
   const spin = () => {
-
     setshowSpin(true);
 
     if (sc.current) {
@@ -503,198 +504,243 @@ function Sliderx({
     }
     sc.current = setTimeout(() => {
       setshowSpin(false);
-    }, 10000)
-
-  }
-
+    }, 10000);
+  };
 
 
+  const drawInteraction = useCallback(
+    (typex: any, event: any, clicked: number) => {
+      const adjustedPos = ScaleCoOrdinates(event, 0);
+      const xnew = adjustedPos.x;
+      const ynew = adjustedPos.y;
 
+      if (canvasRefIn.current) {
+        const context = canvasRefIn.current.getContext("2d");
 
+        canvasRefIn.current.height = interactHeightResolution;
+        canvasRefIn.current.width = canvasInteractWidth;
 
+        requestAnimationFrame(() => {
+          context.drawImage(
+            data,
+            0,
+            0,
+            canvasInteractWidth,
+            interactHeightResolution
+          );
 
+          var offsety = 0;
 
-  const drawInteraction = useCallback((typex: any, event: any, clicked: number) => {
+          const isEdge = /Edg/i.test(navigator.userAgent);
+          const isFirefox = /Firefox/i.test(navigator.userAgent);
 
-    const adjustedPos = ScaleCoOrdinates(event, 0);
-    const xnew = adjustedPos.x;
-    const ynew = adjustedPos.y;
-
-    if (canvasRefIn.current) {
-      const context = canvasRefIn.current.getContext("2d");
-
-      canvasRefIn.current.height = window.innerHeight;
-      canvasRefIn.current.width = canvasInteractWidth;
-
-
-      requestAnimationFrame(() => {
-        context.drawImage(data, 0, 0, canvasInteractWidth, window.innerHeight);
-
-        var offsety = 0;
-
-        var screenWidth = window.innerWidth * 0.94;
-        var pictureWidth = canvasInteractWidth;
-        var offsetX = (screenWidth - pictureWidth) / 2;
-
-        if (matchMobile) {
-
-
-          offsetX = window.innerWidth * 0.94;
-
-        }
-
-        const xx = cropInitialIn[0].x - offsetX;
-        const yy = cropInitialIn[0].y - offsety;
-
-
-        const xxw = cropInitialIn2[0].x - offsetX;
-        const yyw = cropInitialIn2[0].y - offsety
-        const r = 35;
-
-        context.beginPath();
-        context.arc(xnew, ynew, 5, 0, Math.PI * 2);
-        context.fillStyle = "rgba(250, 250,250,0)";
-        context.fill();
-        context.closePath();
-
-        var clikarc1 = context.isPointInPath(0, 0);
-        var clikarc2 = context.isPointInPath(0, 0);
-
-        if (post.interact1a || post.interact1b) {
-
-          //alert('jj');
-
-
-
-          if (post.interact1a) {
-
-            if ([0, 3].includes(typex)) {
-              context.beginPath();
-              context.arc(xx, yy, r, 0, Math.PI * 2);
-
-              clikarc1 = context.isPointInPath(xnew, ynew);
-              context.fillStyle = darkmodeReducer ? "rgba(50, 50,50,0.3)" : 'rgba(250, 250,250,0.3)';
-              context.closePath();
-              context.fill();
-              context.lineWidth = 3.6;
-              context.strokeStyle = darkmodeReducer ? "#ffffff" : '#333333';
-              context.stroke();
-
-
-            }
-            else if (typex === 1) {
-              context.beginPath();
-              context.arc(xx, yy, r, 0, Math.PI * 2);
-              clikarc1 = context.isPointInPath(xnew, ynew);
-
-
-              context.fillStyle = `rgba(250, 250,250,0.0)`;
-              context.closePath();
-              context.fill();
-            }
-
-          }
-
-
-
-          if (post.interact1b) {
-
-            if ([0, 3].includes(typex)) {
-              context.beginPath();
-              context.arc(xxw, yyw, r, 0, Math.PI * 2);
-
-              clikarc2 = context.isPointInPath(xnew, ynew);
-              context.fillStyle = darkmodeReducer ? "rgba(50, 50,50,0.3)" : 'rgba(250, 250,250,0.3)';
-              context.closePath();
-              context.fill();
-              context.lineWidth = 3.6;
-              context.strokeStyle = darkmodeReducer ? "#ffffff" : '#333333';
-              context.stroke();
-
-
-            }
-            else if (typex === 1) {
-              context.beginPath();
-              context.arc(xxw, yyw, r, 0, Math.PI * 2);
-              clikarc2 = context.isPointInPath(xnew, ynew);
-
-
-              context.fillStyle = `rgba(250, 250,250,0.0)`;
-              context.closePath();
-              context.fill();
-            }
-
-          }
-
-
-          if (typex === 3) {
+          if (isEdge) {
+            offsety = -20;
+          } else if (isFirefox) {
+            offsety = -10;
           } else {
+            offsety = 0;
+          }
 
-            if (tiim.current) {
-              clearTimeout(tiim.current);
+          // Access the total width of the element, including margins and borders
+
+          var screenWidth = 0;
+
+          if (isEdge) {
+            screenWidth = window.innerWidth * 1.01;
+          } else if (isFirefox) {
+            screenWidth = window.innerWidth * 0.98;
+          } else {
+            screenWidth = window.innerWidth * 0.98;
+          }
+
+          var pictureWidth = canvasInteractWidth;
+          var offsetX = (screenWidth - pictureWidth) / 2;
+
+
+          var xx = cropInitialIn[0].x;
+          var yy = cropInitialIn[0].y;
+          const xxw = cropInitialIn2[0].x;
+          const yyw = cropInitialIn2[0].y;
+          var r = 45;
+
+
+
+          if (matchMobile) {
+            if (itemcroptype[pey] === 3) {
+              r = 150;
+
+            } else {
+
+              r = 80;
             }
-            tiim.current = setTimeout(() => {
-              if (typex === 0 || typex === 3) {
-                drawInteraction(1, event, 0);
-              } else { drawInteraction(0, event, 0); }
-
-            }, 1000)
-
+          } else {
+            if (itemcroptype[pey] === 3) {
+              r = 78;
+            }
           }
 
 
 
-          canvasRefIn.current.style.width = `${imageWidthcss}px`;
-          canvasRefIn.current.style.height = `${imageHeightcss}px`;
+
+          // Calculate the X-coordinate
+          const xCoordinate = (xx / 100) * canvasInteractWidth;
+          var x2 = xCoordinate;
+
+          const yCoordinate = (yy / 100) * interactHeightResolution;
+          var y2 = yCoordinate;
+
+
+          const xCoordinatex = (xxw / 100) * canvasInteractWidth;
+          var x2b = xCoordinatex;
+
+          const yCoordinatex = (yyw / 100) * interactHeightResolution;
+          var y2b = yCoordinatex;
 
 
 
 
 
+          context.beginPath();
+          context.arc(xnew, ynew, 5, 0, Math.PI * 2);
+          context.fillStyle = "rgba(250, 250,250,0)";
+          context.fill();
+          context.closePath();
 
+          var clikarc1 = context.isPointInPath(0, 0);
+          var clikarc2 = context.isPointInPath(0, 0);
 
-          if (post.interact1b || post.interact1a) {
-            if (clicked === 1 && clikarc2) {
-              /// alert(`xx: ${xx}, xnew: ${xnew}`);
+          if (post.interact1a || post.interact1b) {
+            //alert('jj');
 
-              /// dispatch(UpdateInteract(post.interact1b, true));
-              spin();
-              setinteract(true);
-              setinteractContent(post.interact1b);
+            if (post.interact1a) {
+              if ([0, 3].includes(typex)) {
+                context.beginPath();
+                context.arc(x2, y2, r, 0, Math.PI * 2);
 
+                clikarc1 = context.isPointInPath(xnew, ynew);
+                context.fillStyle = darkmodeReducer
+                  ? "rgba(50, 50,50,0.3)"
+                  : "rgba(250, 250,250,0.3)";
+                context.closePath();
+                context.fill();
+                context.lineWidth = matchMobile ? 9.6 : itemcroptype[pey] === 3 ? 9 : 6;
+                context.strokeStyle = darkmodeReducer ? "#ffffff" : "#333333";
+                context.stroke();
+              } else if (typex === 1) {
+                context.beginPath();
+                context.arc(x2, y2, r, 0, Math.PI * 2);
+                clikarc1 = context.isPointInPath(xnew, ynew);
+
+                context.fillStyle = `rgba(250, 250,250,0.0)`;
+                context.closePath();
+                context.fill();
+              }
             }
 
-            else if (clicked === 1 && clikarc1) {
-              /// alert(`xx: ${xx}, xnew: ${xnew}`);
+            if (post.interact1b) {
+              if ([0, 3].includes(typex)) {
+                context.beginPath();
+                context.arc(x2b, y2b, r, 0, Math.PI * 2);
 
+                clikarc2 = context.isPointInPath(xnew, ynew);
+                context.fillStyle = darkmodeReducer
+                  ? "rgba(50, 50,50,0.3)"
+                  : "rgba(250, 250,250,0.3)";
+                context.closePath();
+                context.fill();
+                context.lineWidth = matchMobile ? 9.6 : itemcroptype[pey] === 3 ? 9 : 6;
+                context.strokeStyle = darkmodeReducer ? "#ffffff" : "#333333";
+                context.stroke();
+              } else if (typex === 1) {
+                context.beginPath();
+                context.arc(x2b, y2b, r, 0, Math.PI * 2);
+                clikarc2 = context.isPointInPath(xnew, ynew);
 
-              spin();
-              setinteract(true);
-              setinteractContent(post.interact1a);
-
+                context.fillStyle = `rgba(250, 250,250,0.0)`;
+                context.closePath();
+                context.fill();
+              }
             }
-            else if (clicked === 1) {
+
+            if (typex === 3) {
+            } else {
               if (tiim.current) {
                 clearTimeout(tiim.current);
               }
-              setHasInteractivity(false);
-              clickslider(event);
+              tiim.current = setTimeout(() => {
+                if (typex === 0 || typex === 3) {
+                  drawInteraction(1, event, 0);
+                } else {
+                  drawInteraction(0, event, 0);
+                }
+              }, 1000);
+            }
+            if (canvasRefIn.current) {
+              canvasRefIn.current.style.width = `${imageWidthcss}px`;
+              canvasRefIn.current.style.height = `${imageHeightcss}px`;
+            }
 
-              /// alert('jj');
-            } else { }
-          } else { }
+            if (post.interact1b || post.interact1a) {
+              if (clicked === 1 && clikarc2) {
+                /// alert(`xx: ${xx}, xnew: ${xnew}`);
 
-          //alert(imageHeightcss);
+                /// dispatch(UpdateInteract(post.interact1b, true));
+                ///stop interaction first 
+                setInteractedDark(false);
+                setinteract(false);
+                setinteractContent("");
+                setfadeout(false);
+                ///stop interaction first 
+                spin();
+                setinteract(true);
+                setinteractContent(post.interact1b);
+              } else if (clicked === 1 && clikarc1) {
+                /// alert(`xx: ${xx}, xnew: ${xnew}`);
+
+                ///stop interaction first 
+                setInteractedDark(false);
+                setinteract(false);
+                setinteractContent("");
+                setfadeout(false);
+                ///stop interaction first 
+                spin();
+                setinteract(true);
+                setinteractContent(post.interact1a);
+              } else if (clicked === 1) {
 
 
+                switch (event.detail) {
+                  case 1:
+                    setinteract(false);
+                    setinteractContent("");
+                    setfadeout(false);
 
-        }
+                    context.clearRect(0, 0, canvasRefIn.current.width, canvasRefIn.current.width);
 
-      });
-    }
-  }, [data, imageWidthcss, imageHeightcss, interact,]);
+                    if (tiim.current) {
+                      clearTimeout(tiim.current);
+                    }
+                    setHasInteractivity(false);
+                    clickslider(event);
+                    break;
+
+                }
 
 
+                /// alert('jj');
+              } else {
+              }
+            } else {
+            }
+
+            //alert(imageHeightcss);
+          }
+        });
+      }
+    },
+    [data, imageWidthcss, imageHeightcss, interact]
+  );
 
   ///
   ///
@@ -834,45 +880,35 @@ function Sliderx({
 
   return (
     <>
-
-
       <Grid
         item
-
-
         xs={12}
         style={{
           position: "fixed",
-          top: '3vh',
+          top: "3vh",
           padding: "0px",
-          zIndex: '200'
+          zIndex: "200",
         }}
       >
-
-
-        {Tutorial ? <Grid
-          item
-          onClick={() => {
-            setTutorial(false);
-          }}
-
-          xs={6}
-          style={{
-            padding: "10px",
-            backgroundColor: '#00ccff',
-            borderRadius: '8%',
-            fontFamily: 'sans-serif',
-            fontWeight: 'bold'
-          }}
-        >
-
-          Mobile Interaction Still In Development, Coming Soon 😊
-        </Grid> : null}
-
-
-      </Grid  >
-
-
+        {Tutorial ? (
+          <Grid
+            item
+            onClick={() => {
+              setTutorial(false);
+            }}
+            xs={6}
+            style={{
+              padding: "10px",
+              backgroundColor: "#00ccff",
+              borderRadius: "8%",
+              fontFamily: "sans-serif",
+              fontWeight: "bold",
+            }}
+          >
+            Mobile Interaction Still In Development, Coming Soon 😊
+          </Grid>
+        ) : null}
+      </Grid>
 
       <Grid
         item
@@ -939,21 +975,23 @@ function Sliderx({
             />
           </span>
         </div>{" "}
-
-
-        {showSpin ?
-          <Grid item xs={12} style={{ position: 'fixed', zIndex: 100, padding: '3vh' }}>
-            <div className="spinner zuperxyinfo" style={{
-              borderTop: `8px solid ${post.color1}`, boxShadow: `0 0 8.5px, ${post.color1}`
-            }}></div>
-          </Grid> :
-          null
-        }
-
-
-
+        {showSpin ? (
+          <Grid
+            item
+            xs={12}
+            style={{ position: "absolute", zIndex: 100, padding: "3vh" }}
+          >
+            <div
+              className="spinner zuperxyinfo"
+              style={{
+                borderTop: `8px solid ${post.color1}`,
+                boxShadow: `0 0 8.5px, ${post.color1}`,
+              }}
+            ></div>
+          </Grid>
+        ) : null}
         {slides.length > 0 ? (
-          interactContent ? null :
+          interactContent ? null : (
             <SliderNumber
               ActiveCanvas={ActiveCanvas}
               post={post}
@@ -967,8 +1005,8 @@ function Sliderx({
               total={slides.length}
               itemCLICKED={itemCLICKED}
               pey={pey}
-
             />
+          )
         ) : null}
         <Arrow
           itemCLICKED={itemCLICKED}
@@ -981,14 +1019,10 @@ function Sliderx({
         />
         {transitions((style, i) => (
           <div key={i}>
-
             <animated.img
               onLoad={(e: any) => {
                 onPostsItemload(e, pey, i);
-
-
               }}
-
               onMouseDown={clickslider}
               ref={addPostItemsRef}
               className={
@@ -1003,23 +1037,19 @@ function Sliderx({
                 height: type === 1 ? `auto` : itemheight[pey],
                 position: "absolute",
                 padding: "0px",
-                objectFit:
-                  itemcroptype[pey] === 1 || itemcroptype[pey] === 2
-                    ? "cover"
-                    : "cover",
+                objectFit: "cover",
                 objectPosition:
                   itemcroptype[pey] === 1 || itemcroptype[pey] === 2
                     ? "50% top"
                     : "50% 50",
                 zIndex: 0,
-                float: "left",
-                filter: "blur(0px)",
+
+
               }}
             />
 
             <animated.img
-
-
+              ref={pic}
               onMouseDown={clickslider}
               className={
                 darkmodeReducer ? "turlightpostdark" : "turlightpostlight"
@@ -1033,81 +1063,100 @@ function Sliderx({
                 height: type === 1 ? `auto` : itemheight[pey],
                 position: "absolute",
                 padding: "0px",
-                objectFit:
-                  itemcroptype[pey] === 1 || itemcroptype[pey] === 2
-                    ? "cover"
-                    : "cover",
+                objectFit: "cover",
                 objectPosition:
                   itemcroptype[pey] === 1 || itemcroptype[pey] === 2
                     ? "50% top"
                     : "50% 50",
                 zIndex: 1,
-                float: "left",
+
               }}
             />
 
-            {i === 0 && HasInteractivity && ActiveCanvas === pey ? <canvas
-              onMouseUp={(e: any) => {
-                handleTouchStartIn(e, 0);
-              }}
-              onTouchEnd={(e: any) => {
-                handleTouchStartIn(e, 1);
-              }}
-              ref={canvasRefIn}
-              style={{
-                cursor: 'pointer',
-                padding: "0px",
-                position: 'fixed',
-                zIndex: 11,
-                top: '0vh',
-                margin: 'auto',
-                opacity: HideCann ? 0 : 1,
-
-
-              }}
-            /> : null}
-
-            {interact && HasInteractivity && ActiveCanvas === pey ?
-
-
-              <img className={fadeout ? "fadeboyinOut" : "fadeboyinInt"}
-                src={interactContent}
-                onClick={() => {
-                  ///  alert('kk')
-
-                  setinteract(false);
-                  setinteractContent('');
-                  setfadeout(false);
-
-
-                  if (sc.current) {
-                    clearTimeout(sc.current);
-                  }
-
-                  setshowSpin(false);
+            {i === 0 && HasInteractivity && ActiveCanvas === pey ? (
+              <canvas
+                onMouseUp={(e: any) => {
+                  handleTouchStartIn(e, 0);
                 }}
+                onTouchStart={(e: any) => {
+                  handleTouchStartIn(e, 1);
+                }}
+                ref={canvasRefIn}
                 style={{
-                  cursor: 'pointer',
-                  height: "100%",
-                  objectFit: 'contain',
-                  zIndex: 50,
-                  position: 'absolute',
-                  margin: 'auto',
-                  textAlign: 'center',
-                  top: '0vh',
-                  width: '100%',
-                  backgroundColor: darkmodeReducer ? 'rgb(20,20,20,0.82)' : 'rgb(210,210,210,0.77)'
+                  cursor: "pointer",
+                  padding: "0px",
+                  position: "absolute",
+                  zIndex: 11,
+                  height: '0px',
+                  width: '0px',
+                  top: "0vh",
+                  margin: "auto",
+                  opacity: HideCann ? 0 : 1,
+                  visibility: itemCLICKED[pey] ? 'visible' : 'hidden',
                 }}
               />
+            ) : null}
+
+            {interact && HasInteractivity && ActiveCanvas === pey ? (
+              <img
+                className={fadeout ? "fadeboyinOut" : "fadeboyinInt"}
+                src={interactContent}
+                onClick={() => {
 
 
-              : null
-            }
+
+                  if (InteractedDark) {
+                    ////////
+                    if (InteractTimerxx.current) {
+                      clearTimeout(InteractTimerxx.current);
+                    }
+                    dispatch(UpdateInteract(interactContent, true));
+                    setInteractedDark(false);
+                    setinteract(false);
+                    setinteractContent("");
+                    setfadeout(false);
+                    if (sc.current) {
+                      clearTimeout(sc.current);
+                    }
+                    setshowSpin(false);
+                    /////////////////
+                  } else {
+                    setInteractedDark(true);
+                    if (InteractTimerxx.current) {
+                      clearTimeout(InteractTimerxx.current);
+                    }
+                    InteractTimerxx.current = setTimeout(() => {
+                      setInteractedDark(false);
+                      setinteract(false);
+                      setinteractContent("");
+                      setfadeout(false);
+                      if (sc.current) {
+                        clearTimeout(sc.current);
+                      }
+                      setshowSpin(false);
+                    }, 1100)
+
+                  }
 
 
-
-
-
+                }}
+                style={{
+                  filter: InteractedDark ? 'brightness(40%)' : '',
+                  cursor: "pointer",
+                  height: "100%",
+                  objectFit: "contain",
+                  zIndex: 50,
+                  position: "absolute",
+                  margin: "auto",
+                  textAlign: "center",
+                  top: "0vh",
+                  width: "100%",
+                  backgroundColor: darkmodeReducer
+                    ? "rgb(20,20,20,0.82)"
+                    : "rgb(210,210,210,0.77)",
+                }}
+              />
+            ) : null}
           </div>
         ))}{" "}
         <Dots
@@ -1118,62 +1167,37 @@ function Sliderx({
           slides={slides}
           activeSlide={sliderIndexSlow}
         />
-
-
-
-        {post.interact1a && HasInteractivity && ActiveCanvas === pey ?
-
-
+        {post.interact1a && HasInteractivity && ActiveCanvas === pey ? (
           <img
             src={post.interact1a}
-            onClick={() => {
-
-
-            }}
             style={{
               height: "100%",
-              objectFit: 'contain',
+              objectFit: "contain",
               zIndex: 50,
-              position: 'absolute',
-              margin: 'auto',
-              textAlign: 'center',
-              top: '-200000vh',
-              width: '100%',
-
+              position: "absolute",
+              margin: "auto",
+              textAlign: "center",
+              top: "-200000vh",
+              width: "100%",
             }}
           />
-
-
-          : null
-        }
-
-
-        {post.interact1b && HasInteractivity && ActiveCanvas === pey ?
-
-
+        ) : null}
+        {post.interact1b && HasInteractivity && ActiveCanvas === pey ? (
           <img
             src={post.interact1b}
-
             style={{
-
-              cursor: 'pointer',
+              cursor: "pointer",
               height: "100%",
-              objectFit: 'contain',
+              objectFit: "contain",
               zIndex: 50,
-              position: 'absolute',
-              margin: 'auto',
-              textAlign: 'center',
-              top: '-200000vh',
-              width: '100%',
-
+              position: "absolute",
+              margin: "auto",
+              textAlign: "center",
+              top: "-200000vh",
+              width: "100%",
             }}
           />
-
-
-          : null
-        }
-
-
+        ) : null}
       </Grid>
     </>
   );

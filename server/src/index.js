@@ -28,20 +28,20 @@ const path = require("path");
 const multer = require("multer");
 const { uploadFileTos3, getFileStreamFroms3 } = require("./s3");
 if (process.env.APP_STATE === "dev") {
-    const corsOptions = {
-        //// origin: "http://localhost:3000",
-        credentials: true,
-        optionsSuccessStatus: 200,
-    };
-    app.use(cors());
-}
-else {
-    const corsOptions = {
-        origin: ["https://clikbate.com", "https://www.clikbate.com"],
+    var corsOptions = {
+        origin: "http://192.168.0.21:3000",
         credentials: true,
         optionsSuccessStatus: 200,
     };
     app.use(cors(corsOptions));
+}
+else {
+    var corsOptionsx = {
+        origin: ["https://clikbate.com", "https://www.clikbate.com"],
+        credentials: true,
+        optionsSuccessStatus: 200,
+    };
+    app.use(cors(corsOptionsx));
 }
 app.use(express.json({ limit: "400mb" }));
 app.use(express.urlencoded({ limit: "400mb" }));

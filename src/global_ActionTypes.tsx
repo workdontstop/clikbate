@@ -49,4 +49,6 @@ export const UPDATE_MenuNav = "UPDATE_MenuNav";
 
 export const UPDATE_pagenum = "UPDATE_pagenum";
 
+export const UPDATE_signin = "UPDATE_signin";
+
 

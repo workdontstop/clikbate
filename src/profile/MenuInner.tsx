@@ -19,6 +19,7 @@ import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import FaceIcon from '@material-ui/icons/Face';
 import PermContactCalendarIcon from '@material-ui/icons/PermContactCalendar';
 import SubjectIcon from '@material-ui/icons/Subject';
+import { UpdateNavFilterReducer, UpdateSign } from "../GlobalActions";
 
 
 function MenuInnerx({
@@ -274,6 +275,7 @@ function MenuInnerx({
   };
 
   const GoToMemberLoaderUp = () => {
+
     if (Timervv.current) {
       clearTimeout(Timervv.current);
     }
@@ -365,6 +367,7 @@ function MenuInnerx({
                   bottom: typeTop ? "-2.6vh" : "0.2em",
                   left: typeTop ? "-3px" : matchPc ? "-2px" : "0px",
                 }}
+
               >
                 <CircleIcon
                   onClick={() => {
@@ -439,7 +442,7 @@ function MenuInnerx({
                               height: `${getSliderWidthNew}px`,
                               backgroundColor: darkmodeReducer
                                 ? "rgba(010,010,010, 0.68)"
-                                : "rgba(210,210,210, 0.7)",
+                                : "rgba(210,210,210, 0.3)",
                               borderRadius: "50%",
                               marginTop: "2.15vh",
                               textAlign: "center",
@@ -495,8 +498,7 @@ function MenuInnerx({
                                 onClick={() => {
 
 
-                                  matchMobile ? alert('Coming Soon 😊') :
-
+                                  matchMobile ? alert('Coming Soon To Mobile 😊') :
                                     clickOptions(i, optionsClickType, "upload");
 
                                 }}
@@ -506,7 +508,7 @@ function MenuInnerx({
                                   height: `${getSliderWidthNew}px`,
                                   backgroundColor: darkmodeReducer
                                     ? "rgba(010,010,010, 0.68)"
-                                    : "rgba(210,210,210, 0.7)",
+                                    : "rgba(210,210,210, 0.3)",
                                   borderRadius: "50%",
                                   marginTop: "2.15vh",
                                   textAlign: "center",
@@ -545,59 +547,108 @@ function MenuInnerx({
                               </div>
                               :
 
+                              idReducer === 150 ? <div
+                                onClick={() => {
 
-                              <label htmlFor="fileoo">
-                                <div
-                                  onClick={() => {
+                                  dispatch(UpdateSign(true));
 
-
-                                    clickOptions(i, optionsClickType, "upload");
-
-                                  }}
+                                }}
+                                style={{
+                                  cursor: ActiveSlide === i ? "pointer" : "copy",
+                                  width: `${getSliderWidthNew}px`,
+                                  height: `${getSliderWidthNew}px`,
+                                  backgroundColor: darkmodeReducer
+                                    ? "rgba(010,010,010, 0.68)"
+                                    : "rgba(210,210,210, 0.3)",
+                                  borderRadius: "50%",
+                                  marginTop: "2.15vh",
+                                  textAlign: "center",
+                                  alignItems: "center",
+                                  display: "grid",
+                                  justifyContent: "center",
+                                  boxShadow: darkmodeReducer
+                                    ? ActiveSlide === i
+                                      ? `0 0 3.4px ${ColorMemberReducer}`
+                                      : typeTop
+                                        ? "0 0 5.5px#aaaaaa"
+                                        : ""
+                                    : ActiveSlide === i
+                                      ? `0 0 3.4px ${ColorMemberReducer}`
+                                      : typeTop
+                                        ? "0 0 5.45px#222222"
+                                        : ``,
+                                }}
+                              >
+                                {" "}
+                                <CircleIcon
                                   style={{
-                                    cursor: ActiveSlide === i ? "pointer" : "copy",
-                                    width: `${getSliderWidthNew}px`,
-                                    height: `${getSliderWidthNew}px`,
-                                    backgroundColor: darkmodeReducer
-                                      ? "rgba(010,010,010, 0.68)"
-                                      : "rgba(210,210,210, 0.7)",
-                                    borderRadius: "50%",
-                                    marginTop: "2.15vh",
-                                    textAlign: "center",
-                                    alignItems: "center",
-                                    display: "grid",
-                                    justifyContent: "center",
-                                    boxShadow: darkmodeReducer
+                                    fontSize: matchPc ? "1.65vw" : "4.5vh",
+                                    opacity: ActiveSlide === i ? 0.5 : 1,
+                                    color: darkmodeReducer
                                       ? ActiveSlide === i
-                                        ? `0 0 3.4px ${ColorMemberReducer}`
-                                        : typeTop
-                                          ? "0 0 5.5px#aaaaaa"
-                                          : ""
+                                        ? "red"
+                                        : "#eeeeee"
                                       : ActiveSlide === i
-                                        ? `0 0 3.4px ${ColorMemberReducer}`
-                                        : typeTop
-                                          ? "0 0 5.45px#222222"
-                                          : ``,
+                                        ? "red"
+                                        : "#222222",
                                   }}
-                                >
-                                  {" "}
-                                  <CircleIcon
-                                    style={{
-                                      fontSize: matchPc ? "1.65vw" : "4.5vh",
-                                      opacity: ActiveSlide === i ? 0.5 : 1,
-                                      color: darkmodeReducer
-                                        ? ActiveSlide === i
-                                          ? "red"
-                                          : "#eeeeee"
-                                        : ActiveSlide === i
-                                          ? "red"
-                                          : "#222222",
-                                    }}
-                                    className="zuperkinginfo"
-                                  />
+                                  className="zuperkinginfo"
+                                />
 
-                                </div>
-                              </label>}
+                              </div> :
+                                <>
+                                  <label htmlFor="fileoo">
+                                    <div
+                                      onClick={() => {
+
+
+                                        clickOptions(i, optionsClickType, "upload");
+
+                                      }}
+                                      style={{
+                                        cursor: ActiveSlide === i ? "pointer" : "copy",
+                                        width: `${getSliderWidthNew}px`,
+                                        height: `${getSliderWidthNew}px`,
+                                        backgroundColor: darkmodeReducer
+                                          ? "rgba(010,010,010, 0.68)"
+                                          : "rgba(210,210,210, 0.3)",
+                                        borderRadius: "50%",
+                                        marginTop: "2.15vh",
+                                        textAlign: "center",
+                                        alignItems: "center",
+                                        display: "grid",
+                                        justifyContent: "center",
+                                        boxShadow: darkmodeReducer
+                                          ? ActiveSlide === i
+                                            ? `0 0 3.4px ${ColorMemberReducer}`
+                                            : typeTop
+                                              ? "0 0 5.5px#aaaaaa"
+                                              : ""
+                                          : ActiveSlide === i
+                                            ? `0 0 3.4px ${ColorMemberReducer}`
+                                            : typeTop
+                                              ? "0 0 5.45px#222222"
+                                              : ``,
+                                      }}
+                                    >
+                                      {" "}
+                                      <CircleIcon
+                                        style={{
+                                          fontSize: matchPc ? "1.65vw" : "4.5vh",
+                                          opacity: ActiveSlide === i ? 0.5 : 1,
+                                          color: darkmodeReducer
+                                            ? ActiveSlide === i
+                                              ? "red"
+                                              : "#eeeeee"
+                                            : ActiveSlide === i
+                                              ? "red"
+                                              : "#222222",
+                                        }}
+                                        className="zuperkinginfo"
+                                      />
+
+                                    </div>
+                                  </label></>}
                           </>
                           :
 
@@ -699,7 +750,7 @@ function MenuInnerx({
                           height: `${getSliderWidthNew}px`,
                           backgroundColor: darkmodeReducer
                             ? "rgba(010,010,010, 0.68)"
-                            : "rgba(210,210,210, 0.7)",
+                            : "rgba(210,210,210, 0.3)",
                           borderRadius: "50%",
                           marginTop: "2.15vh",
                           textAlign: "center",

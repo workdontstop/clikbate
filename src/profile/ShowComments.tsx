@@ -22,6 +22,7 @@ import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ReplyAllIcon from "@mui/icons-material/ReplyAll";
 import QuickreplyIcon from "@mui/icons-material/Quickreply";
+import BackspaceIcon from '@material-ui/icons/Backspace';
 import { ICommentTemplate, IGrid } from "../log/log-Interfaces";
 import CircleIcon from "@mui/icons-material/Circle";
 import CommentIcon from "@mui/icons-material/Comment";
@@ -440,7 +441,7 @@ function ShowCommentsx({
             </span>
           </span>{" "}
 
-          {post.comUserId === idReducer ? <QuickreplyIcon
+          {post.comUserId === idReducer ? < BackspaceIcon
 
             onClick={() => {
               setshowdelete(true)
@@ -456,7 +457,7 @@ function ShowCommentsx({
               color: post.color1,
               position: "relative",
               fontSize: matchMobile ? '3.6vh' : "1.5vw",
-              opacity: 0.26,
+              opacity: 0.32,
               left: matchMobile ? '-1vw' : zoomedModal ? "-4vw" : "0px",
             }}
           /> : null}

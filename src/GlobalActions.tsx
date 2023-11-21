@@ -22,7 +22,8 @@ import {
   UPDATE_INTERACT,
   UPDATE_MenuData,
   UPDATE_MenuNav,
-  UPDATE_pagenum
+  UPDATE_pagenum,
+  UPDATE_signin
 } from "./global_ActionTypes";
 
 export function DarkmodeAction(newDarkModeData: boolean) {
@@ -194,6 +195,13 @@ export function UpdateMenuNav(Payload: boolean) {
 export function Updatepagenum(Payload: number) {
   return {
     type: UPDATE_pagenum,
+    payload: Payload,
+  }
+};
+
+export function UpdateSign(Payload: boolean) {
+  return {
+    type: UPDATE_signin,
     payload: Payload,
   }
 };

@@ -18,7 +18,9 @@ import {
   UpdateCommentHistory,
   UpdatePostFromCom,
   UpdateReactType,
+  UpdateSign
 } from ".././GlobalActions";
+
 
 function Billboardx({
   OpenModalForm,
@@ -317,13 +319,13 @@ function Billboardx({
   }
 
 
-
+  ///scrollSnapAlign: x ? "start" : "",
   ///hoverOverImageRef.current.style.background = "red";
 
   return (
     <>
       <>
-        <Grid item md={12} style={{ height: '0px', scrollSnapAlign: x ? "start" : "", }}></Grid>
+        <Grid item md={12} style={{ height: '0px', }}></Grid>
         <Grid container className="dontallowhighlighting" style={{}}>
 
 
@@ -359,7 +361,7 @@ function Billboardx({
                 height: billboardDynamicHeight,
                 backgroundColor: showModalFormMenu ? "rgba(005, 005, 005, 0)" : darkmodeReducer
                   ? "rgba(005, 005, 005, 0.26)"
-                  : "rgba(250, 250, 250, 0.23)",
+                  : "rgba(250, 250, 250, 0.05)",
                 borderRadius: "0px",
                 borderBottomLeftRadius: ShowBillboard
                   ? "0px"
@@ -383,7 +385,7 @@ function Billboardx({
             {/*///////////////////////////////////////////////////////////////////////////BACKPAD BILLBOARD CURSOR ALIAS LAYOUT*/}
 
             <Grid item md={12} style={{ height: '0px', }}></Grid>
-
+            <Grid item md={12} style={{ height: '0px', }}></Grid>
 
             {/*///////////////////////////////////////////////////////////////////////////BACKPAD BILLBOARD CONTROL DISPLAY ON DOUBLE CLICK*/}
 
@@ -402,6 +404,8 @@ function Billboardx({
                 visibility: ShowBillboard ? "hidden" : "visible",
               }}
             >
+
+
               {/*///////////////////////////////////////////////////////////////////////////FAVS*/}
               <Grid
                 item
@@ -557,6 +561,14 @@ function Billboardx({
                 }}
               >
                 <span
+                  onClick={() => {
+
+                    if (idReducer === 150) {
+                      dispatch(UpdateSign(true));
+                    }
+                  }}
+
+
                   className={
                     darkmodeReducer
                       ? `fontfamilyArial ${usernameClass} turdark`
@@ -674,7 +686,8 @@ function Billboardx({
                         color: "#ffffff",
                         cursor: "pointer",
                         opacity: 0.8,
-                        visibility: memeberPageid === 0 || memeberPageid === idReducer ? 'visible' : 'hidden',
+                        visibility: memeberPageid === 0 || memeberPageid === idReducer ?
+                          idReducer === 150 ? 'hidden' : 'visible' : 'hidden',
                       }}
                       className="zuperkinginfo"
                     />{" "}
