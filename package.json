@@ -16,6 +16,7 @@
     "@types/node": "^12.20.55",
     "@types/react": "^17.0.45",
     "@types/react-dom": "^17.0.17",
+    "aws-sdk": "^2.1502.0",
     "axios": "^0.21.4",
     "csstype": "^3.1.0",
     "date-and-time": "^2.3.1",

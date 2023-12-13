@@ -94,7 +94,8 @@ function ProfileOutter() {
       interact: boolean;
       MenuData: String;
       pagenum: number;
-      SignIn: boolean
+      SignIn: boolean,
+      Guest: number
     };
   }
 
@@ -104,7 +105,7 @@ function ProfileOutter() {
   ///
   ///
   /// GET SCREENHEIGHT FROM REDUX STORE
-  const { screenHeight, darkmode, snapStart, activateLoader, historyscroll, interactContent, interact, MenuData, pagenum, SignIn } =
+  const { screenHeight, darkmode, snapStart, activateLoader, historyscroll, interactContent, interact, MenuData, pagenum, SignIn, Guest } =
     useSelector((state: RootStateGlobalReducer) => ({
       ...state.GlobalReducer,
     }));
@@ -118,6 +119,7 @@ function ProfileOutter() {
   const MenuDataReducer = MenuData
   const pagenumReducer = pagenum;
   const SignInReducer = SignIn;
+  const GuestReducer = Guest;
 
 
 
@@ -211,6 +213,9 @@ function ProfileOutter() {
 
 
   const [selectedImage, setselectedImage] = useState<Array<any>>([]);
+
+
+  const [clikplay, setclikplay] = useState(false);
 
 
 
@@ -360,6 +365,8 @@ function ProfileOutter() {
 
       Axios.post(`${REACT_APP_SUPERSTARZ_URL}/checkIsLoggedxx`, {
         values: valax,
+      }, {
+        withCredentials: true,
       })
         .then((response) => {
           if (response.data.message === "logged in") {
@@ -1601,18 +1608,18 @@ function ProfileOutter() {
                   : "postscroll-lightm"
             }
             style={{
-
+              scrollSnapType: snapStartReducer ? "y mandatory" : 'none',
               backgroundImage: PaperStyleReducer,
               borderRadius: "0px",
               height: "100vh",
               width: "100%",
               overflowY:
-                (stopBodyScroll && matchMobile) ||
-                  (stopBodyScroll && matchTablet)
+                stopBodyScroll
                   ? "hidden"
                   : "auto",
               overflowX: "hidden",
               paddingBottom: "15vh",
+
 
             }}
           >
@@ -1755,7 +1762,7 @@ function ProfileOutter() {
                       ref={profileImageR}
                       onClick={() => {
 
-                        if (idReducer === 150) {
+                        if (idReducer === GuestReducer) {
                           dispatch(UpdateSign(true));
                         } else {
                           OpenModalForm(1);
@@ -1901,6 +1908,7 @@ function ProfileOutter() {
                   position: "relative", zIndex: 1, padding: "0px"
                 }}>
                   <Profile
+                    clikplay={clikplay}
 
                     setShowBigPlay={setShowBigPlay}
                     setsuperSettings={setsuperSettings}
@@ -1965,7 +1973,7 @@ function ProfileOutter() {
                     container
                     style={{
                       position: "fixed",
-                      top: "0px",
+                      top: "0vh",
                       width: "100%",
                       height: "100%",
                       zIndex: 10,
@@ -1978,13 +1986,14 @@ function ProfileOutter() {
                       }}
                       style={{
                         backgroundColor: darkmodeReducer
-                          ? "rgba(50,50,50,0.05)"
-                          : "rgba(250,250,250,0.05)",
+                          ? "rgba(50,50,50,0.25)"
+                          : "rgba(250,250,250,0.25)",
                         position: "fixed",
-                        top: "0px",
+                        top: "0vh",
                         width: "100%",
                         height: "100%",
                         zIndex: 8,
+                        cursor: 'pointer',
                       }}
                     ></Grid>{" "}
                     <Grid
@@ -1994,8 +2003,8 @@ function ProfileOutter() {
                         backgroundColor: darkmodeReducer
                           ? "rgba(50,50,50,0.85)"
                           : "rgba(200,200,200,0.75)",
-                        height: "50%",
-                        marginTop: "22vh",
+                        height: "75%",
+                        marginTop: "0vh",
                         textAlign: "center",
                         justifyContent: "center",
                         display: "grid",
@@ -2045,8 +2054,8 @@ function ProfileOutter() {
                         backgroundColor: darkmodeReducer
                           ? "rgba(50,50,50,0.85)"
                           : "rgba(200,200,200,0.75)",
-                        height: "50%",
-                        marginTop: "22vh",
+                        height: "75%",
+                        marginTop: "0vh",
                         textAlign: "center",
                         justifyContent: "center",
                         display: "grid",
@@ -2294,11 +2303,11 @@ function ProfileOutter() {
 
                       borderTopRightRadius: '5vh',
                       borderTopLeftRadius: '5vh',
-                      display: idReducer === 150 ? SignInReducer ? 'block' : 'none' : 'none',
+                      display: idReducer === GuestReducer ? SignInReducer ? 'block' : 'none' : 'none',
 
                     }}
                   >
-                    <LoginButtons OpenModalForm={OpenModalForm} />
+                    <LoginButtons OpenModalForm={OpenModalForm} type={1} />
                   </Grid>
                   :
 
@@ -2313,11 +2322,11 @@ function ProfileOutter() {
                       bottom: '0vh',
                       backgroundColor: darkmodeReducer
                         ? "rgba(50,50,50,0.85)"
-                        : "rgba(200,200,200,0.75)",
+                        : "rgba(220,220,220,0.75)",
 
                       borderTopRightRadius: '5vh',
                       borderTopLeftRadius: '5vh',
-                      display: idReducer === 150 ? SignInReducer ? 'block' : 'none' : 'none',
+                      display: idReducer === GuestReducer ? SignInReducer ? 'block' : 'none' : 'none',
 
                     }}
                   >
@@ -2340,6 +2349,10 @@ function ProfileOutter() {
                 }}
               >
                 <SlowMotionVideoIcon
+                  onClick={() => {
+
+                    setclikplay(true);
+                  }}
                   className={`${darkmodeReducer
                     ? "make-small-icons-clickable-darkMenu dontallowhighlighting zuperkingIcon"
                     : "make-small-icons-clickable-lightMenu dontallowhighlighting zuperking"

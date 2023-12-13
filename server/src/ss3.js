@@ -24,18 +24,23 @@ const buckname = process.env.BUCKET_NAME;
 const region = process.env.BUCKET_REGION;
 const accessKeyId = process.env.BUCKET_ACCESS_KEY;
 const secretAccessKey = process.env.BUCKET_SECRET_KEY;
-const s3 = new aws_sdk_1.default.S3({ region, accessKeyId, secretAccessKey, signatureVersion: 'v4' });
+const s3 = new aws_sdk_1.default.S3({
+    region,
+    accessKeyId,
+    secretAccessKey,
+    signatureVersion: "v4",
+});
 function generateUploadURL() {
     return __awaiter(this, void 0, void 0, function* () {
         const rawbytes = yield randomBytes(16);
-        const name = rawbytes.toString('hex');
-        const params = ({
+        const name = rawbytes.toString("hex");
+        const params = {
             Bucket: buckname,
             Key: name,
             Expires: 5000,
-            ContentType: 'image/jpeg'
-        });
-        const uploadURL = yield s3.getSignedUrlPromise('putObject', params);
+            ContentType: "image/jpeg",
+        };
+        const uploadURL = yield s3.getSignedUrlPromise("putObject", params);
         return uploadURL;
     });
 }

@@ -25,6 +25,8 @@ import TheatersIcon from '@material-ui/icons/Theaters';
 import QueueMusicIcon from '@material-ui/icons/QueueMusic';
 import PhotoAlbumIcon from '@material-ui/icons/PhotoAlbum';
 import SettingsIcon from '@material-ui/icons/Settings';
+import SuperstarzIconLight from "../images/s.png";
+import SuperstarzIconDark from "../images/sd.png";
 import {
   UpdateLoader,
   Updatepagenum
@@ -81,18 +83,24 @@ function ActualMenux({ showModalFormMenu, setshowModalFormMenu, postData, setsup
   const memeberPageidReducer = memeberPageid;
   const MemberProfileDataReducer = MemberProfileData;
 
-  /// GET DARKMODE FROM REDUX STORE
+
   interface RootStateGlobalReducer {
     GlobalReducer: {
       darkmode: boolean;
+      MenuData: String;
+      Guest: number,
+
     };
   }
-  const { darkmode } = useSelector((state: RootStateGlobalReducer) => ({
+  const { darkmode, MenuData, Guest } = useSelector((state: RootStateGlobalReducer) => ({
     ...state.GlobalReducer,
   }));
 
   const darkmodeReducer = darkmode;
 
+  const MenuDataReducer = MenuData;
+
+  const GuestReducer = Guest;
   ///
   ///
   ///MUI PAPER STYLES FROM REDUX
@@ -213,8 +221,8 @@ function ActualMenux({ showModalFormMenu, setshowModalFormMenu, postData, setsup
 
   const stylesxx = useSpring({
     transform: matchMobile ?
-      MovePlay ? "translateX(225%) scale(5)" : "translateX(0%) scale(5)" :
-      MovePlay ? "translateX(475%) scale(5)" : "translateX(0%) scale(5)",
+      MovePlay ? "translateX(120%) scale(5)" : "translateX(0%) scale(5)" :
+      MovePlay ? "translateX(150%) scale(5)" : "translateX(0%) scale(5)",
     config: { tension: 280, friction: 60 }
   });
 
@@ -231,7 +239,7 @@ function ActualMenux({ showModalFormMenu, setshowModalFormMenu, postData, setsup
     }
 
     if (showModalFormMenu) {
-      if (idReducer === 150) {
+      if (idReducer === GuestReducer) {
 
 
         Timerjj.current = setTimeout(() => {
@@ -249,6 +257,39 @@ function ActualMenux({ showModalFormMenu, setshowModalFormMenu, postData, setsup
   }, [showModalFormMenu, idReducer])
 
 
+
+
+  var icon;
+  var PaperStyleReducer = "";
+  var containerApp = "containerappmobile";
+  ///
+  ///
+  ///
+  ///CONDITIONAL STATEMENT FOR DEVICE TYPE
+  if (matchPc) {
+    containerApp = "containerapp";
+    icon = "iconPc";
+
+    ///
+  } else if (matchTablet) {
+    containerApp = "containerapptablet";
+    icon = "iconTablet";
+
+    ///
+  } else {
+    containerApp = "containerappmobile";
+    icon = "iconMobile";
+  }
+
+  var logoimage;
+
+  if (darkmodeReducer) {
+    PaperStyleReducer = PaperStyleDark;
+    logoimage = SuperstarzIconDark;
+  } else {
+    PaperStyleReducer = PaperStyleLight;
+    logoimage = SuperstarzIconLight;
+  }
 
 
   return (
@@ -351,7 +392,9 @@ function ActualMenux({ showModalFormMenu, setshowModalFormMenu, postData, setsup
                 }
               >
                 {Signup ? 'In' : 'Bate'}
+
               </span>
+              <p><h6 style={{ transform: 'scale(0.8)', color: darkmodeReducer ? "#eeeeee" : "#444444", opacity: 0.7, marginLeft: '6vw' }}>Beta</h6></p>
 
 
             </span>
@@ -379,35 +422,33 @@ function ActualMenux({ showModalFormMenu, setshowModalFormMenu, postData, setsup
 
 
           {matchMobile ? null : <animated.div
-            onClick={() => {
-              setMovePlay(true);
 
-              setTimeout(() => {
-                setshowModalFormMenu(false);
-                scrollToRef();
-
-              }, 1500)
-
-            }}
             style={{
               ...stylesxx,
               position: 'fixed',
-              top: '25vh',
-              marginLeft: '9vw',
+              top: '22vh',
+              marginLeft: '15.6vw',
+              height: 'auto'
             }}
           >
-            <SlowMotionVideoIcon
 
-              className={
-                darkmodeReducer
-                  ? "make-small-icons-clickable-darkMenu dontallowhighlighting zuperkingIcon"
-                  : "make-small-icons-clickable-lightMenu dontallowhighlighting zuperking"
-              }
+            <img
+              onClick={() => {
+                setMovePlay(true);
+
+                setTimeout(() => {
+                  setshowModalFormMenu(false);
+                  scrollToRef();
+
+                }, 1500)
+
+              }}
+              className={icon}
+              src={logoimage}
+              alt="SuperstarZ logo"
               style={{
-                fontSize: '3vh',
-                color: colorReducer,
-                opacity: darkmodeReducer
-                  ? '0.8' : '0.4'
+                textAlign: "center", opacity: matchMobile ? darkmodeReducer ? 0.7 : 0.9 : darkmodeReducer ? 0.3 : 0.5,
+                width: '25%', height: '20%'
               }}
             />
 
@@ -422,37 +463,34 @@ function ActualMenux({ showModalFormMenu, setshowModalFormMenu, postData, setsup
           {matchMobile ?
 
             <animated.div
-              onClick={() => {
-                setMovePlay(true);
-
-                setTimeout(() => {
-                  setshowModalFormMenu(false);
-                  scrollToRef();
-
-                }, 1500)
-
-              }}
               style={{
                 ...stylesxx,
                 position: 'fixed',
-                bottom: '23vh',
-                marginLeft: '26vw',
+                bottom: '22vh',
+                marginLeft: '42vw',
+                height: 'auto'
               }}
             >
-              <SlowMotionVideoIcon
+              <img
+                onClick={() => {
+                  setMovePlay(true);
 
-                className={
-                  darkmodeReducer
-                    ? "dontallowhighlighting "
-                    : "dontallowhighlighting"
-                }
+                  setTimeout(() => {
+                    setshowModalFormMenu(false);
+                    scrollToRef();
+
+                  }, 1500)
+
+                }}
+                className={icon}
+                src={logoimage}
+                alt="SuperstarZ logo"
                 style={{
-                  fontSize: '2vh',
-                  color: colorReducer,
-                  opacity: darkmodeReducer
-                    ? '0.8' : '0.4'
+                  textAlign: "center", opacity: matchMobile ? darkmodeReducer ? 0.4 : 0.7 : darkmodeReducer ? 0.3 : 0.5,
+                  width: '30%', height: '20%'
                 }}
               />
+
 
             </animated.div > : null}
 

@@ -151,8 +151,8 @@ export const ButtonsLoginReducerLight = (
 ////////////PAPER LIGHTNDARK DATA////////////////
 const initialStatePaperLIGHTNDARK = {
   PaperStyleLight:
-    "linear-gradient(0deg,  #999999, #999999,#999999 )",
-  PaperStyleDark: "linear-gradient(0deg, #282c34, #242c34, #0b1728)",
+    "linear-gradient(0deg, #f2f2f2, #ffffff, #f2f2f2)",
+  PaperStyleDark: "linear-gradient(0deg, #0a0a0a, #1a1a1a, #0a0a0a)",
 };
 
 type MyPaperReducerLightnDark = typeof initialStatePaperLIGHTNDARK;
@@ -259,7 +259,7 @@ export const GlobalReducerLoader = (
 const initialState = {
   snapStart: true,
   screenHeight: 0,
-  darkmode: true,
+  darkmode: false,
   AlertData: null,
   AlertEmojiType: 0,
   activateLoader: false,
@@ -275,6 +275,7 @@ const initialState = {
   menunav: true,
   pagenum: 0,
   SignIn: true,
+  Guest: 141
   ////For example const initialState = { person: null as Person };
 };
 type MyGlobalReducer = typeof initialState;

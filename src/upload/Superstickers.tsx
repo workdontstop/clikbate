@@ -51,6 +51,7 @@ import SettingsBackupRestoreIcon from "@mui/icons-material/SettingsBackupRestore
 import UploadIcon from "@mui/icons-material/Upload";
 import { readFileContent } from './FileReader';
 import DeleteIcon from '@material-ui/icons/Delete';
+import { InteractMenu } from "./InteractMenu";
 
 
 function Superstickersx({
@@ -85,7 +86,9 @@ function Superstickersx({
   interactContentBlob,
   setinteractContentBlob,
   interactContent2Blob,
-  setinteractContent2Blob
+  setinteractContent2Blob,
+  setradius1,
+  setradius2
 }: any): JSX.Element {
   const [superundoArray, setsuperundoArray] = useState<any>([]);
 
@@ -207,6 +210,10 @@ function Superstickersx({
   const allowscrolltimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const timm = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const canxxtim = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const canxxTime = 2000;
 
   const Timecc = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -503,7 +510,7 @@ function Superstickersx({
   }, [interactContent2[index]]);
 
 
-
+  const [percentageCoveragex, setpercentageCoveragex] = useState(0);
 
 
   //
@@ -905,6 +912,10 @@ function Superstickersx({
 
   }, [cropInitialIn, interactContent, interactContent2])
 
+
+  const [adjustinteract1, setadjustinteract1] = useState(false);
+  const [adjustinteract2, setadjustinteract2] = useState(false);
+
   const handleTouchStartIn = useCallback((e: any, type: any) => {
     ////mouseover(0);
 
@@ -953,15 +964,33 @@ function Superstickersx({
 
         if (context.isPointInPath(e.clientX, e.clientY)) {
 
-          if (Touched === 1 || Touched === 2) { } else { calldraw(3, e.clientX, e.clientY, 0); }
+          if (Touched === 1 || Touched === 2) { } else {
+            //calldraw(3, e.clientX, e.clientY, 0); 
+          }
 
 
         } else {
 
           if (interactContent[index]) {
 
-          } else {
+            if (adjustinteract1) {
+              // Update the array at the specified index or add a new element if the index is not present
+              setcropInitialIn((prevArray: any) => {
+                const newArray: any = [...prevArray];
+                newArray[index] = newCropInitialIn;
+                return newArray;
+              });
+              if (showBorder) { } else { setshowBorder(true); }
+              if (canxxtim.current) {
+                clearTimeout(canxxtim.current);
+              }
+              canxxtim.current = setTimeout(() => {
+                setshowBorder(false);
+              }, canxxTime);
 
+            }
+
+          } else {
 
 
 
@@ -973,11 +1002,8 @@ function Superstickersx({
             });
 
             if (e.target) {
+
               triggerFileInput(1);
-
-
-
-
 
 
               // Other logic here...
@@ -985,7 +1011,25 @@ function Superstickersx({
           }
 
           if (interactContent2[index]) {
-            if (Touched === 1 || Touched === 2) { } else { calldraw(3, e.clientX, e.clientY, 0); }
+            if (adjustinteract2) {
+              // Update the array at the specified index or add a new element if the index is not present
+              setcropInitialIn2((prevArray: any) => {
+                const newArray: any = [...prevArray];
+                newArray[index] = newCropInitialIn2;
+                return newArray;
+              });
+              if (showBorder) { } else { setshowBorder(true); }
+              if (canxxtim.current) {
+                clearTimeout(canxxtim.current);
+              }
+              canxxtim.current = setTimeout(() => {
+                setshowBorder(false);
+              }, canxxTime);
+
+
+            }
+            if (Touched === 1 || Touched === 2) { } else { //calldraw(3, e.clientX, e.clientY, 0);
+            }
           } else {
 
 
@@ -1019,7 +1063,11 @@ function Superstickersx({
         });
 
         if (e.target) {
+
+
           triggerFileInput(1);
+
+
           // Other logic here...
         }
 
@@ -1031,7 +1079,7 @@ function Superstickersx({
 
 
 
-  }, [interactContent[index], interactContent2[index], Touched, canvasRefIn, canvasInteractWidth, StopTouch, interactHeightResolution])
+  }, [interactContent[index], interactContent2[index], Touched, canvasRefIn, canvasInteractWidth, StopTouch, interactHeightResolution, adjustinteract1, adjustinteract2])
 
 
   const fileInputRef2 = useRef<HTMLInputElement | null>(null);
@@ -1099,6 +1147,39 @@ function Superstickersx({
 
 
 
+  const [valuex, setValuex] = useState(60); // Initial value
+
+  const [valuex2, setValuex2] = useState(60); // Initial value
+
+  const handleChange = (event: any, newValue: any) => {
+
+    if (showBorder) { } else { setshowBorder(true); }
+    if (canxxtim.current) {
+      clearTimeout(canxxtim.current);
+    }
+    canxxtim.current = setTimeout(() => {
+      setshowBorder(false);
+    }, canxxTime);
+
+    setValuex(newValue);
+  };
+
+
+  const handleChange2x = (event: any, newValue: any) => {
+
+    if (showBorder) { } else { setshowBorder(true); }
+    if (canxxtim.current) {
+      clearTimeout(canxxtim.current);
+    }
+    canxxtim.current = setTimeout(() => {
+      setshowBorder(false);
+    }, canxxTime);
+
+    setValuex2(newValue);
+  };
+
+
+
   ///
   ///
   ///
@@ -1126,9 +1207,9 @@ function Superstickersx({
 
 
 
-  const callDelInteract = useCallback(() => {
+  const callDelInteract = useCallback((one: boolean) => {
 
-    if (Touched === 1) {
+    if (one) {
 
       interactContentxx[index] = '';
       setinteractContent(interactContentxx);
@@ -1148,6 +1229,7 @@ function Superstickersx({
 
     } else {
 
+
       interactContentxx2[index] = '';
       setinteractContent2(interactContentxx2);
       interactContentxx2Blob[index] = '';
@@ -1161,11 +1243,65 @@ function Superstickersx({
         newArray[index] = newCropInitialIn2;
         return newArray;
       });
+
       setTouched(0);
+    }
+
+
+    if (tiim.current) {
+      clearTimeout(tiim.current);
     }
 
   }, [Touched, interactContent2, interactContent, cropInitialIn2, cropInitialIn])
 
+
+
+  // Bilinear interpolation function
+  function interpolate(imageData: any, x: any, y: any) {
+    var x_floor = Math.floor(x);
+    var y_floor = Math.floor(y);
+
+    // Ensure bounds are within the source image
+    x_floor = Math.max(0, Math.min(imageData.width - 2, x_floor));
+    y_floor = Math.max(0, Math.min(imageData.height - 2, y_floor));
+
+    var x_frac = x - x_floor;
+    var y_frac = y - y_floor;
+
+    var p1 = getPixel(imageData, x_floor, y_floor);
+    var p2 = getPixel(imageData, x_floor + 1, y_floor);
+    var p3 = getPixel(imageData, x_floor, y_floor + 1);
+    var p4 = getPixel(imageData, x_floor + 1, y_floor + 1);
+
+    var topInterpolation = interpolatePixelValues(p1, p2, x_frac);
+    var bottomInterpolation = interpolatePixelValues(p3, p4, x_frac);
+
+    return interpolatePixelValues(topInterpolation, bottomInterpolation, y_frac);
+  }
+
+  // Helper function to get a pixel from image data
+  function getPixel(imageData: any, x: any, y: any) {
+    var index = (y * imageData.width + x) * 4;
+    return [
+      imageData.data[index],
+      imageData.data[index + 1],
+      imageData.data[index + 2],
+      imageData.data[index + 3]
+    ];
+  }
+
+  // Helper function to interpolate between pixel values
+  function interpolatePixelValues(p1: any, p2: any, t: any) {
+    return [
+      (1 - t) * p1[0] + t * p2[0],
+      (1 - t) * p1[1] + t * p2[1],
+      (1 - t) * p1[2] + t * p2[2],
+      (1 - t) * p1[3] + t * p2[3]
+    ];
+  }
+
+
+  const [showBorder, setshowBorder] = useState(false);
 
   const calldraw = useCallback((typex: number, x: number, y: number, mode: number) => {
 
@@ -1181,6 +1317,16 @@ function Superstickersx({
       requestAnimationFrame(() => {
         context.drawImage(dat, 0, 0, canvasInteractWidth, interactHeightResolution);
         // Get the screen width
+
+        function adjustBrightness(imageData: any, factor: any) {
+          var data = imageData.data;
+          for (var i = 0; i < data.length; i += 4) {
+            // Adjust brightness for each RGB component
+            data[i] *= factor;     // Red
+            data[i + 1] *= factor; // Green
+            data[i + 2] *= factor; // Blue
+          }
+        }
 
 
         // Get the picture width (adjust this according to your specific scenario)
@@ -1200,9 +1346,12 @@ function Superstickersx({
 
         var yy = cropInitialIn[index].y;
         var yy2 = cropInitialIn2[index].y;
-        var r = 35;
+
+        ////////////////////
 
 
+
+        /////////////////////////////
 
 
 
@@ -1234,37 +1383,98 @@ function Superstickersx({
 
 
 
+        var scaleFactor = 1.02; // You can adjust this value to control the zoom level
+
 
 
         if (interactContent[index] && mode === 0 || interactContent2[index] && mode === 0) {
 
 
           if (interactContent[index]) {
+            var r = valuex;
+            // Assuming canvasWidth is the width of your canvas and r is the radius of the arc
+            const canvasWidth = canvasInteractWidth /* your canvas width */;
+            // Calculate the percentage coverage
+            const percentageCoverage1 = (2 * r / canvasWidth) * 100;
+            ///setpercentageCoveragex(percentageCoverage);
+            setradius1(percentageCoverage1);
 
 
-
-
-            /////typex filps between zero and one for blinking efect
             if (typex === 0 || typex === 3) {
+
+
+              var valuexx = valuex - 0.5;
+              var imageData = context.getImageData(x2 - 1 - r, y2 - 0.5 - r, 2.1 * r, 2.1 * r); // (x, y, width, height)
+
+
+              // Create a larger image data for the zoom effect
+              var zoomedImageData = context.createImageData(imageData.width * scaleFactor, imageData.height * scaleFactor);
+
+              // Copy pixels from the original image data to the larger image data with bilinear interpolation
+              for (var ybb = 0; ybb < zoomedImageData.height; ybb++) {
+                for (var xbb = 0; xbb < zoomedImageData.width; xbb++) {
+                  var sourceX = xbb / scaleFactor;
+                  var sourceY = ybb / scaleFactor;
+
+                  // Get the interpolated pixel value
+                  var interpolatedPixel = interpolate(imageData, sourceX, sourceY);
+
+                  // Set the pixel values in the zoomed image data
+                  var destIndex = (ybb * zoomedImageData.width + xbb) * 4;
+                  zoomedImageData.data[destIndex] = interpolatedPixel[0];
+                  zoomedImageData.data[destIndex + 1] = interpolatedPixel[1];
+                  zoomedImageData.data[destIndex + 2] = interpolatedPixel[2];
+                  zoomedImageData.data[destIndex + 3] = interpolatedPixel[3];
+                }
+              }
+
+              // Apply a light white border at the borders
+              var borderWidth = showBorder ? 1 : 0; // Adjust the width of the border
+              for (var ybb = 0; ybb < zoomedImageData.height; ybb++) {
+                for (var xbb = 0; xbb < zoomedImageData.width; xbb++) {
+                  if (
+                    xbb < borderWidth ||
+                    xbb >= zoomedImageData.width - borderWidth ||
+                    ybb < borderWidth ||
+                    ybb >= zoomedImageData.height - borderWidth
+                  ) {
+                    // Apply a light white color to the border
+                    var destIndex = (ybb * zoomedImageData.width + xbb) * 4;
+                    zoomedImageData.data[destIndex] = 230; // Red channel
+                    zoomedImageData.data[destIndex + 1] = 20; // Green channel
+                    zoomedImageData.data[destIndex + 2] = 2; // Blue channel
+                    zoomedImageData.data[destIndex + 3] = 0.8; // Alpha channel
+                  }
+                }
+              }
+
+              // Put the modified pixel data back onto the canvas
+              context.putImageData(zoomedImageData, x2 - r * scaleFactor, y2 - r * scaleFactor);
+            }
+
+            ////////////////////////////////////////////////////////////////////////////////////
+            /////typex filps between zero and one for blinking efect
+
+
+            if (typex === 0 || typex === 3) {
+
+
+
               context.beginPath();
-              context.arc(x2, y2, r, 0, Math.PI * 2);
+              context.arc(x2, y2, r + 14, 0, Math.PI * 2);
               var clikarc1 = context.isPointInPath(x, y);
-              context.fillStyle = `rgba(250, 250,250,0.3)`;
+              context.fillStyle = `rgba(250, 250,250,0.0)`;
+              ///context.fillStyle = `rgba(250, 250,250,0)`;
               context.closePath();
               context.fill();
-              context.lineWidth = 2;
-              context.strokeStyle = "#333333";
-              context.stroke();
 
-
-
-
-
-
+              ///context.lineWidth = 2;
+              ///context.strokeStyle = "#333333";
+              ////context.stroke();
             }
             else if (typex === 1) {
               context.beginPath();
-              context.arc(x2, y2, r, 0, Math.PI * 2);
+              context.arc(x2, y2, r + 14, 0, Math.PI * 2);
               var clikarc1 = context.isPointInPath(x, y);
               context.fillStyle = `rgba(250, 250,250,0.0)`;
               context.closePath();
@@ -1279,22 +1489,86 @@ function Superstickersx({
 
           if (interactContent2[index]) {
 
+            var r = valuex2;
+            // Assuming canvasWidth is the width of your canvas and r is the radius of the arc
+            const canvasWidth = canvasInteractWidth /* your canvas width */;
+            // Calculate the percentage coverage
+            const percentageCoverage2 = (2 * r / canvasWidth) * 100;
+            ///setpercentageCoveragex(percentageCoverage);
+            setradius2(percentageCoverage2);
+
+            if (typex === 0 || typex === 3) {
+
+              var valuexx2 = valuex2 - 0.5;
+
+              var imageData2 = context.getImageData(x2b - 1 - r, y2b - 0.5 - r, 2.1 * r, 2.1 * r); // (x, y, width, height)
+
+
+              // Create a larger image data for the zoom effect
+              var zoomedImageData2 = context.createImageData(imageData2.width * scaleFactor, imageData2.height * scaleFactor);
+
+              // Copy pixels from the original image data to the larger image data with bilinear interpolation
+              for (var ybb = 0; ybb < zoomedImageData2.height; ybb++) {
+                for (var xbb = 0; xbb < zoomedImageData2.width; xbb++) {
+                  var sourceX = xbb / scaleFactor;
+                  var sourceY = ybb / scaleFactor;
+
+                  // Get the interpolated pixel value
+                  var interpolatedPixel = interpolate(imageData2, sourceX, sourceY);
+
+                  // Set the pixel values in the zoomed image data
+                  var destIndex = (ybb * zoomedImageData2.width + xbb) * 4;
+                  zoomedImageData2.data[destIndex] = interpolatedPixel[0];
+                  zoomedImageData2.data[destIndex + 1] = interpolatedPixel[1];
+                  zoomedImageData2.data[destIndex + 2] = interpolatedPixel[2];
+                  zoomedImageData2.data[destIndex + 3] = interpolatedPixel[3];
+                }
+              }
+
+              // Apply a light white border at the borders
+              var borderWidth = showBorder ? 1 : 0;  // Adjust the width of the border
+              for (var ybb = 0; ybb < zoomedImageData2.height; ybb++) {
+                for (var xbb = 0; xbb < zoomedImageData2.width; xbb++) {
+                  if (
+                    xbb < borderWidth ||
+                    xbb >= zoomedImageData2.width - borderWidth ||
+                    ybb < borderWidth ||
+                    ybb >= zoomedImageData2.height - borderWidth
+                  ) {
+                    // Apply a light white color to the border
+                    var destIndex = (ybb * zoomedImageData2.width + xbb) * 4;
+                    zoomedImageData2.data[destIndex] = 230; // Red channel
+                    zoomedImageData2.data[destIndex + 1] = 20; // Green channel
+                    zoomedImageData2.data[destIndex + 2] = 2; // Blue channel
+                    zoomedImageData2.data[destIndex + 3] = 0.8; // Alpha channel
+                  }
+                }
+              }
+
+              // Put the modified pixel data back onto the canvas
+              context.putImageData(zoomedImageData2, x2b - r * scaleFactor, y2b - r * scaleFactor);
+            }
 
             /////typex filps between zero and one for blinking efect
             if (typex === 0 || typex === 3) {
               context.beginPath();
-              context.arc(x2b, y2b, r, 0, Math.PI * 2);
+              context.arc(x2b, y2b, r + 14, 0, Math.PI * 2);
               var clikarc2 = context.isPointInPath(x, y);
-              context.fillStyle = `rgba(250, 250,250,0.3)`;
+              context.fillStyle = `rgba(250, 250,250,0.0)`;
               context.closePath();
               context.fill();
-              context.lineWidth = 2;
+
+              /***
+               * 
+               * context.lineWidth = 2;
               context.strokeStyle = "#333333";
               context.stroke();
+              
+              **/
             }
             else if (typex === 1) {
               context.beginPath();
-              context.arc(x2b, y2b, r, 0, Math.PI * 2);
+              context.arc(x2b, y2b, r + 14, 0, Math.PI * 2);
               var clikarc2 = context.isPointInPath(x, y);
               context.fillStyle = `rgba(250, 250,250,0.0)`;
               context.closePath();
@@ -1321,7 +1595,7 @@ function Superstickersx({
                   calldraw(1, 0, 0, 0);
                 } else { calldraw(0, 0, 0, 0); }
               }
-            }, 1000)
+            }, 170)
 
           }
 
@@ -1417,7 +1691,8 @@ function Superstickersx({
       ///use this
     }
 
-  }, [dat, cropInitialIn, cropInitialIn2, interactContent2, interactContent, canvasRefIn, showArc, canvasInteractWidth, interactHeightResolution, Touched, canvasInteractWidthCss]);
+  }, [showBorder, valuex2, valuex, dat, cropInitialIn, cropInitialIn2, interactContent2, interactContent, canvasRefIn,
+    showArc, canvasInteractWidth, interactHeightResolution, Touched, canvasInteractWidthCss]);
 
 
 
@@ -1435,7 +1710,7 @@ function Superstickersx({
       } else { calldraw(0, 0, 0, 0); }
 
     }
-  }, [dat, Touched, canvasInteractWidth, interactHeightResolution]);
+  }, [showBorder, dat, Touched, canvasInteractWidth, interactHeightResolution, interactContent, interactContent2, cropInitialIn, cropInitialIn2, valuex, valuex2]);
 
 
 
@@ -1911,6 +2186,7 @@ function Superstickersx({
         setinteractContent2(interactContentxx2);
         setinteractContent2Blob(interactContentxx2Blob);
 
+        setadjustinteract2(true);
 
       } catch (error) {
         console.error('Error reading the file:', error);
@@ -1939,6 +2215,8 @@ function Superstickersx({
         setinteractContent(interactContentxx);
         setinteractContentBlob(interactContentxxBlob);
 
+        setadjustinteract1(true);
+
 
       } catch (error) {
         console.error('Error reading the file:', error);
@@ -1946,31 +2224,34 @@ function Superstickersx({
     }
   };
 
-  const triggerFileInput = (type: any) => {
-
-    setStopTouch(true)
-
-    if (timm.current) {
-      clearTimeout(timm.current);
-    }
-    timm.current = setTimeout(function () {
-      setStopTouch(false)
-
-    }, 3000);
+  const triggerFileInput = useCallback((type: any) => {
 
 
+    if (adjustinteract1 || adjustinteract2) { } else {
 
-    if (type == 1) {
-      if (fileInputRef.current) {
-        fileInputRef.current.click();
+      setStopTouch(true)
+
+      if (timm.current) {
+        clearTimeout(timm.current);
       }
-    } else {
-      if (fileInputRef2.current) {
-        fileInputRef2.current.click();
+      timm.current = setTimeout(function () {
+        setStopTouch(false)
+
+      }, 3000);
+
+
+
+      if (type == 1) {
+        if (fileInputRef.current) {
+          fileInputRef.current.click();
+        }
+      } else {
+        if (fileInputRef2.current) {
+          fileInputRef2.current.click();
+        }
       }
     }
-
-  };
+  }, [fileInputRef, fileInputRef2, adjustinteract1, adjustinteract2]);
 
   function readFileAsDataUrl(file: any) {
     return new Promise((resolve, reject) => {
@@ -1988,6 +2269,10 @@ function Superstickersx({
       reader.readAsDataURL(file);
     });
   }
+
+
+
+  const moveCordinatesMultiple = 1;
 
   return (
     <>
@@ -2924,7 +3209,8 @@ function Superstickersx({
                 {Touched === 1 || Touched === 2 ? <DeleteIcon
                   onClick={() => {
 
-                    callDelInteract();
+                    /////
+                    ////callDelInteract();
 
                   }}
                   className={
@@ -2966,6 +3252,7 @@ function Superstickersx({
                     fontSize: matchTabletMobile
                       ? `${mobilefont}vh`
                       : `${pcfont}vw`,
+                    display: adjustinteract1 || adjustinteract2 ? 'none' : 'block',
                   }}
                 />}
 
@@ -3565,11 +3852,37 @@ function Superstickersx({
             zIndex: 11,
             top: '0vh',
             margin: 'left',
+            backgroundColor: 'rgb(0,0,0,0)',
             display: stickerOPtionsDefault === 4 ? 'block' : 'none',
 
           }}
         />
 
+
+        <InteractMenu
+          percentageCoveragex={percentageCoveragex}
+          callDelInteract={callDelInteract}
+          colorx={colorx}
+          setadjustinteract2={setadjustinteract2}
+          setcropInitialIn2={setcropInitialIn2}
+          interactContent2={interactContent2}
+          stickerOPtionsDefault={stickerOPtionsDefault}
+          setcropInitialIn={setcropInitialIn} index={index}
+          moveCordinatesMultiple={moveCordinatesMultiple}
+          showBorder={showBorder} setshowBorder={setshowBorder} canxxtim={canxxtim}
+          canxxTime={canxxTime}
+          valuex={valuex}
+          valuex2={valuex2}
+          handleChange={handleChange}
+          adjustinteract1={adjustinteract1}
+          adjustinteract2={adjustinteract2}
+          interactContent={interactContent}
+          setadjustinteract1={setadjustinteract1}
+          mobilefont={mobilefont}
+          pcfont={pcfont}
+          handleChange2x={handleChange2x}
+
+        />
 
         <canvas
           onClick={() => {

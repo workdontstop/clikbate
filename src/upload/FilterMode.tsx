@@ -152,6 +152,11 @@ function FilterModex({
   const [interactContent, setinteractContent] = useState<any>([]);
   const [interactContent2, setinteractContent2] = useState<any>([]);
 
+  const [radius1, setradius1] = useState(0);
+
+  const [radius2, setradius2] = useState(0);
+
+
   const [interactContentBlob, setinteractContentBlob] = useState<any>([]);
   const [interactContent2Blob, setinteractContent2Blob] = useState<any>([]);
 
@@ -942,6 +947,8 @@ function FilterModex({
               }}
             >
               <Superstickers
+                setradius1={setradius1}
+                setradius2={setradius2}
                 interactContentBlob={interactContentBlob}
                 setinteractContentBlob={setinteractContentBlob}
                 interactContent2Blob={interactContent2Blob}
@@ -1011,7 +1018,8 @@ function FilterModex({
               }}
             >
               <Caption
-
+                radius1={radius1}
+                radius2={radius2}
                 interactContent={interactContentBlob}
                 setinteractContent={setinteractContentBlob}
                 interactContent2={interactContent2Blob}

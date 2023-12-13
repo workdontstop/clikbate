@@ -402,7 +402,7 @@ function Home(): JSX.Element {
 
             <Grid item xs={3} sm={3} md={4}></Grid>
 
-            <LoginButtons OpenModalForm={OpenModalForm} />
+            <LoginButtons OpenModalForm={OpenModalForm} type={0} />
 
             <CommentTemplate
               profilex={profilex}

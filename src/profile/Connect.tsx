@@ -424,7 +424,7 @@ function Connectx({
             alignItems: "center",
             justifyContent: "left",
             zIndex: 1,
-            paddingLeft: matchPc ? "1.4vw" : matchTablet ? "2.3vw" : "2.1vw",
+            paddingLeft: matchPc ? "1.4vw" : matchTablet ? "2.3vw" : "3.1vw",
             height: "0px",
             fontFamily: "Arial, Helvetica, sans-seri",
           }}
@@ -434,7 +434,7 @@ function Connectx({
             style={{
               backgroundColor: `${post.color1}`,
               zIndex: 2,
-              left: matchMobile ? '-3.8vw' : `${profileImagethumbLeft + 18}px`,
+              left: matchMobile ? '-2.8vw' : `${profileImagethumbLeft + 18}px`,
               top: matchMobile ? `${profileImagethumbTop - 45}px` : `${profileImagethumbTop}px`,
               opacity: 0.8,
               position: "absolute",
@@ -481,7 +481,7 @@ function Connectx({
             onClick={Click}
             ref={profileImageref}
             onLoad={calculateconnectPosition}
-            className={darkmodeReducer ? "turpostDark" : "turpostDark"}
+            className={darkmodeReducer ? "turpostDarkmini" : "turpostDarkmini"}
             src={`${post.profile_image}`}
             alt="a superstarz post "
             style={{
@@ -490,7 +490,7 @@ function Connectx({
               boxShadow: darkmodeReducer
                 ? "0 0 1px #555555"
                 : "0 0 3.5px #aaaaaa",
-              width: matchMobile ? '16vw' : '4.8vw',
+              width: matchMobile ? '14vw' : '4.8vw',
               height: "auto",
               padding: "0px",
               objectFit: "contain",

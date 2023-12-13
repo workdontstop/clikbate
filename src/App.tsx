@@ -90,7 +90,7 @@ function App(): JSX.Element {
 
   const initialLogValuexx = {
     inputedUsername: "Guest",
-    inputedPassword: "Gggggggg$",
+    inputedPassword: "gggggggg",
   };
 
   const [cleanLoginValuesxx, setCleanLoginValuesxx] =
@@ -117,7 +117,7 @@ function App(): JSX.Element {
             colortype: response.data.payload.usercolortype,
           };
           dispatch(UpdateColorAction(colorboy, 1));
-          window.location.reload();
+          /// window.location.reload();
         }
 
       })
@@ -128,8 +128,9 @@ function App(): JSX.Element {
     ///alert("app.tsx checkislogged logged out");
   }
 
-  useEffect(() => {
-    Axios.post(`${REACT_APP_SUPERSTARZ_URL}/checkIsLogged`)
+
+  const IsLog = () => {
+    Axios.post(`${REACT_APP_SUPERSTARZ_URL}/checkIsLogged`, { withCredentials: true })
       .then((response) => {
         if (response.data.message === "logged in") {
           dispatch(IsLoggedAction());
@@ -148,7 +149,22 @@ function App(): JSX.Element {
       .catch(function (error) {
         GuestLogin();
       });
+
+  }
+
+
+
+  useEffect(() => {
+    IsLog();
   }, [REACT_APP_SUPERSTARZ_URL, dispatch]);
+
+
+  useEffect(() => {
+
+    setTimeout(() => { IsLog(); }, 1500)
+
+  }, []);
+
 
   ///
   ///
@@ -204,6 +220,8 @@ function App(): JSX.Element {
     icon = "iconMobile";
   }
 
+
+
   return (
     <>
       {loggedInReducer ? (
@@ -245,7 +263,10 @@ function App(): JSX.Element {
                   className={icon}
                   src={logoimage}
                   alt="SuperstarZ logo"
-                  style={{ textAlign: "center", opacity: darkmodeReducer ? 0.2 : matchMobile ? 0.17 : 0.3 }}
+                  style={{
+                    textAlign: "center", opacity: matchMobile ? darkmodeReducer ? 0.7 : 0.9 : darkmodeReducer ? 0.7 : 0.9,
+                    width: matchMobile ? '70%' : '40%', height: 'auto'
+                  }}
                 />
               </Grid>
 

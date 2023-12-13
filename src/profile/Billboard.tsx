@@ -213,22 +213,49 @@ function Billboardx({
 
   ///
   ///
-  ///
-  /// GET DARKMODE FROM REDUX STORE
+  /// INTERFACE/TYPES FOR SCREENHEIGHT AND DARKMODE
   interface RootStateGlobalReducer {
     GlobalReducer: {
+      snapStart: boolean;
       darkmode: boolean;
+      screenHeight: number;
+      activateLoader: boolean;
+      historyscroll: number;
+      interactContent: any;
+      interact: boolean;
+      MenuData: String;
+      pagenum: number;
+      SignIn: boolean,
+      Guest: number
     };
   }
-  const { darkmode } = useSelector((state: RootStateGlobalReducer) => ({
-    ...state.GlobalReducer,
-  }));
 
+
+
+  ///
+  ///
+  ///
+  /// GET SCREENHEIGHT FROM REDUX STORE
+  const { screenHeight, darkmode, snapStart, activateLoader, historyscroll, interactContent, interact, MenuData, pagenum, SignIn, Guest } =
+    useSelector((state: RootStateGlobalReducer) => ({
+      ...state.GlobalReducer,
+    }));
+  const screenHeightReducer = screenHeight;
   const darkmodeReducer = darkmode;
+  const snapStartReducer = snapStart;
+  const activateLoaderReducer = activateLoader;
+  const historyscrollReducer = historyscroll;
+  const interactContentReducer: any = interactContent;
+  const interactReducer = interact;
+  const MenuDataReducer = MenuData
+  const pagenumReducer = pagenum;
+  const SignInReducer = SignIn;
+  const GuestReducer = Guest;
+
 
   //////////////////////////////////BILLBOARD VARIABLES FOR DEVICE TYPES
   var widthh = matchPc ? "65vw" : "98.5vw";
-  var topp = matchPc ? "55.9vh" : matchTablet ? "5.5vh" : "24.5vh";
+  var topp = matchPc ? "50.9vh" : matchTablet ? "5.5vh" : "23.5vh";
   var usernameClass = matchPc
     ? "usernamePc"
     : matchTablet
@@ -236,7 +263,7 @@ function Billboardx({
       : "usernameMobile";
 
   var widthName = matchPc ? "65vw" : "98.5vw";
-  var topName = matchPc ? "63vh" : matchTablet ? "12.5vh" : "30vh";
+  var topName = matchPc ? "58vh" : matchTablet ? "12.5vh" : "28.5vh";
   var name = matchPc ? "namePc" : matchTablet ? "nameTablet" : "nameMobile";
 
   var widthConnect = matchPc ? "65vw" : "98.5vw";
@@ -247,7 +274,7 @@ function Billboardx({
   var fontConnectText = matchPc ? "1.2vw" : matchTablet ? "2.5vw" : "1.92vh";
   var fontConnectnum = matchPc ? "1.75vw" : matchTablet ? "3.9vw" : "2.3vh";
 
-  var billboardDynamicHeight = matchPc ? "70vh" : matchTablet ? "57vw" : "34vh";
+  var billboardDynamicHeight = matchPc ? "65vh" : matchTablet ? "57vw" : "34vh";
 
   //////////////////////////////////BILLBOARD VARIABLES FOR DEVICE TYPES
 
@@ -336,8 +363,7 @@ function Billboardx({
               position: "relative",
               top: "0em",
               width: "100%",
-
-
+              scrollSnapAlign: snapStartReducer ? "start" : 'none'
 
             }}
           >
@@ -415,12 +441,12 @@ function Billboardx({
                   width: widthConnect,
                   height: "0px",
                   top: bottomConnect,
-                  display: "flex",
+                  display: showModalFormMenu ? 'none' : "flex",
                   justifyContent: "flex-end",
                   zIndex: 4,
                 }}
               >
-                <Grid item style={{ textAlign: "center", height: "0px" }}>
+                <Grid item style={{ textAlign: "center", height: "0px", }}>
                   {" "}
                   <span
                     onClick={() => {
@@ -540,6 +566,22 @@ function Billboardx({
               {/*///////////////////////////////////////////////////////////////////////////FAVS*/}
 
 
+              <Grid
+
+                item
+                xs={12}
+                style={{
+                  position: "absolute",
+                  top: '30vh',
+                  textAlign: "right",
+                  zIndex: 0,
+                  height: "0px",
+                  scrollSnapAlign: snapStartReducer ? "start" : 'none'
+
+                }}
+              >
+
+              </Grid>
 
 
               {/*///////////////////////////////////////////////////////////////////////////USERNAME*/}
@@ -563,7 +605,7 @@ function Billboardx({
                 <span
                   onClick={() => {
 
-                    if (idReducer === 150) {
+                    if (idReducer === GuestReducer) {
                       dispatch(UpdateSign(true));
                     }
                   }}
@@ -575,6 +617,7 @@ function Billboardx({
                       : `fontfamilyArial ${usernameClass} turlight`
                   }
                   style={{
+                    display: showModalFormMenu ? 'none' : 'inline',
                     cursor: "pointer",
                     color: darkmodeReducer ? "#dddddd" : "#0b111b",
                     backgroundColor: darkmodeReducer

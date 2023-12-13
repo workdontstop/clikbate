@@ -9,7 +9,7 @@ import CancelIcon from '@material-ui/icons/Cancel';
 import { useRef, useState, useEffect, useCallback } from "react";
 import { RootStateOrAny, useSelector, useDispatch } from "react-redux";
 
-function LoginButtonsx({ OpenModalForm }: any) {
+function LoginButtonsx({ OpenModalForm, type }: any) {
   ///
   ///
   ///CONDITIONAL STATEMENT FOR DEVICE TYPE
@@ -144,7 +144,10 @@ function LoginButtonsx({ OpenModalForm }: any) {
         <Grid item className="buttonpad buttonshake" xs={10} sm={6} md={3}>
           <Button
             onClick={() => {
-              OpenModalForm(8000)
+
+              if (type === 0) { OpenModalForm(1) } else {
+                OpenModalForm(8000)
+              }
 
               if (Timervv.current) {
                 clearTimeout(Timervv.current);
@@ -181,7 +184,9 @@ function LoginButtonsx({ OpenModalForm }: any) {
         <Grid item className="buttonpad buttonshake" xs={10} sm={6} md={3}>
           <Button
             onClick={() => {
-              OpenModalForm(9000)
+              if (type === 0) { OpenModalForm(0) } else {
+                OpenModalForm(9000)
+              }
 
               if (Timervv.current) {
                 clearTimeout(Timervv.current);

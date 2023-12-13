@@ -52,10 +52,11 @@ function MenuInnerx({
     GlobalReducer: {
       darkmode: boolean;
       MenuData: String;
-      pagenum: number
+      pagenum: number,
+      Guest: number
     };
   }
-  const { darkmode, MenuData, pagenum } = useSelector((state: RootStateGlobalReducer) => ({
+  const { darkmode, MenuData, pagenum, Guest } = useSelector((state: RootStateGlobalReducer) => ({
     ...state.GlobalReducer,
   }));
 
@@ -64,6 +65,8 @@ function MenuInnerx({
   const MenuDataReducer = MenuData;
 
   const pagenumReducer = pagenum;
+
+  const GuestReducer = Guest;
 
   const dispatch = useDispatch();
 
@@ -547,7 +550,7 @@ function MenuInnerx({
                               </div>
                               :
 
-                              idReducer === 150 ? <div
+                              idReducer === GuestReducer ? <div
                                 onClick={() => {
 
                                   dispatch(UpdateSign(true));

@@ -171,31 +171,43 @@ function MiniPostx({
   const MemberProfileDataReducer = MemberProfileData;
   const usernameReducer = username;
 
-  ///
-  ///
-  ///
-  /// INTERFACE/TYPES FOR SCREENHEIGHT AND DARKMODE
   interface RootStateGlobalReducer {
     GlobalReducer: {
+      snapStart: boolean;
       darkmode: boolean;
       screenHeight: number;
+      activateLoader: boolean;
+      historyscroll: number;
+      interactContent: any;
+      interact: boolean;
+      MenuData: String;
       pagenum: number;
+      SignIn: boolean,
+      Guest: number
     };
   }
+
+
 
   ///
   ///
   ///
   /// GET SCREENHEIGHT FROM REDUX STORE
-  const { screenHeight, darkmode, pagenum } = useSelector(
-    (state: RootStateGlobalReducer) => ({
+  const { screenHeight, darkmode, snapStart, activateLoader, historyscroll, interactContent, interact, MenuData, pagenum, SignIn, Guest } =
+    useSelector((state: RootStateGlobalReducer) => ({
       ...state.GlobalReducer,
-    })
-  );
-
+    }));
   const screenHeightReducer = screenHeight;
   const darkmodeReducer = darkmode;
+  const snapStartReducer = snapStart;
+  const activateLoaderReducer = activateLoader;
+  const historyscrollReducer = historyscroll;
+  const interactContentReducer: any = interactContent;
+  const interactReducer = interact;
+  const MenuDataReducer = MenuData
   const pagenumReducer = pagenum;
+  const SignInReducer = SignIn;
+  const GuestReducer = Guest;
 
 
   const profileImageref = useRef<any>();
@@ -365,19 +377,42 @@ function MiniPostx({
   useEffect(() => {
     //console.log(postDatainnerInteraction1[0])
 
-    postDatainnerInteraction1.map((str: any, index: any) => {
+    postDatainnerInteraction1[pey].map((str: any, index: any) => {
       if (containsURL(str)) {
         setHasInteractivity(true);
         ///alert('kk')
+      } else {
+        setHasInteractivity(false);
+
+        postDatainnerInteraction2[pey].map((str: any, index: any) => {
+          if (containsURL(str)) {
+
+            setHasInteractivity(true);
+          } else {
+            setHasInteractivity(false);
+          }
+        });
       }
     });
 
-    postDatainnerInteraction2.map((str: any, index: any) => {
-      if (containsURL(str)) {
-        setHasInteractivity(true);
-      }
-    });
-  }, [postDatainnerInteraction1, postDatainnerInteraction2, itemCLICKED]);
+
+  }, [postDatainnerInteraction1[pey], postDatainnerInteraction2[pey], itemCLICKED]);
+
+
+
+
+
+  const [isWide, setIsWide] = useState(false);
+
+  const handleImageLoad = (e: any) => {
+    const { naturalWidth, naturalHeight } = e.target;
+    const aspectRatio = naturalWidth / naturalHeight;
+    if (naturalWidth > naturalHeight) {
+      setIsWide(true);
+    }
+
+
+  };
 
 
 
@@ -397,6 +432,7 @@ function MiniPostx({
             paddingLeft: matchMobile ? "0px" : "0px",
             paddingRight: matchMobile ? "0px" : "0px",
             paddingTop: matchMobile ? "10px" : "3px",
+            scrollSnapAlign: snapStartReducer ? "start" : 'none'
 
           }}
         >
@@ -426,7 +462,7 @@ function MiniPostx({
                 backgroundColor: post.color1,
                 borderRadius: "50%",
                 fontSize: "0.92vw",
-                display: 'block',
+                display: HasInteractivity ? 'block' : 'none',
                 color: darkmodeReducer ? "#ffffff" : "#000000",
                 transform: matchMobile ? 'scale(0.15)' : 'scale(0.3)'
               }
@@ -458,7 +494,7 @@ function MiniPostx({
                 backgroundColor: post.color1,
                 borderRadius: "50%",
                 fontSize: "0.92vw",
-                display: 'block',
+                display: HasInteractivity ? 'block' : 'none',
                 color: darkmodeReducer ? "#ffffff" : "#000000",
                 transform: matchMobile ? 'scale(0.15)' : 'scale(0.26)'
               }
@@ -472,8 +508,46 @@ function MiniPostx({
 
           <div>
 
+            <img
+              onLoad={handleImageLoad}
+              onClick={() => {
+                setzoomClickedIndex(pey + 1);
+                setSliderIndexMini(0);
+                setminiProfile(false);
+              }}
+              className={
+                darkmodeReducer ? "turlightpostdark" : "turlightpostlight"
+              }
+              src={
+                postDatainnerThumb[pey][
+                showIndex ? (sliderIndexMini > 400 ? 0 : sliderIndexMini) : 0
+                ]
+              }
+              alt="a Clikbate post "
+              style={{
 
-            <animated.img
+                cursor: "pointer",
+                width: "100%",
+                height: isWide && matchMobile ? '28vh' : 'auto',
+                position: "absolute",
+                padding: "0px",
+                objectFit:
+                  itemcroptype[pey] === 1 || itemcroptype[pey] === 2
+                    ? "cover"
+                    : "cover",
+                objectPosition:
+                  itemcroptype[pey] === 1 || itemcroptype[pey] === 2
+                    ? "50% top"
+                    : "50% 50",
+
+                zIndex: 0,
+
+              }}
+
+            />
+
+            <img
+              onLoad={handleImageLoad}
               onClick={() => {
                 setzoomClickedIndex(pey + 1);
                 setSliderIndexMini(0);
@@ -487,12 +561,12 @@ function MiniPostx({
                 showIndex ? (sliderIndexMini > 400 ? 0 : sliderIndexMini) : 0
                 ]
               }
-              alt="a superstarz post "
+              alt="a Clikbate post "
               style={{
 
                 cursor: "pointer",
                 width: "100%",
-                height: "auto",
+                height: isWide && matchMobile ? '28vh' : 'auto',
                 position: "relative",
                 padding: "0px",
                 objectFit:
@@ -503,9 +577,12 @@ function MiniPostx({
                   itemcroptype[pey] === 1 || itemcroptype[pey] === 2
                     ? "50% top"
                     : "50% 50",
-                float: "left",
+
+                zIndex: 1,
+
 
               }}
+              crossOrigin="anonymous"
             />
           </div>
 
@@ -523,7 +600,7 @@ function MiniPostx({
               display: "flex", //flex
               alignItems: "center",
               justifyContent: "left",
-              zIndex: 5,
+              zIndex: 50,
               color: "#ffffffff",
               paddingLeft: "2vw",
               fontFamily: "Arial, Helvetica, sans-seri",
@@ -560,28 +637,41 @@ function MiniPostx({
                   .
                 </span>
 
-                {CommSho ?
-                  <CommentIcon
-                    className="zuperkingIconPostLight"
-                    style={{
-                      fontSize: postcirclefontx,
-                      color: post.color1,
-                    }}
-                  /> : FavIcon ?
-                    <SentimentVerySatisfiedIcon
-                      className="zuperkingIconPostLight"
+
+
+                <span
+                  style={{
+                    marginLeft: matchMobile ? '3vw' : '1vw',
+
+                  }}
+                >
+                  {CommSho ?
+
+
+                    <CommentIcon
+                      className="zuperkingtur"
                       style={{
                         fontSize: postcirclefontx,
                         color: post.color1,
                       }}
-                    /> :
-                    <CircleIcon
-                      className="zuperkingIconPostLight"
-                      style={{
-                        fontSize: postcirclefont,
-                        color: post.color1,
-                      }}
-                    />}
+                    /> : FavIcon ?
+                      <SentimentVerySatisfiedIcon
+                        className="zuperkingtur"
+                        style={{
+                          fontSize: postcirclefontx,
+                          color: post.color1,
+                        }}
+                      /> :
+                      <CircleIcon
+                        className="zuperkingtur"
+                        style={{
+                          fontSize: postcirclefont,
+                          color: post.color1,
+                        }}
+                      />}
+
+                </span>
+
 
 
 
@@ -620,21 +710,27 @@ function MiniPostx({
           />
           {/*///////////////////////////////////////////////////////////////////////////PROFILE-PIC*/}
 
-          <div
-            style={{
-              fontWeight: "bold",
-              color: darkmodeReducer ? "#ffffff" : '#000000',
-              fontStyle: 'italic',
-              fontSize: matchPc ? "2.39vh" : '1.8vh',
-              zIndex: 5,
-              paddingLeft: matchPc ? "7vw" : matchTablet ? "2.3vw" : "2vw",
-              height: "0px",
-              fontFamily: "Arial, Helvetica, sans-seri",
-              opacity: darkmodeReducer ? '0.6' : '0.4',
-            }}
-          >
-            {post.topic}
+          <div>
+
+
+            <div
+              style={{
+                fontWeight: "bold",
+                color: darkmodeReducer ? "#ffffff" : "#000000",
+                fontSize: matchPc ? "2.2vh" : "1.7vh",
+                zIndex: 5,
+                paddingLeft: matchPc ? "7vw" : matchTablet ? "2.3vw" : "2vw",
+                height: "0px",
+                fontFamily: "Arial, Helvetica, sans-serif",
+                opacity: darkmodeReducer ? "0.6" : "0.8",
+              }}
+            >   <p>
+                {post.topic}
+              </p>
+
+            </div>
           </div>
+
 
           {/*///////////////////////////////////////////////////////////////////////////PROFILE-PIC*/}
         </div>

@@ -63,7 +63,7 @@ function Profilex({
   setStopMini,
   postDatainnerInteraction1,
   postDatainnerInteraction2,
-
+  clikplay,
   callPagination,
   setShowBigPlay,
   setsuperSettings,
@@ -107,6 +107,14 @@ function Profilex({
 
   const [lastIndicatorPushH, setlastIndicatorPushH] = useState(37);
 
+
+  useEffect(() => {
+
+    if (clikplay) {
+      clearAllTimers();
+    }
+
+  }, [clikplay])
 
   useEffect(() => {
 
@@ -521,6 +529,17 @@ function Profilex({
 
               setshowThisComponenet(false);
               dispatch(UpdateLoader(false));
+
+              if (StopMini) {
+
+              } else {
+
+                setTimeout(() => {
+                  scrollToRef();
+
+                }, 3600)
+
+              }
               ///////////
             }, 4000);
 
@@ -861,19 +880,19 @@ function Profilex({
 
     for (let i = 0; i <= Limit; i++) {  // <= 20 to include the reset to the first post
       if (i > indexRoll) {
-        Time = Time + 4500;
+        Time = Time + 7000;
         setShowBigPlay(true);
 
         tyTimer.current[i] = setTimeout(() => {
 
           if (i === Limit) {
             // Reset to the first post after reaching the last post
-            postDivRefx.current[Limit < 3 ? Limit : Limit - 3].scrollIntoView({
+            postDivRefx.current[Limit < 3 ? Limit - 1 : Limit - 3].scrollIntoView({
               behavior: "smooth",
               block: "start",
             });
             //
-            postDivRefRoll.current[Limit < 3 ? Limit : Limit - 3].scrollIntoView({
+            postDivRefRoll.current[Limit < 3 ? Limit - 1 : Limit - 3].scrollIntoView({
               behavior: "smooth",
               block: "start",
             });
@@ -891,7 +910,7 @@ function Profilex({
           }
 
 
-        }, Time - 4500);
+        }, Time - 7000);
       }
     }
 
@@ -922,13 +941,15 @@ function Profilex({
           }}
         ></Grid>
 
-        <Grid
+
+        {showModalFormMenu ? <Grid
           item
           style={{
             height: "0px",
             zIndex: 500000000000,
             position: 'fixed',
-            top: '0vh'
+            top: '0vh',
+            backgroundColor: '#00ccff'
           }}
         >
           <ActualMenu
@@ -938,7 +959,8 @@ function Profilex({
             showModalFormMenu={showModalFormMenu}
             setshowModalFormMenu={setshowModalFormMenu} />
 
-        </Grid>
+        </Grid> : null}
+
 
 
 
@@ -952,7 +974,7 @@ function Profilex({
             paddingLeft: miniProfile ? (matchPc ? "6vw" : "0vw") : "0vw",
             paddingRight: miniProfile ? (matchPc ? "6vw" : "0vw") : "0vw",
             height: "auto",
-            marginTop: '5.5vh',
+            marginTop: matchMobile ? '3vh' : '5.5vh',
             marginLeft: miniProfile && matchPc ? '5.5vw' : '0px',
           }}
         >
@@ -1033,7 +1055,7 @@ function Profilex({
                       xs={12}
                       style={{
                         marginTop: "20px",
-                        height: matchMobile ? "8.2vh" : ' 1vh',
+                        height: matchMobile ? "9vh" : ' 0vh',
                       }}
                     ></Grid>
                   </div>

@@ -154,6 +154,8 @@ function Postx({
   const startinview = useCallback(() => {
     if (inView) {
 
+
+
       if (Timer.current) {
         clearTimeout(Timer.current);
       }
@@ -313,6 +315,7 @@ function Postx({
       id: number;
       memeberPageid: number;
       MemberProfileData: any;
+
     };
   }
   const { image, imageThumb, id, memeberPageid, MemberProfileData, username } =
@@ -325,6 +328,7 @@ function Postx({
   const memeberPageidReducer = memeberPageid;
   const MemberProfileDataReducer = MemberProfileData;
   const usernameReducer = username;
+
 
   const CallEmoBackend = useCallback(
     (ty: number) => {
@@ -406,32 +410,44 @@ function Postx({
       Emo4Num,
     ]
   );
-
-  ///
-  ///
-  ///
-  /// INTERFACE/TYPES FOR SCREENHEIGHT AND DARKMODE
   interface RootStateGlobalReducer {
     GlobalReducer: {
+      snapStart: boolean;
       darkmode: boolean;
       screenHeight: number;
+      activateLoader: boolean;
+      historyscroll: number;
+      interactContent: any;
+      interact: boolean;
+      MenuData: String;
       pagenum: number;
+      SignIn: boolean,
+      Guest: number
     };
   }
+
+
 
   ///
   ///
   ///
   /// GET SCREENHEIGHT FROM REDUX STORE
-  const { screenHeight, darkmode, pagenum } = useSelector(
-    (state: RootStateGlobalReducer) => ({
+  const { screenHeight, darkmode, snapStart, activateLoader, historyscroll, interactContent, interact, MenuData, pagenum, SignIn, Guest } =
+    useSelector((state: RootStateGlobalReducer) => ({
       ...state.GlobalReducer,
-    })
-  );
-
+    }));
   const screenHeightReducer = screenHeight;
   const darkmodeReducer = darkmode;
+  const snapStartReducer = snapStart;
+  const activateLoaderReducer = activateLoader;
+  const historyscrollReducer = historyscroll;
+  const interactContentReducer: any = interactContent;
+  const interactReducer = interact;
+  const MenuDataReducer = MenuData
   const pagenumReducer = pagenum;
+  const SignInReducer = SignIn;
+  const GuestReducer = Guest;
+
 
   var textback = "";
   if (darkmodeReducer) {
@@ -699,7 +715,7 @@ function Postx({
   var emoNum4 = matchPc
     ? itemcroptype[pey] === 2
       ? 3.5
-      : 6.5
+      : 6.4
     : matchTablet
       ? 20
       : itemcroptype[pey] === 3
@@ -709,7 +725,7 @@ function Postx({
   var emoNum3 = matchPc
     ? itemcroptype[pey] === 2
       ? -7.5
-      : -4.5
+      : -4.6
     : matchTablet
       ? 20
       : itemcroptype[pey] === 3
@@ -775,7 +791,7 @@ function Postx({
   var dotspace = matchPc ? "1.7vw" : matchTablet ? "1.9vh" : "1.9vh";
   var dotspace2 = matchPc ? "0.9vw" : matchTablet ? "1.9vh" : "1.9vh";
 
-  var posttopicfont = matchPc ? "1.35vw" : matchTablet ? "1.8vh" : "1.65vh";
+  var posttopicfont = matchPc ? "1.2vw" : matchTablet ? "1.8vh" : "1.65vh";
 
   var postcaptiontop = matchPc ? "-1.85vh" : matchTablet ? "-9.2vh" : "-9.6vh";
   var postcaptionfont = matchPc ? "1.2vw" : matchTablet ? "2.35vh" : "1.82vh";
@@ -1024,6 +1040,7 @@ function Postx({
             width: "100%",
             height: '0px'
 
+
           }}
         ></div>
 
@@ -1037,6 +1054,7 @@ function Postx({
             paddingLeft: matchMobile ? "0px" : "0.5px",
             paddingRight: matchMobile ? "0px" : "0.5px",
             paddingTop: "0px",
+            scrollSnapAlign: snapStartReducer ? "start" : 'none'
 
           }}
         >
@@ -1112,7 +1130,7 @@ function Postx({
             <span
               onClick={() => {
 
-                if (idReducer === 150) {
+                if (idReducer === GuestReducer) {
                   dispatch(UpdateSign(true));
                 } else {
                   commentClicked();
@@ -1164,7 +1182,7 @@ function Postx({
               }
               onClick={() => {
 
-                if (idReducer === 150) {
+                if (idReducer === GuestReducer) {
                   dispatch(UpdateSign(true));
                 } else {
                   commentClicked();
@@ -1338,12 +1356,10 @@ function Postx({
                   onClick={() => {
 
 
-                    if (idReducer === 150) {
-                      dispatch(UpdateSign(true));
-                    } else {
-                      startSpin3();
-                      CallEmoBackend(3);
-                    }
+
+                    startSpin3();
+                    CallEmoBackend(3);
+
 
                   }}
                   item
@@ -1391,7 +1407,7 @@ function Postx({
                         padding: "0px",
                         objectFit: "contain",
                         borderRadius: "50%",
-                        transform: Zoom3 ? "scale(2)" : "scale(1.5)",
+                        transform: Zoom3 ? "scale(2)" : "scale(1.2)",
                         transition: "transform 0.1s",
                         opacity: 1
                       }}
@@ -1409,13 +1425,10 @@ function Postx({
                     setZoomBigEmo4(false);
                   }}
                   onClick={() => {
-                    if (idReducer === 150) {
-                      dispatch(UpdateSign(true));
 
-                    } else {
-                      startSpin4();
-                      CallEmoBackend(4);
-                    }
+                    startSpin4();
+                    CallEmoBackend(4);
+
 
                   }}
                   item
@@ -1464,7 +1477,7 @@ function Postx({
                         objectFit: "contain",
                         borderRadius: "50%",
                         opacity: 1,
-                        transform: Zoom4 ? "scale(2)" : "scale(1.5)",
+                        transform: Zoom4 ? "scale(2)" : "scale(1.2)",
                         transition: "transform 0.1s",
                       }}
                     />
@@ -1833,7 +1846,7 @@ function Postx({
                           fontWeight: "bold",
                           fontSize: postusernamefont,
                           cursor: 'pointer',
-                          fontStyle: 'italic',
+
                         }}
                       >
                         {post.username}
@@ -1919,7 +1932,7 @@ function Postx({
                             style={{
                               fontSize: postcirclefont,
                               color: post.color1,
-                              transform: BigCircle ? "scale(5)" : "scale(3.8)", opacity: 0.6,
+                              transform: BigCircle ? "scale(5)" : "scale(2.2)", opacity: 0.6,
                               transition: "transform 0.05s",
 
                             }}
@@ -1930,7 +1943,7 @@ function Postx({
                             style={{
                               fontSize: postcirclefont,
                               color: post.color1,
-                              transform: BigCircle ? "scale(5)" : "scale(3.8)", opacity: 0.6,
+                              transform: BigCircle ? "scale(5)" : "scale(2.2)", opacity: 0.6,
                               transition: "transform 0.05s",
                             }}
                           />
@@ -1940,7 +1953,7 @@ function Postx({
                             style={{
                               fontSize: postcirclefont,
                               color: post.color1,
-                              transform: matchMobile ? BigCircle ? "scale(5)" : "scale(3.8)" : BigCircle ? "scale(5)" : "scale(3)", opacity: 0.6,
+                              transform: matchMobile ? BigCircle ? "scale(5)" : "scale(2.2)" : BigCircle ? "scale(5)" : "scale(2.2)", opacity: 0.6,
                               transition: "transform 0.05s",
 
                             }}
@@ -2001,7 +2014,7 @@ function Postx({
                           //////////////////caption
                         }
 
-                        <span style={{ fontStyle: 'italic' }}>      {post.topic ? post.topic : "SuperstarZ"}{" "}</span>
+                        <span style={{}}>      {post.topic ? post.topic : "SuperstarZ"}{" "}</span>
 
 
                         {

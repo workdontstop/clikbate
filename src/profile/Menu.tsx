@@ -14,7 +14,7 @@ import CircleIcon from "@mui/icons-material/Circle";
 import { OptionsSlider } from "./OptionsSlider";
 import SuperstarzIconLight from "../images/s.png";
 import SuperstarzIconDark from "../images/sd.png";
-import { UpdateOptionsTop } from ".././GlobalActions";
+import { UpdateOptionsTop, SnapToggleAction } from ".././GlobalActions";
 import ZoomOutIcon from "@mui/icons-material/ZoomOut";
 
 import { UpdateMenuNav } from "../GlobalActions";
@@ -53,7 +53,10 @@ function Menux({
   const dispatch = useDispatch();
 
 
-
+  var isSafari = navigator.vendor && navigator.vendor.indexOf('Apple') > -1 &&
+    navigator.userAgent &&
+    navigator.userAgent.indexOf('CriOS') == -1 &&
+    navigator.userAgent.indexOf('FxiOS') == -1;
 
 
 
@@ -81,16 +84,19 @@ function Menux({
     GlobalReducer: {
       darkmode: boolean;
       MenuData: String;
+      Guest: number,
 
     };
   }
-  const { darkmode, MenuData, } = useSelector((state: RootStateGlobalReducer) => ({
+  const { darkmode, MenuData, Guest } = useSelector((state: RootStateGlobalReducer) => ({
     ...state.GlobalReducer,
   }));
 
   const darkmodeReducer = darkmode;
 
-  const MenuDataReducer = MenuData
+  const MenuDataReducer = MenuData;
+
+  const GuestReducer = Guest;
 
 
 
@@ -114,19 +120,57 @@ function Menux({
   ///
   ///
 
+
+  const [isSafariaa, setisSafariaa] = useState(false);
+  useEffect(() => {
+
+    if (isSafari) { setisSafariaa(true) } else { setisSafariaa(false) }
+  }, [isSafari])
+
+  const isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
+
+
+
+
   //
   //
-  //
+  //isSafari
   //USE SLIDE DOWN ANIMATION FROM REACT SPRING
+
+
+  const [shownav2, setshownav2] = useState(false);
+
+  const [halt, sethalt] = useState(false);
+
+  useEffect(() => {
+
+
+    if (menuTimer3.current) {
+      clearTimeout(menuTimer3.current);
+    }
+
+    if (shownav) {
+      setshownav2(true);
+    } else {
+
+
+
+      menuTimer3.current = setTimeout(() => { setshownav2(false); }, 2000)
+
+    }
+  }, [shownav])
+
+
   const animationmenu = useSpring({
     config: {
-      duration: 80,
+      duration: 1000,
     },
     opacity: shownav ? 1 : 0,
-    transform: shownav ? `translateY(-10%)` : `translateY(-180%)`,
-
+    marginTop: shownav2 ? `0vh` : `-60vh`,
 
   });
+
+
 
 
 
@@ -160,12 +204,14 @@ function Menux({
         ///dispatch(UpdateMenuNav(true));
 
         setShownav(true);
+        if (matchMobile) { dispatch(SnapToggleAction(false)) };
       }
       menuTimer2.current = setTimeout(function () {
         setShownav(false);
-        //// dispatch(UpdateMenuNav(false));
-      }, 2800);
-    }, 1250);
+        if (matchMobile) { dispatch(SnapToggleAction(true)); }
+
+      }, 2600);
+    }, 2000);
 
 
 
@@ -184,7 +230,8 @@ function Menux({
     shownavTop,
     haltedTop,
     HidePostDataOnScroll,
-    showModalForm
+    showModalForm,
+
   ]);
 
 
@@ -241,7 +288,7 @@ function Menux({
   useEffect(() => {
 
 
-    if (idReducer === 150) {
+    if (idReducer === GuestReducer) {
 
       if (Timer.current) {
         clearTimeout(Timer.current);
@@ -340,31 +387,21 @@ function Menux({
                 >
                   {" "}
                   <Grid item xs={1} md={2} style={{ height: "0px" }}></Grid>
+
+
                   <Grid
                     item
                     xs={8}
                     md={8}
                     style={{
                       height: "0px",
-                      marginTop: matchPc ? "-90vh" : "-76Vh",
+                      marginTop: matchPc ? "-90vh" : isSafariaa ? '-79vh' : "-76vh",
 
                     }}
                   >
-
-
-
-
-
-
-
-
-
-
-
-
                     {MenuDataReducer === '' ? <>
 
-                      <animated.div style={{ ...animationmenu, height: '0px', display: shownav ? 'block' : 'none' }}>
+                      <animated.div style={{ ...animationmenu, height: '0px', }}>
                         <span
                           onClick={(e: any) => {
                             ////dispatch(UpdateOptionsTop(true));
@@ -427,7 +464,7 @@ function Menux({
                       </animated.div>  </> :
 
 
-                      MenuDataReducer ? <> <animated.div style={{ ...animationmenu, height: '0px', display: shownav ? 'block' : 'none' }}>
+                      MenuDataReducer ? <> <animated.div style={{ ...animationmenu, height: '0px' }}>
                         <span
                           onClick={(e: any) => {
                             ////dispatch(UpdateOptionsTop(true));

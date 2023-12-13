@@ -105,6 +105,13 @@ function Sliderx({
 
   const [InteractedDark, setInteractedDark] = useState(false);
 
+
+
+
+
+
+
+
   ///
   ///
   ///
@@ -204,6 +211,10 @@ function Sliderx({
     sliderLoader = "superloaderAutoSlider";
   }
 
+
+
+
+
   ///
   ///
   ///
@@ -277,6 +288,7 @@ function Sliderx({
     return urlPattern.test(str);
   };
 
+
   useEffect(() => {
     //console.log(postDatainnerInteraction1[0])
 
@@ -284,14 +296,21 @@ function Sliderx({
       if (containsURL(str)) {
         setHasInteractivity(true);
         ///alert('kk')
+      } else {
+        setHasInteractivity(false);
+
+        postDatainnerInteraction2.map((str: any, index: any) => {
+          if (containsURL(str)) {
+
+            setHasInteractivity(true);
+          } else {
+            setHasInteractivity(false);
+          }
+        });
       }
     });
 
-    postDatainnerInteraction2.map((str: any, index: any) => {
-      if (containsURL(str)) {
-        setHasInteractivity(true);
-      }
-    });
+
   }, [postDatainnerInteraction1, postDatainnerInteraction2, itemCLICKED]);
 
   const [data, setdata] = useState(null);
@@ -310,7 +329,9 @@ function Sliderx({
   );
 
   const pic: any = useRef(null);
+  const picanonymous: any = useRef(null);
   const canvasRefIn: any = useRef(null);
+  const DummyCanvas4ToDataURL: any = useRef(null);
 
   const ScaleCoOrdinates = useCallback(
     (event, type) => {
@@ -376,9 +397,11 @@ function Sliderx({
       canvasRefIn.current.width,
       canvasRefIn.current.height
     );
-    const previewFileReadimage: any = new Image();
 
-    previewFileReadimage.src = slides[sliderIndex];
+    const previewFileReadimage: any = new Image();
+    previewFileReadimage.crossOrigin = "anonymous";
+
+    previewFileReadimage.src = pic.current.src;
 
     previewFileReadimage.onload = () => {
       const ratio =
@@ -448,7 +471,6 @@ function Sliderx({
   }, [itemCLICKED[pey], HasInteractivity, showIntImage, postDivRef]);
 
   const tti = useRef<ReturnType<typeof setTimeout> | null>(null);
-
   const interacttime = useRef<ReturnType<typeof setTimeout> | null>(null);
   const interacttime2 = useRef<ReturnType<typeof setTimeout> | null>(null);
   const bh = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -508,6 +530,53 @@ function Sliderx({
   };
 
 
+  // Bilinear interpolation function
+  function interpolate(imageData: any, x: any, y: any) {
+    var x_floor = Math.floor(x);
+    var y_floor = Math.floor(y);
+
+    // Ensure bounds are within the source image
+    x_floor = Math.max(0, Math.min(imageData.width - 2, x_floor));
+    y_floor = Math.max(0, Math.min(imageData.height - 2, y_floor));
+
+    var x_frac = x - x_floor;
+    var y_frac = y - y_floor;
+
+    var p1 = getPixel(imageData, x_floor, y_floor);
+    var p2 = getPixel(imageData, x_floor + 1, y_floor);
+    var p3 = getPixel(imageData, x_floor, y_floor + 1);
+    var p4 = getPixel(imageData, x_floor + 1, y_floor + 1);
+
+    var topInterpolation = interpolatePixelValues(p1, p2, x_frac);
+    var bottomInterpolation = interpolatePixelValues(p3, p4, x_frac);
+
+    return interpolatePixelValues(topInterpolation, bottomInterpolation, y_frac);
+  }
+
+  // Helper function to get a pixel from image data
+  function getPixel(imageData: any, x: any, y: any) {
+    var index = (y * imageData.width + x) * 4;
+    return [
+      imageData.data[index],
+      imageData.data[index + 1],
+      imageData.data[index + 2],
+      imageData.data[index + 3]
+    ];
+  }
+
+  // Helper function to interpolate between pixel values
+  function interpolatePixelValues(p1: any, p2: any, t: any) {
+    return [
+      (1 - t) * p1[0] + t * p2[0],
+      (1 - t) * p1[1] + t * p2[1],
+      (1 - t) * p1[2] + t * p2[2],
+      (1 - t) * p1[3] + t * p2[3]
+    ];
+  }
+
+
+
+
   const drawInteraction = useCallback(
     (typex: any, event: any, clicked: number) => {
       const adjustedPos = ScaleCoOrdinates(event, 0);
@@ -528,6 +597,9 @@ function Sliderx({
             canvasInteractWidth,
             interactHeightResolution
           );
+
+
+
 
           var offsety = 0;
 
@@ -562,23 +634,34 @@ function Sliderx({
           var yy = cropInitialIn[0].y;
           const xxw = cropInitialIn2[0].x;
           const yyw = cropInitialIn2[0].y;
-          var r = 45;
 
 
 
-          if (matchMobile) {
-            if (itemcroptype[pey] === 3) {
-              r = 150;
 
-            } else {
-
-              r = 80;
-            }
-          } else {
-            if (itemcroptype[pey] === 3) {
-              r = 78;
-            }
+          if (post.rad1 === null) {
+            var r1 = 120;
           }
+          else {
+            // Given values
+            const percentageCoverage = post.rad1; // Replace with your actual percentageCoverage
+            const canvasWidth = canvasInteractWidth/* your canvas width */;
+            // Calculate the radius
+            var r1 = (percentageCoverage * canvasWidth) / 200;
+
+          }
+
+          if (post.rad2 === null) {
+            var r2 = 120;
+          } else {
+            const percentageCoveragex = post.rad2; // Replace with your actual percentageCoverage
+            const canvasWidthx = canvasInteractWidth/* your canvas width */;
+            // Calculate the radius
+            var r2 = (percentageCoveragex * canvasWidthx) / 200;
+          }
+
+
+
+
 
 
 
@@ -601,6 +684,7 @@ function Sliderx({
 
 
 
+
           context.beginPath();
           context.arc(xnew, ynew, 5, 0, Math.PI * 2);
           context.fillStyle = "rgba(250, 250,250,0)";
@@ -613,50 +697,170 @@ function Sliderx({
           if (post.interact1a || post.interact1b) {
             //alert('jj');
 
+            var scaleFactor = 1.03; // You can adjust this value to control the zoom level
+
             if (post.interact1a) {
+              if (typex === 0 || typex === 3) {
+                var imageData = context.getImageData(
+                  x2 - 1 - r1,
+                  y2 - 0.5 - r1,
+                  2.1 * r1,
+                  2.1 * r1
+                ); // (x, y, width, height)
+
+                // Create a larger image data for the zoom effect
+                var zoomedImageData = context.createImageData(
+                  imageData.width * scaleFactor,
+                  imageData.height * scaleFactor
+                );
+
+                // Copy pixels from the original image data to the larger image data with bilinear interpolation
+                for (var ybb = 0; ybb < zoomedImageData.height; ybb++) {
+                  for (var xbb = 0; xbb < zoomedImageData.width; xbb++) {
+                    var sourceX = xbb / scaleFactor;
+                    var sourceY = ybb / scaleFactor;
+
+                    // Get the interpolated pixel value
+                    var interpolatedPixel = interpolate(imageData, sourceX, sourceY);
+
+                    // Set the pixel values in the zoomed image data
+                    var destIndex = (ybb * zoomedImageData.width + xbb) * 4;
+                    zoomedImageData.data[destIndex] = interpolatedPixel[0];
+                    zoomedImageData.data[destIndex + 1] = interpolatedPixel[1];
+                    zoomedImageData.data[destIndex + 2] = interpolatedPixel[2];
+                    zoomedImageData.data[destIndex + 3] = interpolatedPixel[3];
+                  }
+                }
+
+                // Apply a light white border at the borders
+                var borderWidth = 0; // Adjust the width of the border
+                for (var ybb = 0; ybb < zoomedImageData.height; ybb++) {
+                  for (var xbb = 0; xbb < zoomedImageData.width; xbb++) {
+                    if (
+                      xbb < borderWidth ||
+                      xbb >= zoomedImageData.width - borderWidth ||
+                      ybb < borderWidth ||
+                      ybb >= zoomedImageData.height - borderWidth
+                    ) {
+                      // Apply a light white color to the border
+                      var destIndex = (ybb * zoomedImageData.width + xbb) * 4;
+                      zoomedImageData.data[destIndex] = 230; // Red channel
+                      zoomedImageData.data[destIndex + 1] = 20; // Green channel
+                      zoomedImageData.data[destIndex + 2] = 2; // Blue channel
+                      zoomedImageData.data[destIndex + 3] = 0.8; // Alpha channel
+                    }
+                  }
+                }
+
+                // Put the modified pixel data back onto the canvas
+                context.putImageData(
+                  zoomedImageData,
+                  x2 - r1 * scaleFactor,
+                  y2 - r1 * scaleFactor
+                );
+              }
+              //////////////////////////////////////////////////////////////////////////////////////////////////
               if ([0, 3].includes(typex)) {
                 context.beginPath();
-                context.arc(x2, y2, r, 0, Math.PI * 2);
+                context.arc(x2, y2, r1, 0, Math.PI * 2);
 
                 clikarc1 = context.isPointInPath(xnew, ynew);
                 context.fillStyle = darkmodeReducer
-                  ? "rgba(50, 50,50,0.3)"
-                  : "rgba(250, 250,250,0.3)";
+                  ? "rgba(50, 50,50,0)"
+                  : "rgba(250, 250,250,0.0)";
                 context.closePath();
                 context.fill();
-                context.lineWidth = matchMobile ? 9.6 : itemcroptype[pey] === 3 ? 9 : 6;
-                context.strokeStyle = darkmodeReducer ? "#ffffff" : "#333333";
-                context.stroke();
+
               } else if (typex === 1) {
                 context.beginPath();
-                context.arc(x2, y2, r, 0, Math.PI * 2);
+                context.arc(x2, y2, r1, 0, Math.PI * 2);
                 clikarc1 = context.isPointInPath(xnew, ynew);
-
                 context.fillStyle = `rgba(250, 250,250,0.0)`;
                 context.closePath();
                 context.fill();
               }
+
+
             }
 
             if (post.interact1b) {
+              if (typex === 0 || typex === 3) {
+                var imageData2 = context.getImageData(
+                  x2b - 1 - r2,
+                  y2b - 0.5 - r2,
+                  2.1 * r2,
+                  2.1 * r2
+                ); // (x, y, width, height)
+
+
+                // Create a larger image data for the zoom effect
+                var zoomedImageData2 = context.createImageData(
+                  imageData2.width * scaleFactor,
+                  imageData2.height * scaleFactor
+                );
+
+                // Copy pixels from the original image data to the larger image data with bilinear interpolation
+                for (var ybb = 0; ybb < zoomedImageData2.height; ybb++) {
+                  for (var xbb = 0; xbb < zoomedImageData2.width; xbb++) {
+                    var sourceX = xbb / scaleFactor;
+                    var sourceY = ybb / scaleFactor;
+
+                    // Get the interpolated pixel value
+                    var interpolatedPixel = interpolate(imageData2, sourceX, sourceY);
+
+                    // Set the pixel values in the zoomed image data
+                    var destIndex = (ybb * zoomedImageData2.width + xbb) * 4;
+                    zoomedImageData2.data[destIndex] = interpolatedPixel[0];
+                    zoomedImageData2.data[destIndex + 1] = interpolatedPixel[1];
+                    zoomedImageData2.data[destIndex + 2] = interpolatedPixel[2];
+                    zoomedImageData2.data[destIndex + 3] = interpolatedPixel[3];
+                  }
+                }
+
+                // Apply a light white border at the borders
+                var borderWidth = 0; // Adjust the width of the border
+                for (var ybb = 0; ybb < zoomedImageData2.height; ybb++) {
+                  for (var xbb = 0; xbb < zoomedImageData2.width; xbb++) {
+                    if (
+                      xbb < borderWidth ||
+                      xbb >= zoomedImageData2.width - borderWidth ||
+                      ybb < borderWidth ||
+                      ybb >= zoomedImageData2.height - borderWidth
+                    ) {
+                      // Apply a light white color to the border
+                      var destIndex = (ybb * zoomedImageData2.width + xbb) * 4;
+                      zoomedImageData2.data[destIndex] = 230; // Red channel
+                      zoomedImageData2.data[destIndex + 1] = 20; // Green channel
+                      zoomedImageData2.data[destIndex + 2] = 2; // Blue channel
+                      zoomedImageData2.data[destIndex + 3] = 0.8; // Alpha channel
+                    }
+                  }
+                }
+
+                // Put the modified pixel data back onto the canvas
+                context.putImageData(
+                  zoomedImageData2,
+                  x2b - r2 * scaleFactor,
+                  y2b - r2 * scaleFactor
+                );
+              }
+              ///////////////////////////////////////////////////////////////////////////////////////////////
               if ([0, 3].includes(typex)) {
                 context.beginPath();
-                context.arc(x2b, y2b, r, 0, Math.PI * 2);
-
+                context.arc(x2b, y2b, r2, 0, Math.PI * 2);
                 clikarc2 = context.isPointInPath(xnew, ynew);
                 context.fillStyle = darkmodeReducer
-                  ? "rgba(50, 50,50,0.3)"
-                  : "rgba(250, 250,250,0.3)";
+                  ? "rgba(50, 50,50,0)"
+                  : "rgba(250, 250,250,0.0)";
                 context.closePath();
                 context.fill();
-                context.lineWidth = matchMobile ? 9.6 : itemcroptype[pey] === 3 ? 9 : 6;
-                context.strokeStyle = darkmodeReducer ? "#ffffff" : "#333333";
-                context.stroke();
+                ///context.lineWidth = matchMobile ? 9.6 : itemcroptype[pey] === 3 ? 9 : 6;
+                ///context.strokeStyle = darkmodeReducer ? "#ffffff" : "#333333";
+                ///context.stroke();
               } else if (typex === 1) {
                 context.beginPath();
-                context.arc(x2b, y2b, r, 0, Math.PI * 2);
+                context.arc(x2b, y2b, r2, 0, Math.PI * 2);
                 clikarc2 = context.isPointInPath(xnew, ynew);
-
                 context.fillStyle = `rgba(250, 250,250,0.0)`;
                 context.closePath();
                 context.fill();
@@ -674,12 +878,16 @@ function Sliderx({
                 } else {
                   drawInteraction(0, event, 0);
                 }
-              }, 1000);
+              }, 170);
             }
             if (canvasRefIn.current) {
               canvasRefIn.current.style.width = `${imageWidthcss}px`;
               canvasRefIn.current.style.height = `${imageHeightcss}px`;
             }
+
+
+
+
 
             if (post.interact1b || post.interact1a) {
               if (clicked === 1 && clikarc2) {
@@ -1048,16 +1256,16 @@ function Sliderx({
               }}
             />
 
-            <animated.img
+            <img
               ref={pic}
               onMouseDown={clickslider}
               className={
                 darkmodeReducer ? "turlightpostdark" : "turlightpostlight"
               }
               src={slides[i]}
-              alt="a superstarz post "
+              alt="a clikbate post "
               style={{
-                ...style,
+
                 cursor: "pointer",
                 width: "100%",
                 height: type === 1 ? `auto` : itemheight[pey],
@@ -1071,6 +1279,7 @@ function Sliderx({
                 zIndex: 1,
 
               }}
+              crossOrigin="anonymous"
             />
 
             {i === 0 && HasInteractivity && ActiveCanvas === pey ? (
@@ -1093,9 +1302,15 @@ function Sliderx({
                   margin: "auto",
                   opacity: HideCann ? 0 : 1,
                   visibility: itemCLICKED[pey] ? 'visible' : 'hidden',
+
+
                 }}
               />
             ) : null}
+
+
+
+
 
             {interact && HasInteractivity && ActiveCanvas === pey ? (
               <img
@@ -1198,6 +1413,7 @@ function Sliderx({
             }}
           />
         ) : null}
+
       </Grid>
     </>
   );

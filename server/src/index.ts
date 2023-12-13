@@ -18,11 +18,10 @@ var cors = require("cors");
 const path = require("path");
 
 const multer = require("multer");
-const { uploadFileTos3, getFileStreamFroms3 } = require("./s3");
 
 if (process.env.APP_STATE === "dev") {
   var corsOptions = {
-    origin: "http://192.168.0.21:3000",
+    origin: "http://192.168.0.13:3000",
     credentials: true, //access-control-allow-credentials:true
     optionsSuccessStatus: 200,
   };
@@ -149,7 +148,7 @@ WHERE post = posts.id and user = ?)EmoIn,
          WHERE post = posts.id and type=4)funny, 
          
          
-        members.profile_image,members.username,color1,posts.id,sender,post_count,topic,
+        rad1,rad2,members.profile_image,members.username,color1,posts.id,sender,post_count,topic,
 caption,item1,thumb1,itemtype1,interact1a,interact1ax,interact1ay,interact1b,interact1bx,interact1by,item2,thumb2,itemtype2,interact2a,interact2ax,interact2ay,interact2b,interact2bx,interact2by,item3,thumb3,itemtype3,interact3a,interact3ax,interact3ay,interact3b,interact3bx,interact3by,item4,thumb4,itemtype4,item5,thumb5,itemtype5,time  FROM posts inner join members on
  posts.sender = members.id   ORDER BY posts.id DESC LIMIT 20`;
 
@@ -186,7 +185,7 @@ WHERE post = posts.id and user = ?)EmoIn,
          WHERE post = posts.id and type=4)funny, 
          
          
-        members.profile_image,members.username,color1,posts.id,sender,post_count,topic,
+       rad1,rad2, members.profile_image,members.username,color1,posts.id,sender,post_count,topic,
 caption,item1,thumb1,itemtype1,interact1a,interact1ax,interact1ay,interact1b,interact1bx,interact1by,item2,thumb2,itemtype2,interact2a,interact2ax,interact2ay,interact2b,interact2bx,interact2by,item3,thumb3,itemtype3,interact3a,interact3ax,interact3ay,interact3b,interact3bx,interact3by,item4,thumb4,itemtype4,item5,thumb5,itemtype5,time  FROM posts inner join members on
  posts.sender = members.id AND posts.id < ?    ORDER BY posts.id DESC LIMIT 20`;
 
@@ -204,7 +203,7 @@ const updatebillboardPic2 = `UPDATE members SET billboard2 = ?, billboardthumb2 
 
 const createpost = `INSERT INTO posts (sender,post_count,topic,caption,item1,thumb1,itemtype1,interact1a,interact1ax,interact1ay,
   interact1b,interact1bx,interact1by,item2,thumb2,itemtype2,interact2a,interact2ax,interact2ay,interact2b,interact2bx,interact2by,item3,thumb3,itemtype3,
-  interact3a,interact3ax,interact3ay,interact3b,interact3bx,interact3by,item4,thumb4,itemtype4,item5,thumb5,itemtype5,time) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`;
+  interact3a,interact3ax,interact3ay,interact3b,interact3bx,interact3by,item4,thumb4,itemtype4,item5,thumb5,itemtype5,rad1,rad2,time) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`;
 
 const createComment = `INSERT INTO comments (post,com,commented_by,date) VALUES (?,?,?,?)`;
 
@@ -330,7 +329,7 @@ WHERE post = posts.id and user = ?)EmoIn,
          WHERE post = posts.id and type=4)funny, 
          
          
-        members.profile_image,members.username,color1,posts.id,sender,post_count,topic,
+        rad1,rad2,members.profile_image,members.username,color1,posts.id,sender,post_count,topic,
 caption,item1,thumb1,itemtype1,interact1a,interact1ax,interact1ay,interact1b,interact1bx,interact1by,item2,thumb2,itemtype2,interact2a,interact2ax,interact2ay,interact2b,interact2bx,interact2by,item3,thumb3,itemtype3,interact3a,interact3ax,interact3ay,interact3b,interact3bx,interact3by,item4,thumb4,itemtype4,item5,thumb5,itemtype5,time  FROM posts inner join members on
  posts.sender = members.id    where posts.sender = ?  ORDER BY posts.id DESC LIMIT 20`;
 
@@ -369,7 +368,7 @@ WHERE post = posts.id and user = ?)EmoIn,
          WHERE post = posts.id and type=4)funny, 
          
          
-        members.profile_image,members.username,color1,posts.id,sender,post_count,topic,
+        rad1,rad2,members.profile_image,members.username,color1,posts.id,sender,post_count,topic,
 caption,item1,thumb1,itemtype1,interact1a,interact1ax,interact1ay,interact1b,interact1bx,interact1by,item2,thumb2,itemtype2,interact2a,interact2ax,interact2ay,interact2b,interact2bx,interact2by,item3,thumb3,itemtype3,interact3a,interact3ax,interact3ay,interact3b,interact3bx,interact3by,item4,thumb4,itemtype4,item5,thumb5,itemtype5,time  FROM posts inner join members on
  posts.sender = members.id where posts.sender = ? AND posts.id < ?  ORDER BY posts.id DESC LIMIT 20 `;
 
@@ -845,7 +844,7 @@ app.post("/post_upload_data", async (req: any, res: any, next: any) => {
 
   var currentTime = new Date();
 
-  console.log(values.I1x);
+  console.log(values.rad1);
   try {
     await execPoolQuery(createpost, [
       values.id,
@@ -894,6 +893,9 @@ app.post("/post_upload_data", async (req: any, res: any, next: any) => {
       values.all[4] ? values.all[4].imagedata : null,
       values.all[4] ? values.all[4].imagedataThumb : null,
       values.all[4] ? 1 : null,
+
+      values.rad1,
+      values.rad2,
       currentTime,
     ]);
     return res.send({ message: "images uploaded" });
@@ -1266,12 +1268,12 @@ app.post(
             values.inputedUsername,
             hash,
             values.inputedEmail,
-            "https://superstarz-data-tank.s3.eu-west-2.amazonaws.com/fc284f4924c7405bb44ab8e2c3f05891",
-            "https://superstarz-data-tank.s3.eu-west-2.amazonaws.com/94e85f77e13ff88e7deb98d65975f39a",
-            "https://superstarz-data-tank.s3.eu-west-2.amazonaws.com/27e942d28474c2e0bff656c338c563a5",
-            "https://superstarz-data-tank.s3.eu-west-2.amazonaws.com/d42140d57dc052276dd51af3f461e4f9",
-            "https://superstarz-data-tank.s3.eu-west-2.amazonaws.com/98356ee74f016f6e019ec687d3a54982",
-            "https://superstarz-data-tank.s3.eu-west-2.amazonaws.com/2c38be850a49ff355ba1e13a40ebe3f0",
+            "https://clikbatebucket.s3.amazonaws.com/3763e5c4c412eefdeb6e7528d27d636f",
+            "https://clikbatebucket.s3.amazonaws.com/9f372d50df48ec12e6b74703199a4fd0",
+            "https://clikbatebucket.s3.amazonaws.com/92fcfd4fc5a38c8dc6d2b1459bfa60d3",
+            "https://clikbatebucket.s3.amazonaws.com/f37214a78551f5bfe7aad14bd81b08c9",
+            "https://clikbatebucket.s3.amazonaws.com/fdbdfac4387215403ce708cbb20b49e8",
+            "https://clikbatebucket.s3.amazonaws.com/ce5328a431d4b5f5cbfbd91d495b97d6",
             color,
             color,
             0,

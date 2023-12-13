@@ -59,6 +59,8 @@ function Captionx({
   interactContent2,
   cropInitialIn,
   interactContent,
+  radius1,
+  radius2
 }: any): JSX.Element {
   const [matchTabletMobile, setmatchTabletMobile] = useState<boolean>(false);
 
@@ -270,6 +272,8 @@ function Captionx({
                     I3y: cropInitialIn[2].y,
                     I3bx: cropInitialIn2[2].x,
                     I3by: cropInitialIn2[2].y,
+                    rad1: radius1,
+                    rad2: radius2,
                   };
 
 
@@ -327,6 +331,8 @@ function Captionx({
               I3y: cropInitialIn[2].y,
               I3bx: cropInitialIn2[2].x,
               I3by: cropInitialIn2[2].y,
+              rad1: radius1,
+              rad2: radius2,
             };
 
 
