@@ -260,7 +260,27 @@ function FormHolderx({
               };
               dispatch(UpdateColorAction(colorboy, 1));
 
-              window.location.reload();
+
+              if (response.data.payload.userreg === 1) {
+                localStorage.setItem('reg', '0');
+
+                Axios.put(
+                  `${REACT_APP_SUPERSTARZ_URL}/update_Reg`,
+                  { values: response.data.payload },
+                  {}
+                ).then((response) => {
+                  if (response.data.message === "updated") {
+                    window.location.reload();
+                  }
+                })
+                  .catch(function (error) {
+                    window.location.reload();
+                  });
+              }
+
+
+
+
 
               /// dispatch(IsLoggedAction());
             } else {
@@ -734,7 +754,7 @@ function FormHolderx({
                       } else if (response.data.payload) {
 
 
-
+                        localStorage.setItem('reg', '1');
 
                         window.location.reload();
 

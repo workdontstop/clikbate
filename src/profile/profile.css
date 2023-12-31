@@ -284,3 +284,19 @@
 .blinking {
   animation: blink 1s infinite;
 }
+
+@keyframes blinkxx {
+  0% {
+    opacity: 0.55;
+  }
+  50% {
+    opacity: 0.8;
+  }
+  100% {
+    opacity: 0.35;
+  }
+}
+
+.blinkingxx {
+  animation: blinkxx 0.45s infinite;
+}

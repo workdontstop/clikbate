@@ -23,7 +23,14 @@ import {
   UPDATE_MenuData,
   UPDATE_MenuNav,
   UPDATE_pagenum,
-  UPDATE_signin
+  UPDATE_signin,
+  UPDATE_upaudio,
+  clickPostHintState_LOADER,
+  connectHintState_LOADER,
+  minimiseHintState_LOADER,
+  interactHintState_LOADER,
+  EditHintState_LOADER,
+  interactionstartHintState_LOADER,
 } from "./global_ActionTypes";
 
 ////////////OPTIONS TOP SHOW  DATA////////////////
@@ -132,6 +139,7 @@ const initialStateButtonsLOGINLIGHT = {
 };
 type MyButtonsLoginReducerLight = typeof initialStateButtonsLOGINLIGHT;
 
+
 export const ButtonsLoginReducerLight = (
   state = initialStateButtonsLOGINLIGHT,
   action: any
@@ -233,6 +241,22 @@ export const GlobalReducerColor = (
 //////GLOBAL LOADER  DATA
 const initialStateLoader = {
   loader: false,
+  clickPostHint: '',
+  clickPostHintState: true,
+  connectHint: '',
+  connectHintState: true,
+  minimiseHint: '',
+  minimiseHintState: true,
+  interactHint: '',
+  interactHintState: true,
+  EditHint: '',
+  EditHintState: true,
+  interactionstartHint: '',
+  interactionstartHintState: true,
+  adjustinteractionHint: '',
+  adjustinteractionHintState: true,
+
+
 };
 type MYGlobalReducerLoader = typeof initialStateLoader;
 
@@ -245,6 +269,18 @@ export const GlobalReducerLoader = (
       return { ...state, loader: true };
     case HIDE_GLOBAL_LOADER:
       return { ...state, loader: false };
+    case clickPostHintState_LOADER:
+      return { ...state, clickPostHintState: false };
+    case connectHintState_LOADER:
+      return { ...state, connectHintState: false };
+    case minimiseHintState_LOADER:
+      return { ...state, minimiseHintState: false };
+    case interactHintState_LOADER:
+      return { ...state, interactHintState: false };
+    case EditHintState_LOADER:
+      return { ...state, EditHintState: false };
+    case interactionstartHintState_LOADER:
+      return { ...state, interactionstartHintState: false };
     default:
       return state;
   }
@@ -270,12 +306,15 @@ const initialState = {
   CommentData: [],
   reactionType: 0,
   interactContent: '',
-  interact: false,
+  interact: 0,
   MenuData: '',
   menunav: true,
   pagenum: 0,
   SignIn: true,
-  Guest: 141
+  Guest: 141,
+  interactContentAudiox: null,
+  interactContentAudiotypex: 0,
+
   ////For example const initialState = { person: null as Person };
 };
 type MyGlobalReducer = typeof initialState;
@@ -348,6 +387,13 @@ export const GlobalReducer = (
       return {
         ...state,
         SignIn: action.payload,
+      };
+
+    case UPDATE_upaudio:
+      return {
+        ...state,
+        interactContentAudiox: action.payload,
+        interactContentAudiotypex: action.payload2,
       };
 
     default:

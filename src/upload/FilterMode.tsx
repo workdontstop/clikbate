@@ -29,6 +29,8 @@ import { convertHexToRGB } from "material-ui/utils/colorManipulator";
 import { Caption } from "./Caption";
 import date from "date-and-time";
 import AdjustIcon from '@material-ui/icons/Adjust';
+import { CaptionText } from "./CaptionText";
+import { Tutorial } from "../Tutorial";
 
 ///Axios.defaults.withCredentials = true;
 
@@ -46,6 +48,15 @@ function FilterModex({
   ratiox
 }: any): JSX.Element {
   var newitemUploadRef = useRef<any>(null);
+
+  const Value = {
+    caption: "",
+    topic: "",
+  };
+
+
+
+  const [captionvalues, setcaptionvalues] = useState(Value);
 
   // Formatting the date and time
   // by using date.format() method
@@ -152,6 +163,12 @@ function FilterModex({
   const [interactContent, setinteractContent] = useState<any>([]);
   const [interactContent2, setinteractContent2] = useState<any>([]);
 
+  const [interactContentvideo, setinteractContentvideo] = useState<any>(null);
+  const [interactContentvideo2, setinteractContentvideo2] = useState<any>(null);
+
+  const [interactContenttype, setinteractContenttype] = useState(0);
+  const [interactContenttype2, setinteractContenttype2] = useState(0);
+
   const [radius1, setradius1] = useState(0);
 
   const [radius2, setradius2] = useState(0);
@@ -200,6 +217,81 @@ function FilterModex({
     ...state.GlobalNavuploadReducer,
   }));
   const activatefilterImageReducer = activatefilterImage;
+
+
+
+
+
+
+
+  const [AudioUrl, setAudioUrl] = useState<any>(null);
+
+
+  const [vidBackUpURL, setvidBackUpURL] = useState(''); // State to store the image URL
+
+
+  const [vidBackUpURL2, setvidBackUpURL2] = useState(''); // State to store the image URL
+
+  const [interactContentAudio, setinteractContentAudio] = useState<any>(null);
+
+  const [interactContentAudiotype, setinteractContentAudiotype] = useState<any>(0);
+
+  const [ShowAudio, setShowAudio] = useState<any>(false);
+
+  const [Audioname, setAudioname] = useState('');
+
+
+  const [AllowCaption, setAllowCaption] = useState(false);
+
+
+
+  ///
+  ///
+  /// SANITISE LOG IN FORM INPUT CLIENT SIDE
+  const updatecaptiontop = useCallback(
+    (e: any) => {
+      const { name, value } = e.target;
+      setcaptionvalues({ ...captionvalues, [name]: value });
+
+
+    },
+    [captionvalues]
+  );
+
+
+
+  var transform = "";
+  var font1 = "";
+  var font2 = "";
+  var paddingbutU = "";
+
+  var width = " ";
+  var sizex: "small" | "medium" | undefined = undefined;
+  ///
+  ///
+  ///
+  if (matchPc) {
+    sizex = "medium";
+    width = "20%";
+    transform = "scale(1)";
+    font1 = "2.7vh";
+    font2 = "2.1vh";
+    paddingbutU = "70px";
+  } else if (matchTablet) {
+    sizex = "small";
+    width = "62%";
+    transform = "scale(1)";
+    font1 = "2.6vh";
+    font2 = "2vh";
+    paddingbutU = "100px";
+  } else {
+    sizex = "small";
+    width = "100%";
+    transform = "scale(0.94)";
+    font1 = "";
+    font2 = "";
+    paddingbutU = "80px";
+  }
 
   ///
 
@@ -652,6 +744,7 @@ function FilterModex({
           }}
         >
           <OptionsSlider
+            AllowCaption={AllowCaption}
             setstartTopicCap={setstartTopicCap}
             finalImageData={finalImageData}
             setfinalImageData={setfinalImageData}
@@ -921,6 +1014,8 @@ function FilterModex({
         </>
       ) : null}
 
+      {startSuperSticker ? null : <Tutorial type={5} index={0} />}
+
       {startSuperSticker ? (
         <>
           {" "}
@@ -947,6 +1042,19 @@ function FilterModex({
               }}
             >
               <Superstickers
+                setvidBackUpURL={setvidBackUpURL}
+                vidBackUpURL={vidBackUpURL}
+                vidBackUpURL2={vidBackUpURL2}
+                setvidBackUpURL2={setvidBackUpURL2}
+                interactContentvideo2={interactContentvideo2}
+                interactContentvideo={interactContentvideo}
+                interactContenttype={interactContenttype}
+                interactContenttype2={interactContenttype2}
+
+                setinteractContentvideo2={setinteractContentvideo2}
+                setinteractContentvideo={setinteractContentvideo}
+                setinteractContenttype={setinteractContenttype}
+                setinteractContenttype2={setinteractContenttype2}
                 setradius1={setradius1}
                 setradius2={setradius2}
                 interactContentBlob={interactContentBlob}
@@ -1017,7 +1125,33 @@ function FilterModex({
                 zIndex: 11,
               }}
             >
+
+
               <Caption
+                vidBackUpURL={vidBackUpURL}
+                vidBackUpURL2={vidBackUpURL2}
+                captionvalues={captionvalues}
+                setcaptionvalues={setcaptionvalues}
+                setAllowCaption={setAllowCaption}
+                setAudioUrl={setAudioUrl}
+                AudioUrl={AudioUrl}
+
+                setAudioname={setAudioname}
+                Audioname={Audioname}
+
+                ShowAudio={ShowAudio}
+                setShowAudio={setShowAudio}
+
+                setinteractContentAudio={setinteractContentAudio}
+                interactContentAudio={interactContentAudio}
+
+                setinteractContentAudiotype={setinteractContentAudiotype}
+                interactContentAudiotype={interactContentAudiotype}
+
+                interactContenttype2={interactContenttype2}
+                interactContenttype={interactContenttype}
+                interactContentvideo2={interactContentvideo2}
+                interactContentvideo={interactContentvideo}
                 radius1={radius1}
                 radius2={radius2}
                 interactContent={interactContentBlob}
@@ -1043,6 +1177,61 @@ function FilterModex({
           </animated.div>
         </>
       ) : null}
+
+
+
+
+
+      {startSuperSticker ? null :
+
+        startTopicCap ? null :
+
+          <Grid
+            item
+            xs={6}
+            style={{
+              padding: "0px",
+              height: '0px',
+
+            }}
+          >
+
+            <CaptionText
+              updatecaptiontop={updatecaptiontop}
+              sizex={sizex} font1={font1} font2={font2}
+              captionvalues={captionvalues}
+              transform={transform} width={width} />
+
+
+
+            <CheckIcon
+              onClick={() => {
+                setAllowCaption(true);
+              }}
+              className={
+                darkmodeReducer
+                  ? "make-small-icons-clickable-lightCrop dontallowhighlighting zuperkingIcon "
+                  : "make-small-icons-clickable-darkCrop dontallowhighlighting zuperkingIcon  "
+              }
+              style={{
+                color: "#ffffff",
+                fontSize: matchTabletMobile
+                  ? `${mobilefont}vh`
+                  : `${pcfont}vw`,
+                right: "37.5%",
+                position: 'fixed',
+                zIndex: 2,
+                bottom: '5.4vh',
+                display: startTopicCap ? 'none' : 'block'
+              }}
+            />
+
+          </Grid>}
+
+
+
+
+
 
       <Grid
         container

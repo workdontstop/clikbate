@@ -204,11 +204,11 @@ function Menux({
         ///dispatch(UpdateMenuNav(true));
 
         setShownav(true);
-        if (matchMobile) { dispatch(SnapToggleAction(false)) };
+        dispatch(SnapToggleAction(false))
       }
       menuTimer2.current = setTimeout(function () {
         setShownav(false);
-        if (matchMobile) { dispatch(SnapToggleAction(true)); }
+        dispatch(SnapToggleAction(true));
 
       }, 2600);
     }, 2000);

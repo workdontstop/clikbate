@@ -6,7 +6,6 @@ import { useSelector, useDispatch } from "react-redux";
 import { useSpring, animated } from "react-spring";
 import {
   UpdateLoader,
-
 } from ".././GlobalActions";
 import Axios from "axios";
 import CircleIcon from "@mui/icons-material/Circle";
@@ -70,7 +69,7 @@ function MenuInnerx({
 
   const dispatch = useDispatch();
 
-  const { REACT_APP_SUPERSTARZ_URL, REACT_APP_APPX_STATE } = process.env;
+  const { REACT_APP_SUPERSTARZ_URL, REACT_APP_CLOUNDFRONT, REACT_APP_APPX_STATE } = process.env;
 
 
   const [FeedsThumb, setFeedsThumb] = useState('');
@@ -692,7 +691,8 @@ function MenuInnerx({
                               marginBottom: "2.2px",
 
                             }}
-                            src={imageReducer}
+
+                            src={`${REACT_APP_CLOUNDFRONT}${imageReducer}`}
                           />
                       )}
                     </>
@@ -735,8 +735,9 @@ function MenuInnerx({
 
                           marginBottom: "2.2px",
                         }}
+
                         src={memeberPageidReducer === 0 && i === 0 ?
-                          image1 : image2}
+                          `${REACT_APP_CLOUNDFRONT}${image1}` : `${REACT_APP_CLOUNDFRONT}${image2}`}
                       /> : <div
                         onClick={() => {
                           clickOptions(i, optionsClickType, " ");

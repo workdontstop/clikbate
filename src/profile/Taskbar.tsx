@@ -160,21 +160,17 @@ function Taskbarx({
       ? getSliderWidth / 1.02
       : getSliderWidth / 0.77;
 
+
+  const { PaperStyleLight, PaperStyleDark } = useSelector(
+    (state: RootStateOrAny) => ({
+      ...state.PaperReducerLightnDark,
+    })
+  );
+
+
   return (
     <>
       <animated.div
-
-        className={
-          matchPc
-            ? darkmodeReducer
-              ? "postscroll-dark modal-containerDark"
-              : "postscroll-light modal-containerLight"
-            : darkmodeReducer
-              ? "postscroll-darkm modal-containerDark"
-              : "postscroll-lightm  modal-containerLight"
-        }
-
-
 
         style={{
           ...animation, width: '100%',
@@ -182,6 +178,9 @@ function Taskbarx({
           position: "fixed",
           top: '-0vh',
           zIndex: 100,
+          backgroundImage: darkmodeReducer
+            ? PaperStyleDark
+            : PaperStyleLight,
           cursor: "default",
           overflow: hideCrop ? 'auto' : 'hidden',
         }}>

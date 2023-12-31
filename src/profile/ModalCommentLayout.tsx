@@ -89,7 +89,7 @@ function ModalCommentLayoutx({
   const [serverEmojiplain, setserverEmojiplain] = useState<boolean>(true);
 
 
-  const { REACT_APP_SUPERSTARZ_URL, REACT_APP_APPX_STATE } = process.env;
+  const { REACT_APP_SUPERSTARZ_URL, REACT_APP_CLOUNDFRONT, REACT_APP_APPX_STATE } = process.env;
 
 
 
@@ -452,7 +452,9 @@ function ModalCommentLayoutx({
                       onClick={Interceptzoomlogmodal}
                       onLoad={onimageload}
                       src={
-                        connectTemplateGo > 0 ? memeberPageid === 0 ? imageReducer : MemberProfileData.userimage : DiscussionImage[0]
+                        connectTemplateGo > 0 ? memeberPageid === 0 ? `${REACT_APP_CLOUNDFRONT}${imageReducer}` : `${REACT_APP_CLOUNDFRONT}${MemberProfileData.userimage}`
+                          : `${REACT_APP_CLOUNDFRONT}${DiscussionImage}`
+
                       }
                       className="modalImageStylex"
                       style={{
@@ -499,8 +501,11 @@ function ModalCommentLayoutx({
                           ref={ModalImageRef}
                           onClick={Interceptzoomlogmodal}
                           onLoad={onimageloadx}
+
                           src={
-                            connectTemplateGo > 0 ? memeberPageid === 0 ? imageReducer : MemberProfileData.userimage : DiscussionImage[0]
+                            connectTemplateGo > 0 ? memeberPageid === 0 ? `${REACT_APP_CLOUNDFRONT}${imageReducer}` : `${REACT_APP_CLOUNDFRONT}${MemberProfileData.userimage}`
+                              : `${REACT_APP_CLOUNDFRONT}${DiscussionImage}`
+
                           }
                           className="modalImageStyle"
                           style={{
@@ -568,9 +573,9 @@ function ModalCommentLayoutx({
           ) : (
             /*PC PC PC PC PC PC PC PC PC PC PC PC PC PC PC PC PC PC PC PC PC PC PC PC
         PC PC PC PC PC PC PC PC PC PC PC PC */ /*MOBILE MOBILE MOBILE MOBILE
-                                                                                                                                                                                                                                                                                                                                                                                                                                            MOBILE MOBILEMOBILE MOBILE MOBILE MOBILE MOBILE MOBILE MOBILEMOBILE MOBILE
-                                                                                                                                                                                                                                                                                                                                                                                                MOBILE MOBILE MOBILE MOBILE MOBILEMOBILE MOBILE MOBILE MOBILE MOBILE
-                                                                                                                                                                                                                                                                                                                                                                                                MOBILE MOBILE MOBILE*/
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    MOBILE MOBILEMOBILE MOBILE MOBILE MOBILE MOBILE MOBILE MOBILEMOBILE MOBILE
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        MOBILE MOBILE MOBILE MOBILE MOBILEMOBILE MOBILE MOBILE MOBILE MOBILE
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        MOBILE MOBILE MOBILE*/
             <DialogContent
               className="Hide-mobile-Scrollbar  fadermodal FormDialog-container-mobile dontallowhighlighting"
               ref={imagescrollRef}
@@ -604,7 +609,9 @@ function ModalCommentLayoutx({
                         onClick={clickMobileZoom}
                         onLoad={mobileImageOnLoad}
                         src={
-                          connectTemplateGo > 0 ? memeberPageid === 0 ? imageReducer : MemberProfileData.userimage : DiscussionImage[0]
+                          connectTemplateGo > 0 ? memeberPageid === 0 ? `${REACT_APP_CLOUNDFRONT}${imageReducer}` : `${REACT_APP_CLOUNDFRONT}${MemberProfileData.userimage}`
+                            : `${REACT_APP_CLOUNDFRONT}${DiscussionImage}`
+
                         }
                         className="modalMobileImageStyle slow-Div-Change"
                         alt="SuperstarZ"

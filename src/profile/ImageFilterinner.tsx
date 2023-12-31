@@ -9,6 +9,7 @@ import CircleIcon from "@mui/icons-material/Circle";
 import SettingsIcon from "@mui/icons-material/Settings";
 
 function ImageFilterinnerx({
+  AllowCaption,
   optionsShow,
   optinstopshowingReducer,
   typeTop,
@@ -93,6 +94,20 @@ function ImageFilterinnerx({
   }));
 
   const darkmodeReducer = darkmode;
+
+
+  useEffect(() => {
+
+    if (AllowCaption) {
+
+      setsupeFilterLoadFade(true);
+      ApplyImageFilter(effectMode[0], 0, 0, getImageWidth, "imageHDall", "hd");
+    }
+
+
+  }, [AllowCaption])
+
+
 
   ///
   ///
@@ -449,18 +464,21 @@ function ImageFilterinnerx({
       var heightx: number;
       var width: number;
       var height: number;
-      /////////////////////////////////////////resolution//////////////////////////////////////////////
+      /////////////////////////////////////////adjust resolution canvas filter mode//////////////////////////////////////////////
       var dynamicDimensions = matchMobile
         ? window.innerHeight * 4.5
         : window.innerHeight * 2;
       var dynamicDimensionsx = matchMobile
         ? window.innerWidth * 4.5
         : window.innerWidth * 1.8;
-      /////////////////////////////////////////resolution//////////////////////////////////////////////
+      ////////
+      /////////////////////////////////////////adjust resolution canvas filter mode//////////////////////////////////////////////
 
 
       previewFileReadimage.onload = function () {
         const ctx = canvasRef.current.getContext("2d");
+        const qualityValue = 1;
+
         if (
           previewFileReadimage.naturalWidth > previewFileReadimage.naturalHeight
         ) {
@@ -468,12 +486,13 @@ function ImageFilterinnerx({
             widthx = matchMobile ? 155 : 250;
             width = matchMobile ? 155 : 250;
           } else {
-
-
-
             if (resolution === "hd") {
-              widthx = previewFileReadimage.naturalWidth;
-              width = previewFileReadimage.naturalWidth;
+              ////////
+              /////////////////////////////////////////adjust resolution final result image//////////////////////////////////////////////
+              widthx = previewFileReadimage.naturalWidth * qualityValue;
+              width = previewFileReadimage.naturalWidth * qualityValue;
+              ////////
+              /////////////////////////////////////////adjust resolution final result image//////////////////////////////////////////////
             } else {
               widthx = matchMobile
                 ? dynamicDimensionsx * 0.7
@@ -494,8 +513,12 @@ function ImageFilterinnerx({
             height = matchMobile ? 150 : 250;
           } else {
             if (resolution === "hd") {
-              heightx = previewFileReadimage.naturalHeight;
-              height = previewFileReadimage.naturalHeight;
+              ////////
+              /////////////////////////////////////////adjust resolution final result image//////////////////////////////////////////////
+              heightx = previewFileReadimage.naturalHeight * qualityValue;
+              height = previewFileReadimage.naturalHeight * qualityValue;
+              ////////
+              /////////////////////////////////////////adjust resolution final result image//////////////////////////////////////////////
             } else {
               heightx = matchMobile
                 ? dynamicDimensions * 0.6

@@ -14,6 +14,11 @@ function ServerErrorx({
   serverErrorDisplay,
 }: IServerError) {
   /////////////////////////////////////////////
+
+
+
+
+
   ///
   ///
   ///
@@ -25,6 +30,7 @@ function ServerErrorx({
       screenHeight: number;
       AlertData: "";
       AlertEmojiType: number;
+      Guest: number
     };
   }
 
@@ -32,7 +38,7 @@ function ServerErrorx({
   ///
   ///
   /// GET SCREENHEIGHT FROM REDUX STORE
-  const { screenHeight, darkmode, AlertData, AlertEmojiType } = useSelector(
+  const { screenHeight, darkmode, AlertData, AlertEmojiType, Guest } = useSelector(
     (state: RootStateGlobalReducer) => ({
       ...state.GlobalReducer,
     })
@@ -41,6 +47,7 @@ function ServerErrorx({
   const darkmodeReducer = darkmode;
   const AlertDataReducer = AlertData;
   const AlertEmojiTypeReducer = AlertEmojiType;
+  const GuestReducer = Guest;
 
   ///
   ///
@@ -99,7 +106,7 @@ function ServerErrorx({
       if (AlertDataReducer) {
         dispatch(UpdateAlertReducer(null, 0));
       }
-    }, 3900);
+    }, 5000);
   }, [AlertDataReducer]);
 
   return (
@@ -111,7 +118,7 @@ function ServerErrorx({
             onClick={() => {
               dispatch(UpdateAlertReducer(null, 0));
             }}
-            style={{ height: "20%", padding: "0px" }}
+            style={{ height: "20%", padding: "0px", cursor: 'pointer' }}
             className={
               AlertDataReducer
                 ? ` dontallowhighlighting ${Backtype} server-error`
@@ -211,6 +218,23 @@ function ServerErrorx({
                       }}
                     >
                       &#128721;
+                    </span>
+                  </Grid>
+                  <Grid
+                    item
+                    xs={1}
+                    style={{
+                      display: AlertEmojiTypeReducer === 3 ? "block" : "none",
+                    }}
+                  >
+                    <span
+                      className="server-error-emoji-span"
+                      style={{
+                        fontSize: severerrorEmoji,
+                        marginLeft: severerrorEmojiLeft,
+                      }}
+                    >
+                      &#128150;
                     </span>
                   </Grid>
                 </Grid>

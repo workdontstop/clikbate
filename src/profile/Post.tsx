@@ -32,7 +32,11 @@ import {
   UpdateHistory,
   UpdateCommentHistory,
   UpdatePostFromCom,
-  UpdateReactType, Updatepagenum
+  UpdateReactType,
+  Updatepagenum,
+
+
+
 } from ".././GlobalActions";
 
 import Axios from "axios";
@@ -92,6 +96,11 @@ function Postx({
   itemInteractGo1,
   postItemsRef,
   ActiveCanvas,
+  ShowBigPlay,
+  activeAudio,
+  setactiveAudio,
+  clearAllTimers,
+  AllowAllHdImagesShow
 
 
 
@@ -991,10 +1000,10 @@ function Postx({
 
     dispatch(UpdatePostFromCom(postData));
 
-    dispatch(UpdateCommentHistory(postData[pey], postDatainner[pey]));
+    dispatch(UpdateCommentHistory(postData[pey], postData[pey].item2));
 
     setCommentPostid(postData[pey]);
-    setDiscussionImage(postDatainner[pey]);
+    setDiscussionImage(postData[pey].item2);
     OpenModalForm(2);
   };
 
@@ -1064,6 +1073,10 @@ function Postx({
           {/*///////////////////////////////////////////////////////////////////////////POST DATA*/}
 
           <Slider
+            AllowAllHdImagesShow={AllowAllHdImagesShow}
+            activeAudio={activeAudio}
+            setactiveAudio={setactiveAudio}
+
             paperPostScrollRef={paperPostScrollRef}
             postDivRef={postDivRef}
             checkifClicked={checkifClicked}
@@ -1644,14 +1657,14 @@ function Postx({
                       );
                       dispatch(UpdatePostFromCom(postData));
                       dispatch(
-                        UpdateCommentHistory(postData[pey], postDatainner[pey])
+                        UpdateCommentHistory(postData[pey], postData[pey].item2)
                       );
 
                       dispatch(UpdateReactType(3));
 
                       setconnectTemplateGo(0);
                       setCommentPostid(postData[pey]);
-                      setDiscussionImage(postDatainner[pey]);
+                      setDiscussionImage(postData[pey].item2);
                       OpenModalForm(3);
                       settypeEmo(3);
                     }}
@@ -1725,14 +1738,14 @@ function Postx({
                       );
                       dispatch(UpdatePostFromCom(postData));
                       dispatch(
-                        UpdateCommentHistory(postData[pey], postDatainner[pey])
+                        UpdateCommentHistory(postData[pey], postData[pey].item2)
                       );
 
                       dispatch(UpdateReactType(4));
 
                       setconnectTemplateGo(0);
                       setCommentPostid(postData[pey]);
-                      setDiscussionImage(postDatainner[pey]);
+                      setDiscussionImage(postData[pey].item2);
                       OpenModalForm(3);
                       settypeEmo(4);
                     }}
@@ -1895,11 +1908,17 @@ function Postx({
                       </span>
 
 
-                      <span
+                      <span className={ShowBigPlay ? 'blinkingxx' : ''}
                         onClick={() => {
-                          setsliderIndexMini(sliderIndex);
-                          setzoomClickedIndex(pey + 1);
-                          setminiProfile(true);
+
+                          if (ShowBigPlay) {
+                            clearAllTimers();
+                          } else {
+                            setsliderIndexMini(sliderIndex);
+                            setzoomClickedIndex(pey + 1);
+                            setminiProfile(true);
+                          }
+
                         }}
 
                         onTouchStart={() => {
@@ -1953,7 +1972,7 @@ function Postx({
                             style={{
                               fontSize: postcirclefont,
                               color: post.color1,
-                              transform: matchMobile ? BigCircle ? "scale(5)" : "scale(2.2)" : BigCircle ? "scale(5)" : "scale(2.2)", opacity: 0.6,
+                              transform: BigCircle ? "scale(5)" : "scale(2.2)", opacity: 0.6,
                               transition: "transform 0.05s",
 
                             }}
@@ -2014,7 +2033,7 @@ function Postx({
                           //////////////////caption
                         }
 
-                        <span style={{}}>      {post.topic ? post.topic : "SuperstarZ"}{" "}</span>
+                        <span style={{}}>      {post.topic ? post.topic : "Clikbate"}{" "}</span>
 
 
                         {

@@ -37,7 +37,7 @@ function generateUploadURL() {
         const params = {
             Bucket: buckname,
             Key: name,
-            Expires: 5000,
+            Expires: 8000,
             ContentType: "image/jpeg",
         };
         const uploadURL = yield s3.getSignedUrlPromise("putObject", params);

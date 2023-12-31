@@ -68,6 +68,7 @@ function OptionsSliderx({
   setselectedImage,
   setcropimage,
   postData,
+  AllowCaption
 
 }: any) {
   ///
@@ -574,6 +575,7 @@ function OptionsSliderx({
         />
       ) : (
         <ImageFilterinner
+          AllowCaption={AllowCaption}
           setstartTopicCap={setstartTopicCap}
           finalImageData={finalImageData}
           setfinalImageData={setfinalImageData}

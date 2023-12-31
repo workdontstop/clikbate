@@ -1051,22 +1051,22 @@
 .modal-containerDark {
   background-image: linear-gradient(
     to bottom,
-    rgb(100, 100, 100, 0.97),
-    rgb(100, 100, 100, 0.97),
-    rgb(100, 100, 100, 0.96),
-    rgb(100, 100, 100, 0.935),
-    rgb(100, 100, 100, 0.925)
+    rgb(70, 70, 70, 0.97),
+    rgb(70, 70, 70, 0.97),
+    rgb(70, 70, 70, 0.96),
+    rgb(70, 70, 70, 0.935),
+    rgb(70, 70, 70, 0.925)
   );
 }
 
 .modal-containerLight {
   background-image: linear-gradient(
     to bottom,
-    rgb(160, 160, 160, 0.979),
-    rgb(160, 160, 160, 0.97),
-    rgb(160, 160, 160, 0.96),
-    rgb(160, 160, 160, 0.95),
-    rgb(160, 160, 160, 0.95)
+    rgb(220, 220, 220, 0.979),
+    rgb(220, 220, 220, 0.97),
+    rgb(220, 220, 220, 0.96),
+    rgb(220, 220, 220, 0.95),
+    rgb(220, 220, 220, 0.95)
   );
 }
 
@@ -2185,4 +2185,9 @@ span.click-effect:hover {
 
 span.click-effect:active {
   background-color: rgba(0, 0, 0, 0); /* Your provided color on click */
+}
+
+.fade-out {
+  opacity: 0;
+  transition: opacity 3s ease;
 }

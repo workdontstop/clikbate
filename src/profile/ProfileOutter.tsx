@@ -6,6 +6,7 @@ import { Billboard } from "./Billboard";
 import "./profile.css";
 import { Connect } from "./Connect";
 import { Profile } from "./Profile";
+
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import Axios from "axios";
@@ -26,7 +27,7 @@ import { UserInfoUpdateMEMBER } from "../log/actions/UserdataAction";
 import { Loader } from "./Loader";
 import { UpdateLoader, UpdateMenuData, Updatepagenum } from ".././GlobalActions";
 import { Taskbar } from "./Taskbar";
-import { UpdateInteract } from ".././GlobalActions";
+import { UpdateInteract, UpdateAlertReducer } from ".././GlobalActions";
 import SlowMotionVideoIcon from '@material-ui/icons/SlowMotionVideo';
 
 import { LoginButtons } from "../log/LogButtons";
@@ -43,7 +44,7 @@ import {
 } from "@material-ui/core";
 
 function ProfileOutter() {
-  const { REACT_APP_SUPERSTARZ_URL, REACT_APP_APPX_STATE } = process.env;
+  const { REACT_APP_SUPERSTARZ_URL, REACT_APP_CLOUNDFRONT, REACT_APP_APPX_STATE } = process.env;
 
   var billdefaultbill =
     "https://superstarz-data-tank.s3.eu-west-2.amazonaws.com/fc284f4924c7405bb44ab8e2c3f05891";///not used
@@ -91,7 +92,7 @@ function ProfileOutter() {
       activateLoader: boolean;
       historyscroll: number;
       interactContent: any;
-      interact: boolean;
+      interact: number;
       MenuData: String;
       pagenum: number;
       SignIn: boolean,
@@ -122,6 +123,7 @@ function ProfileOutter() {
   const GuestReducer = Guest;
 
 
+  const [sliderIndex, setSliderIndex] = useState(0);
 
 
   const [ShowBigPlay, setShowBigPlay] = useState(false);
@@ -340,6 +342,7 @@ function ProfileOutter() {
 
       if (memeberPageidReducer === 0) {
         dispatch(UserInfoUpdateMEMBERDATA([]));
+
         valax = {
           id: idReducer,
           id2: idReducer,
@@ -381,7 +384,7 @@ function ProfileOutter() {
             } else { callfeeds(response.data.payload.id, pagenumReducer); }
 
           } else if (response.data.message === "logged out") {
-            alert("app.tsx checkislogged logged out");
+            alert("Ongoing Security Updates, Pls Try Again Later");
           }
         })
         .catch(function (error) {
@@ -486,6 +489,8 @@ function ProfileOutter() {
   const [formtype, setFormtype] = useState<number>(1);
 
 
+  const [dontallowspring, setdontallowspring] = useState<boolean>(false);
+
   const OpenModalForm = useCallback(
     (type: any) => {
       var dd = { type: 0, id: 0, innerid: 0, pagenumReducer: pagenumReducer };
@@ -524,6 +529,7 @@ function ProfileOutter() {
         window.history.pushState(dd, "", modalName);
       }
       else if (type === 2) {
+        setdontallowspring(false);
         setconnectTemplateGo(0);
         let modalName = "Discussion";
         setreactionTemplateGo(false);
@@ -532,12 +538,14 @@ function ProfileOutter() {
         setShowModalForm(true);
         window.history.pushState(dd, "", modalName);
       } else if (type === 200) {
+        setdontallowspring(true);
         setconnectTemplateGo(0);
         setreactionTemplateGo(false);
         setcommentTemplateGo(true);
         setStopBodyScroll(true);
         setShowModalForm(true);
       } else if (type === 3 || type === 4) {
+        setdontallowspring(false);
         let modalName = type === 3 ? "Reaction" : "Connections";
         setcommentTemplateGo(true);
         setreactionTemplateGo(true);
@@ -545,6 +553,7 @@ function ProfileOutter() {
         setShowModalForm(true);
         window.history.pushState(dd, "", modalName);
       } else if (type === 300 || type === 400) {
+        setdontallowspring(true);
         setcommentTemplateGo(true);
         setreactionTemplateGo(true);
         setStopBodyScroll(true);
@@ -660,6 +669,23 @@ function ProfileOutter() {
     }
   };
 
+
+
+
+  const [callhistoryModal, setcallhistoryModal] = useState(0);
+
+  const [historyScrollonload, sethistoryScrollonload] = useState(0);
+
+  const openmodalhistory = (t: number) => {
+    if (t === 0) {
+    } else {
+      OpenModalForm(t);
+      setcallhistoryModal(0)
+    }
+  }
+
+
+
   ///
   ///
   ///
@@ -680,10 +706,13 @@ function ProfileOutter() {
     setScrollTo(historyIndexInt);
 
     if (historyIndexInt === 0) {
+
+      sethistoryScrollonload(0);
+
     } else {
-      setTimeout(() => {
-        paperPostScrollRef.current.scrollTop = historyIndexInt;
-      }, 2000);
+
+      sethistoryScrollonload(historyIndexInt);
+
     }
 
     var historyData = window.history.state.data;
@@ -717,6 +746,19 @@ function ProfileOutter() {
 
     dispatch(Updatepagenum(limValue));
 
+
+
+    if (historyDataTypeInt === 0 || historyDataTypeInt === 1) {
+
+
+    } else {
+
+      setshowThisComponenet(true);
+    }
+
+
+    ///alert(historyDataTypeInt);
+
     if (
       historyDataTypeInt === 0 ||
       historyDataTypeInt === 5 ||
@@ -724,6 +766,8 @@ function ProfileOutter() {
       historyDataTypeInt === 9
     ) {
 
+
+      /// alert('jj');
       callpopstatewithoutdata(
         historyData,
         historyDataTypeInt,
@@ -774,7 +818,9 @@ function ProfileOutter() {
 
             setCommentPostid(comidhistoryData);
             setDiscussionImage(DiscussionImagehistoryData);
-            OpenModalForm(200);
+
+
+            setcallhistoryModal(200)
           } else if (historyDataTypeInt === 8) {
             setCommentHistoryData(historycomOriginalData);
             setcommentHistoryScroll(historycomScroll);
@@ -782,13 +828,15 @@ function ProfileOutter() {
             setconnectTemplateGo(0);
             setCommentPostid(comidhistoryData);
             setDiscussionImage(DiscussionImagehistoryData);
-            OpenModalForm(300);
+
+            setcallhistoryModal(300)
+
             settypeEmo(historyreactTypeHis);
           } else if (historyDataTypeInt === 10) {
             setCommentHistoryData(historycomOriginalData);
             setcommentHistoryScroll(historycomScroll);
 
-            OpenModalForm(400);
+            setcallhistoryModal(400);
             setconnectTemplateGo(historyreactTypeHis);
           } else {
           }
@@ -804,7 +852,8 @@ function ProfileOutter() {
 
             setCommentPostid(comidhistoryData);
             setDiscussionImage(DiscussionImagehistoryData);
-            OpenModalForm(200);
+
+            setcallhistoryModal(200)
           } else if (historyDataTypeInt === 8) {
             setCommentHistoryData(historycomOriginalData);
             setcommentHistoryScroll(historycomScroll);
@@ -812,13 +861,14 @@ function ProfileOutter() {
             setconnectTemplateGo(0);
             setCommentPostid(comidhistoryData);
             setDiscussionImage(DiscussionImagehistoryData);
-            OpenModalForm(300);
+
+            setcallhistoryModal(300)
             settypeEmo(historyreactTypeHis);
           } else if (historyDataTypeInt === 10) {
             setCommentHistoryData(historycomOriginalData);
             setcommentHistoryScroll(historycomScroll);
 
-            OpenModalForm(400);
+            setcallhistoryModal(400)
             setconnectTemplateGo(historyreactTypeHis);
           } else {
           }
@@ -875,21 +925,29 @@ function ProfileOutter() {
         setCommentHistoryData(dd);
         setcommentHistoryScroll(sr);
 
+
         setCommentPostid(i);
         setDiscussionImage(d);
-        OpenModalForm(200);
+
+        setcallhistoryModal(200)
+
+
       } else if (ty === 7) {
-        ///
+
         setconnectTemplateGo(0);
         setCommentPostid(i);
         setDiscussionImage(d);
-        OpenModalForm(300);
+
+        setcallhistoryModal(300)
+
         settypeEmo(reactTy);
       } else if (ty === 9) {
         setCommentHistoryData(dd);
         setcommentHistoryScroll(sr);
 
-        OpenModalForm(400);
+
+
+        setcallhistoryModal(400)
         setconnectTemplateGo(reactTy);
       } else {
       }
@@ -1108,7 +1166,7 @@ function ProfileOutter() {
             responsex(postdataRep, postLim);
 
           } else if (response.data.message === "error in fetching feeds") {
-            alert("Connection malfunction profile outter");
+            alert("Ongoing Security Updates, Pls Try Again Later");
           }
         })
         .catch(function (error) {
@@ -1592,6 +1650,9 @@ function ProfileOutter() {
 
   return (
     <>
+
+
+
       <Loader autoSlideDisplay={autoSlideDisplay} sliderLoader={sliderLoader} />
 
       {loggedInReducer ? (
@@ -1637,8 +1698,8 @@ function ProfileOutter() {
                         padding: "0px",
                         height: "100vh",
                         backgroundColor: darkmodeReducer
-                          ? "rgba(30,20,30, 0.3)"
-                          : "rgba(210,210,200, 0.25)",
+                          ? "rgba(30,20,30, 0.33)"
+                          : "rgba(210,210,200, 0.28)",
                         top: "0vh",
                         zIndex: "1000",
                       }}
@@ -1647,6 +1708,8 @@ function ProfileOutter() {
                 ) : null}
 
                 <Billboard
+                  sliderIndex={sliderIndex}
+                  setSliderIndex={setSliderIndex}
                   setshowModalFormMenu={setShowModalFormMenu}
                   showModalFormMenu={showModalFormMenu}
                   postData={postData}
@@ -1708,7 +1771,7 @@ function ProfileOutter() {
                           callAddfav();
                         }
                       }}
-                      className={`  ${optionsClass}   `}
+                      className={ShowBigPlay ? `blinkingxx    ${optionsClass}   ` : `   ${optionsClass}   `}
                       style={{
                         zIndex: 2,
                         backgroundColor: idReducer === memeberPageidReducer ? colorReducer : ColorMemberReducer,
@@ -1716,6 +1779,7 @@ function ProfileOutter() {
                         top: `${profileImagethumbTop}px`,
                         opacity: 0.7,
                         visibility: showModalFormMenu ? 'hidden' : "visible",
+
                       }}
                     >
                       <Connect
@@ -1754,7 +1818,8 @@ function ProfileOutter() {
                         filter: "blur(4px)",
                         visibility: matchMobile && showModalFormMenu ? 'hidden' : 'visible',
                       }}
-                      src={`${imageReducerThumb}`}
+
+                      src={`${REACT_APP_CLOUNDFRONT}${imageReducerThumb}`}
                       alt="Superstarz Billboard "
                     />
 
@@ -1788,7 +1853,10 @@ function ProfileOutter() {
                         margin: "auto",
                         visibility: matchMobile && showModalFormMenu ? 'hidden' : 'visible',
                       }}
-                      src={`${imageReducer}`}
+
+
+
+                      src={`${REACT_APP_CLOUNDFRONT}${imageReducer}`}
                       alt="Superstarz Billboard "
                     />
                   </Grid>
@@ -1908,8 +1976,11 @@ function ProfileOutter() {
                   position: "relative", zIndex: 1, padding: "0px"
                 }}>
                   <Profile
+                    historyScrollonload={historyScrollonload}
+                    callhistoryModal={callhistoryModal}
+                    openmodalhistory={openmodalhistory}
                     clikplay={clikplay}
-
+                    ShowBigPlay={ShowBigPlay}
                     setShowBigPlay={setShowBigPlay}
                     setsuperSettings={setsuperSettings}
 
@@ -2002,7 +2073,7 @@ function ProfileOutter() {
                         padding: "0px",
                         backgroundColor: darkmodeReducer
                           ? "rgba(50,50,50,0.85)"
-                          : "rgba(200,200,200,0.75)",
+                          : "rgba(210,210,210,0.86)",
                         height: "75%",
                         marginTop: "0vh",
                         textAlign: "center",
@@ -2053,7 +2124,7 @@ function ProfileOutter() {
                         padding: "0px",
                         backgroundColor: darkmodeReducer
                           ? "rgba(50,50,50,0.85)"
-                          : "rgba(200,200,200,0.75)",
+                          : "rgba(210,210,210,0.86)",
                         height: "75%",
                         marginTop: "0vh",
                         textAlign: "center",
@@ -2106,7 +2177,7 @@ function ProfileOutter() {
                 className="dontallowhighlighting"
                 item
                 onClick={() => {
-                  dispatch(UpdateInteract('', false));
+                  dispatch(UpdateInteract('', 0));
                 }}
                 style={{
                   cursor: 'pointer',
@@ -2119,7 +2190,7 @@ function ProfileOutter() {
                   backgroundColor: darkmodeReducer
                     ? "rgb(20,20,20,0.52)"
                     : "rgb(210,210,210,0.45)",
-                  display: interactReducer ? 'block' : 'none',
+                  display: interactReducer === 1 ? 'block' : 'none',
                   alignItems: 'center',
 
 
@@ -2128,7 +2199,7 @@ function ProfileOutter() {
                 {matchMobile ? <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '85vh' }}>
                   <img
                     onClick={() => {
-                      dispatch(UpdateInteract('', false));
+                      dispatch(UpdateInteract('', 0));
                     }}
                     className="dontallowhighlighting"
                     src={interactContentReducer}
@@ -2144,7 +2215,7 @@ function ProfileOutter() {
                   />
                 </div>
                   : <img onClick={() => {
-                    dispatch(UpdateInteract('', false));
+                    dispatch(UpdateInteract('', 0));
                   }}
                     className="dontallowhighlighting" src={interactContentReducer}
                     style={{
@@ -2152,7 +2223,12 @@ function ProfileOutter() {
                       width: 'auto'
                     }} />
                 }
+
               </Grid>
+
+
+
+
 
 
               <Grid
@@ -2183,6 +2259,7 @@ function ProfileOutter() {
                   />
                 </div>
                 <CommentTemplate
+                  dontallowspring={dontallowspring}
                   setcommentHistoryScroll={setcommentHistoryScroll}
                   setCommentHistoryData={setCommentHistoryData}
                   commentHistoryScroll={commentHistoryScroll}
@@ -2205,7 +2282,10 @@ function ProfileOutter() {
                   setcheckIfColorChanged={setcheckIfColorChanged}
                 />
               </Grid>
+
+
               <UploadProfilePic
+                sliderIndex={sliderIndex}
                 billdefaultbill={billdefaultbill}
                 uploadClose={uploadClose}
                 profileimageSource={profileimageSource}
@@ -2334,38 +2414,6 @@ function ProfileOutter() {
                     <LoginButtons OpenModalForm={OpenModalForm} />
                   </Grid>
               }
-
-
-
-
-              {ShowBigPlay ? <Grid
-                item
-                style={{
-                  position: 'fixed',
-                  bottom: '3vh',
-                  zIndex: 4500,
-                  right: '5vw',
-
-                }}
-              >
-                <SlowMotionVideoIcon
-                  onClick={() => {
-
-                    setclikplay(true);
-                  }}
-                  className={`${darkmodeReducer
-                    ? "make-small-icons-clickable-darkMenu dontallowhighlighting zuperkingIcon"
-                    : "make-small-icons-clickable-lightMenu dontallowhighlighting zuperking"
-                    } blinking`}
-                  style={{
-                    fontSize: matchMobile ? '8.7vh' : '6vw',
-                    color: colorReducer
-                  }}
-                />
-
-
-              </Grid> : null}
-
 
 
 

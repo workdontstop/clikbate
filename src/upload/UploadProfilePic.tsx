@@ -27,6 +27,7 @@ function UploadProfilePicx({
   typex,
   uploadClose,
   billdefaultbill,
+  sliderIndex
 }: any): JSX.Element {
   const cropCanvasRefx: any = useRef(null);
 
@@ -483,18 +484,19 @@ function UploadProfilePicx({
     ) => {
       Axios.put(urlx, a)
         .then((response) => {
-          setsuperLoadFadex(false);
+          //// setsuperLoadFadex(false);
           console.log(response);
           if (response.status === 200) {
             setsuperLoadFadex(true);
             if (allow) {
-              let imagelink = urlx.split("?")[0];
+              let imagelinkhh = urlx.split("?")[0];
+              let imagelink = imagelinkhh.split("/").pop();
 
 
 
               var bi = 0;
 
-              if (billboardstateReducer === 0) {
+              if (sliderIndex === 0) {
 
                 bi = 1;
               } else {
@@ -525,7 +527,9 @@ function UploadProfilePicx({
               }
             } else {
               let imagelinkx = urlx.split("?")[0];
-              s3finaldatax[0] = imagelinkx;
+
+              s3finaldatax[0] = imagelinkx.split("/").pop();
+
 
               PutImageInS3WithURL(
                 thumbBlob,
@@ -545,7 +549,7 @@ function UploadProfilePicx({
           alert("caption erroerrr");
         });
     },
-    [idReducer, s3finaldatax, billboard1Reducer, billboardstateReducer]
+    [idReducer, s3finaldatax, billboard1Reducer, billboardstateReducer, sliderIndex]
   );
 
   const UpdateBillboardDatabaseStatus200 = (datak: any, b: any) => {
@@ -553,17 +557,28 @@ function UploadProfilePicx({
       values: datak,
     })
       .then((response) => {
-        setsuperLoadFadex(false);
+
         if (response.data.message === "billboard image uploaded") {
-          setsuperLoadFadex(false);
+
 
           const data = {
-            billboard1: b,
-            billboard2: b,
+            billboard1: datak.imagedata,
+            billboard2: datak.imagedata,
           };
 
-          dispatch(UserInfoUpdateBILLBOARD(data, datak.type));
-          uploadClose(3);
+
+
+          setTimeout(() => {
+
+            dispatch(UserInfoUpdateBILLBOARD(data, datak.type));
+            uploadClose(3);
+            setsuperLoadFadex(false);
+          }, 1500)
+
+
+
+          ///window.location.reload(true);
+
         }
       })
       .catch(function (error) {
@@ -577,7 +592,7 @@ function UploadProfilePicx({
       values: datak,
     })
       .then((response) => {
-        setsuperLoadFadex(false);
+
         if (response.data.message === "profile image data updated") {
           var colorboy = {
             color1: color.darkVibrant,
@@ -586,10 +601,16 @@ function UploadProfilePicx({
           };
           dispatch(UpdateColorAction(colorboy, 1));
           const data = {
-            image: b,
+            image: datak.imagedata,
           };
-          dispatch(UserInfoUpdatePROFILE(data));
-          uploadClose(4);
+
+          setTimeout(() => {
+
+            dispatch(UserInfoUpdatePROFILE(data));
+            uploadClose(4);
+            setsuperLoadFadex(false);
+          }, 1500)
+
         }
       })
       .catch(function (error) {

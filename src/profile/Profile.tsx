@@ -9,6 +9,8 @@ import $ from "jquery";
 import { matchPc, matchTablet, matchMobile } from "../DetectDevice";
 import { RootStateOrAny, useSelector, useDispatch } from "react-redux";
 
+import { UpdateInteract, UpdateAlertReducer } from ".././GlobalActions";
+
 import { ActualMenu } from "./ActualMenu";
 import {
   Paper,
@@ -68,7 +70,11 @@ function Profilex({
   setShowBigPlay,
   setsuperSettings,
   showModalFormMenu,
-  setshowModalFormMenu
+  setshowModalFormMenu,
+  ShowBigPlay,
+  callhistoryModal,
+  openmodalhistory,
+  historyScrollonload
 }: any) {
   const [countAutoplay, setcountAutoplay] = useState<number>(0);
 
@@ -88,6 +94,9 @@ function Profilex({
   const [second, setsecond] = useState<any>(0);
   const [secondgo, setsecondgo] = useState<boolean>(false);
 
+
+  const [AllowAllHdImagesShow, setAllowAllHdImagesShow] = useState<boolean>(false);
+
   const [itemheight, setitemheight] = useState<Array<string>>([]);
   const [itemheighthold, setitemheighthold] = useState<Array<string>>([]);
   const [itemcroptype, setitemcroptype] = useState<Array<number>>([]);
@@ -99,7 +108,14 @@ function Profilex({
     []
   );
 
+
+  const [activeAudio, setactiveAudio] = useState(1000000000000000000);
+
   const lastItemElement = useRef<any>();
+
+
+
+
 
   const [showMoreIndicator, setshowMoreIndicator] = useState(false);
 
@@ -108,13 +124,26 @@ function Profilex({
   const [lastIndicatorPushH, setlastIndicatorPushH] = useState(37);
 
 
+
+
+
   useEffect(() => {
 
     if (clikplay) {
       clearAllTimers();
     }
 
+
   }, [clikplay])
+
+
+  useEffect(() => {
+
+    setshowThisComponenet(true);
+
+  }, [])
+
+
 
   useEffect(() => {
 
@@ -194,6 +223,8 @@ function Profilex({
 
   const [ActiveCanvas, setActiveCanvas] = useState(0);
 
+  const [ActiveCanvasx, setActiveCanvasx] = useState(0);
+
   const [itemOriginalPostHeight, setitemOriginalPostHeight] = useState<
     Array<number>
   >([]);
@@ -218,6 +249,18 @@ function Profilex({
   const scrollTypeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
 
+  const postTimer1 = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const postTimer2 = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const postTimer3 = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const postTimer4 = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const postTimer5 = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const postTimer6 = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const postTimer7 = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const postTimer8 = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+
+
+
 
   ///
   /// INTERFACE/TYPES FOR SCREENHEIGHT AND DARKMODE
@@ -226,7 +269,10 @@ function Profilex({
       darkmode: boolean;
       screenHeight: number;
       activateLoader: boolean;
-      pagenum: number
+      pagenum: number,
+      Guest: number
+
+
 
     };
   }
@@ -235,7 +281,7 @@ function Profilex({
   ///
   ///
   /// GET SCREENHEIGHT FROM REDUX STORE
-  const { screenHeight, darkmode, activateLoader, pagenum } = useSelector(
+  const { screenHeight, darkmode, activateLoader, pagenum, Guest } = useSelector(
     (state: RootStateGlobalReducer) => ({
       ...state.GlobalReducer,
     })
@@ -244,6 +290,7 @@ function Profilex({
   const darkmodeReducer = darkmode;
   const activateLoaderReducer = activateLoader;
   const pagenumReducer = pagenum;
+  const GuestReducer = Guest;
 
 
   ///
@@ -347,26 +394,32 @@ function Profilex({
     return (num / 100) * per;
   }
 
-  const navvScroll = () => {
+  const navvScroll = useCallback(() => {
     /// alert(ScrollTo);
-    if (ScrollTo === 0) {
+
+    if (StopMini) {
+      if (ScrollTo === 0) {
+      } else {
+        ///alert(ScrollTo);
+        setTimeout(() => {
+          paperPostScrollRef.current.scrollTop = ScrollTo;
+        }, 30);
+      }
     } else {
-      ///alert(ScrollTo);
-      setTimeout(() => {
-        paperPostScrollRef.current.scrollTop = ScrollTo;
-      }, 30);
+
     }
 
-  };
+  }, [StopMini, ScrollTo])
 
   const onPostsItemload = useCallback(
     (e: any, index: number, itemnum: number) => {
-      ///
-      if (ScrollTo === index) {
-        navvScroll();
-      }
+
       if (itemnum === 0) {
         if (postItemsRef.current[index]) {
+
+          clearAllTimers();
+
+
           var imageHeight = postItemsRef.current[index].clientHeight;
 
           ///////////////////////////////
@@ -475,8 +528,6 @@ function Profilex({
           if (StopMini || pagenumReducer === 0) { } else {
             if (postData[0].lim > 0 && index === 0) {
               setTimeout(function () {
-
-
                 postDivRef.current[0].scrollIntoView({
                   behavior: "smooth",
                   block: "start",
@@ -499,49 +550,105 @@ function Profilex({
 
 
 
+            if (idReducer === GuestReducer) { dispatch(UpdateAlertReducer('Welcome to ClikBate , Express Yourself and have fun.', 3)); }
+
 
             /**  if (activateLoaderReducer) {
                             dispatch(UpdateLoader(false));
                           } */
 
-            ////
-            navvScroll();
-            ///
-            ///
+
 
             dispatch(UpdateLoader(true));
-            setTimeout(function () {
+
+            if (postTimer1.current) {
+              clearTimeout(postTimer1.current);
+            }
+            postTimer1.current = setTimeout(function () {
 
               if (StopMini) {
-                setStopMini(false)
+
+                if (postTimer2.current) {
+                  clearTimeout(postTimer2.current);
+                }
+                postTimer2.current = setTimeout(function () {
+                  setStopMini(false)
+                }, 2000);
               } else {
                 setminiProfile(true);
               }
               ///////////
-            }, 2000);
+            }, 1000);
 
 
-            setTimeout(function () {
-
+            if (postTimer3.current) {
+              clearTimeout(postTimer3.current);
+            }
+            postTimer3.current = setTimeout(function () {
               setlastIndicatorPushH(22 + 37);
               setlastIndicatorPush(true);
 
 
-              setshowThisComponenet(false);
-              dispatch(UpdateLoader(false));
+              openmodalhistory(callhistoryModal);
+              if (historyScrollonload === 0) {
+              } else {
+                if (postTimer4.current) {
+                  clearTimeout(postTimer4.current);
+                }
+                postTimer4.current = setTimeout(() => {
+                  paperPostScrollRef.current.scrollTop = historyScrollonload;
+                }, 1000);
+              }
+
 
               if (StopMini) {
+                if (postTimer5.current) {
+                  clearTimeout(postTimer5.current);
+                }
+                postTimer5.current = setTimeout(() => {
+                  setshowThisComponenet(false);
+                  dispatch(UpdateLoader(false));
+                }, 1000);
+
+                if (postTimer6.current) {
+                  clearTimeout(postTimer6.current);
+                }
+                postTimer6.current = setTimeout(() => {
+                  setAllowAllHdImagesShow(true)
+
+                }, 7900)
 
               } else {
 
-                setTimeout(() => {
-                  scrollToRef();
 
-                }, 3600)
+                setshowThisComponenet(false);
+                dispatch(UpdateLoader(false));
+
+                if (postTimer7.current) {
+                  clearTimeout(postTimer7.current);
+                }
+
+                postTimer7.current = setTimeout(() => {
+
+                  scrollToRef();
+                  ////
+                  navvScroll();
+                  ///
+                  ///
+                  if (postTimer8.current) {
+                    clearTimeout(postTimer8.current);
+                  }
+                  postTimer8.current = setTimeout(() => {
+                    setAllowAllHdImagesShow(true)
+
+                  }, 5000)
+
+
+                }, 2900)
 
               }
               ///////////
-            }, 4000);
+            }, 2700);
 
 
 
@@ -663,7 +770,7 @@ function Profilex({
       newclickArray[index] = false;
       setitemCLICKED(newclickArray);
       postitemSHOWFULLHEIGHT(index, 1);
-      scrollToPost(index);
+      setTimeout(() => { scrollToPost(index); }, 500)
     } else {
 
 
@@ -681,7 +788,8 @@ function Profilex({
       newclickArray[index] = true;
       setitemCLICKED(newclickArray);
       postitemSHOWFULLHEIGHT(index, 0);
-      scrollToPost(index);
+      setTimeout(() => { scrollToPost(index); }, 500)
+
     }
 
 
@@ -766,12 +874,15 @@ function Profilex({
   interface RootStateReducerImage {
     UserdataReducer: {
       image: string;
+
+      id: number;
     };
   }
-  const { image } = useSelector((state: RootStateReducerImage) => ({
+  const { image, id } = useSelector((state: RootStateReducerImage) => ({
     ...state.UserdataReducer,
   }));
   const imageReducer = image;
+  const idReducer = id;
 
   const blank = () => { };
 
@@ -874,47 +985,54 @@ function Profilex({
 
   const scrollToRef = useCallback(() => {
 
-    var Limit: number = postData.length;
+    if (StopMini) { } else {
 
-    var Time = 0;
+      setShowBigPlay(true);
+      var Limit: number = postData.length;
 
-    for (let i = 0; i <= Limit; i++) {  // <= 20 to include the reset to the first post
-      if (i > indexRoll) {
-        Time = Time + 7000;
-        setShowBigPlay(true);
+      var Time = 0;
 
-        tyTimer.current[i] = setTimeout(() => {
+      for (let i = 0; i <= Limit; i++) {  // <= 20 to include the reset to the first post
+        if (i > indexRoll) {
+          Time = Time + 8000;
+          setShowBigPlay(true);
 
-          if (i === Limit) {
-            // Reset to the first post after reaching the last post
-            postDivRefx.current[Limit < 3 ? Limit - 1 : Limit - 3].scrollIntoView({
-              behavior: "smooth",
-              block: "start",
-            });
-            //
-            postDivRefRoll.current[Limit < 3 ? Limit - 1 : Limit - 3].scrollIntoView({
-              behavior: "smooth",
-              block: "start",
-            });
-            setShowBigPlay(false);
-          } else {
-            postDivRefx.current[i].scrollIntoView({
-              behavior: "smooth",
-              block: "start",
-            });
-            //
-            postDivRefRoll.current[i].scrollIntoView({
-              behavior: "smooth",
-              block: "start",
-            });
-          }
+          tyTimer.current[i] = setTimeout(() => {
+
+            if (i === Limit) {
+              // Reset to the first post after reaching the last post
+              postDivRefx.current[Limit < 3 ? Limit - 1 : Limit - 3].scrollIntoView({
+                behavior: "smooth",
+                block: "start",
+              });
+              //
+              postDivRefRoll.current[Limit < 3 ? Limit - 1 : Limit - 3].scrollIntoView({
+                behavior: "smooth",
+                block: "start",
+              });
+              setShowBigPlay(false);
+            } else {
 
 
-        }, Time - 7000);
+              postDivRefx.current[i].scrollIntoView({
+                behavior: "smooth",
+                block: "start",
+              });
+              //
+              postDivRefRoll.current[i].scrollIntoView({
+                behavior: "smooth",
+                block: "start",
+              });
+            }
+
+
+          }, Time - 8000);
+        }
       }
+
     }
 
-  }, [AllowRoll, indexRoll, postData]);
+  }, [AllowRoll, indexRoll, postData, StopMini]);
 
 
   /////////////////////////////////////////////////////////////
@@ -1003,6 +1121,11 @@ function Profilex({
                     }}
                   >
                     <MiniPost
+                      AllowAllHdImagesShow={AllowAllHdImagesShow}
+                      clearAllTimers={clearAllTimers}
+                      setactiveAudio={setactiveAudio}
+                      activeAudio={activeAudio}
+                      ShowBigPlay={ShowBigPlay}
                       setAdded={setAdded}
                       Added={Added}
                       postDatainnerInteraction2={postDatainnerInteraction2}
@@ -1016,6 +1139,8 @@ function Profilex({
                       setminiProfile={setminiProfile}
                       setStopBodyScroll={setStopBodyScroll}
                       setx={setx}
+                      ActiveCanvasx={ActiveCanvasx}
+                      setActiveCanvasx={setActiveCanvasx}
                       miniLayoutPost={miniLayoutPost}
                       setCommentPostid={setCommentPostid}
                       postData={postData}
@@ -1062,6 +1187,11 @@ function Profilex({
 
                   <div key={i} style={{ display: miniProfile ? "none" : "block", }}>
                     <Post
+                      AllowAllHdImagesShow={AllowAllHdImagesShow}
+                      clearAllTimers={clearAllTimers}
+                      setactiveAudio={setactiveAudio}
+                      activeAudio={activeAudio}
+                      ShowBigPlay={ShowBigPlay}
                       setAdded={setAdded}
                       Added={Added}
                       addpostDivRefRoll={addpostDivRefRoll}

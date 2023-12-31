@@ -133,6 +133,36 @@ function App(): JSX.Element {
     Axios.post(`${REACT_APP_SUPERSTARZ_URL}/checkIsLogged`, { withCredentials: true })
       .then((response) => {
         if (response.data.message === "logged in") {
+
+
+
+          let regLocalData = localStorage.getItem('reg');
+
+          // Check if 'reg' equals '1' and dont stop tutorial
+          if (regLocalData === '1') { } else {
+
+
+            if (response.data.payload.userreg === 1) {
+              Axios.put(
+                `${REACT_APP_SUPERSTARZ_URL}/update_Reg`,
+                { values: response.data.payload },
+                {}
+              ).then((response) => {
+                if (response.data.message === "updated") {
+
+                  //alert('kjj');
+
+                }
+              }).catch(function (error) {
+
+              });
+            }
+          }
+
+
+
+          localStorage.setItem('reg', '0');
+
           dispatch(IsLoggedAction());
           dispatch(IsLoggedProfileAction());
           dispatch(UserdataActionOnLoad(response.data.payload));
@@ -142,6 +172,8 @@ function App(): JSX.Element {
             colortype: response.data.payload.usercolortype,
           };
           dispatch(UpdateColorAction(colorboy, 1));
+
+
         } else if (response.data.message === "logged out") {
           GuestLogin();
         }

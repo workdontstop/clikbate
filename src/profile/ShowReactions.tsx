@@ -55,7 +55,8 @@ function ShowReactionsx({
   paperPostScrollRefxx,
   connectTemplateGo,
 }: any) {
-  const { REACT_APP_SUPERSTARZ_URL, REACT_APP_APPX_STATE } = process.env;
+
+  const { REACT_APP_SUPERSTARZ_URL, REACT_APP_CLOUNDFRONT, REACT_APP_APPX_STATE } = process.env;
 
   const dispatch = useDispatch();
 
@@ -349,7 +350,8 @@ function ShowReactionsx({
                 objectFit: "contain",
                 width: "100%",
               }}
-              src={`${post.profile_image}`}
+
+              src={`${REACT_APP_CLOUNDFRONT}${post.profile_image}`}
               alt="Superstarz Billboard "
             />
 

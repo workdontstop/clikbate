@@ -51,4 +51,22 @@ export const UPDATE_pagenum = "UPDATE_pagenum";
 
 export const UPDATE_signin = "UPDATE_signin";
 
+export const UPDATE_upaudio = "UPDATE_upaudio";
+
+
+export const clickPostHintState_LOADER = "clickPostHintState_LOADER";
+
+export const connectHintState_LOADER = "connectHintState_LOADER";
+
+
+export const interactionstartHintState_LOADER = "interactionstartHintState_LOADER";
+
+export const EditHintState_LOADER = "EditHintState_LOADER";
+
+export const interactHintState_LOADER = "interactHintState_LOADER";
+
+export const minimiseHintState_LOADER = "minimiseHintState_LOADER";
+
+
+
 

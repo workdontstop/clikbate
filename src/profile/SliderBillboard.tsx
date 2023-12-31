@@ -13,12 +13,17 @@ function SliderBillboardx({
   ClickBillboardClose,
   ShowBillboard,
   billboardserverswitch,
+  sliderIndex,
+  setSliderIndex
 }: any): JSX.Element {
-  const { REACT_APP_APPX_STATE } = process.env;
+
+
+  const { REACT_APP_SUPERSTARZ_URL, REACT_APP_CLOUNDFRONT, REACT_APP_APPX_STATE } = process.env;
+
 
   var allow4dev = "";
 
-  const [sliderIndex, setSliderIndex] = useState(0);
+
 
   const [allowAutoPlay, setAllowAutoPlay] = useState(true);
 
@@ -176,9 +181,9 @@ function SliderBillboardx({
 
     ///set((state) => (state + 1) % slides.length);
     if (sliderIndex === slides.length - 1) {
-      setSliderIndex((sliderIndex) => 0);
+      setSliderIndex((sliderIndex: any) => 0);
     } else {
-      setSliderIndex((sliderIndex) => sliderIndex + 1);
+      setSliderIndex((sliderIndex: any) => sliderIndex + 1);
     }
   };
 
@@ -192,9 +197,9 @@ function SliderBillboardx({
     }
 
     if (sliderIndex === 0) {
-      setSliderIndex((sliderIndex) => slides.length - 1);
+      setSliderIndex((sliderIndex: any) => slides.length - 1);
     } else {
-      setSliderIndex((sliderIndex) => sliderIndex - 1);
+      setSliderIndex((sliderIndex: any) => sliderIndex - 1);
     }
   };
 
@@ -206,7 +211,7 @@ function SliderBillboardx({
     setAllowAutoPlay(false);
 
     autoPlayTimer.current = setInterval(function () {
-      setSliderIndex((state) => (state + 1) % slides.length);
+      setSliderIndex((state: any) => (state + 1) % slides.length);
     }, autoSlideDuration);
   };
 
@@ -241,7 +246,7 @@ function SliderBillboardx({
           clearInterval(autoPlayTimer.current);
         }
       } else {
-        setSliderIndex((state) => (state + 1) % slides.length);
+        setSliderIndex((state: any) => (state + 1) % slides.length);
       }
     }, 12000);
 
@@ -280,7 +285,7 @@ function SliderBillboardx({
 
   useEffect(() => {
     if (slides[1]) {
-      setSliderIndex((state) => 1 % slides.length);
+      setSliderIndex((state: any) => 1 % slides.length);
     }
   }, [billboard2Reducer]);
 
@@ -323,7 +328,7 @@ function SliderBillboardx({
   ///
   /// CHANGE SLIDER CONTENT USING  DOTS
   const GotoDots = (clickedDot: number) => {
-    setSliderIndex((sliderIndex) => clickedDot);
+    setSliderIndex((sliderIndex: any) => clickedDot);
   };
 
   ///
@@ -381,7 +386,8 @@ function SliderBillboardx({
               zIndex: 1,
               filter: "blur(0px)",
             }}
-            src={slidesthumb[i]}
+
+            src={`${REACT_APP_CLOUNDFRONT}${slidesthumb[i]}`}
           />
           <animated.img
             ref={SlideimageRef}
@@ -410,7 +416,7 @@ function SliderBillboardx({
               left: "0",
               zIndex: 2,
             }}
-            src={slides[i]}
+            src={`${REACT_APP_CLOUNDFRONT}${slides[i]}`}
           />
         </Grid>
       ))}{" "}

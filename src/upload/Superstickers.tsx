@@ -52,6 +52,9 @@ import UploadIcon from "@mui/icons-material/Upload";
 import { readFileContent } from './FileReader';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { InteractMenu } from "./InteractMenu";
+import { VideoEditor } from "./VideoEditor";
+import { Tutorial } from "../Tutorial";
+
 
 
 function Superstickersx({
@@ -88,7 +91,20 @@ function Superstickersx({
   interactContent2Blob,
   setinteractContent2Blob,
   setradius1,
-  setradius2
+  setradius2,
+  setinteractContentvideo2,
+  setinteractContentvideo,
+  setinteractContenttype,
+  setinteractContenttype2,
+  interactContentvideo2,
+  interactContentvideo,
+  interactContenttype,
+  interactContenttype2,
+  setvidBackUpURL,
+  vidBackUpURL,
+  vidBackUpURL2,
+  setvidBackUpURL2,
+
 }: any): JSX.Element {
   const [superundoArray, setsuperundoArray] = useState<any>([]);
 
@@ -1211,6 +1227,11 @@ function Superstickersx({
 
     if (one) {
 
+
+
+      setinteractContentvideo(null);
+      setinteractContenttype(0);
+      /////////
       interactContentxx[index] = '';
       setinteractContent(interactContentxx);
       interactContentxxBlob[index] = '';
@@ -1230,6 +1251,10 @@ function Superstickersx({
     } else {
 
 
+
+      setinteractContentvideo2(null);
+      setinteractContenttype2(0);
+      //////////////
       interactContentxx2[index] = '';
       setinteractContent2(interactContentxx2);
       interactContentxx2Blob[index] = '';
@@ -2166,57 +2191,161 @@ function Superstickersx({
   }
 
 
+
+
+
+  function readFileAsDataUrl(file: any) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+
+      reader.onloadend = () => {
+        resolve(reader.result);
+      };
+
+      reader.onerror = () => {
+        reject(reader.error);
+      };
+
+      // Read the file and get the Data URL directly
+      reader.readAsDataURL(file);
+    });
+  }
+
+
+  const [VideoData2, setVideoData2] = useState<any>(null);
+  const [VideoData, setVideoData] = useState<any>(null);
+
+  const [VideoUrl, setVideoUrl] = useState<any>(null);
+  const [VideoUrl2, setVideoUrl2] = useState<any>(null);
+
+  const [ShowVideo2, setShowVideo2] = useState(false);
+  const [ShowVideo, setShowVideo] = useState(false);
+
+
+
+  useEffect(() => {
+    if (VideoData2) {
+      // Create a blob URL when new video data is set
+      const newVideoUrl = URL.createObjectURL(VideoData2);
+      setVideoUrl2(newVideoUrl);
+      setShowVideo2(true);
+
+      // Cleanup function to revoke the blob URL
+      return () => {
+        URL.revokeObjectURL(newVideoUrl);
+      };
+    }
+  }, [VideoData2]);
+
   const handleFileChange2 = async (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
+
+    // Clear the input value to allow the same file to be selected again
+    if (event.target && event.target.value) {
+      event.target.value = '';
+    }
+
     if (file) {
 
       try {
+        if (file.type.startsWith('video/')) {
 
 
-        const dataUrl: any = await readFileAsDataUrl(file);
-
-        const res = await fetch(dataUrl);
-        const dataxs = await res.blob();
+          setShowVideo(false);
+          setVideoData(file);
 
 
-        interactContentxx2Blob[index] = dataxs;
-        interactContentxx2[index] = dataUrl;
+          setShowVideo2(true);
 
 
-        setinteractContent2(interactContentxx2);
-        setinteractContent2Blob(interactContentxx2Blob);
+          interactContentxx2[index] = file;
+          setinteractContent2(interactContentxx);
 
-        setadjustinteract2(true);
 
-      } catch (error) {
+          // Proceed with your video handling logic
+        } else {
+          const dataUrl: any = await readFileAsDataUrl(file);
+          const res = await fetch(dataUrl);
+          const dataxs = await res.blob();
+
+
+          interactContentxx2Blob[index] = dataxs;
+          interactContentxx2[index] = dataUrl;
+
+
+          setinteractContent2(interactContentxx2);
+          setinteractContent2Blob(interactContentxx2Blob);
+
+          setadjustinteract2(true);
+
+        }
+      } catch (error: any) {
         console.error('Error reading the file:', error);
       }
     }
   };
 
 
+  useEffect(() => {
+    if (VideoData) {
+      // Create a blob URL when new video data is set
+      const newVideoUrl = URL.createObjectURL(VideoData);
+      setVideoUrl(newVideoUrl);
+      setShowVideo(true);
+
+      // Cleanup function to revoke the blob URL
+      return () => {
+        URL.revokeObjectURL(newVideoUrl);
+      };
+    }
+  }, [VideoData]);
+
+
+
+
+
+
   const handleFileChange = async (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
+
+    // Clear the input value to allow the same file to be selected again
+    if (event.target && event.target.value) {
+      event.target.value = '';
+    }
+
     if (file) {
 
       try {
 
-
-        const dataUrl: any = await readFileAsDataUrl(file);
-
-        const res = await fetch(dataUrl);
-        const dataxs = await res.blob();
+        if (file.type.startsWith('video/')) {
 
 
-        interactContentxxBlob[index] = dataxs;
-        interactContentxx[index] = dataUrl
+          setShowVideo(false);
+          setVideoData(file);
+
+          interactContentxx[index] = file;
+          setinteractContent(interactContentxx);
 
 
-        setinteractContent(interactContentxx);
-        setinteractContentBlob(interactContentxxBlob);
 
-        setadjustinteract1(true);
 
+          // Proceed with your video handling logic
+        } else {
+          const dataUrl: any = await readFileAsDataUrl(file);
+
+          const res = await fetch(dataUrl);
+          const dataxs = await res.blob();
+
+
+          interactContentxxBlob[index] = dataxs;
+          interactContentxx[index] = dataUrl
+
+
+          setinteractContent(interactContentxx);
+          setinteractContentBlob(interactContentxxBlob);
+
+          setadjustinteract1(true);
+        }
 
       } catch (error) {
         console.error('Error reading the file:', error);
@@ -2252,23 +2381,6 @@ function Superstickersx({
       }
     }
   }, [fileInputRef, fileInputRef2, adjustinteract1, adjustinteract2]);
-
-  function readFileAsDataUrl(file: any) {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-
-      reader.onloadend = () => {
-        resolve(reader.result);
-      };
-
-      reader.onerror = () => {
-        reject(reader.error);
-      };
-
-      // Read the file and get the Data URL directly
-      reader.readAsDataURL(file);
-    });
-  }
 
 
 
@@ -3507,42 +3619,7 @@ function Superstickersx({
           }
 
 
-          {stickerOPtionsDefault === 4 ?
-            interactContent[index] || interactContent2[index] ? null : < Grid
-              item
-              xs={12}
-              style={{
-                padding: "20px",
-              }}
-            >
-              <CloseIcon
-                onClick={() => {
-                  if (tiim.current) {
-                    clearTimeout(tiim.current);
-                  }
-                  if (TouchTimer.current) {
-                    clearTimeout(TouchTimer.current);
-                  }
 
-                  calldraw(0, 0, 0, 1);
-                  setstickerOPtionsDefault(0);
-                  //setStopCollectInteractData1(false);
-                }}
-                className={
-                  darkmodeReducer
-                    ? "make-small-icons-clickable-dark dontallowhighlighting zuperkingIcon "
-                    : "make-small-icons-clickable-light  dontallowhighlighting zuperkingIcon  "
-                }
-                style={{
-                  margin: "auto",
-                  color: "#ffffff",
-                  fontSize: matchTabletMobile
-                    ? `${mobilefont}vh`
-                    : `${pcfont}vw`,
-                }}
-              />
-            </Grid>
-            : null}
 
 
 
@@ -3860,6 +3937,10 @@ function Superstickersx({
 
 
         <InteractMenu
+          interactContenttype={interactContenttype}
+          interactContentvideo={interactContentvideo}
+          interactContenttype2={interactContenttype2}
+          interactContentvideo2={interactContentvideo2}
           percentageCoveragex={percentageCoveragex}
           callDelInteract={callDelInteract}
           colorx={colorx}
@@ -3920,6 +4001,36 @@ function Superstickersx({
             display: stickerOPtionsDefault === 4 ? 'none' : 'block',
           }}
         />
+
+
+        <Grid item
+          xs={12}
+          style={{ position: 'relative', bottom: '60vh', zIndex: 20000000 }}>
+
+
+
+
+
+          <VideoEditor
+            setvidBackUpURL={setvidBackUpURL}
+            vidBackUpURL={vidBackUpURL}
+            vidBackUpURL2={vidBackUpURL2}
+            setvidBackUpURL2={setvidBackUpURL2}
+            setadjustinteract1={setadjustinteract1}
+            setadjustinteract2={setadjustinteract2}
+            setinteractContentvideo={setinteractContentvideo}
+            setinteractContenttype={setinteractContenttype}
+            setinteractContenttype2={setinteractContenttype2}
+            setinteractContentvideo2={setinteractContentvideo2}
+            callDelInteract={callDelInteract} VideoUrl={VideoUrl}
+            ShowVideo2={ShowVideo2} ShowVideo={ShowVideo} VideoUrl2={VideoUrl2}
+            setShowVideo2={setShowVideo2} setShowVideo={setShowVideo} />
+
+
+
+
+        </Grid>
+
 
         <canvas
           className={
@@ -4005,6 +4116,50 @@ function Superstickersx({
           </>
         ) : null}
 
+        {stickerOPtionsDefault === 4 ?
+          interactContent[index] || interactContent2[index] ? null : < Grid
+            item
+            xs={12}
+            style={{
+              padding: "20px",
+              position: 'fixed',
+              zIndex: 200000000,
+              top: '2vh',
+              right: '27vw'
+            }}
+          >
+            <CloseIcon
+              onClick={() => {
+                if (tiim.current) {
+                  clearTimeout(tiim.current);
+                }
+                if (TouchTimer.current) {
+                  clearTimeout(TouchTimer.current);
+                }
+
+                calldraw(0, 0, 0, 1);
+                setstickerOPtionsDefault(0);
+                //setStopCollectInteractData1(false);
+              }}
+              className={
+                darkmodeReducer
+                  ? "make-small-icons-clickable-dark dontallowhighlighting  "
+                  : "make-small-icons-clickable-light  dontallowhighlighting   "
+              }
+              style={{
+                margin: "auto",
+                color: "#ffffff",
+                fontSize: matchTabletMobile
+                  ? `${mobilefont}vh`
+                  : `${pcfont}vw`,
+
+              }}
+            />
+          </Grid>
+          : null}
+
+
+        {stickerOPtionsDefault === 4 ? <Tutorial type={6} index={0} /> : null}
 
 
 

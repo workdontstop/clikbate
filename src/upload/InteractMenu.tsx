@@ -60,10 +60,12 @@ function InteractMenux({
     handleChange2x,
     colorx,
     callDelInteract,
-    percentageCoveragex
-
+    percentageCoveragex,
+    interactContenttype,
+    interactContentvideo,
+    interactContenttype2,
+    interactContentvideo2
 }: any) {
-
 
     ///
     ///
@@ -87,7 +89,9 @@ function InteractMenux({
     const Timer2 = useRef<ReturnType<typeof setTimeout> | null>(null);
 
 
+    const videoRefjj = useRef<HTMLVideoElement>(null);
 
+    const videoRefjja = useRef<HTMLVideoElement>(null);
 
 
     return (
@@ -169,7 +173,7 @@ function InteractMenux({
                         top: "4vh",
                         width: "50px",
                         backgroundColor: "",
-                        border: "solid #ffffff",
+                        border: darkmodeReducer ? "solid #ffffff" : "solid #000000",
                         height: "50px",
                         margin: "auto",
                         borderRadius: "50%",
@@ -233,7 +237,7 @@ function InteractMenux({
                         top: "5vh",
                         width: "50px",
                         backgroundColor: "",
-                        border: "solid #ffffff",
+                        border: darkmodeReducer ? "solid #ffffff" : "solid #000000",
                         height: "50px",
                         left: "8vw",
                         borderRadius: "50%",
@@ -298,7 +302,7 @@ function InteractMenux({
                         top: "-1vh",
                         width: "50px",
                         backgroundColor: "",
-                        border: "solid #ffffff",
+                        border: darkmodeReducer ? "solid #ffffff" : "solid #000000",
                         height: "50px",
                         left: "15vw",
                         borderRadius: "50%",
@@ -366,7 +370,7 @@ function InteractMenux({
                         top: "-0vh",
                         width: "50px",
                         backgroundColor: "",
-                        border: "solid #ffffff",
+                        border: darkmodeReducer ? "solid #ffffff" : "solid #000000",
                         height: "50px",
                         borderRadius: "50%",
                         margin: "auto",
@@ -421,24 +425,52 @@ function InteractMenux({
                         justifyContent: "center",
                     }}
                 >
-                    {adjustinteract1 && interactContent ? (
-                        <img
-                            src={interactContent}
-                            style={{
-                                width: "50%",
-                                height: "auto",
-                            }}
-                        />
-                    ) : null}
+                    {adjustinteract1 && interactContent ?
+
+                        interactContenttype === 1 ?
+                            <video
+                                src={interactContentvideo ? URL.createObjectURL(interactContentvideo) : ''}   // Using the blob URL from interactContentvideo
+                                style={{
+                                    width: "100%", // Set thevideo width to 100%
+                                    height: "auto",
+                                    display: "block", // Ensure proper rendering in some browsers
+                                    margin: "0 auto", // Center the video
+                                    cursor: 'pointer'
+                                }}
+                            // Add if you want video controls like play, pause, etc.
+                            /> :
+                            <img
+                                src={interactContent}
+                                style={{
+                                    width: "50%",
+                                    height: "auto",
+                                }}
+                            />
+                        : null}
 
                     {adjustinteract2 && interactContent2 ? (
-                        <img
-                            src={interactContent2}
-                            style={{
-                                width: "50%",
-                                height: "auto",
-                            }}
-                        />
+
+
+
+                        interactContenttype2 === 1 ?
+                            <video
+                                src={interactContentvideo2 ? URL.createObjectURL(interactContentvideo2) : ''}   // Using the blob URL from interactContentvideo
+                                style={{
+                                    width: "100%", // Set thevideo width to 100%
+                                    height: "auto",
+                                    display: "block", // Ensure proper rendering in some browsers
+                                    margin: "0 auto", // Center the video
+                                    cursor: 'pointer'
+                                }}
+                            // Add if you want video controls like play, pause, etc.
+                            /> :
+                            <img
+                                src={interactContent2}
+                                style={{
+                                    width: "50%",
+                                    height: "auto",
+                                }}
+                            />
                     ) : null}
 
                     <CheckIcon
@@ -483,56 +515,31 @@ function InteractMenux({
                     }}
                 >
 
-                    {interactContent.length > 0 ?
 
 
 
-                        interactContent[index] === '' ?
-                            <Grid container style={{ paddingTop: '5vh' }}>
-                                <Grid item xs={3}
-                                ></Grid>
-
-                                <Grid item xs={6}
-                                    style={{
-                                        textAlign: "center",
-                                        height: '20vh'
-
-                                    }}>
-                                    <PanoramaIcon
-                                        className={
-                                            darkmodeReducer
-                                                ? " dontallowhighlighting zuperkingIcon "
-                                                : " dontallowhighlighting zuperkingIcon  "
-                                        }
-                                        style={{
-                                            margin: "auto",
-                                            marginTop: '4vh',
-                                            color: "#ffffff",
-                                            fontSize: matchMobile ? `${mobilefont}vh` : `${pcfont + 2}vw`,
-                                            textAlign: "center",
-                                            opacity: '0.1'
-
-                                        }}
-                                    />
-                                </Grid>
-                            </Grid> :
+                    {interactContenttype === 1 ?
+                        ////////////////////////////////////////////////VIDEO////////////////////////////////////////////////
+                        <>
                             < Grid container>
                                 <Grid item xs={6}>
-                                    <img
-                                        onClick={
-                                            () => {
-                                                setadjustinteract1(true);
+                                    <video ref={videoRefjj}
+                                        controls
+                                        onClick={(e: any) => {
+                                            setadjustinteract1(true);
+                                            if (videoRefjj.current) {
+                                                videoRefjj.current.muted = !videoRefjj.current.muted; // Toggle mute
                                             }
-                                        }
-                                        src={interactContent[index]}
+                                        }}
+                                        src={interactContentvideo ? URL.createObjectURL(interactContentvideo) : ''}    // Using the blob URL from interactContentvideo
                                         style={{
-                                            width: "100%", // Set the image width to 100%
+                                            width: "100%", // Set the video width to 100%
                                             height: "auto",
                                             display: "block", // Ensure proper rendering in some browsers
-                                            margin: "0 auto", // Center the image
+                                            margin: "0 auto", // Center the video
                                             cursor: 'pointer'
                                         }}
-                                        alt="Interact Content"
+                                    // Add if you want video controls like play, pause, etc.
                                     />
                                 </Grid>
                                 <Grid item xs={6}>
@@ -592,61 +599,156 @@ function InteractMenux({
                                                 }}
                                             />}
                                     </Grid>
-                                </Grid>
-                            </Grid>
+                                </Grid>  </Grid>
+                        </>
 
-                        : null}
+                        ////////////////////////////////////////////////VIDEO////////////////////////////////////////////////
 
+                        :
+                        ////////////////////////////////////////////////IMAGE////////////////////////////////////////////////
 
-                    {interactContent2.length > 0 ?
+                        interactContent.length > 0 ?
+                            interactContent[index] === '' ?
+                                <Grid container style={{ paddingTop: '5vh' }}>
+                                    <Grid item xs={3}
+                                    ></Grid>
 
-
-
-
-                        interactContent2[index] === "" ? (
-                            <Grid container>
-                                <Grid item xs={3}></Grid>
-                                <Grid
-                                    item
-                                    xs={6}
-                                    style={{
-                                        textAlign: "center",
-                                        height: "20px",
-                                    }}
-                                >
-                                    <PanoramaIcon
-                                        className={
-                                            darkmodeReducer
-                                                ? " dontallowhighlighting zuperkingIcon "
-                                                : " dontallowhighlighting zuperkingIcon  "
-                                        }
+                                    <Grid item xs={6}
                                         style={{
-                                            margin: "auto",
-                                            marginTop: "4vh",
-                                            color: "#ffffff",
-                                            fontSize: matchMobile ? `${mobilefont}vh` : `${pcfont + 2}vw`,
                                             textAlign: "center",
-                                            opacity: "0.1",
-                                        }}
-                                    />
+                                            height: '20vh'
+
+                                        }}>
+                                        <PanoramaIcon
+                                            className={
+                                                darkmodeReducer
+                                                    ? " dontallowhighlighting zuperkingIcon "
+                                                    : " dontallowhighlighting zuperkingIcon  "
+                                            }
+                                            style={{
+                                                color: darkmodeReducer ? '#ffffff' : '#000000',
+                                                margin: "auto",
+                                                marginTop: '4vh',
+                                                fontSize: matchMobile ? `${mobilefont}vh` : `${pcfont + 2}vw`,
+                                                textAlign: "center",
+                                                opacity: '0.1'
+
+                                            }}
+                                        />
+                                    </Grid>
+
+                                </Grid> :
+                                < Grid container>
+                                    <Grid item xs={6}>
+                                        <img
+                                            onClick={
+                                                () => {
+                                                    setadjustinteract1(true);
+                                                }
+                                            }
+                                            src={interactContent[index]}
+                                            style={{
+                                                width: "100%", // Set the image width to 100%
+                                                height: "auto",
+                                                display: "block", // Ensure proper rendering in some browsers
+                                                margin: "0 auto", // Center the image
+                                                cursor: 'pointer'
+                                            }}
+                                            alt="Interact Content"
+                                        />
+                                    </Grid>
+                                    <Grid item xs={6}>
+                                        <Grid item xs={12} style={{ position: 'relative', textAlign: 'center', marginTop: '4vh' }}>
+
+
+
+                                            {AllowDel ?
+                                                <DeleteForeverIcon
+                                                    onClick={() => {
+                                                        callDelInteract(true);
+                                                    }}
+                                                    className={
+                                                        darkmodeReducer
+                                                            ? " dontallowhighlighting zuperkingIcon "
+                                                            : " dontallowhighlighting zuperkingIcon  "
+                                                    }
+                                                    style={{
+                                                        margin: "auto",
+                                                        color: colorx,
+                                                        fontSize: matchMobile ? `${mobilefont}vh` : `${pcfont}vw`,
+                                                        position: "absolute",
+                                                        bottom: "-6vh",
+                                                        textAlign: "center",
+                                                        cursor: 'pointer'
+
+                                                    }}
+                                                />
+                                                :
+                                                <BackspaceIcon
+                                                    onClick={() => {
+
+                                                        setAllowDel(true);
+
+                                                        if (Timer.current) {
+                                                            clearTimeout(Timer.current);
+                                                        }
+                                                        Timer.current = setTimeout(() => {
+                                                            setAllowDel(false);
+                                                        }, 2500)
+
+                                                    }}
+                                                    className={
+                                                        darkmodeReducer
+                                                            ? " dontallowhighlighting zuperkingIcon "
+                                                            : " dontallowhighlighting zuperkingIcon  "
+                                                    }
+                                                    style={{
+                                                        margin: "auto",
+                                                        color: "#ffffff",
+                                                        fontSize: matchMobile ? `${mobilefont}vh` : `${pcfont}vw`,
+                                                        position: "absolute",
+                                                        bottom: "-6vh",
+                                                        textAlign: "center",
+                                                        cursor: 'pointer'
+
+                                                    }}
+                                                />}
+                                        </Grid>
+                                    </Grid>
                                 </Grid>
-                            </Grid>
-                        ) : (
-                            <Grid container>
+
+                            : null
+                        ////////////////////////////////////////////////IMAGE////////////////////////////////////////////////
+                    }
+
+
+
+
+
+                    {
+
+
+
+                        interactContenttype2 === 1 ?
+                            < Grid container>
                                 <Grid item xs={6}>
-                                    <img
-                                        onClick={() => {
+                                    <video ref={videoRefjja}
+                                        controls
+                                        onClick={(e: any) => {
                                             setadjustinteract2(true);
+                                            if (videoRefjja.current) {
+                                                videoRefjja.current.muted = !videoRefjja.current.muted; // Toggle mute
+                                            }
                                         }}
-                                        src={interactContent2[index]}
+                                        src={interactContentvideo2 ? URL.createObjectURL(interactContentvideo2) : ''}    // Using the blob URL from interactContentvideo
                                         style={{
-                                            width: "100%", // Set the image width to 100%
+                                            width: "100%", // Set the video width to 100%
                                             height: "auto",
                                             display: "block", // Ensure proper rendering in some browsers
-                                            margin: "0 auto", // Center the image
+                                            margin: "0 auto", // Center the video
                                             cursor: 'pointer'
                                         }}
-                                        alt="Interact Content"
+                                    // Add if you want video controls like play, pause, etc.
                                     />
                                 </Grid>
                                 <Grid item xs={6}>
@@ -704,40 +806,153 @@ function InteractMenux({
                                             />
                                         )}
                                     </Grid>
-                                </Grid>
-                            </Grid>
-                        ) :
-                        <Grid container>
-                            <Grid item xs={3}
-                            ></Grid>
-                            <Grid item xs={6}
-                                style={{
-                                    textAlign: "center",
-                                    height: '20px'
+                                </Grid></Grid>
+                            :
 
-                                }}>
-                                <PanoramaIcon
-                                    className={
-                                        darkmodeReducer
-                                            ? " dontallowhighlighting zuperkingIcon "
-                                            : " dontallowhighlighting zuperkingIcon  "
-                                    }
-                                    style={{
-                                        margin: "auto",
-                                        marginTop: '4vh',
-                                        color: "#ffffff",
-                                        fontSize: matchMobile ? `${mobilefont}vh` : `${pcfont + 2}vw`,
-                                        textAlign: "center",
-                                        opacity: '0.1'
 
-                                    }}
-                                />
-                            </Grid>
-                        </Grid>}
+                            interactContent2.length > 0 ?
+
+
+
+
+                                interactContent2[index] === "" ? (
+                                    <Grid container>
+                                        <Grid item xs={3}></Grid>
+                                        <Grid
+                                            item
+                                            xs={6}
+                                            style={{
+                                                textAlign: "center",
+                                                height: "20px",
+                                            }}
+                                        >
+                                            <PanoramaIcon
+                                                className={
+                                                    darkmodeReducer
+                                                        ? " dontallowhighlighting zuperkingIcon "
+                                                        : " dontallowhighlighting zuperkingIcon  "
+                                                }
+                                                style={{
+                                                    margin: "auto",
+                                                    marginTop: "4vh",
+                                                    color: darkmodeReducer ? '#ffffff' : '#000000',
+                                                    fontSize: matchMobile ? `${mobilefont}vh` : `${pcfont + 2}vw`,
+                                                    textAlign: "center",
+                                                    opacity: "0.1",
+                                                }}
+                                            />
+                                        </Grid>
+                                    </Grid>
+                                ) : (
+                                    <Grid container>
+                                        <Grid item xs={6}>
+                                            <img
+                                                onClick={() => {
+                                                    setadjustinteract2(true);
+                                                }}
+                                                src={interactContent2[index]}
+                                                style={{
+                                                    width: "100%", // Set the image width to 100%
+                                                    height: "auto",
+                                                    display: "block", // Ensure proper rendering in some browsers
+                                                    margin: "0 auto", // Center the image
+                                                    cursor: 'pointer'
+                                                }}
+                                                alt="Interact Content"
+                                            />
+                                        </Grid>
+                                        <Grid item xs={6}>
+                                            <Grid
+                                                item
+                                                xs={12}
+                                                style={{ position: "relative", textAlign: "center", marginTop: "4vh" }}
+                                            >
+                                                {AllowDel2 ? (
+                                                    <DeleteForeverIcon
+                                                        onClick={() => {
+                                                            callDelInteract(false);
+                                                        }}
+                                                        className={
+                                                            darkmodeReducer
+                                                                ? " dontallowhighlighting zuperkingIcon "
+                                                                : " dontallowhighlighting zuperkingIcon  "
+                                                        }
+                                                        style={{
+                                                            margin: "auto",
+                                                            color: colorx,
+                                                            fontSize: matchMobile ? `${mobilefont}vh` : `${pcfont}vw`,
+                                                            position: "absolute",
+                                                            bottom: "-6vh",
+                                                            textAlign: "center",
+                                                            cursor: "pointer",
+                                                        }}
+                                                    />
+                                                ) : (
+                                                    <BackspaceIcon
+                                                        onClick={() => {
+                                                            setAllowDel2(true);
+
+                                                            if (Timer2.current) {
+                                                                clearTimeout(Timer2.current);
+                                                            }
+                                                            Timer2.current = setTimeout(() => {
+                                                                setAllowDel2(false);
+                                                            }, 2500);
+                                                        }}
+                                                        className={
+                                                            darkmodeReducer
+                                                                ? " dontallowhighlighting zuperkingIcon "
+                                                                : " dontallowhighlighting zuperkingIcon  "
+                                                        }
+                                                        style={{
+                                                            margin: "auto",
+                                                            color: "#ffffff",
+                                                            fontSize: matchMobile ? `${mobilefont}vh` : `${pcfont}vw`,
+                                                            position: "absolute",
+                                                            bottom: "-6vh",
+                                                            textAlign: "center",
+                                                            cursor: "pointer",
+                                                        }}
+                                                    />
+                                                )}
+                                            </Grid>
+                                        </Grid>
+                                    </Grid>
+                                ) :
+                                <Grid container>
+                                    <Grid item xs={3}
+                                    ></Grid>
+                                    <Grid item xs={6}
+                                        style={{
+                                            textAlign: "center",
+                                            height: '20px'
+
+                                        }}>
+                                        <PanoramaIcon
+                                            className={
+                                                darkmodeReducer
+                                                    ? " dontallowhighlighting zuperkingIcon "
+                                                    : " dontallowhighlighting zuperkingIcon  "
+                                            }
+                                            style={{
+                                                margin: "auto",
+                                                marginTop: '4vh',
+                                                color: darkmodeReducer ? '#ffffff' : '#000000',
+                                                fontSize: matchMobile ? `${mobilefont}vh` : `${pcfont + 2}vw`,
+                                                textAlign: "center",
+                                                opacity: '0.1'
+
+                                            }}
+                                        />
+                                    </Grid>
+                                </Grid>}
 
 
                     <Grid item xs={12} style={{ bottom: '-20vh', position: 'relative', }}>
-                        <Grid item xs={3} style={{ height: '15vh', border: '2px solid white', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '24px', fontFamily: 'Helvetica, Arial, sans-serif', color: '#ffffff' }}>
+                        <Grid item xs={3} style={{
+                            height: '15vh', border: darkmodeReducer ? '2px solid white' : '2px solid black', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '24px',
+                            fontFamily: 'Helvetica, Arial, sans-serif', color: darkmodeReducer ? '#ffffff' : '#000000'
+                        }}>
                             BOP
                         </Grid>
 

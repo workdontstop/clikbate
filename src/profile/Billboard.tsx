@@ -34,7 +34,8 @@ function Billboardx({
   x,
   postData,
   showModalFormMenu,
-  setshowModalFormMenu
+  setshowModalFormMenu, sliderIndex,
+  setSliderIndex
 }: any): JSX.Element {
   ///
   ///
@@ -730,7 +731,7 @@ function Billboardx({
                         cursor: "pointer",
                         opacity: 0.8,
                         visibility: memeberPageid === 0 || memeberPageid === idReducer ?
-                          idReducer === 150 ? 'hidden' : 'visible' : 'hidden',
+                          'visible' : 'hidden',
                       }}
                       className="zuperkinginfo"
                     />{" "}
@@ -753,6 +754,8 @@ function Billboardx({
               {/*///////////////////////////////////////////////////////////////////////////BILLBOARD IMAGE*/}
 
               <SliderBillboard
+                sliderIndex={sliderIndex}
+                setSliderIndex={setSliderIndex}
                 billboardserverswitch={billboardserverswitch}
                 ClickBillboardClose={ClickBillboardClose}
                 ShowBillboard={ShowBillboard}

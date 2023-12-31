@@ -23,7 +23,14 @@ import {
   UPDATE_MenuData,
   UPDATE_MenuNav,
   UPDATE_pagenum,
-  UPDATE_signin
+  UPDATE_signin,
+  UPDATE_upaudio,
+  clickPostHintState_LOADER,
+  connectHintState_LOADER,
+  minimiseHintState_LOADER,
+  interactHintState_LOADER,
+  EditHintState_LOADER,
+  interactionstartHintState_LOADER,
 } from "./global_ActionTypes";
 
 export function DarkmodeAction(newDarkModeData: boolean) {
@@ -168,7 +175,7 @@ export function UpdateUploadData(Payload: any, Payload2: any) {
 }
 
 
-export function UpdateInteract(Payload: String, Payload2: boolean) {
+export function UpdateInteract(Payload: String, Payload2: number) {
   return {
     type: UPDATE_INTERACT,
     payload: Payload,
@@ -205,3 +212,54 @@ export function UpdateSign(Payload: boolean) {
     payload: Payload,
   }
 };
+
+export function UpdateA(Payload: any, Payload2: number) {
+  return {
+    type: UPDATE_upaudio,
+    payload: Payload,
+    payload2: Payload2,
+  };
+}
+
+
+export function UpdateTutorials(typexx: number) {
+
+  if (typexx === 1) {
+    return {
+      type: clickPostHintState_LOADER,
+      payload: typexx,
+    };
+  } else if (typexx === 2) {
+    return {
+      type: minimiseHintState_LOADER,
+      payload: typexx,
+    };
+  }
+  else if (typexx === 3) {
+    return {
+      type: connectHintState_LOADER,
+      payload: typexx,
+    };
+  }
+  else if (typexx === 4) {
+    return {
+      type: interactHintState_LOADER,
+      payload: typexx,
+    };
+  }
+  else if (typexx === 5) {
+    return {
+      type: EditHintState_LOADER,
+      payload: typexx,
+    };
+  }
+  else if (typexx === 6) {
+    return {
+      type: interactionstartHintState_LOADER,
+      payload: typexx,
+    };
+  } else { }
+
+
+
+}

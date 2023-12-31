@@ -20,7 +20,7 @@ function SliderNumberx({
   HasInteractivity,
   startInteractivity,
   post,
-  ActiveCanvas,
+  ActiveCanvas, showSpin, setshowSpin
 }: any): JSX.Element {
   const startplay = () => {
     if (ActiveAutoPlay[pey]) {
@@ -48,7 +48,6 @@ function SliderNumberx({
 
   const darkmodeReducer = darkmode;
 
-  const [showSpin, setshowSpin] = useState(false);
 
 
 
@@ -65,9 +64,7 @@ function SliderNumberx({
       if (sc.current) {
         clearTimeout(sc.current);
       }
-      sc.current = setTimeout(() => {
-        setshowSpin(false);
-      }, 1500)
+
 
     }
 
@@ -82,7 +79,7 @@ function SliderNumberx({
     <>
 
       {showSpin ?
-        <Grid item xs={12} style={{ position: 'absolute', zIndex: 100, padding: '3vh' }}>
+        <Grid item xs={12} style={{ position: 'absolute', zIndex: 100, padding: '3vh', visibility: HasInteractivity ? 'visible' : 'hidden' }}>
           <div className="spinner zuperxyinfo" style={{
             borderTop: `8px solid ${post.color1}`, boxShadow: `0 0 8.5px, ${post.color1}`
           }}></div>

@@ -45,7 +45,8 @@ function Connectx({
 }: any): JSX.Element {
   const dispatch = useDispatch();
 
-  const { REACT_APP_SUPERSTARZ_URL, REACT_APP_APPX_STATE } = process.env;
+
+  const { REACT_APP_SUPERSTARZ_URL, REACT_APP_CLOUNDFRONT, REACT_APP_APPX_STATE } = process.env;
 
   const [serverErrorDisplay, setServerErrorDisplay] = useState<number>(1);
   const [serverEmojiplain, setserverEmojiplain] = useState<boolean>(true);
@@ -393,7 +394,8 @@ function Connectx({
             ref={profileImageref}
             onLoad={calculateconnectPosition}
             className={darkmodeReducer ? "turpostDark" : "turpostDark"}
-            src={`${post.profile_image}`}
+
+            src={`${REACT_APP_CLOUNDFRONT}${post.profile_image}`}
             alt="a superstarz post "
             style={{
               cursor: "pointer",
@@ -482,10 +484,11 @@ function Connectx({
             ref={profileImageref}
             onLoad={calculateconnectPosition}
             className={darkmodeReducer ? "turpostDarkmini" : "turpostDarkmini"}
-            src={`${post.profile_image}`}
+
+            src={`${REACT_APP_CLOUNDFRONT}${post.profile_image}`}
             alt="a superstarz post "
             style={{
-              top: matchMobile ? '0.5vh' : '4.5vh',
+              top: matchMobile ? '0.9vh' : '4.5vh',
               cursor: "pointer",
               boxShadow: darkmodeReducer
                 ? "0 0 1px #555555"
@@ -561,7 +564,8 @@ function Connectx({
             ref={profileImageref}
             onLoad={calculateconnectPosition}
             className={darkmodeReducer ? "turpostDark" : "turpostLight"}
-            src={`${post.profile_image}`}
+
+            src={`${REACT_APP_CLOUNDFRONT}${post.profile_image}`}
             alt="a superstarz post "
             style={{
               cursor: "pointer",
@@ -667,7 +671,8 @@ function Connectx({
               objectFit: "contain",
               width: "70%",
             }}
-            src={`${post.profile_image}`}
+
+            src={`${REACT_APP_CLOUNDFRONT}${post.profile_image}`}
             alt="Superstarz Billboard "
           />
         </>

@@ -20,6 +20,8 @@ import CircleIcon from "@mui/icons-material/Circle";
 import { RootStateOrAny, useSelector, useDispatch } from "react-redux";
 import { matchMobile, matchPc, matchTablet } from "../DetectDevice";
 import { UserInfoUpdateMEMBER } from "../log/actions/UserdataAction";
+
+
 import AddIcon from "@mui/icons-material/Add";
 import {
   UpdateLoader,
@@ -76,9 +78,13 @@ function MiniPostx({
   setSliderIndexMini,
   paperPostScrollRef,
   postDatainnerInteraction2,
-  postDatainnerInteraction1
+  postDatainnerInteraction1,
+  ShowBigPlay,
+  clearAllTimers,
+  AllowAllHdImagesShow
+
 }: any) {
-  const { REACT_APP_APPX_STATE } = process.env;
+  const { REACT_APP_SUPERSTARZ_URL, REACT_APP_CLOUNDFRONT, REACT_APP_APPX_STATE } = process.env;
 
   var allow4dev = "";
 
@@ -87,6 +93,10 @@ function MiniPostx({
   } else {
     allow4dev = "";
   }
+
+
+  const [BigCircle, setBigCircle] = useState(false);
+
 
   const Timer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -120,6 +130,12 @@ function MiniPostx({
       setStopSpring(true);
     }, 30000);
   }, [post]);
+
+
+
+  const [AllowFadoutMiniThumb, setAllowFadoutMiniThumb] = useState(false);
+
+
 
   useEffect(() => {
     setTimeout(() => {
@@ -247,12 +263,12 @@ function MiniPostx({
 
   useEffect(() => {
 
+    if (post.funny > 0 || post.care > 0) {
 
-    if (post.commentCount > 0) {
-      setCommsho(true)
-    }
-    else if (post.funny > 0 || post.care > 0) {
       setFavIcon(true)
+    }
+    else if (post.commentCount > 0) {
+      setCommsho(true)
     }
     else {
       setCommsho(false);
@@ -274,8 +290,8 @@ function MiniPostx({
 
   var postusernamefont = matchPc ? "1.1vw" : matchTablet ? "2.32vh" : "1.7vh";
   var postusernameleft = matchPc ? "41.1%" : matchTablet ? "15.5%" : "20%";
-  var postcirclefont = matchPc ? "0.7vw" : matchTablet ? "1.2vw" : "1.1vh";
-  var postcirclefontx = matchPc ? "1.4vw" : matchTablet ? "1.2vw" : "2.2vh";
+  var postcirclefont = matchPc ? ShowBigPlay ? '1.4vw' : "0.7vw" : matchTablet ? "1.2vw" : ShowBigPlay ? '3vh' : "1.1vh";
+  var postcirclefontx = matchPc ? ShowBigPlay ? '2.2vw' : "1.4vw" : matchTablet ? "1.2vw" : ShowBigPlay ? '4.1vh' : "2.2vh";
 
   var dotspace = matchPc ? "1.7vw" : matchTablet ? "1.9vh" : "1.9vh";
   var dotspace2 = matchPc ? "0.9vw" : matchTablet ? "1.9vh" : "1.9vh";
@@ -375,28 +391,25 @@ function MiniPostx({
 
 
   useEffect(() => {
-    //console.log(postDatainnerInteraction1[0])
+    // Function to check if a string is likely a file name
+    const isFileName = (str: any) => {
+      // Example regex for a typical file name (adjust as needed)
+      const fileNameRegex = /^[a-zA-Z0-9._-]+$/;
+      return fileNameRegex.test(str);
+    };
 
-    postDatainnerInteraction1[pey].map((str: any, index: any) => {
-      if (containsURL(str)) {
-        setHasInteractivity(true);
-        ///alert('kk')
-      } else {
-        setHasInteractivity(false);
+    // Iterate through postDatainnerInteraction1
+    let foundFileName = postDatainnerInteraction1.some(isFileName);
 
-        postDatainnerInteraction2[pey].map((str: any, index: any) => {
-          if (containsURL(str)) {
+    if (!foundFileName) {
+      // If not found in the first array, check in postDatainnerInteraction2
+      foundFileName = postDatainnerInteraction2.some(isFileName);
+    }
 
-            setHasInteractivity(true);
-          } else {
-            setHasInteractivity(false);
-          }
-        });
-      }
-    });
+    // Set the state based on the presence of a file name
+    setHasInteractivity(foundFileName);
+  }, [postDatainnerInteraction1, postDatainnerInteraction2, itemCLICKED]);
 
-
-  }, [postDatainnerInteraction1[pey], postDatainnerInteraction2[pey], itemCLICKED]);
 
 
 
@@ -516,20 +529,21 @@ function MiniPostx({
                 setminiProfile(false);
               }}
               className={
-                darkmodeReducer ? "turlightpostdark" : "turlightpostlight"
+
+                darkmodeReducer ? "turlightpostdar  " : "turlightpostlight "
               }
-              src={
-                postDatainnerThumb[pey][
-                showIndex ? (sliderIndexMini > 400 ? 0 : sliderIndexMini) : 0
-                ]
-              }
+
+
+              src={`${REACT_APP_CLOUNDFRONT}${postDatainnerThumb[pey][showIndex ? (sliderIndexMini > 400 ? 0 : sliderIndexMini) : 0
+              ]}`}
+
               alt="a Clikbate post "
               style={{
 
                 cursor: "pointer",
                 width: "100%",
                 height: isWide && matchMobile ? '28vh' : 'auto',
-                position: "absolute",
+                position: AllowAllHdImagesShow ? "absolute" : 'relative',
                 padding: "0px",
                 objectFit:
                   itemcroptype[pey] === 1 || itemcroptype[pey] === 2
@@ -546,7 +560,8 @@ function MiniPostx({
 
             />
 
-            <img
+
+            {AllowAllHdImagesShow ? <img
               onLoad={handleImageLoad}
               onClick={() => {
                 setzoomClickedIndex(pey + 1);
@@ -556,11 +571,11 @@ function MiniPostx({
               className={
                 darkmodeReducer ? "turlightpostdark" : "turlightpostlight"
               }
-              src={
-                postDatainner[pey][
-                showIndex ? (sliderIndexMini > 400 ? 0 : sliderIndexMini) : 0
-                ]
-              }
+
+
+
+              src={`${REACT_APP_CLOUNDFRONT}${post.item2}`}
+
               alt="a Clikbate post "
               style={{
 
@@ -582,8 +597,9 @@ function MiniPostx({
 
 
               }}
-              crossOrigin="anonymous"
-            />
+
+            /> : null}
+
           </div>
 
 
@@ -640,8 +656,31 @@ function MiniPostx({
 
 
                 <span
+
+                  onClick={() => {
+                    if (ShowBigPlay) {
+                      clearAllTimers();
+                    }
+                  }}
+                  onTouchStart={() => {
+                    setBigCircle(true);
+                  }}
+                  onTouchEnd={() => {
+                    setBigCircle(false);
+                  }}
+
+                  onMouseOver={() => {
+                    setBigCircle(true);
+                  }}
+                  onMouseOut={() => {
+                    setBigCircle(false);
+                  }}
+
+                  className={ShowBigPlay ? `blinkingxx` : `    `}
                   style={{
-                    marginLeft: matchMobile ? '3vw' : '1vw',
+                    marginLeft: matchMobile ? ShowBigPlay ? '1vw' : '1vw' : '1vw',
+                    position: 'absolute',
+                    cursor: BigCircle ? ShowBigPlay ? "pointer" : "default" : "default",
 
                   }}
                 >
@@ -649,24 +688,30 @@ function MiniPostx({
 
 
                     <CommentIcon
-                      className="zuperkingtur"
+                      className={darkmode ? 'zuperkingIconPostDark' : "zuperkingIconPostLightx"}
                       style={{
                         fontSize: postcirclefontx,
                         color: post.color1,
+                        transform: BigCircle ? "scale(2.7)" : "scale(1)", opacity: 0.6,
+                        transition: "transform 0.05s",
                       }}
                     /> : FavIcon ?
                       <SentimentVerySatisfiedIcon
-                        className="zuperkingtur"
+                        className={darkmode ? 'zuperkingIconPostDark' : "zuperkingIconPostLightx"}
                         style={{
                           fontSize: postcirclefontx,
                           color: post.color1,
+                          transform: BigCircle ? "scale(2.7)" : "scale(1)", opacity: 0.6,
+                          transition: "transform 0.05s",
                         }}
                       /> :
                       <CircleIcon
-                        className="zuperkingtur"
+                        className={darkmode ? 'zuperkingIconPostDark' : "zuperkingIconPostLightx"}
                         style={{
                           fontSize: postcirclefont,
                           color: post.color1,
+                          transform: BigCircle ? "scale(2.7)" : "scale(1)", opacity: 0.6,
+                          transition: "transform 0.05s",
                         }}
                       />}
 
@@ -719,7 +764,7 @@ function MiniPostx({
                 color: darkmodeReducer ? "#ffffff" : "#000000",
                 fontSize: matchPc ? "2.2vh" : "1.7vh",
                 zIndex: 5,
-                paddingLeft: matchPc ? "7vw" : matchTablet ? "2.3vw" : "2vw",
+                paddingLeft: matchPc ? "7vw" : matchTablet ? "2.3vw" : "4vw",
                 height: "0px",
                 fontFamily: "Arial, Helvetica, sans-serif",
                 opacity: darkmodeReducer ? "0.6" : "0.8",

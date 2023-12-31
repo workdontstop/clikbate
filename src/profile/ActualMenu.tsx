@@ -58,6 +58,10 @@ function ActualMenux({ showModalFormMenu, setshowModalFormMenu, postData, setsup
   });
 
 
+  const { REACT_APP_SUPERSTARZ_URL, REACT_APP_CLOUNDFRONT, REACT_APP_APPX_STATE } = process.env;
+
+
+
   ///
   ///
   ///
@@ -244,7 +248,7 @@ function ActualMenux({ showModalFormMenu, setshowModalFormMenu, postData, setsup
 
         Timerjj.current = setTimeout(() => {
           setSignup(true)
-        }, 700);
+        }, 6000);
 
       } else {
         setSignup(false)
@@ -409,12 +413,14 @@ function ActualMenux({ showModalFormMenu, setshowModalFormMenu, postData, setsup
             <div style={{ paddingRight: '1.2vw', }}>
 
 
-              <img src={image} title={usernameReducer} onClick={() => {
+              <img
+                src={`${REACT_APP_CLOUNDFRONT}${image}`}
+                title={usernameReducer} onClick={() => {
 
-                GoToMemberLoaderUpP();
+                  GoToMemberLoaderUpP();
 
 
-              }} style={{ cursor: 'pointer', width: matchMobile ? '9vh' : '5vw', height: matchMobile ? '9vh' : '5vw', borderRadius: '50%' }} />
+                }} style={{ cursor: 'pointer', width: matchMobile ? '9vh' : '5vw', height: matchMobile ? '9vh' : '5vw', borderRadius: '50%' }} />
 
             </div>
           </Grid>

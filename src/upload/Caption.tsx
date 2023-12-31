@@ -1,4 +1,5 @@
 import React, {
+  ChangeEvent,
   useRef,
   useState,
   useCallback,
@@ -15,6 +16,7 @@ import Masonry from "@mui/lab/Masonry";
 import CircleIcon from "@mui/icons-material/Circle";
 import { SuperCrop } from "./SuperCrop";
 import MusicNoteIcon from "@mui/icons-material/MusicNote";
+import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
 import PhotoIcon from "@mui/icons-material/Photo";
 import GifIcon from "@mui/icons-material/Gif";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
@@ -47,6 +49,9 @@ import SettingsBackupRestoreIcon from "@mui/icons-material/SettingsBackupRestore
 import date from "date-and-time";
 import { UpdateNavFilterReducer } from "../GlobalActions";
 import { UpdateNavCropReducer } from "../GlobalActions";
+import { AudioEditor } from "./AudioEditor";
+import { CaptionText } from "./CaptionText";
+
 
 function Captionx({
   closeUploadModal,
@@ -60,26 +65,57 @@ function Captionx({
   cropInitialIn,
   interactContent,
   radius1,
-  radius2
+  radius2,
+  interactContenttype2,
+  interactContenttype,
+  interactContentvideo2,
+  interactContentvideo,
+
+  interactContentAudiotype,
+  interactContentAudio,
+
+  setinteractContentAudio,
+  setinteractContentAudiotype,
+  captionvalues,
+  setcaptionvalues,
+  setAudioname,
+  Audioname,
+  setAudioUrl,
+  AudioUrl,
+  setShowAudio,
+  ShowAudio,
+  setAllowCaption,
+
+  vidBackUpURL,
+  vidBackUpURL2
 }: any): JSX.Element {
   const [matchTabletMobile, setmatchTabletMobile] = useState<boolean>(false);
 
   const [supeFilterLoadFadex, setsupeFilterLoadFadex] =
     useState<boolean>(false);
 
+
+  const [backgroudAudio, setbackgroudAudio] =
+    useState<boolean>(true);
+
+  const [audioStart, setaudioStart] = useState(0);
+
+  const [audioEnd, setaudioEnd] = useState(0);
+
+
   const { REACT_APP_SUPERSTARZ_URL } = process.env;
 
-  const Value = {
-    caption: "",
-    topic: "",
-  };
 
 
-  const [captionvalues, setcaptionvalues] = useState(Value);
+
+  const [loadmode, setloadmode] = useState('');
+
 
   var s3finaldata: any = [];
 
   var s3finaldataThumb: any = [];
+
+  var s3finaldataExtra: any = [];
 
   var s3finaldataAll: any = [];
 
@@ -87,15 +123,27 @@ function Captionx({
 
   var s3finaldataINT2: any = [];
 
+  var s3finalvid: any = '';
+
+  var s3finalvid2: any = '';
+
+  var s3finalvidbackup: any = '';
+
+  var s3finalvid2backup: any = '';
+
+
+
   ///
   ///
   ///DARKMODE FROM REDUX
   interface RootStateGlobalReducer {
     GlobalReducer: {
       darkmode: boolean;
+      interactContentAudiox: any;
+      interactContentAudiotypex: number
     };
   }
-  const { darkmode } = useSelector((state: RootStateGlobalReducer) => ({
+  const { darkmode, interactContentAudiox, interactContentAudiotypex } = useSelector((state: RootStateGlobalReducer) => ({
     ...state.GlobalReducer,
   }));
 
@@ -132,9 +180,17 @@ function Captionx({
     (e: any) => {
       const { name, value } = e.target;
       setcaptionvalues({ ...captionvalues, [name]: value });
+
+
     },
     [captionvalues]
   );
+
+
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+
+
+
 
   var transform = "";
   var font1 = "";
@@ -191,9 +247,9 @@ function Captionx({
 
   const dispatch = useDispatch();
 
-  const UpdatePostDatabaseStatus200 = (datak: any, b: any) => {
+  const calldatabase = useCallback((datak: any, t: number, audiolink: any) => {
 
-    console.log(datak);
+    setloadmode('Saving');
 
     // alert(finalImageData.length)
     Axios.post(`${REACT_APP_SUPERSTARZ_URL}/post_upload_data`, {
@@ -203,11 +259,53 @@ function Captionx({
         console.log(response);
         setsupeFilterLoadFadex(false);
         if (response.data.message === "images uploaded") {
+          if (t === 1) {
+            console.log(response.data.go);
 
-          setsupeFilterLoadFadex(false);
-          closeUploadModal(2);
+            var tg = response.data.go;
 
-          window.location.reload();
+
+
+            var da = {
+              file: audiolink,
+              name: Audioname,
+              sender: idReducer,
+              post: tg,
+              audioStart: audioStart,
+              audioEnd: audioEnd,
+            };
+
+
+            Axios.post(`${REACT_APP_SUPERSTARZ_URL}/post_upload_audio_data`, {
+              values: da,
+            })
+              .then((response) => {
+                ///console.log(response);
+                /// setsupeFilterLoadFadex(false);
+                if (response.data.message === "audio uploaded") {
+
+                  setsupeFilterLoadFadex(false);
+                  closeUploadModal(2);
+                  window.location.reload();
+
+                }
+              })
+              .catch(function (error) {
+                setsupeFilterLoadFadex(false);
+                console.log(error);
+              });
+
+
+
+
+
+
+          } else {
+            setsupeFilterLoadFadex(false);
+            closeUploadModal(2);
+            window.location.reload();
+          }
+
 
         }
       })
@@ -215,8 +313,312 @@ function Captionx({
         setsupeFilterLoadFadex(false);
         console.log(error);
       });
+
+
+  }, [audioStart, audioEnd, Audioname, idReducer])
+
+  const UpdatePostDatabaseStatus200 = useCallback((datak: any, b: any) => {
+
+
+    if (interactContentAudiotypex === 1) {
+      GetSecureURLAudio(datak);
+
+      /// alert(interactContentAudiotypex);
+    }
+
+    else {
+
+
+
+
+      console.log(datak);
+      var audiolinkm = null;
+
+      calldatabase(datak, 0, audiolinkm)
+    }
+  }, [interactContentAudiotypex]);
+
+
+
+
+  const GetSecureURLAudio = useCallback((datak: any) => {
+    var kob = {
+      count: 0,
+    };
+
+    Axios.post(`${REACT_APP_SUPERSTARZ_URL}/get_signed_url_4upload_post_audio`, {
+      values: kob,
+    })
+      .then((response: any) => {
+        //setsupeFilterLoadFadex(false);
+        var holderx = response.data.holder;
+        setsupeFilterLoadFadex(true);
+        /// alert('UploadingPost');
+        ///alert(h1);
+        let urlxx = "";
+        var xx: any = null;
+        urlxx = holderx[0].urlA;
+
+
+        setloadmode('Uploading Audio');
+
+        xx = interactContentAudiox;
+
+        Axios.put(urlxx, xx)
+          .then((response) => {
+            setsupeFilterLoadFadex(false);
+            if (response.status === 200) {
+              setsupeFilterLoadFadex(true);
+              let imagelinkx = urlxx.split("?")[0];
+              let imagelinkl = imagelinkx.split("/").pop();
+              var audiolink = imagelinkl;
+              console.log(audiolink);
+
+
+              calldatabase(datak, 1, audiolink);
+
+
+              ///console.log(imagelinkx);
+            }
+          })
+          .catch(function (error) {
+            setsupeFilterLoadFadex(false);
+            console.log(error);
+          });
+
+
+        ///  PutImageInS3WithURLVid(type, type2, holder[0].urlVid, holder[0].urlVid2, a, b, base64);
+
+      })
+      .catch(function (error) {
+        setsupeFilterLoadFadex(false);
+        console.log(error);
+      });
+
+  }, [interactContentAudiox]);
+
+
+
+
+  const PutImageInS3WithURLVid = useCallback(
+    (type: any, type2: any, h1: any, h2: any, v1: any, v2: any, base64: any, vidbackup1: any, vidbackup2: any, holder: any) => {
+
+      let urlx = "";
+      var x: any = null;
+
+      ///alert(h1);
+      let urlxx = "";
+      var xx: any = null;
+
+
+      const calldatabaseVid = () => {
+
+
+
+
+        var datallx = {
+          topic: captionvalues.topic,
+          caption: captionvalues.caption,
+          id: idReducer,
+          all: s3finaldataAll,
+          I1x: cropInitialIn[0].x,
+          I1y: cropInitialIn[0].y,
+          I1bx: cropInitialIn2[0].x,
+          I1by: cropInitialIn2[0].y,
+          I2x: cropInitialIn[1].x,
+          I2y: cropInitialIn[1].y,
+          I2bx: cropInitialIn2[1].x,
+          I2by: cropInitialIn2[1].y,
+          I3x: cropInitialIn[2].x,
+          I3y: cropInitialIn[2].y,
+          I3bx: cropInitialIn2[2].x,
+          I3by: cropInitialIn2[2].y,
+          rad1: radius1,
+          rad2: radius2,
+          vid1: s3finalvid,
+          vid2: s3finalvid2,
+          vid1backup: s3finalvidbackup,
+          vid2backup: s3finalvid2backup,
+          interacttype1: type,
+          interacttype2: type2,
+
+        }
+
+
+        ///setloadmode('Pocessing');
+
+        setsupeFilterLoadFadex(true);
+        UpdatePostDatabaseStatus200(datallx, base64);
+
+
+
+      }
+
+
+
+      const calltwo = () => {
+        if (type2 === 1) {
+          // alert('thumb');
+          urlxx = h2;
+          xx = v2;
+          Axios.put(urlxx, xx)
+            .then((response) => {
+
+              setsupeFilterLoadFadex(false);
+              if (response.status === 200) {
+                setsupeFilterLoadFadex(true);
+                let imagelinkx = urlxx.split("?")[0];
+                let imagelinkjjka = imagelinkx.split("/").pop();
+                s3finalvid2 = imagelinkjjka;
+
+
+                Axios.put(holder[0].urlVIDimage2, vidbackup2)
+                  .then((response) => {
+
+                    setsupeFilterLoadFadex(false);
+                    if (response.status === 200) {
+                      setsupeFilterLoadFadex(true);
+
+
+                      let imagelinkbb2 = holder[0].urlVIDimage2.split("?")[0];
+                      let imagelinkdd = imagelinkbb2.split("/").pop();
+                      s3finalvid2backup = imagelinkdd;
+
+
+                      calldatabaseVid();
+                      ///console.log(imagelinkx);
+                    }
+                  })
+                  .catch(function (error) {
+                    setsupeFilterLoadFadex(false);
+                    console.log(error);
+                  });
+              }
+            })
+            .catch(function (error) {
+              setsupeFilterLoadFadex(false);
+              console.log(error);
+            });
+
+        } else {
+          calldatabaseVid();
+
+        }
+      }
+
+
+
+      if (type === 1) {
+        // alert('thumb');
+        urlx = h1;
+        x = v1;
+        Axios.put(urlx, x)
+          .then((response) => {
+
+            setsupeFilterLoadFadex(false);
+            if (response.status === 200) {
+              setsupeFilterLoadFadex(true);
+              let imagelink = urlx.split("?")[0];
+              let imagelinkka = imagelink.split("/").pop();
+              s3finalvid = imagelinkka;
+
+
+              Axios.put(holder[0].urlVIDimage1, vidbackup1)
+                .then((response) => {
+
+                  setsupeFilterLoadFadex(false);
+                  if (response.status === 200) {
+                    setsupeFilterLoadFadex(true);
+
+                    let imagelinkbb = holder[0].urlVIDimage1.split("?")[0];
+                    let imagelinkkq = imagelinkbb.split("/").pop();
+                    s3finalvidbackup = imagelinkkq;
+
+
+                    calltwo();
+
+                    ///console.log(imagelink);
+                  }
+                })
+                .catch(function (error) {
+                  setsupeFilterLoadFadex(false);
+                  console.log(error);
+                });
+              ///console.log(imagelink);
+            }
+          })
+          .catch(function (error) {
+            setsupeFilterLoadFadex(false);
+            console.log(error);
+          });
+      } else {
+        calltwo()
+      }
+
+
+
+
+
+
+    },
+    [idReducer, s3finaldata, s3finaldataExtra, s3finaldataThumb, s3finalvid2, s3finalvid2backup, s3finalvid, s3finalvidbackup, s3finaldataAll, cropInitialIn, cropInitialIn2, interactContentAudiotypex, Audioname,]
+  );
+
+
+  const GetVideoSecureURL = (a: any, b: any, type: any, type2: any, datall: any, base64: any, vidbackup1: any, vidbackup2: any) => {
+    var countxx: any = 0;
+
+    if (type === 1) {
+      countxx = countxx + 1;
+    }
+
+    if (type2 === 1) {
+      countxx = countxx + 1;
+    }
+
+    if (countxx > 0) {
+      var kob = {
+        count: countxx,
+      };
+
+      Axios.post(`${REACT_APP_SUPERSTARZ_URL}/get_signed_url_4upload_post_vid`, {
+        values: kob,
+      })
+        .then((response: any) => {
+          setsupeFilterLoadFadex(false);
+          var holder = response.data.holder;
+          setsupeFilterLoadFadex(true);
+          /// alert('UploadingPost');
+          console.log(holder);
+
+          setloadmode('Uploading Video');
+
+          PutImageInS3WithURLVid(type, type2, holder[0].urlVid, holder[0].urlVid2, a, b, base64, vidbackup1, vidbackup2, holder);
+
+        })
+        .catch(function (error) {
+          setsupeFilterLoadFadex(false);
+          console.log(error);
+        });
+    } else {
+
+      setsupeFilterLoadFadex(true);
+      UpdatePostDatabaseStatus200(datall, base64);
+    }
   };
 
+
+
+  ////
+  ////
+  ////
+  const CallDatabase = useCallback((datall: any, base64: any, UpdatePostDatabaseStatus200: any) => {
+
+    GetVideoSecureURL(interactContentvideo, interactContentvideo2, interactContenttype, interactContenttype2, datall, base64, vidBackUpURL, vidBackUpURL2);
+
+    ///setsupeFilterLoadFadex(true);
+    //UpdatePostDatabaseStatus200(datall, base64);
+  }, [interactContentvideo, interactContentvideo2, interactContenttype, interactContenttype2, interactContentAudiotypex, Audioname, vidBackUpURL, vidBackUpURL2])
 
   const PutImageInS3Interaction = useCallback(
     (holder: any, datap: any, base64: any, allow: boolean, i: number) => {
@@ -245,12 +647,14 @@ function Captionx({
               setsupeFilterLoadFadex(true);
               if (allow) {
                 let imagelink = urlx.split("?")[0];
-                s3finaldataINT1[i] = imagelink;
+                let imagelinkjjk = imagelink.split("/").pop();
+                s3finaldataINT1[i] = imagelinkjjk;
                 var datak = {
-                  imagedata: s3finaldata[i],
-                  imagedataThumb: s3finaldataThumb[i],
-                  interact1: s3finaldataINT1[i],
-                  interact2: s3finaldataINT2[i]
+                  imagedata: s3finaldata[0],
+                  imagedataThumb: s3finaldataThumb[0],
+                  imagedata2: s3finaldataExtra[0],
+                  interact1: s3finaldataINT1[0],
+                  interact2: s3finaldataINT2[0]
                 };
                 s3finaldataAll[i] = datak;
 
@@ -274,19 +678,29 @@ function Captionx({
                     I3by: cropInitialIn2[2].y,
                     rad1: radius1,
                     rad2: radius2,
+                    vid1: s3finalvid,
+                    vid2: s3finalvid2,
+                    vid1backup: s3finalvidbackup,
+                    vid2backup: s3finalvid2backup,
+                    interacttype1: 0,
+                    interacttype2: 0,
                   };
 
+                  //setloadmode('Pocessing');
 
-                  ///console.log(s3finaldataAll);
-                  setsupeFilterLoadFadex(true);
-                  UpdatePostDatabaseStatus200(datall, base64);
+                  CallDatabase(datall, base64, UpdatePostDatabaseStatus200);
+
+
+                  ///alert('Processing');
+
                 } else {
 
                   PutImageInS3Interaction(holder, datap, base64, false, i + 1);
                 }
               } else {
                 let imagelinkx = urlx.split("?")[0];
-                s3finaldataINT2[i] = imagelinkx;
+                let imagelinkj = imagelinkx.split("/").pop();
+                s3finaldataINT2[i] = imagelinkj;
 
                 PutImageInS3Interaction(holder, datap, base64, true, i);
               }
@@ -305,10 +719,11 @@ function Captionx({
           let imagelink = null;
           s3finaldataINT1[i] = imagelink;
           var datak = {
-            imagedata: s3finaldata[i],
-            imagedataThumb: s3finaldataThumb[i],
-            interact1: s3finaldataINT1[i],
-            interact2: s3finaldataINT2[i]
+            imagedata: s3finaldata[0],
+            imagedataThumb: s3finaldataThumb[0],
+            imagedata2: s3finaldataExtra[0],
+            interact1: s3finaldataINT1[0],
+            interact2: s3finaldataINT2[0]
           };
           s3finaldataAll[i] = datak;
 
@@ -333,12 +748,16 @@ function Captionx({
               I3by: cropInitialIn2[2].y,
               rad1: radius1,
               rad2: radius2,
+              vid1: s3finalvid,
+              vid2: s3finalvid2,
+              vid1backup: s3finalvidbackup,
+              vid2backup: s3finalvid2backup,
+              interacttype1: 0,
+              interacttype2: 0,
             };
 
+            CallDatabase(datall, base64, UpdatePostDatabaseStatus200);
 
-            ///console.log(s3finaldataAll);
-            setsupeFilterLoadFadex(true);
-            UpdatePostDatabaseStatus200(datall, base64);
           } else {
 
             PutImageInS3Interaction(holder, datap, base64, false, i + 1);
@@ -353,7 +772,8 @@ function Captionx({
         /////////////////////////////////
       }
     },
-    [idReducer, s3finaldata, s3finaldataINT1, s3finaldataINT2, interactContent, interactContent2, cropInitialIn, cropInitialIn2]
+    [idReducer, s3finaldata, s3finaldataThumb, s3finaldataExtra, s3finaldataINT1, s3finaldataINT2, interactContent, interactContent2, cropInitialIn,
+      cropInitialIn2, s3finalvid, s3finalvid2, s3finalvid2backup, s3finalvidbackup]
   );
 
 
@@ -361,7 +781,10 @@ function Captionx({
     (holder: any, a: any, b: any, base64: any, allow: boolean, i: number) => {
 
 
+
+
       let urlx = "";
+      let urlxx = "";
       var x: any = null;
       if (allow) {
         // alert('thumb');
@@ -370,8 +793,13 @@ function Captionx({
       } else {
         //alert('hd');
         urlx = holder[i].urlHD;
+        urlxx = holder[i].urlHD2;
         x = a;
+
       }
+
+
+
       Axios.put(urlx, x[i])
         .then((response) => {
           console.log(response);
@@ -380,10 +808,14 @@ function Captionx({
             setsupeFilterLoadFadex(true);
             if (allow) {
               let imagelink = urlx.split("?")[0];
-              s3finaldataThumb[i] = imagelink;
+              let imagelinkjj = imagelink.split("/").pop();
+              s3finaldataThumb[i] = imagelinkjj;
               var datak = {
-                imagedata: s3finaldata[i],
-                imagedataThumb: s3finaldataThumb[i],
+                imagedata: s3finaldata[0],
+                imagedataThumb: s3finaldataThumb[0],
+                imagedata2: s3finaldataExtra[0],
+                interact1: s3finaldataINT1[0],
+                interact2: s3finaldataINT2[0]
               };
               s3finaldataAll[i] = datak;
 
@@ -399,14 +831,36 @@ function Captionx({
                 //setsupeFilterLoadFadex(true);
                 //UpdatePostDatabaseStatus200(datap, base64);
 
+
+                /// alert('UploadingInteraction');
+                setloadmode('Uploading Interaction');
                 PutImageInS3Interaction(holder, datap, base64, false, 0);
               } else {
                 PutImageInS3WithURL(holder, a, b, base64, false, i + 1);
               }
             } else {
-              let imagelinkx = urlx.split("?")[0];
-              s3finaldata[i] = imagelinkx;
-              PutImageInS3WithURL(holder, a, b, base64, true, i);
+
+
+              Axios.put(urlxx, x[i])
+                .then((response) => {
+
+                  if (response.status === 200) {
+                    let imagelinkxda = urlx.split("?")[0];
+                    s3finaldata[i] = imagelinkxda;
+
+
+                    let imagelinkv = urlxx.split("?")[0];
+                    let imagelinkxxqqq = imagelinkv.split("/").pop();
+                    s3finaldataExtra[i] = imagelinkxxqqq;
+
+                    PutImageInS3WithURL(holder, a, b, base64, true, i);
+                  }
+                })
+                .catch(function (error) {
+                  ///setsupeFilterLoadFadex(false);
+                  console.log(error);
+                });
+
             }
           }
         })
@@ -414,14 +868,16 @@ function Captionx({
           setsupeFilterLoadFadex(false);
           console.log(error);
         });
+
     },
-    [idReducer, s3finaldata, s3finaldataThumb]
+    [idReducer, s3finaldata, s3finaldataThumb, s3finaldataExtra, s3finaldataINT1, s3finaldataINT2]
   );
 
   const GetSecureURL = (hdBlob: any, thumbBlob: any, hdBase64: any) => {
     var kob = {
-      count: finalImageData.length,
+      count: finalImageData.length + 1,
     };
+
     Axios.post(`${REACT_APP_SUPERSTARZ_URL}/get_signed_url_4upload_post`, {
       values: kob,
     })
@@ -429,6 +885,8 @@ function Captionx({
         setsupeFilterLoadFadex(false);
         var holder = response.data.holder;
         setsupeFilterLoadFadex(true);
+        /// alert('UploadingPost');
+        setloadmode('Uploading Post');
         PutImageInS3WithURL(holder, hdBlob, thumbBlob, hdBase64, false, 0);
       })
       .catch(function (error) {
@@ -439,6 +897,7 @@ function Captionx({
 
   const UploadSuperData = useCallback(
     (hdBlob: any, thumbBlob: any, hdBase64: any) => {
+
       setsupeFilterLoadFadex(true);
       GetSecureURL(hdBlob, thumbBlob, hdBase64);
     },
@@ -446,26 +905,76 @@ function Captionx({
   );
 
 
+  const { PaperStyleLight, PaperStyleDark } = useSelector(
+    (state: RootStateOrAny) => ({
+      ...state.PaperReducerLightnDark,
+    })
+  );
+
+
+
+
+  /////
+  const convertAndSetAudioUrl = (file: any) => {
+    const reader = new FileReader();
+
+    reader.onloadend = () => {
+      // This is the data URL
+      const audioDataUrl = reader.result;
+      setAudioUrl(audioDataUrl);
+      setShowAudio(true);
+
+    };
+
+    // Read the file as a Data URL
+    reader.readAsDataURL(file);
+
+  };
+
+  ////
+  const handleFileChangex = async (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+
+    // Clear the input value to allow the same file to be selected again
+    if (event.target && event.target.value) {
+      event.target.value = '';
+    }
+
+    if (file) {
+      try {
+        // Check if the selected file is an audio file
+        if (file.type.startsWith('audio/')) {
+          // Audio file handling logic
+
+          // For example, setting the audio file to state variables
+          // Assuming setAudioData is your state setter for audio data
+
+          setAudioname(file.name);
+          convertAndSetAudioUrl(file);
+
+          // You might also handle the audio data URL or Blob here if needed
+          // ...
+
+        } else {
+          // Handle non-audio file selection, possibly show an error message
+          console.error('Selected file is not an audio file');
+        }
+
+      } catch (error) {
+        console.error('Error processing the audio file:', error);
+      }
+    }
+  };
+
+  // Make sure to define or update your state setters like setAudioData
+  // and other relevant states and logic as needed.
+
+
+
 
   return (
     <>
-      {supeFilterLoadFadex ? (
-        <>
-          <Grid
-            container
-            style={{
-              backgroundColor: darkmodeReducer
-                ? "rgba(50,50,50,0.5)"
-                : "rgba(250,250,250,0.5)",
-              position: "fixed",
-              top: "0px",
-              width: "100%",
-              height: "100%",
-              zIndex: 10,
-            }}
-          ></Grid>{" "}
-        </>
-      ) : null}
+
 
       <Grid
         container
@@ -477,7 +986,272 @@ function Captionx({
           height: "100%",
           zIndex: 1,
         }}
-      >
+      > <Grid
+        item
+        xs={12}
+        style={{
+          padding: "0px",
+        }}
+      ></Grid>
+
+        {ShowAudio ? <AudioEditor
+          setaudioStart={setaudioStart}
+          setaudioEnd={setaudioEnd}
+          setAudioUrl={setAudioUrl}
+          setAudioname={setAudioname}
+          AudioUrl={AudioUrl}
+          ShowAudio={ShowAudio}
+          setShowAudio={setShowAudio}
+          setinteractContentAudio={setinteractContentAudio}
+          setinteractContentAudiotype={setinteractContentAudiotype}
+        /> : null}
+
+
+
+
+
+        <Grid
+          item
+          xs={6}
+          style={{
+            padding: "0px",
+            backgroundColor: '#00ccff',
+            height: '0px',
+            marginTop: '3vh'
+          }}
+        >
+
+
+
+          {finalImageData[0] ? < img
+            src={URL.createObjectURL(finalImageData[0])}
+            style={{
+              width: "65%",
+              height: "53vh",
+              objectFit: 'cover',
+              marginLeft: '10vw'
+            }}
+            alt="Image"
+          /> : null}
+
+
+
+        </Grid>
+
+
+
+        <Grid
+          item
+          xs={6}
+          style={{
+            padding: "0px",
+            height: '0vh',
+            marginTop: '5vh',
+            paddingLeft: '8vw',
+          }}
+        >
+
+
+
+
+          <Grid
+            item
+            xs={12}
+            style={{
+              padding: "0px",
+              height: '5vh',
+              marginTop: '-5vh',
+              display: interactContentAudiotype === 1 ? 'block' : 'none'
+            }}
+          >
+
+
+            <CircleIcon
+              onClick={
+                () => {
+                  setbackgroudAudio(!backgroudAudio);
+                }
+              }
+              className={
+                darkmodeReducer
+                  ? "make-small-icons-clickable-lightCrop dontallowhighlighting zuperkingIcon "
+                  : "make-small-icons-clickable-darkCrop dontallowhighlighting zuperkingIcon  "
+              }
+              style={{
+                fontSize: matchTabletMobile ? `${mobilefont}vh` : `${pcfont - 1}vw`,
+                marginRight: "5vw",
+                color: backgroudAudio ? 'green' : 'red'
+              }}
+
+            />
+            <span
+              style={{
+                position: 'relative', // Absolute position for the text
+                top: '-10%', // Center vertically
+                fontFamily: 'fantasy',
+                fontSize: matchTabletMobile ? `${mobilefont}vh` : `1.2vw`,
+              }}
+            >
+              {backgroudAudio ? 'Allow Audio Play During Interaction' : 'Stop Audio Play During Interaction'}
+            </span>
+
+
+          </Grid>
+
+
+          <Grid
+            item
+            xs={12}
+            style={{
+              padding: "0px",
+              height: '5vh',
+              marginTop: '-14vh'
+
+            }}
+          >
+
+            <input
+              type="file"
+              ref={fileInputRef}
+              style={{ display: 'none' }}
+              onChange={handleFileChangex}
+            />
+            <MusicNoteIcon
+              onClick={
+                () => {
+
+                  if (interactContentAudiotype === 1) {
+
+                    if (fileInputRef.current) {
+                      fileInputRef.current.click();
+                    }
+                  } else {
+                    if (fileInputRef.current) {
+                      fileInputRef.current.click();
+                    }
+
+                  }
+                }
+              }
+              className={
+                darkmodeReducer
+                  ? "make-small-icons-clickable-lightCrop dontallowhighlighting zuperkingIcon "
+                  : "make-small-icons-clickable-darkCrop dontallowhighlighting zuperkingIcon  "
+              }
+              style={{
+                color: "#ffffff",
+                fontSize: matchTabletMobile ? `${mobilefont}vh` : `${pcfont - 1}vw`,
+                marginRight: "5vw",
+              }}
+            />
+            <span
+              style={{
+                position: 'relative', // Absolute position for the text
+                top: '-10%', // Center vertically
+                fontFamily: 'fantasy',
+                fontSize: matchTabletMobile ? `${mobilefont}vh` : `1.3vw`,
+              }}
+            >
+              {interactContentAudiotype === 1 ? Audioname : 'Add Audio Sample'}
+            </span>
+
+
+          </Grid>
+
+
+
+          <Grid container>
+            <Grid
+              item
+              xs={12}
+              style={{
+                padding: "0px",
+                position: 'relative',
+                marginTop: '12vh',
+                height: 'auto',
+
+              }}
+            >
+
+
+
+
+
+              <Grid
+                item
+                xs={6}
+                style={{
+                  padding: "0px",
+
+                  height: '0vh',
+                  position: 'relative',
+
+                }}
+              >
+
+                {
+                  interactContenttype === 1 ?
+                    <video
+                      src={interactContentvideo ? URL.createObjectURL(interactContentvideo) : ''}   // Using the blob URL from interactContentvideo
+                      style={{
+                        width: "90%", // Set thevideo width to 100%
+                        height: "auto",
+                        display: "block", // Ensure proper rendering in some browsers
+                        margin: "0 auto", // Center the video
+                        cursor: 'pointer'
+                      }}
+                    // Add if you want video controls like play, pause, etc.
+                    /> :
+                    interactContent.length > 0 ? <img
+                      src={URL.createObjectURL(interactContent[0])}
+                      style={{
+                        width: "90%",
+                        height: "21vh",
+                        objectFit: 'cover',
+
+                      }}
+                    /> : null
+                }
+
+
+                {interactContenttype2 === 1 ?
+                  <video
+                    src={interactContentvideo2 ? URL.createObjectURL(interactContentvideo2) : ''}   // Using the blob URL from interactContentvideo
+                    style={{
+                      width: "90%", // Set thevideo width to 100%
+                      height: "auto",
+                      display: "block", // Ensure proper rendering in some browsers
+                      margin: "0 auto", // Center the video
+                      cursor: 'pointer'
+                    }}
+                  // Add if you want video controls like play, pause, etc.
+                  /> :
+                  interactContent2.length > 0 ? <img
+                    src={URL.createObjectURL(interactContent2[0])}
+
+                    style={{
+                      width: "90%",
+                      height: "21vh",
+                      objectFit: 'cover',
+                    }}
+                  /> : null
+                }
+              </Grid>
+
+
+            </Grid>
+          </Grid>
+
+
+
+
+        </Grid>
+
+
+
+
+
+
         <Grid
           item
           xs={12}
@@ -485,47 +1259,6 @@ function Captionx({
             padding: "0px",
           }}
         ></Grid>
-        <TextField
-          size={sizex}
-          inputProps={{ style: { fontSize: font1 } }}
-          InputLabelProps={{ style: { fontSize: font2 } }}
-          onChange={updatecaptiontop}
-          value={captionvalues.topic}
-          style={{
-            transform: transform,
-            width: width,
-            paddingBottom: "0px",
-            position: "fixed",
-            top: "25vh",
-            left: "20vw",
-            zIndex: 26,
-          }}
-          label="Caption"
-          type="text"
-          name="topic"
-          variant="standard"
-        />{" "}
-        <TextField
-          size={sizex}
-          inputProps={{ style: { fontSize: font1 } }}
-          InputLabelProps={{ style: { fontSize: font2 } }}
-          onChange={updatecaptiontop}
-          value={captionvalues.caption}
-          style={{
-            transform: transform,
-            width: "60%",
-            paddingBottom: "0px",
-            position: "fixed",
-            top: "45vh",
-            left: "20vw",
-            zIndex: 26,
-            display: 'none'
-          }}
-          label="Share Your Thoughts"
-          type="text"
-          name="caption"
-          variant="standard"
-        />{" "}
         <Grid
           item
           xs={4}
@@ -533,6 +1266,7 @@ function Captionx({
             margin: "auto",
             textAlign: "center",
             height: "0px",
+            marginTop: '30vh'
           }}
         >
           <CheckIcon
@@ -557,6 +1291,7 @@ function Captionx({
           />
           <CloseIcon
             onClick={() => {
+              setAllowCaption(false);
               setstartTopicCap(false);
             }}
             className={
@@ -572,7 +1307,45 @@ function Captionx({
             }}
           />
         </Grid>
-      </Grid>
+
+
+
+        {supeFilterLoadFadex ? (
+
+          <>
+            <Grid
+              container
+              style={{
+                backgroundColor: darkmodeReducer
+                  ? "rgba(50,50,50,0.68)"
+                  : "rgba(250,250,250,0.8)",
+                position: "fixed",
+                top: "0px",
+                width: "100vw",
+                height: "100vh",
+                zIndex: 10000000,
+              }}
+            >
+
+
+              <h2 className='blinken' style={{ textAlign: 'center', margin: 'auto', fontFamily: 'fantasy', }}>
+                {loadmode}..
+              </h2>
+
+
+
+            </Grid>{" "}
+          </>
+        ) :
+
+          null
+
+
+        }
+
+
+
+      </Grid >
     </>
   );
 }

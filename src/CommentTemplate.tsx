@@ -41,6 +41,7 @@ function CommentTemplatex({
   CommentHistoryData,
   setcommentHistoryScroll,
   setCommentHistoryData,
+  dontallowspring
 }: any): JSX.Element {
   ///
   ///
@@ -126,7 +127,7 @@ function CommentTemplatex({
   ///CREATE A SLIDE UP ANIMATION WITH  REACT SPRING
   const modalanimation = useSpring({
     config: {
-      duration: 500,
+      duration: dontallowspring ? 5 : 500,
     },
     opacity: showModalForm ? 1 : 0.9,
     transform: showModalForm ? `translateY(0%)` : `translateY(100%)`,

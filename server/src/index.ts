@@ -11,6 +11,8 @@ dotenv.config();
 const cookieParser = require("cookie-parser");
 import express = require("express");
 import { generateUploadURL } from "./ss3";
+import { generateUploadURLvid } from "./ss3vid";
+import { generateUploadURLaudio } from "./ss3audio";
 
 var app: Application = express();
 var cors = require("cors");
@@ -34,6 +36,32 @@ if (process.env.APP_STATE === "dev") {
   };
   app.use(cors(corsOptionsx));
 }
+
+// Additional middleware to add CORS headers for image requests
+app.use((req, res, next) => {
+  // Set headers for cross-origin isolation
+  // Set CORS and cache headers
+
+  res.set("Cross-Origin-Opener-Policy", "same-origin");
+  res.set("Cross-Origin-Embedder-Policy", "require-corp");
+
+  next();
+});
+
+///
+///
+// Additional middleware to add CORS headers for image requests
+app.use("/images", (req, res, next) => {
+  // Set CORS and cache headers
+  res.set("Access-Control-Allow-Origin", [
+    "https://clikbate.com",
+    "https://www.clikbate.com",
+    "http://192.168.0.13:3000",
+  ]);
+  res.set("Cache-Control", "public, max-age=0");
+
+  next();
+});
 
 app.use(express.json({ limit: "400mb" }));
 app.use(express.urlencoded({ limit: "400mb" }));
@@ -113,44 +141,28 @@ const getstickers = `SELECT stickname FROM stickers  ORDER BY id DESC  LIMIT 30 
 
 ///checkIsLogged
 
-const postsx = `SELECT
+const postsx = `
+SELECT
+  (SELECT COUNT(*) FROM fan WHERE favid = posts.sender AND userid = ?) AS favCount,
+  (SELECT type FROM emotions WHERE post = posts.id AND user = ?) AS EmoIn,
+  (SELECT COUNT(*) FROM comments WHERE post = posts.id) AS commentCount,
 
+  (SELECT COUNT(*) FROM emotions WHERE post = posts.id AND type = 1) AS lovely,
+  (SELECT COUNT(*) FROM emotions WHERE post = posts.id AND type = 2) AS cool,
+  (SELECT COUNT(*) FROM emotions WHERE post = posts.id AND type = 3) AS care,
+  (SELECT COUNT(*) FROM emotions WHERE post = posts.id AND type = 4) AS funny,
 
-(SELECT COUNT(*)   
-  FROM fan
- WHERE favid = posts.sender and userid = ?)favCount,
+  (SELECT file FROM audio WHERE post = posts.id) AS audioData,
+  (SELECT audiostart FROM audio WHERE post = posts.id) AS audioDataStart,
+  (SELECT audioend FROM audio WHERE post = posts.id) AS audioDataEnd,
 
-
-(SELECT type
-FROM emotions 
-WHERE post = posts.id and user = ?)EmoIn,
-
-
-(SELECT COUNT(*) 
-          FROM comments 
-         WHERE post = posts.id)commentCount,
-
-
-      (SELECT COUNT(*) 
-          FROM emotions
-         WHERE post = posts.id and type=1)lovely, 
-         
-      (SELECT COUNT(*) 
-          FROM emotions
-         WHERE post = posts.id and type=2)cool, 
-
-            (SELECT COUNT(*) 
-          FROM emotions
-         WHERE post = posts.id and type=3)care, 
-
-            (SELECT COUNT(*) 
-          FROM emotions
-         WHERE post = posts.id and type=4)funny, 
-         
-         
-        rad1,rad2,members.profile_image,members.username,color1,posts.id,sender,post_count,topic,
-caption,item1,thumb1,itemtype1,interact1a,interact1ax,interact1ay,interact1b,interact1bx,interact1by,item2,thumb2,itemtype2,interact2a,interact2ax,interact2ay,interact2b,interact2bx,interact2by,item3,thumb3,itemtype3,interact3a,interact3ax,interact3ay,interact3b,interact3bx,interact3by,item4,thumb4,itemtype4,item5,thumb5,itemtype5,time  FROM posts inner join members on
- posts.sender = members.id   ORDER BY posts.id DESC LIMIT 20`;
+  interacttype1, interacttype2, rad1, rad2, members.profile_image, members.username, color1, posts.id, sender, post_count, topic,
+  caption, item1, thumb1, itemtype1, interact1a, interact1ax, interact1ay, interact1b, interact1bx, interact1by, item2,vid1backup,vid2backup,time
+FROM posts
+INNER JOIN members ON posts.sender = members.id
+ORDER BY posts.id DESC
+LIMIT 20
+`;
 
 const posts_more = `SELECT
 (SELECT COUNT(*)   
@@ -183,13 +195,22 @@ WHERE post = posts.id and user = ?)EmoIn,
             (SELECT COUNT(*) 
           FROM emotions
          WHERE post = posts.id and type=4)funny, 
+
+          (SELECT file FROM audio WHERE post = posts.id) AS audioData,
+  (SELECT audiostart FROM audio WHERE post = posts.id) AS audioDataStart,
+  (SELECT audioend FROM audio WHERE post = posts.id) AS audioDataEnd,
          
          
-       rad1,rad2, members.profile_image,members.username,color1,posts.id,sender,post_count,topic,
-caption,item1,thumb1,itemtype1,interact1a,interact1ax,interact1ay,interact1b,interact1bx,interact1by,item2,thumb2,itemtype2,interact2a,interact2ax,interact2ay,interact2b,interact2bx,interact2by,item3,thumb3,itemtype3,interact3a,interact3ax,interact3ay,interact3b,interact3bx,interact3by,item4,thumb4,itemtype4,item5,thumb5,itemtype5,time  FROM posts inner join members on
+        
+         
+      interacttype1,interacttype2,rad1,rad2, members.profile_image,members.username,color1,posts.id,sender,post_count,topic,
+caption,item1,thumb1,itemtype1,interact1a,interact1ax,interact1ay,interact1b,interact1bx,interact1by,item2,vid1backup,vid2backup,time
+  FROM posts inner join members on
  posts.sender = members.id AND posts.id < ?    ORDER BY posts.id DESC LIMIT 20`;
 
 const updateColor = `UPDATE members SET  color1 = ? WHERE (id = ?)`;
+
+const updateReg = `UPDATE members SET  reg = 0 WHERE (id = ?)`;
 
 const updateBasicpage = `UPDATE members SET username = ?, quote=?, biography=?   WHERE (id = ?)`;
 
@@ -202,8 +223,11 @@ const updatebillboardPic = `UPDATE members SET billboard1 = ?, billboardthumb1 =
 const updatebillboardPic2 = `UPDATE members SET billboard2 = ?, billboardthumb2 = ?  WHERE (id = ?)`;
 
 const createpost = `INSERT INTO posts (sender,post_count,topic,caption,item1,thumb1,itemtype1,interact1a,interact1ax,interact1ay,
-  interact1b,interact1bx,interact1by,item2,thumb2,itemtype2,interact2a,interact2ax,interact2ay,interact2b,interact2bx,interact2by,item3,thumb3,itemtype3,
-  interact3a,interact3ax,interact3ay,interact3b,interact3bx,interact3by,item4,thumb4,itemtype4,item5,thumb5,itemtype5,rad1,rad2,time) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`;
+  interact1b,interact1bx,interact1by,rad1,rad2,interacttype1,interacttype2,item2,vid1backup,vid2backup,time)
+   VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`;
+
+const y = `INSERT INTO audio (file,name,sender,post,audiostart,audioend,time)
+VALUES (?,?,?,?,?,?,?)`;
 
 const createComment = `INSERT INTO comments (post,com,commented_by,date) VALUES (?,?,?,?)`;
 
@@ -326,11 +350,16 @@ WHERE post = posts.id and user = ?)EmoIn,
 
             (SELECT COUNT(*) 
           FROM emotions
-         WHERE post = posts.id and type=4)funny, 
+         WHERE post = posts.id and type=4)funny,
+         
+          (SELECT file FROM audio WHERE post = posts.id) AS audioData,
+  (SELECT audiostart FROM audio WHERE post = posts.id) AS audioDataStart,
+  (SELECT audioend FROM audio WHERE post = posts.id) AS audioDataEnd,
          
          
-        rad1,rad2,members.profile_image,members.username,color1,posts.id,sender,post_count,topic,
-caption,item1,thumb1,itemtype1,interact1a,interact1ax,interact1ay,interact1b,interact1bx,interact1by,item2,thumb2,itemtype2,interact2a,interact2ax,interact2ay,interact2b,interact2bx,interact2by,item3,thumb3,itemtype3,interact3a,interact3ax,interact3ay,interact3b,interact3bx,interact3by,item4,thumb4,itemtype4,item5,thumb5,itemtype5,time  FROM posts inner join members on
+         interacttype1,interacttype2,rad1,rad2,members.profile_image,members.username,color1,posts.id,sender,post_count,topic,
+caption,item1,thumb1,itemtype1,interact1a,interact1ax,interact1ay,interact1b,interact1bx,interact1by,item2,vid1backup,vid2backup,
+time  FROM posts inner join members on
  posts.sender = members.id    where posts.sender = ?  ORDER BY posts.id DESC LIMIT 20`;
 
 const profile_more = `SELECT
@@ -366,10 +395,15 @@ WHERE post = posts.id and user = ?)EmoIn,
             (SELECT COUNT(*) 
           FROM emotions
          WHERE post = posts.id and type=4)funny, 
+
+          (SELECT file FROM audio WHERE post = posts.id) AS audioData,
+  (SELECT audiostart FROM audio WHERE post = posts.id) AS audioDataStart,
+  (SELECT audioend FROM audio WHERE post = posts.id) AS audioDataEnd,
          
          
-        rad1,rad2,members.profile_image,members.username,color1,posts.id,sender,post_count,topic,
-caption,item1,thumb1,itemtype1,interact1a,interact1ax,interact1ay,interact1b,interact1bx,interact1by,item2,thumb2,itemtype2,interact2a,interact2ax,interact2ay,interact2b,interact2bx,interact2by,item3,thumb3,itemtype3,interact3a,interact3ax,interact3ay,interact3b,interact3bx,interact3by,item4,thumb4,itemtype4,item5,thumb5,itemtype5,time  FROM posts inner join members on
+        interacttype1,interacttype2,rad1,rad2,members.profile_image,members.username,color1,posts.id,sender,post_count,topic,
+caption,item1,thumb1,itemtype1,interact1a,interact1ax,interact1ay,interact1b,interact1bx,interact1by,item2,vid1backup,vid2backup
+,time  FROM posts inner join members on
  posts.sender = members.id where posts.sender = ? AND posts.id < ?  ORDER BY posts.id DESC LIMIT 20 `;
 
 const optionsval = `(SELECT thumb1 FROM posts WHERE sender = ? ORDER BY id DESC LIMIT 1)
@@ -758,11 +792,50 @@ app.post("/get_signed_url_4upload_post", async (req: any, res: any) => {
     const urlThumb = await generateUploadURL();
     const urlinteraction1 = await generateUploadURL();
     const urlinteraction2 = await generateUploadURL();
+    const urlHD2 = await generateUploadURL();
     var cc = {
       urlHD: urlHD,
       urlThumb: urlThumb,
       urlinteraction1: urlinteraction1,
       urlinteraction2: urlinteraction2,
+      urlHD2: urlHD2,
+    };
+    holder[i] = cc;
+
+    if (values.count - 1 === i) {
+      res.send({ holder });
+    }
+  }
+});
+
+app.post("/get_signed_url_4upload_post_audio", async (req: any, res: any) => {
+  const { values } = req.body;
+  var holder = [];
+
+  const urlA = await generateUploadURLaudio();
+
+  var cc = {
+    urlA: urlA,
+  };
+  holder[0] = cc;
+
+  res.send({ holder });
+});
+
+app.post("/get_signed_url_4upload_post_vid", async (req: any, res: any) => {
+  const { values } = req.body;
+  var holder = [];
+  for (let i = 0; i < values.count; i++) {
+    const urlVID = await generateUploadURLvid();
+    const urlVID2 = await generateUploadURLvid();
+    const urlVIDimage1 = await generateUploadURL();
+    const urlVIDimage2 = await generateUploadURL();
+
+    var cc = {
+      urlVid: urlVID,
+      urlVid2: urlVID2,
+      urlVIDimage1: urlVIDimage1,
+      urlVIDimage2: urlVIDimage2,
     };
     holder[i] = cc;
 
@@ -839,14 +912,54 @@ app.put("/billboard_upload_data", async (req: any, res: any, next: any) => {
   }
 });
 
+app.post("/post_upload_audio_data", async (req: any, res: any, next: any) => {
+  const { values } = req.body;
+
+  var currentTime = new Date();
+
+  try {
+    const result = await execPoolQuery(y, [
+      values.file,
+      values.name,
+      values.sender,
+      values.post,
+      values.audioStart,
+      values.audioEnd,
+      currentTime,
+    ]);
+
+    ///const insertedId = result.insertId;
+
+    return res.send({ message: "audio uploaded" });
+  } catch (e: any) {
+    console.log(e);
+    return res.send({ message: "audio  upload failed" });
+  }
+});
+
 app.post("/post_upload_data", async (req: any, res: any, next: any) => {
   const { values } = req.body;
 
   var currentTime = new Date();
 
-  console.log(values.rad1);
+  var intx1 = null;
+  var intx2 = null;
+
+  if (values.interacttype1 === 1) {
+    intx1 = values.vid1;
+  } else {
+    intx1 = values.all[0].interact1;
+  }
+
+  if (values.interacttype2 === 1) {
+    intx2 = values.vid2;
+  } else {
+    intx2 = values.all[0].interact2;
+  }
+
+  ///console.log(values.rad1);
   try {
-    await execPoolQuery(createpost, [
+    const result = await execPoolQuery(createpost, [
       values.id,
       values.all.length,
       values.topic,
@@ -855,50 +968,31 @@ app.post("/post_upload_data", async (req: any, res: any, next: any) => {
       values.all[0] ? values.all[0].imagedataThumb : null,
       values.all[0] ? 1 : null,
 
-      values.all[0] ? values.all[0].interact1 : null,
+      values.all[0] ? intx1 : null,
       values.I1x ? values.I1x : null,
       values.I1y ? values.I1y : null,
 
-      values.all[0] ? values.all[0].interact2 : null,
+      values.all[0] ? intx2 : null,
       values.I1bx ? values.I1bx : null,
       values.I1by ? values.I1by : null,
 
-      values.all[1] ? values.all[1].imagedata : null,
-      values.all[1] ? values.all[1].imagedataThumb : null,
-      values.all[1] ? 1 : null,
-
-      values.all[1] ? values.all[1].interact1 : null,
-      values.I2x ? values.I2x : null,
-      values.I2y ? values.I2y : null,
-
-      values.all[1] ? values.all[1].interact2 : null,
-      values.I2bx ? values.I2bx : null,
-      values.I2by ? values.I2by : null,
-
-      values.all[2] ? values.all[2].imagedata : null,
-      values.all[2] ? values.all[2].imagedataThumb : null,
-      values.all[2] ? 1 : null,
-
-      values.all[2] ? values.all[2].interact1 : null,
-      values.I3x ? values.I3x : null,
-      values.I3y ? values.I3y : null,
-
-      values.all[2] ? values.all[2].interact2 : null,
-      values.I3bx ? values.I3bx : null,
-      values.I3by ? values.I3by : null,
-
-      values.all[3] ? values.all[3].imagedata : null,
-      values.all[3] ? values.all[3].imagedataThumb : null,
-      values.all[3] ? 1 : null,
-      values.all[4] ? values.all[4].imagedata : null,
-      values.all[4] ? values.all[4].imagedataThumb : null,
-      values.all[4] ? 1 : null,
-
       values.rad1,
       values.rad2,
+
+      values.interacttype1,
+      values.interacttype2,
+
+      values.all[0] ? values.all[0].imagedata2 : null,
+
+      values.vid1backup ? values.vid1backup : null,
+      values.vid2backup ? values.vid2backup : null,
+
       currentTime,
     ]);
-    return res.send({ message: "images uploaded" });
+
+    const insertedId = result.insertId;
+
+    return res.send({ go: insertedId, message: "images uploaded" });
   } catch (e: any) {
     console.log(e);
     return res.send({ message: "images upload failed" });
@@ -918,6 +1012,17 @@ app.put("/update_basic", async (req: Request, res: Response) => {
     return res.send({ message: "username updated" });
   } catch {
     return res.send({ message: "usernameFailed" });
+  }
+});
+
+app.put("/update_Reg", async (req: Request, res: Response) => {
+  const { values } = req.body;
+
+  try {
+    await execPoolQuery(updateReg, [values.id]);
+    return res.send({ message: "updated" });
+  } catch {
+    return res.send({ message: "reg update Failed" });
   }
 });
 
@@ -1268,12 +1373,12 @@ app.post(
             values.inputedUsername,
             hash,
             values.inputedEmail,
-            "https://clikbatebucket.s3.amazonaws.com/3763e5c4c412eefdeb6e7528d27d636f",
-            "https://clikbatebucket.s3.amazonaws.com/9f372d50df48ec12e6b74703199a4fd0",
-            "https://clikbatebucket.s3.amazonaws.com/92fcfd4fc5a38c8dc6d2b1459bfa60d3",
-            "https://clikbatebucket.s3.amazonaws.com/f37214a78551f5bfe7aad14bd81b08c9",
-            "https://clikbatebucket.s3.amazonaws.com/fdbdfac4387215403ce708cbb20b49e8",
-            "https://clikbatebucket.s3.amazonaws.com/ce5328a431d4b5f5cbfbd91d495b97d6",
+            "909ab1e9e39f50fcc96a6f55124d81c8",
+            "4bc9f798a1e4a964f27b3e6e6d10954c",
+            "6a2b5a7e86fc51463969fe9ee843a8d2",
+            "e93e1f41c6716ba2105f9d5b1bb0a69e",
+            "bee47642a8d647d7fa3d763670506bb8",
+            "c3b1f107a3b5722c34a2364decba6a6a",
             color,
             color,
             0,
