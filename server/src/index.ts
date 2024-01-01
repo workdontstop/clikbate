@@ -37,16 +37,12 @@ if (process.env.APP_STATE === "dev") {
   app.use(cors(corsOptionsx));
 }
 
-// Additional middleware to add CORS headers for image requests
-app.use((req, res, next) => {
-  // Set headers for cross-origin isolation
-  // Set CORS and cache headers
-
-  res.set("Cross-Origin-Opener-Policy", "same-origin");
-  res.set("Cross-Origin-Embedder-Policy", "require-corp");
-
-  next();
-});
+// Commenting out COOP and COEP headers
+// app.use((req, res, next) => {
+//   res.set("Cross-Origin-Opener-Policy", "same-origin");
+//   res.set("Cross-Origin-Embedder-Policy", "require-corp");
+//   next();
+// });
 
 ///
 ///
