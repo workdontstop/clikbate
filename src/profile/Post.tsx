@@ -100,7 +100,8 @@ function Postx({
   activeAudio,
   setactiveAudio,
   clearAllTimers,
-  AllowAllHdImagesShow
+  AllowAllHdImagesShow,
+  setitemCLICKED
 
 
 
@@ -1073,6 +1074,7 @@ function Postx({
           {/*///////////////////////////////////////////////////////////////////////////POST DATA*/}
 
           <Slider
+            setitemCLICKED={setitemCLICKED}
             AllowAllHdImagesShow={AllowAllHdImagesShow}
             activeAudio={activeAudio}
             setactiveAudio={setactiveAudio}

@@ -7,6 +7,7 @@ import {
   REQUEST_BILLBOARD_UPDATE2,
   REQUEST_MEMBER,
   REQUEST_MEMBERDATA,
+  REQUEST_USER_REG_UPDATE,
 } from "../log_ActionTypes";
 
 export function UserdataAction(ServerPayload: any) {
@@ -65,4 +66,12 @@ export function UserInfoUpdateBILLBOARD(data: any, typex: any) {
       paload2: typex
     };
   }
+}
+
+
+export function UserdataReg(data: any) {
+  return {
+    type: REQUEST_USER_REG_UPDATE,
+    payload: data,
+  };
 }

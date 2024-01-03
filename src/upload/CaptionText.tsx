@@ -62,6 +62,48 @@ function CaptionTextx({
 
 
 
+    ///
+    ///
+    ///
+    /// INTERFACE/TYPES FOR SCREENHEIGHT AND DARKMODE
+    interface RootStateGlobalReducer {
+        GlobalReducer: {
+            snapStart: boolean;
+            darkmode: boolean;
+
+        };
+    }
+
+
+    const [shownav, setShownav] = useState<boolean>(true);
+    ///
+    ///
+    ///
+    /// GET SCREENHEIGHT FROM REDUX STORE
+    const { darkmode } =
+        useSelector((state: RootStateGlobalReducer) => ({
+            ...state.GlobalReducer,
+        }));
+
+    const darkmodeReducer = darkmode;
+
+
+    ///
+    ///
+    ///
+    const { PaperStyleLight, PaperStyleDark } = useSelector(
+        (state: RootStateOrAny) => ({
+            ...state.PaperReducerLightnDark,
+        })
+    );
+    var PaperStyleReducer = "";
+
+    if (darkmodeReducer) {
+        PaperStyleReducer = PaperStyleDark;
+    } else {
+        PaperStyleReducer = PaperStyleLight;
+    }
+
 
     return (
         <>
@@ -76,9 +118,12 @@ function CaptionTextx({
                     width: width,
                     paddingBottom: "0px",
                     position: "fixed",
-                    bottom: "7vh",
+                    bottom: "4vh",
                     left: "36.5vw",
                     zIndex: 26,
+                    padding: '2.2vh',
+                    borderRadius: '2.5%',
+                    backgroundImage: PaperStyleReducer,
                 }}
                 label="Share Your Thoughts"
                 type="text"

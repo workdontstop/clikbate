@@ -270,17 +270,17 @@ export const GlobalReducerLoader = (
     case HIDE_GLOBAL_LOADER:
       return { ...state, loader: false };
     case clickPostHintState_LOADER:
-      return { ...state, clickPostHintState: false };
+      return { ...state, clickPostHintState: action.payload2 };
     case connectHintState_LOADER:
-      return { ...state, connectHintState: false };
+      return { ...state, connectHintState: action.payload2 };
     case minimiseHintState_LOADER:
-      return { ...state, minimiseHintState: false };
+      return { ...state, minimiseHintState: action.payload2 };
     case interactHintState_LOADER:
-      return { ...state, interactHintState: false };
+      return { ...state, interactHintState: action.payload2 };
     case EditHintState_LOADER:
-      return { ...state, EditHintState: false };
+      return { ...state, EditHintState: action.payload2 };
     case interactionstartHintState_LOADER:
-      return { ...state, interactionstartHintState: false };
+      return { ...state, interactionstartHintState: action.payload2 };
     default:
       return state;
   }

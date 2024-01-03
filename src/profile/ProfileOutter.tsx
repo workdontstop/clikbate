@@ -18,6 +18,7 @@ import { OptionsSlider } from "./OptionsSlider";
 import { UpdateNavFilterReducer, UpdateSign } from "../GlobalActions";
 import { UpdateNavCropReducer } from "../GlobalActions";
 import LogoutIcon from "@mui/icons-material/Logout";
+import HelpIcon from '@material-ui/icons/Help';
 import { DarkmodeToggleAction } from ".././GlobalActions";
 import PanoramaFishEyeIcon from "@mui/icons-material/PanoramaFishEye";
 import DownloadDoneIcon from "@mui/icons-material/DownloadDone";
@@ -29,6 +30,10 @@ import { UpdateLoader, UpdateMenuData, Updatepagenum } from ".././GlobalActions"
 import { Taskbar } from "./Taskbar";
 import { UpdateInteract, UpdateAlertReducer } from ".././GlobalActions";
 import SlowMotionVideoIcon from '@material-ui/icons/SlowMotionVideo';
+import { UserdataReg } from "../log/actions/UserdataAction";
+import { UpdateTutorials } from "../GlobalActions";
+
+
 
 import { LoginButtons } from "../log/LogButtons";
 
@@ -252,14 +257,17 @@ function ProfileOutter() {
       username: string;
       memeberPageid: number;
       MemberProfileData: any;
+      reg: number
     };
   }
-  const { username, image, imageThumb, id, memeberPageid, MemberProfileData } =
+  const { username, image, imageThumb, id, memeberPageid, MemberProfileData, reg } =
     useSelector((state: RootStateReducerImage) => ({
       ...state.UserdataReducer,
     }));
 
   const [imageReducer, setimageReducer] = useState("");
+
+  const regReducer = reg;
 
   const [imageReducerThumb, setimageReducerThumb] = useState("");
   const [ColorMemberReducer, setColorMemberReducer] = useState("");
@@ -2068,7 +2076,77 @@ function ProfileOutter() {
                       }}
                     ></Grid>{" "}
                     <Grid
-                      xs={6}
+                      xs={4}
+                      style={{
+                        padding: "0px",
+                        backgroundColor: darkmodeReducer
+                          ? "rgba(50,50,50,0.85)"
+                          : "rgba(210,210,210,0.86)",
+                        height: "75%",
+                        marginTop: "0vh",
+                        textAlign: "center",
+                        justifyContent: "center",
+                        display: "grid",
+                        alignItems: "center",
+                        position: "relative",
+                        zIndex: 10,
+                      }}
+                    >
+                      <HelpIcon
+                        onClick={() => {
+
+
+                          if (idReducer === GuestReducer) {
+                            ///do nothing
+                          } else {
+                            for (let type = 1; type <= 6; type++) {
+                              dispatch(UpdateTutorials(type, true));
+
+                            }
+                            dispatch(UserdataReg(1));
+
+                          }
+
+
+
+
+                        }}
+                        className={
+                          darkmodeReducer
+                            ? "make-small-icons-clickable-lightCrop turdark dontallowhighlighting zuperkingIcon "
+                            : "make-small-icons-clickable-darkCrop  turdark dontallowhighlighting zuperkingIcon  "
+                        }
+                        style={{
+                          margin: "auto",
+                          color: regReducer === 1 ? colorReducer : '',
+                          fontSize:
+                            matchTablet || matchMobile ? "4.8vh" : "2.9vw",
+                        }}
+                      />
+                      <Grid
+                        item
+                        xs={12}
+                        style={{
+                          fontSize: matchPc
+                            ? "1.1vw"
+                            : matchTablet
+                              ? "2vh"
+                              : "1.9vh",
+                          fontWeight: "bolder",
+                          fontFamily: "Arial, Helvetica, sans-serif",
+                          color: darkmodeReducer ? "#dddddd" : "#0b111b",
+                        }}
+                      >
+                        {regReducer === 1 ? 'Reset Tutorial' : 'Tutorial'}
+                      </Grid>
+                    </Grid>
+
+
+
+
+
+                    <Grid
+                      xs={4}
                       style={{
                         padding: "0px",
                         backgroundColor: darkmodeReducer
@@ -2119,7 +2197,7 @@ function ProfileOutter() {
                       </Grid>
                     </Grid>
                     <Grid
-                      xs={6}
+                      xs={4}
                       style={{
                         padding: "0px",
                         backgroundColor: darkmodeReducer
@@ -2166,6 +2244,11 @@ function ProfileOutter() {
                         Log Out
                       </Grid>
                     </Grid>
+
+
+
+
+
                   </Grid>{" "}
                 </>
               ) : null}

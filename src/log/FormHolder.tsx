@@ -276,6 +276,9 @@ function FormHolderx({
                   .catch(function (error) {
                     window.location.reload();
                   });
+              } else {
+
+                window.location.reload();
               }
 
 

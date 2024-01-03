@@ -59,7 +59,8 @@ function Sliderx({
   paperPostScrollRef,
   setactiveAudio,
   activeAudio,
-  AllowAllHdImagesShow
+  AllowAllHdImagesShow,
+  setitemCLICKED
 }: any): JSX.Element {
   const [sliderDuration] = useState(1500);
 
@@ -615,13 +616,37 @@ function Sliderx({
 
   }, [ActiveCanvas])
 
+
+
+  const closeItemClick = useCallback(() => {
+
+    /////alert('kkhhh');
+    if (matchMobile) {
+      const newclickArray = [...itemCLICKED];
+      newclickArray[pey] = true;
+      setitemCLICKED(newclickArray);
+    }
+
+  }, [itemCLICKED[pey], matchMobile])
+
+
   const IntClose = useCallback(() => {
 
+
+
+
     if (interact) {
+
       setpause(false);
 
       setHideCann(true);
 
+      var d = videoDuration;
+
+      if (interacttypeAll === 1) {
+
+        d = 17000;
+      } else { }
 
 
       if (interacttime.current) {
@@ -634,11 +659,13 @@ function Sliderx({
 
       interacttime.current = setTimeout(() => {
         setfadeout(true);
+        closeItemClick();
+
 
         if (interacttime2.current) {
           clearTimeout(interacttime2.current);
         }
-
+        //alert('kk');
 
         interacttime2.current = setTimeout(() => {
           ///  dispatch(UpdateInteract('', false));
@@ -653,7 +680,7 @@ function Sliderx({
           setinteracttypeAll(0);
           setfadeout(false);
         }, 1800);
-      }, videoDuration);
+      }, d);
     } else {
 
       setTimeout(() => {
@@ -663,11 +690,12 @@ function Sliderx({
       }, 2000);
 
     }
-  }, [interact, videoPlayerReff, videoDuration]);
+  }, [interact, videoPlayerReff, videoDuration, interacttypeAll]);
 
   useEffect(() => {
 
     var d = 10000;
+
 
     if (interacttypeAll === 1) {
       d = 200000;
@@ -742,6 +770,8 @@ function Sliderx({
     ];
   }
 
+
+  const [calledInteraction, setcalledInteraction] = useState(false);
 
 
 
@@ -865,7 +895,7 @@ function Sliderx({
           if (post.interact1a || post.interact1b) {
             //alert('jj');
 
-            var scaleFactor = matchMobile ? 1.015 : 1.005; // You can adjust this value to control the zoom level
+            var scaleFactor = matchMobile ? 1.059 : 1.049; // You can adjust this value to control the zoom level
 
             if (post.interact1a) {
               if (typex === 0 || typex === 3) {
@@ -1046,7 +1076,7 @@ function Sliderx({
                 } else {
                   drawInteraction(0, event, 0);
                 }
-              }, 70);
+              }, 60);
             }
             if (canvasRefIn.current) {
               canvasRefIn.current.style.width = `${imageWidthcss}px`;
@@ -1059,48 +1089,61 @@ function Sliderx({
 
             if (post.interact1b || post.interact1a) {
               if (clicked === 1 && clikarc2) {
-                /// alert(`xx: ${xx}, xnew: ${xnew}`);
 
-                /// dispatch(UpdateInteract(post.interact1b, true));
-                ///stop interaction first 
-                setInteractedDark(false);
-                setinteract(false);
-                setinteractContent("");
-                setinteracttypeAll(0);
-                setfadeout(false);
-                ///stop interaction first 
-                spin(10000000000000);
-                setinteract(true);
+                setTimeout(() => {
+                  /// alert(`xx: ${xx}, xnew: ${xnew}`);
 
-                if (post.interacttype2 === 1 && isAppleDevice) {
+                  /// dispatch(UpdateInteract(post.interact1b, true));
+                  ///stop interaction first 
+                  setInteractedDark(false);
+                  setinteract(false);
+                  setinteractContent("");
+                  setinteracttypeAll(0);
+                  setfadeout(false);
+                  ///stop interaction first 
+                  spin(10000000000000);
+                  setinteract(true);
 
-                  setinteractContent(post.vid2backup);
-                } else {
-                  setinteractContent(post.interact1b);
-                }
+                  if (post.interacttype2 === 1 && isAppleDevice) {
 
-                setinteracttypeAll(post.interacttype2);
+                    setinteractContent(post.vid2backup);
+                  } else {
+                    setinteractContent(post.interact1b);
+                  }
+
+                  setinteracttypeAll(post.interacttype2);
+                }, 1000);
+
+
+
               } else if (clicked === 1 && clikarc1) {
-                /// alert(`xx: ${xx}, xnew: ${xnew}`);
 
-                ///stop interaction first 
-                setInteractedDark(false);
-                setinteract(false);
-                setinteractContent("");
-                setinteracttypeAll(0);
-                setfadeout(false);
-                ///stop interaction first 
-                spin(10000000000000);
-                setinteract(true);
+                setTimeout(() => {
+                  /// alert(`xx: ${xx}, xnew: ${xnew}`);
 
-                if (post.interacttype1 === 1 && isAppleDevice) {
+                  ///stop interaction first 
+                  setInteractedDark(false);
+                  setinteract(false);
+                  setinteractContent("");
+                  setinteracttypeAll(0);
+                  setfadeout(false);
+                  ///stop interaction first 
+                  spin(10000000000000);
+                  setinteract(true);
 
-                  setinteractContent(post.vid1backup);
-                } else {
-                  setinteractContent(post.interact1a);
-                }
-                setinteracttypeAll(post.interacttype1);
+                  if (post.interacttype1 === 1 && isAppleDevice) {
+
+                    setinteractContent(post.vid1backup);
+                  } else {
+                    setinteractContent(post.interact1a);
+                  }
+                  setinteracttypeAll(post.interacttype1);
+                }, 1000)
+
+
               } else if (clicked === 1) {
+
+
 
 
                 switch (event.detail) {
@@ -1124,6 +1167,7 @@ function Sliderx({
 
                 /// alert('jj');
               } else {
+
               }
             } else {
             }
@@ -1133,8 +1177,10 @@ function Sliderx({
         });
       }
     },
-    [data, imageWidthcss, imageHeightcss, interact, videoDuration, isAppleDevice]
+    [data, imageWidthcss, imageHeightcss, interact, videoDuration, isAppleDevice,]
   );
+
+
 
   ///
   ///
@@ -1274,27 +1320,32 @@ function Sliderx({
 
 
   const handleVideoEnd = () => {
-    // console.log("Video has ended.");
+    console.log("Video has ended.");
+
+
+    setTimeout(() => {
+      if (interacttime.current) {
+        clearTimeout(interacttime.current);
+      }
+      if (interacttime2.current) {
+        clearTimeout(interacttime2.current);
+      }
+
+      setshowSpin(false);
+      setshowSpinx(false);
+      setHideCann(false);
+      if (sc.current) {
+        clearTimeout(sc.current);
+      }
+      setinteract(false);
+      setinteractContent("");
+      setinteracttypeAll(0);
+      setfadeout(false);
 
 
 
-    if (interacttime.current) {
-      clearTimeout(interacttime.current);
-    }
-    if (interacttime2.current) {
-      clearTimeout(interacttime2.current);
-    }
 
-    setshowSpin(false);
-    setshowSpinx(false);
-    setHideCann(false);
-    if (sc.current) {
-      clearTimeout(sc.current);
-    }
-    setinteract(false);
-    setinteractContent("");
-    setinteracttypeAll(0);
-    setfadeout(false);
+    }, 20000)
 
 
     // Add additional logic for when the video ends
@@ -1307,7 +1358,7 @@ function Sliderx({
       ///alert('kk');
       console.log(interactContent)
       // Add the 'ended' event listener to the video element
-      videoPlayerReff.current.addEventListener('ended', handleVideoEnd);
+      ////////videoPlayerReff.current.addEventListener('ended', handleVideoEnd);
 
       // Start playing the video
       videoPlayerReff.current.play();
@@ -1318,7 +1369,7 @@ function Sliderx({
   useEffect(() => {
     return () => {
       if (videoPlayerReff.current) {
-        videoPlayerReff.current.removeEventListener('ended', handleVideoEnd);
+        //////videoPlayerReff.current.removeEventListener('ended', handleVideoEnd);
       }
     };
   }, [interactContent]);
@@ -1653,11 +1704,13 @@ function Sliderx({
                       setshowSpinx(false);
                       /////////////////
                     } else {
+
                       setInteractedDark(true);
                       if (InteractTimerxx.current) {
                         clearTimeout(InteractTimerxx.current);
                       }
                       InteractTimerxx.current = setTimeout(() => {
+                        closeItemClick();
                         setInteractedDark(false);
                         setinteract(false);
                         setinteractContent("");
@@ -1712,11 +1765,13 @@ function Sliderx({
                         setshowSpinx(false);
                         /////////////////
                       } else {
+
                         setInteractedDark(true);
                         if (InteractTimerxx.current) {
                           clearTimeout(InteractTimerxx.current);
                         }
                         InteractTimerxx.current = setTimeout(() => {
+                          closeItemClick();
                           setInteractedDark(false);
                           setinteract(false);
                           setinteractContent("");
@@ -1777,11 +1832,13 @@ function Sliderx({
                       setshowSpinx(false);
                       /////////////////
                     } else {
+
                       setInteractedDark(true);
                       if (InteractTimerxx.current) {
                         clearTimeout(InteractTimerxx.current);
                       }
                       InteractTimerxx.current = setTimeout(() => {
+                        closeItemClick();
                         setInteractedDark(false);
                         setinteract(false);
                         setinteractContent("");

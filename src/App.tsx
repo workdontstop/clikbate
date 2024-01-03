@@ -15,6 +15,7 @@ import SuperstarzIconLight from "./images/s.png";
 import SuperstarzIconDark from "./images/sd.png";
 import ProfileOutter from "./profile/ProfileOutter";
 import { UserdataAction } from "./log/actions/UserdataAction";
+
 import { ActivateLoaderAction, HideLoaderAction } from "./GlobalActions";
 
 function App(): JSX.Element {
@@ -141,21 +142,24 @@ function App(): JSX.Element {
           // Check if 'reg' equals '1' and dont stop tutorial
           if (regLocalData === '1') { } else {
 
+            if (response.data.payload.id === 141) {
+              ///alert(response.data.payload.id);
+            } else {
+              if (response.data.payload.userreg === 1) {
+                Axios.put(
+                  `${REACT_APP_SUPERSTARZ_URL}/update_Reg`,
+                  { values: response.data.payload },
+                  {}
+                ).then((response) => {
+                  if (response.data.message === "updated") {
 
-            if (response.data.payload.userreg === 1) {
-              Axios.put(
-                `${REACT_APP_SUPERSTARZ_URL}/update_Reg`,
-                { values: response.data.payload },
-                {}
-              ).then((response) => {
-                if (response.data.message === "updated") {
+                    ///alert('kjj');
 
-                  //alert('kjj');
+                  }
+                }).catch(function (error) {
 
-                }
-              }).catch(function (error) {
-
-              });
+                });
+              }
             }
           }
 

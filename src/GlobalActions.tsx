@@ -222,41 +222,47 @@ export function UpdateA(Payload: any, Payload2: number) {
 }
 
 
-export function UpdateTutorials(typexx: number) {
+export function UpdateTutorials(typexx: number, state: boolean) {
 
   if (typexx === 1) {
     return {
       type: clickPostHintState_LOADER,
       payload: typexx,
+      payload2: state,
     };
   } else if (typexx === 2) {
     return {
       type: minimiseHintState_LOADER,
       payload: typexx,
+      payload2: state,
     };
   }
   else if (typexx === 3) {
     return {
       type: connectHintState_LOADER,
       payload: typexx,
+      payload2: state,
     };
   }
   else if (typexx === 4) {
     return {
       type: interactHintState_LOADER,
       payload: typexx,
+      payload2: state,
     };
   }
   else if (typexx === 5) {
     return {
       type: EditHintState_LOADER,
       payload: typexx,
+      payload2: state,
     };
   }
   else if (typexx === 6) {
     return {
       type: interactionstartHintState_LOADER,
       payload: typexx,
+      payload2: state,
     };
   } else { }
 

@@ -8,6 +8,7 @@ import $ from "jquery";
 
 import { matchPc, matchTablet, matchMobile } from "../DetectDevice";
 import { RootStateOrAny, useSelector, useDispatch } from "react-redux";
+import PlayCircleFilledWhiteIcon from '@material-ui/icons/PlayCircleFilledWhite';
 
 import { UpdateInteract, UpdateAlertReducer } from ".././GlobalActions";
 
@@ -20,7 +21,10 @@ import {
   MuiThemeProvider,
   Box,
 } from "@material-ui/core";
-import ImagePhotoSizeSelectSmall from "material-ui/svg-icons/image/photo-size-select-small";
+
+
+import PlayCircleFilledIcon from '@material-ui/icons/PlayCircleFilled';
+
 import Masonry from "@mui/lab/Masonry";
 import AddIcon from "@mui/icons-material/Add";
 import { Upload } from "../upload/Upload";
@@ -1187,6 +1191,7 @@ function Profilex({
 
                   <div key={i} style={{ display: miniProfile ? "none" : "block", }}>
                     <Post
+                      setitemCLICKED={setitemCLICKED}
                       AllowAllHdImagesShow={AllowAllHdImagesShow}
                       clearAllTimers={clearAllTimers}
                       setactiveAudio={setactiveAudio}
@@ -1294,6 +1299,60 @@ function Profilex({
 
 
 
+        <Grid
+          onClick={() => {
+            clearAllTimers();
+          }}
+          container
+
+          className={darkmodeReducer ? "post-background-darkPlay" : 'post-background-lightPlay'}
+          xs={12}
+          style={{
+            height: "100%",
+            width: '100%',
+            display: ShowBigPlay ? 'block' : 'none',
+            position: 'fixed',
+            top: '0vh',
+            textAlign: 'center',
+            padding: '0px',
+            cursor: 'pointer'
+          }}
+
+        >
+
+          <Grid
+            item
+            xs={12}
+            style={{ padding: '0px' }}
+          >
+
+
+
+            <PlayCircleFilledIcon
+              className={
+
+                darkmodeReducer
+                  ? " dontallowhighlighting zuperkingIcon  zuperkingIconPostDark"
+                  : "  dontallowhighlighting zuperkingIcon  zuperkingIconPostLight"
+              }
+
+              style={{
+                fontSize: matchMobile ? '9.5vh' : '6vw',
+                color: colorReducer,
+                top: matchMobile ? '74vh' : '80vh',
+                position: 'relative',
+
+
+              }}
+            />
+
+
+          </Grid>
+
+
+
+
+        </Grid>
 
 
 

@@ -24,7 +24,6 @@ import { UpdateTutorials } from "./GlobalActions";
 
 import AddIcon from "@mui/icons-material/Add";
 import {
-
   UpdateReactType,
   Updatepagenum,
 } from "./GlobalActions";
@@ -136,7 +135,7 @@ function Tutorialx({ type, index }: any) {
 
           <span
             onClick={() => {
-              dispatch(UpdateTutorials(type));
+              dispatch(UpdateTutorials(type, false));
             }}
             style={{
               backgroundColor: 'black',
@@ -160,7 +159,7 @@ function Tutorialx({ type, index }: any) {
           position: 'fixed',
 
           top: matchMobile ? '20vh' : '53vh',
-          left: matchMobile ? '2vw' : '9vw',
+          left: matchMobile ? '9vw' : '6vw',
           zIndex: 50000,
           color: 'whitesmoke',
           fontFamily: 'sans-serif'
@@ -174,13 +173,13 @@ function Tutorialx({ type, index }: any) {
           <span
 
             onClick={() => {
-              dispatch(UpdateTutorials(type));
+              dispatch(UpdateTutorials(type, false));
             }}
             style={{
               backgroundColor: 'black',
               padding: '3vh',
               cursor: 'pointer'
-            }}>Click circle here To Minimise / Stop Auto Scroll</span>
+            }}>Click circle To Minimise</span>
 
         </Grid>
 
@@ -213,7 +212,7 @@ function Tutorialx({ type, index }: any) {
           <span
 
             onClick={() => {
-              dispatch(UpdateTutorials(type));
+              dispatch(UpdateTutorials(type, false));
             }}
 
             style={{
@@ -239,7 +238,7 @@ function Tutorialx({ type, index }: any) {
           width: '100%',
           position: 'fixed',
           top: matchMobile ? '20vh' : '43vh',
-          left: '20vw',
+          left: matchMobile ? '5vw' : '20vw',
           zIndex: 50000,
           color: 'whitesmoke',
           fontFamily: 'sans-serif'
@@ -253,14 +252,14 @@ function Tutorialx({ type, index }: any) {
           <span
 
             onClick={() => {
-              dispatch(UpdateTutorials(type));
+              dispatch(UpdateTutorials(type, false));
             }}
 
             style={{
               backgroundColor: 'black',
               padding: '3vh',
               cursor: 'pointer'
-            }}>Click On Interactive Motion</span>
+            }}>Interactions vibrate then become clickable</span>
 
         </Grid>
 
@@ -293,7 +292,7 @@ function Tutorialx({ type, index }: any) {
           <span
 
             onClick={() => {
-              dispatch(UpdateTutorials(type));
+              dispatch(UpdateTutorials(type, false));
             }}
 
             style={{
@@ -331,7 +330,7 @@ function Tutorialx({ type, index }: any) {
 
           <span
             onClick={() => {
-              dispatch(UpdateTutorials(type));
+              dispatch(UpdateTutorials(type, false));
             }}
 
             style={{

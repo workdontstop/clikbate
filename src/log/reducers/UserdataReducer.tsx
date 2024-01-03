@@ -7,6 +7,7 @@ import {
   REQUEST_BILLBOARD_UPDATE2,
   REQUEST_MEMBER,
   REQUEST_MEMBERDATA,
+  REQUEST_USER_REG_UPDATE,
 } from "../log_ActionTypes";
 
 ///
@@ -116,6 +117,11 @@ export const UserdataReducer = (
         biography: action.payload.biography,
         fans: action.payload.fans,
         favorites: action.payload.favorites,
+      };
+    case REQUEST_USER_REG_UPDATE:
+      return {
+        ...state,
+        reg: action.payload,
       };
     default:
       return state;
