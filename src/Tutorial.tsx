@@ -121,8 +121,8 @@ function Tutorialx({ type, index }: any) {
           height: "0px",
           width: '100%',
           position: 'fixed',
-          top: matchMobile ? '26vh' : '60vh',
-          left: '20vw',
+          top: matchMobile ? '0vh' : '0vh',
+          left: '10%',
           zIndex: 50000,
           color: 'whitesmoke',
           fontFamily: 'sans-serif'
@@ -140,6 +140,8 @@ function Tutorialx({ type, index }: any) {
             style={{
               backgroundColor: 'black',
               padding: '3vh',
+              width: '90%',
+              position: 'absolute',
               cursor: 'pointer'
             }}>Click On Image For Interactions</span>
 
@@ -157,9 +159,8 @@ function Tutorialx({ type, index }: any) {
           height: "0px",
           width: '100%',
           position: 'fixed',
-
-          top: matchMobile ? '20vh' : '53vh',
-          left: matchMobile ? '9vw' : '6vw',
+          top: matchMobile ? '0vh' : '0vh',
+          left: '10%',
           zIndex: 50000,
           color: 'whitesmoke',
           fontFamily: 'sans-serif'
@@ -177,9 +178,11 @@ function Tutorialx({ type, index }: any) {
             }}
             style={{
               backgroundColor: 'black',
-              padding: '3vh',
+              padding: matchMobile ? '2vh' : '3vh',
+              width: '90%',
+              position: 'absolute',
               cursor: 'pointer'
-            }}>Click circle To Minimise</span>
+            }}>Click On Circle Icon To Minimise</span>
 
         </Grid>
 
@@ -197,8 +200,8 @@ function Tutorialx({ type, index }: any) {
           height: "0px",
           width: '100%',
           position: 'fixed',
-          top: matchMobile ? '30vh' : '73vh',
-          left: '1vw',
+          top: matchMobile ? '0vh' : '0vh',
+          left: '10%',
           zIndex: 50000,
           color: 'whitesmoke',
           fontFamily: 'sans-serif'
@@ -217,7 +220,9 @@ function Tutorialx({ type, index }: any) {
 
             style={{
               backgroundColor: 'black',
-              padding: '3vh',
+              padding: matchMobile ? '2vh' : '3vh',
+              width: '90%',
+              position: 'absolute',
               cursor: 'pointer'
             }}>Double Click Profile Pic To Add Favorites</span>
 
@@ -237,8 +242,8 @@ function Tutorialx({ type, index }: any) {
           height: "0px",
           width: '100%',
           position: 'fixed',
-          top: matchMobile ? '20vh' : '43vh',
-          left: matchMobile ? '5vw' : '20vw',
+          top: matchMobile ? '0vh' : '0vh',
+          left: '10%',
           zIndex: 50000,
           color: 'whitesmoke',
           fontFamily: 'sans-serif'
@@ -257,9 +262,11 @@ function Tutorialx({ type, index }: any) {
 
             style={{
               backgroundColor: 'black',
-              padding: '3vh',
-              cursor: 'pointer'
-            }}>Interactions vibrate then become clickable</span>
+              padding: matchMobile ? '2vh' : '3vh',
+              cursor: 'pointer',
+              width: '90%',
+              position: 'absolute',
+            }}>Interactions Vibrate Then Become Clickable</span>
 
         </Grid>
 
@@ -277,8 +284,8 @@ function Tutorialx({ type, index }: any) {
           height: "0px",
           width: '100%',
           position: 'fixed',
-          top: '43vh',
-          left: '42vw',
+          top: '26vh',
+          left: '40vw',
           zIndex: 50000,
           color: 'whitesmoke',
           fontFamily: 'sans-serif'
@@ -299,7 +306,7 @@ function Tutorialx({ type, index }: any) {
               backgroundColor: 'black',
               padding: '3vh',
               cursor: 'pointer'
-            }}>Double This Image Click To Add Media</span>
+            }}>Double Click This Image To Add Media</span>
 
         </Grid>
 
@@ -316,8 +323,8 @@ function Tutorialx({ type, index }: any) {
           height: "0px",
           width: '100%',
           position: 'fixed',
-          top: '43vh',
-          left: '12vw',
+          top: '3.3vh',
+          left: '8vw',
           zIndex: 50000,
           color: 'whitesmoke',
           fontFamily: 'sans-serif'
@@ -335,7 +342,7 @@ function Tutorialx({ type, index }: any) {
 
             style={{
               backgroundColor: 'black',
-              padding: '3vh',
+              padding: matchMobile ? '2vh' : '3vh',
               cursor: 'pointer'
             }}> Click On This Image To Add Interaction</span>
 

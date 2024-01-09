@@ -15,6 +15,8 @@ import AlbumIcon from "@mui/icons-material/Album";
 import BentoIcon from "@mui/icons-material/Bento";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import CommentIcon from "@mui/icons-material/Comment";
+import AudiotrackIcon from '@material-ui/icons/Audiotrack';
+import MusicOffIcon from '@material-ui/icons/MusicOff';
 import CircleIcon from "@mui/icons-material/Circle";
 import { RootStateOrAny, useSelector, useDispatch } from "react-redux";
 import { matchMobile, matchPc, matchTablet } from "../DetectDevice";
@@ -34,13 +36,14 @@ import {
   UpdatePostFromCom,
   UpdateReactType,
   Updatepagenum,
-
+  MuteAction
 
 
 } from ".././GlobalActions";
 
 import Axios from "axios";
 import { UpdateSign } from "../GlobalActions";
+import { DarkMode } from "@mui/icons-material";
 
 
 
@@ -149,6 +152,82 @@ function Postx({
   const Timer2 = useRef<ReturnType<typeof setTimeout> | null>(null);
   const Timervv = useRef<ReturnType<typeof setTimeout> | null>(null);
 
+  const isAppleDevice = /Mac|iPhone|iPad|iPod/.test(navigator.userAgent);
+
+
+  interface HTMLaudioElementWithCapture extends HTMLAudioElement {
+    captureStream(): MediaStream;
+  }
+
+  const audioPlayerRef = useRef<HTMLaudioElementWithCapture>(null);
+
+
+
+  interface RootStateGlobalReducer {
+    GlobalReducer: {
+      snapStart: boolean;
+      darkmode: boolean;
+      screenHeight: number;
+      activateLoader: boolean;
+      historyscroll: number;
+      interactContent: any;
+      interact: boolean;
+      MenuData: String;
+      pagenum: number;
+      SignIn: boolean,
+      Guest: number,
+      muteaudio: boolean,
+    };
+  }
+
+
+
+  ///
+  ///
+  ///
+  /// GET SCREENHEIGHT FROM REDUX STORE
+  const { screenHeight, darkmode, snapStart, activateLoader, historyscroll, interactContent, interact, MenuData, pagenum, SignIn, Guest, muteaudio } =
+    useSelector((state: RootStateGlobalReducer) => ({
+      ...state.GlobalReducer,
+    }));
+  const screenHeightReducer = screenHeight;
+  const darkmodeReducer = darkmode;
+  const snapStartReducer = snapStart;
+  const activateLoaderReducer = activateLoader;
+  const historyscrollReducer = historyscroll;
+  const interactContentReducer: any = interactContent;
+  const interactReducer = interact;
+  const MenuDataReducer = MenuData
+  const pagenumReducer = pagenum;
+  const SignInReducer = SignIn;
+  const GuestReducer = Guest;
+  const muteaudioReducer = muteaudio;
+
+
+
+
+
+
+  const pauseAudio = (mute: boolean) => {
+
+
+    if (mute) {
+      // If the audio is playing with volume, mute it
+
+      /// audioPlayerRef.currd = true;
+      dispatch(MuteAction(true));
+
+    } else {
+      // If the audio is playing without volume, unmute it
+
+      ///  audioPlayerRef.current.muted = false;
+      dispatch(MuteAction(false));
+
+    }
+
+
+  }
+
   const { ref, inView, entry } = useInView({
     /* Optional options */
     threshold: 0.95,
@@ -240,6 +319,28 @@ function Postx({
       }
     }, 500);
   }, [miniProfile, sliderIndexMini]);
+
+
+
+  ///
+  ///
+  /// GET COLOR FROM REDUX STORE
+  interface RootStateReducerColor {
+    GlobalReducerColor: {
+      color: string;
+      colordark: string;
+      colortype: number;
+    };
+  }
+  const { color, colordark, colortype } = useSelector(
+    (state: RootStateReducerColor) => ({
+      ...state.GlobalReducerColor,
+    })
+  );
+  const colorReducer = color;
+  const colorReducerdark = colordark;
+  const colortypeReducer = colortype;
+
 
 
 
@@ -420,43 +521,7 @@ function Postx({
       Emo4Num,
     ]
   );
-  interface RootStateGlobalReducer {
-    GlobalReducer: {
-      snapStart: boolean;
-      darkmode: boolean;
-      screenHeight: number;
-      activateLoader: boolean;
-      historyscroll: number;
-      interactContent: any;
-      interact: boolean;
-      MenuData: String;
-      pagenum: number;
-      SignIn: boolean,
-      Guest: number
-    };
-  }
 
-
-
-  ///
-  ///
-  ///
-  /// GET SCREENHEIGHT FROM REDUX STORE
-  const { screenHeight, darkmode, snapStart, activateLoader, historyscroll, interactContent, interact, MenuData, pagenum, SignIn, Guest } =
-    useSelector((state: RootStateGlobalReducer) => ({
-      ...state.GlobalReducer,
-    }));
-  const screenHeightReducer = screenHeight;
-  const darkmodeReducer = darkmode;
-  const snapStartReducer = snapStart;
-  const activateLoaderReducer = activateLoader;
-  const historyscrollReducer = historyscroll;
-  const interactContentReducer: any = interactContent;
-  const interactReducer = interact;
-  const MenuDataReducer = MenuData
-  const pagenumReducer = pagenum;
-  const SignInReducer = SignIn;
-  const GuestReducer = Guest;
 
 
   var textback = "";
@@ -492,6 +557,7 @@ function Postx({
 
 
   const [Zoomx, setZoomx] = useState(false);
+  const [Zoomxm, setZoomxm] = useState(false);
   const [Zoomx1, setZoomx1] = useState(false);
   const [Zoomx2, setZoomx2] = useState(false);
 
@@ -1074,6 +1140,8 @@ function Postx({
           {/*///////////////////////////////////////////////////////////////////////////POST DATA*/}
 
           <Slider
+            muteaudioReducer={muteaudioReducer}
+            audioPlayerRef={audioPlayerRef}
             setitemCLICKED={setitemCLICKED}
             AllowAllHdImagesShow={AllowAllHdImagesShow}
             activeAudio={activeAudio}
@@ -1189,6 +1257,10 @@ function Postx({
 
 
 
+
+
+
+
             <CommentIcon
               className={
                 darkmodeReducer
@@ -1219,6 +1291,112 @@ function Postx({
             />
           </span>
           {/*///////////////////////////////////////////////////////////////////////////COMMENTS*/}
+
+
+          {/*///////////////////////////////////////////////////////////////////////////AUDIO ICON*/}
+
+
+          <span
+            onMouseEnter={(e: any) => {
+              setZoomxm(true);
+
+            }}
+            onMouseLeave={(e: any) => {
+              setZoomxm(false);
+
+            }}
+            onClick={() => {
+
+              /// MuteAudio(true)
+            }}
+
+            style={{
+              marginLeft: matchMobile ? '48vw' : "24vw",
+              top: matchMobile ? '3vh' : `5.2vh`,
+              fontWeight: 'bold',
+              padding: "0px",
+              cursor: "pointer",
+              position: 'absolute',
+              display: post.audioData && itemCLICKED[pey] ? 'block' : 'none'
+
+            }}
+          >
+
+
+
+            {muteaudioReducer ? <MusicOffIcon
+              onClick={() => {
+                pauseAudio(false);
+
+              }}
+              className={
+                darkmodeReducer
+                  ? "make-small-icons-clickable-lightCrop dontallowhighlighting zupermenulight "
+                  : "make-small-icons-clickable-darkCrop dontallowhighlighting zupermenudark  "
+              }
+              style={{
+                color: darkmodeReducer ? '#ffffff' : '#000000',
+                fontSize: postcommentfont,
+                marginRight: "5vw",
+                transform: Zoomxm ? "scale(2.2)" : "scale(1.2)",
+                transition: "transform 0.1s",
+                position: "relative",
+                zIndex: 20,
+                opacity: 1,
+              }}
+            />
+
+              :
+
+              isAppleDevice ?
+                <MusicOffIcon
+                  onClick={() => {
+                    pauseAudio(true);
+                  }}
+                  className={
+                    darkmodeReducer
+                      ? "make-small-icons-clickable-lightCrop dontallowhighlighting zupermenulight "
+                      : "make-small-icons-clickable-darkCrop dontallowhighlighting zupermenudark  "
+                  }
+                  style={{
+                    color: darkmodeReducer ? '#ffffff' : '#000000',
+                    fontSize: postcommentfont,
+                    marginRight: "5vw",
+                    transform: Zoomxm ? "scale(2.2)" : "scale(1.2)",
+                    transition: "transform 0.1s",
+                    position: "relative",
+                    zIndex: 20,
+                    opacity: 1,
+                  }}
+                /> : <AudiotrackIcon
+                  onClick={() => {
+                    pauseAudio(true);
+                  }}
+                  className={
+                    darkmodeReducer
+                      ? "make-small-icons-clickable-lightCrop dontallowhighlighting zupermenulight "
+                      : "make-small-icons-clickable-darkCrop dontallowhighlighting zupermenudark  "
+                  }
+                  style={{
+                    color: darkmodeReducer ? '#ffffff' : '#000000',
+                    fontSize: postcommentfont,
+                    marginRight: "5vw",
+                    transform: Zoomxm ? "scale(2.2)" : "scale(1.2)",
+                    transition: "transform 0.1s",
+                    position: "relative",
+                    zIndex: 20,
+                    opacity: 1,
+                  }}
+                />
+
+            }
+
+
+
+
+          </span>
+          {/*///////////////////////////////////////////////////////////////////////////AUDIO ICON*/}
+
 
 
 

@@ -31,6 +31,7 @@ import {
   interactHintState_LOADER,
   EditHintState_LOADER,
   interactionstartHintState_LOADER,
+  UPDATE_MuteAUDIO
 } from "./global_ActionTypes";
 
 ////////////OPTIONS TOP SHOW  DATA////////////////
@@ -159,7 +160,7 @@ export const ButtonsLoginReducerLight = (
 ////////////PAPER LIGHTNDARK DATA////////////////
 const initialStatePaperLIGHTNDARK = {
   PaperStyleLight:
-    "linear-gradient(0deg, #f2f2f2, #ffffff, #f2f2f2)",
+    "linear-gradient(0deg, #f2f2f2, #cccccc, #f2f2f2)",
   PaperStyleDark: "linear-gradient(0deg, #0a0a0a, #1a1a1a, #0a0a0a)",
 };
 
@@ -314,6 +315,7 @@ const initialState = {
   Guest: 141,
   interactContentAudiox: null,
   interactContentAudiotypex: 0,
+  muteaudio: false,
 
   ////For example const initialState = { person: null as Person };
 };
@@ -395,6 +397,13 @@ export const GlobalReducer = (
         interactContentAudiox: action.payload,
         interactContentAudiotypex: action.payload2,
       };
+
+    case UPDATE_MuteAUDIO:
+      return {
+        ...state,
+        muteaudio: action.payload,
+      };
+
 
     default:
       return state;
