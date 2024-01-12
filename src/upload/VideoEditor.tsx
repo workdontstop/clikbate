@@ -27,7 +27,6 @@ import { matchPc, matchTablet, matchMobile } from "../DetectDevice";
 import AdjustIcon from '@material-ui/icons/Adjust';
 import { FFmpeg } from '@ffmpeg/ffmpeg';
 import { fetchFile, toBlobURL } from '@ffmpeg/util';
-import { VideoEditorffmpeg } from "./VideoEditorffmpeg";
 
 interface HTMLVideoElementWithCapture extends HTMLVideoElement {
   captureStream(): MediaStream;
@@ -306,10 +305,6 @@ function VideoEditorx({ VideoUrl, VideoUrl2, ShowVideo2, ShowVideo, setShowVideo
         <canvas ref={canvasRef} style={{ position: 'fixed', top: '-400000000vh', zIndex: 0, }} />
         {vidBackUpURL && <img src={vidBackUpURL} style={{ width: '30%', height: 'auto', position: 'fixed', top: '0vh', zIndex: 0, display: 'none' }} alt="Captured frame" />} {/* Display the captured image */}
       </div>
-
-
-
-      <VideoEditorffmpeg videoUrl={VideoUrl} />
       <Grid xs={12} style={{
         display: ShowVideo ? 'block' : 'none', position: 'fixed', top: '0vh', height: '100vh',
         backgroundImage: darkmodeReducer ? PaperStyleDark : PaperStyleLight,
