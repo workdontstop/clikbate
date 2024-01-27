@@ -17,6 +17,9 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import CommentIcon from "@mui/icons-material/Comment";
 import SentimentVerySatisfiedIcon from "@material-ui/icons/SentimentVerySatisfied";
 import CircleIcon from "@mui/icons-material/Circle";
+import CancelPresentationIcon from '@material-ui/icons/CancelPresentation';
+import CancelIcon from '@material-ui/icons/Cancel';
+
 import { RootStateOrAny, useSelector, useDispatch } from "react-redux";
 import { matchMobile, matchPc, matchTablet } from "./DetectDevice";
 import { UpdateTutorials } from "./GlobalActions";
@@ -51,7 +54,37 @@ function Tutorialx({ type, index }: any) {
 
 
 
+  ///
+  ///
+  ///
+  ///DARKMODE FROM REDUX
+  interface RootStateGlobalReducer {
+    GlobalReducer: {
+      darkmode: boolean;
+    };
+  }
+  const { darkmode } = useSelector((state: RootStateGlobalReducer) => ({
+    ...state.GlobalReducer,
+  }));
+  const darkmodeReducer = darkmode;
 
+
+
+  ///
+  ///
+  ///
+  const { PaperStyleLight, PaperStyleDark } = useSelector(
+    (state: RootStateOrAny) => ({
+      ...state.PaperReducerLightnDark,
+    })
+  );
+  var PaperStyleReducer = "";
+
+  if (darkmodeReducer) {
+    PaperStyleReducer = PaperStyleDark;
+  } else {
+    PaperStyleReducer = PaperStyleLight;
+  }
 
 
 
@@ -121,10 +154,10 @@ function Tutorialx({ type, index }: any) {
           height: "0px",
           width: '100%',
           position: 'fixed',
-          top: matchMobile ? '0vh' : '0vh',
-          left: '10%',
+          top: matchMobile ? '12vh' : '14vh',
+          left: '4%',
           zIndex: 50000,
-          color: 'whitesmoke',
+          color: darkmodeReducer ? 'whitesmoke' : 'black',
           fontFamily: 'sans-serif'
         }}>
         <Grid
@@ -138,12 +171,27 @@ function Tutorialx({ type, index }: any) {
               dispatch(UpdateTutorials(type, false));
             }}
             style={{
-              backgroundColor: 'black',
-              padding: '3vh',
-              width: '90%',
+              backgroundImage: PaperStyleReducer,
+              padding: matchMobile ? '2vh' : '2.5vh',
+              paddingRight: matchMobile ? '10vw' : '3vw',
+              paddingLeft: matchMobile ? '4vw' : '1vw',
+              width: 'auto',
+              fontSize: matchMobile ? `1.5vh` : `0.8vw`,
               position: 'absolute',
-              cursor: 'pointer'
-            }}>Click On Image For Interactions</span>
+              cursor: 'pointer',
+              borderRadius: '20px',
+            }}>Click On Image For Interactions
+
+            <CancelIcon
+              style={{
+                fontSize: matchMobile ? `2vh` : `1.5vw`,
+                position: 'absolute',
+                bottom: '2vh',
+                marginLeft: matchMobile ? '4vw' : '1vw'
+              }}
+            />
+
+          </span>
 
         </Grid>
 
@@ -159,10 +207,10 @@ function Tutorialx({ type, index }: any) {
           height: "0px",
           width: '100%',
           position: 'fixed',
-          top: matchMobile ? '0vh' : '0vh',
-          left: '10%',
+          top: matchMobile ? '12vh' : '14vh',
+          left: '4%',
           zIndex: 50000,
-          color: 'whitesmoke',
+          color: darkmodeReducer ? 'whitesmoke' : 'black',
           fontFamily: 'sans-serif'
         }}>
         <Grid
@@ -177,12 +225,24 @@ function Tutorialx({ type, index }: any) {
               dispatch(UpdateTutorials(type, false));
             }}
             style={{
-              backgroundColor: 'black',
-              padding: matchMobile ? '2vh' : '3vh',
-              width: '90%',
+              backgroundImage: PaperStyleReducer,
+              padding: matchMobile ? '2vh' : '2.5vh',
+              paddingRight: matchMobile ? '10vw' : '3vw',
+              paddingLeft: matchMobile ? '4vw' : '1vw',
+              width: 'auto',
+              fontSize: matchMobile ? `1.5vh` : `0.8vw`,
               position: 'absolute',
-              cursor: 'pointer'
-            }}>Click On Circle Icon To Minimise</span>
+              cursor: 'pointer',
+              borderRadius: '20px',
+            }}>Click On Circle Icon below To Minimise
+            <CancelIcon
+              style={{
+                fontSize: matchMobile ? `2vh` : `1.5vw`,
+                position: 'absolute',
+                bottom: '2vh',
+                marginLeft: matchMobile ? '4vw' : '1vw'
+              }}
+            /></span>
 
         </Grid>
 
@@ -200,10 +260,10 @@ function Tutorialx({ type, index }: any) {
           height: "0px",
           width: '100%',
           position: 'fixed',
-          top: matchMobile ? '0vh' : '0vh',
-          left: '10%',
+          top: matchMobile ? '12vh' : '14vh',
+          left: '4%',
           zIndex: 50000,
-          color: 'whitesmoke',
+          color: darkmodeReducer ? 'whitesmoke' : 'black',
           fontFamily: 'sans-serif'
         }}>
         <Grid
@@ -219,136 +279,201 @@ function Tutorialx({ type, index }: any) {
             }}
 
             style={{
-              backgroundColor: 'black',
-              padding: matchMobile ? '2vh' : '3vh',
-              width: '90%',
+              backgroundImage: PaperStyleReducer,
+              padding: matchMobile ? '2vh' : '2.5vh',
+              paddingRight: matchMobile ? '10vw' : '3vw',
+              paddingLeft: matchMobile ? '4vw' : '1vw',
+              width: 'auto',
               position: 'absolute',
-              cursor: 'pointer'
-            }}>Double Click Profile Pic To Add Favorites</span>
-
-        </Grid>
-
-      </Grid> : null
-
-    }
-
-
-
-    {type === 4 && index === 3 && interactHintState && regReducer === 1 ?
-
-      <Grid container
-
-        style={{
-          height: "0px",
-          width: '100%',
-          position: 'fixed',
-          top: matchMobile ? '0vh' : '0vh',
-          left: '10%',
-          zIndex: 50000,
-          color: 'whitesmoke',
-          fontFamily: 'sans-serif'
-        }}>
-        <Grid
-          xs={12}
-          item
-
-        >
-
-          <span
-
-            onClick={() => {
-              dispatch(UpdateTutorials(type, false));
-            }}
-
-            style={{
-              backgroundColor: 'black',
-              padding: matchMobile ? '2vh' : '3vh',
               cursor: 'pointer',
-              width: '90%',
-              position: 'absolute',
-            }}>Interactions Vibrate Then Become Clickable</span>
+              fontSize: matchMobile ? `1.5vh` : `0.8vw`,
+              borderRadius: '20px',
+            }}>Double Click Profile Pic To Add Favorites
+
+            <CancelIcon
+              style={{
+                fontSize: matchMobile ? `2vh` : `1.5vw`,
+                position: 'absolute',
+                bottom: '2vh',
+                marginLeft: matchMobile ? '4vw' : '1vw'
+              }}
+            />
+
+
+          </span>
 
         </Grid>
 
-      </Grid> : null
+      </Grid > : null
 
     }
 
 
 
-    {type === 5 && EditHintState && regReducer === 1 ?
+    {
+      type === 4 && index === 3 && interactHintState && regReducer === 1 ?
 
-      <Grid container
+        <Grid container
 
-        style={{
-          height: "0px",
-          width: '100%',
-          position: 'fixed',
-          top: '26vh',
-          left: '40vw',
-          zIndex: 50000,
-          color: 'whitesmoke',
-          fontFamily: 'sans-serif'
-        }}>
-        <Grid
-          xs={12}
-          item
+          style={{
+            height: "0px",
+            width: '100%',
+            position: 'fixed',
+            top: matchMobile ? '12vh' : '14vh',
+            left: '4%',
+            zIndex: 50000,
+            color: darkmodeReducer ? 'whitesmoke' : 'black',
+            fontFamily: 'sans-serif'
+          }}>
+          <Grid
+            xs={12}
+            item
 
-        >
+          >
 
-          <span
+            <span
 
-            onClick={() => {
-              dispatch(UpdateTutorials(type, false));
-            }}
+              onClick={() => {
+                dispatch(UpdateTutorials(type, false));
+              }}
 
-            style={{
-              backgroundColor: 'black',
-              padding: '3vh',
-              cursor: 'pointer'
-            }}>Double Click This Image To Add Media</span>
+              style={{
+                backgroundImage: PaperStyleReducer,
+                padding: matchMobile ? '2vh' : '2.5vh',
+                paddingRight: matchMobile ? '10vw' : '3vw',
+                paddingLeft: matchMobile ? '4vw' : '1vw',
+                width: 'auto',
+                position: 'absolute',
+                cursor: 'pointer',
+                fontSize: matchMobile ? `1.5vh` : `0.8vw`,
+                borderRadius: '20px',
+              }}>Interactions Vibrate Then Become Clickable
 
-        </Grid>
+              <CancelIcon
+                style={{
+                  fontSize: matchMobile ? `2vh` : `1.5vw`,
+                  position: 'absolute',
+                  bottom: '2vh',
+                  marginLeft: matchMobile ? '4vw' : '1vw'
+                }}
+              />
 
-      </Grid> : null
+            </span>
+
+          </Grid>
+
+        </Grid> : null
 
     }
 
 
-    {type === 6 && interactionstartHintState && regReducer === 1 ?
 
-      <Grid container
+    {
+      type === 5 && EditHintState && regReducer === 1 ?
 
-        style={{
-          height: "0px",
-          width: '100%',
-          position: 'fixed',
-          top: '3.3vh',
-          left: '8vw',
-          zIndex: 50000,
-          color: 'whitesmoke',
-          fontFamily: 'sans-serif'
-        }}>
-        <Grid
-          xs={12}
-          item
+        <Grid container
 
-        >
+          style={{
+            height: "0px",
+            width: '100%',
+            position: 'fixed',
+            top: '26vh',
+            left: '40vw',
+            color: darkmodeReducer ? 'whitesmoke' : 'black',
+            zIndex: 50000,
+            fontFamily: 'sans-serif'
+          }}>
+          <Grid
+            xs={12}
+            item
 
-          <span
-            onClick={() => {
-              dispatch(UpdateTutorials(type, false));
-            }}
+          >
 
-            style={{
-              backgroundColor: 'black',
-              padding: matchMobile ? '2vh' : '3vh',
-              cursor: 'pointer'
-            }}> Click On This Image To Add Interaction</span>
+            <span
+              onClick={() => {
+                dispatch(UpdateTutorials(type, false));
+              }}
 
-        </Grid>
+              style={{
+                backgroundImage: PaperStyleReducer,
+                padding: matchMobile ? '2vh' : '2.5vh',
+                paddingRight: matchMobile ? '10vw' : '3vw',
+                paddingLeft: matchMobile ? '4vw' : '1vw',
+                width: 'auto',
+                fontSize: matchMobile ? `1.5vh` : `0.8vw`,
+                position: 'absolute',
+                cursor: 'pointer',
+                borderRadius: '20px',
+              }}>Double Click This Image To Add Media
 
-      </Grid> : null
+              <CancelIcon
+                style={{
+                  fontSize: matchMobile ? `2vh` : `1.5vw`,
+                  position: 'absolute',
+                  bottom: '2vh',
+                  marginLeft: matchMobile ? '4vw' : '1vw'
+                }}
+              />
+
+            </span>
+
+          </Grid>
+
+        </Grid> : null
+
+    }
+
+
+    {
+      type === 6 && interactionstartHintState && regReducer === 1 ?
+
+        <Grid container
+
+          style={{
+            height: "0px",
+            width: '100%',
+            position: 'fixed',
+            top: '3.3vh',
+            left: '8vw',
+            zIndex: 50000,
+            color: darkmodeReducer ? 'whitesmoke' : 'black',
+            fontFamily: 'sans-serif'
+          }}>
+          <Grid
+            xs={12}
+            item
+
+          >
+
+            <span
+              onClick={() => {
+                dispatch(UpdateTutorials(type, false));
+              }}
+
+              style={{
+                backgroundImage: PaperStyleReducer,
+                padding: matchMobile ? '2vh' : '2.5vh',
+                paddingRight: matchMobile ? '10vw' : '3vw',
+                paddingLeft: matchMobile ? '4vw' : '1vw',
+                width: 'auto',
+                fontSize: matchMobile ? `1.5vh` : `0.8vw`,
+                position: 'absolute',
+                cursor: 'pointer',
+                borderRadius: '20px',
+              }}> Click On This Image To Add Interaction
+
+              <CancelIcon
+                style={{
+                  fontSize: matchMobile ? `2vh` : `1.5vw`,
+                  position: 'absolute',
+                  bottom: '2vh',
+                  marginLeft: matchMobile ? '4vw' : '1vw'
+                }}
+              /></span>
+
+          </Grid>
+
+        </Grid> : null
 
     }
 

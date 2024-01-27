@@ -23,7 +23,7 @@ const multer = require("multer");
 
 if (process.env.APP_STATE === "dev") {
   var corsOptions = {
-    origin: "http://192.168.0.13:3000",
+    origin: "http://192.168.0.39:3000",
     credentials: true, //access-control-allow-credentials:true
     optionsSuccessStatus: 200,
   };

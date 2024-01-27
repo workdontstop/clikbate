@@ -79,7 +79,6 @@ function MiniPostx({
   paperPostScrollRef,
   postDatainnerInteraction2,
   postDatainnerInteraction1,
-  ShowBigPlay,
   clearAllTimers,
   AllowAllHdImagesShow
 
@@ -94,6 +93,7 @@ function MiniPostx({
     allow4dev = "";
   }
 
+  const ShowBigPlay = false;
 
   const [BigCircle, setBigCircle] = useState(false);
 
@@ -285,7 +285,7 @@ function MiniPostx({
   }, [post]);
 
 
-  var postprofiletop = matchPc ? "-5.8vh" : matchTablet ? "-9.3vh" : "-4.7vh";
+  var postprofiletop = matchPc ? "-5.8vh" : matchTablet ? "-9.3vh" : "-5.7vh";
   var posttopicfont = matchPc ? "1.25vw" : matchTablet ? "1.8vh" : "1.6vh";
 
   var postusernamefont = matchPc ? "1.1vw" : matchTablet ? "2.32vh" : "1.7vh";
@@ -521,6 +521,8 @@ function MiniPostx({
 
           <div>
 
+
+
             <img
               onLoad={handleImageLoad}
               onClick={() => {
@@ -530,7 +532,8 @@ function MiniPostx({
               }}
               className={
 
-                darkmodeReducer ? "turlightpostdar  " : "turlightpostlight "
+                AllowAllHdImagesShow ? darkmodeReducer ? "turlightpostdar   fadeboyout" : "turlightpostlight fadeboyout " :
+                  darkmodeReducer ? "turlightpostdar  " : "turlightpostlight "
               }
 
 
@@ -561,6 +564,7 @@ function MiniPostx({
             />
 
 
+
             {AllowAllHdImagesShow ? <img
               onLoad={handleImageLoad}
               onClick={() => {
@@ -569,9 +573,8 @@ function MiniPostx({
                 setminiProfile(false);
               }}
               className={
-                darkmodeReducer ? "turlightpostdark" : "turlightpostlight"
+                darkmodeReducer ? "turlightpostdark fadeboyinInt" : "turlightpostlight fadeboyinInt"
               }
-
 
 
               src={`${REACT_APP_CLOUNDFRONT}${post.item2}`}
@@ -762,7 +765,7 @@ function MiniPostx({
               style={{
                 fontWeight: "bold",
                 color: darkmodeReducer ? "#ffffff" : "#000000",
-                fontSize: matchPc ? "2.2vh" : "1.7vh",
+                fontSize: matchPc ? "2.1vh" : "1.5vh",
                 zIndex: 5,
                 paddingLeft: matchPc ? "7vw" : matchTablet ? "2.3vw" : "4vw",
                 height: "0px",

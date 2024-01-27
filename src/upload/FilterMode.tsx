@@ -1014,7 +1014,10 @@ function FilterModex({
         </>
       ) : null}
 
-      {startSuperSticker ? null : <Tutorial type={5} index={0} />}
+      {startSuperSticker ? null :
+
+        startTopicCap ? null :
+          <Tutorial type={5} index={0} />}
 
       {startSuperSticker ? (
         <>
