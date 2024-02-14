@@ -85,9 +85,20 @@ function Captionx({
   setShowAudio,
   ShowAudio,
   setAllowCaption,
-
   vidBackUpURL,
-  vidBackUpURL2
+  vidBackUpURL2,
+  currentTimestamp,
+  Durationx,
+  currentTimestamp2,
+  Durationx2,
+  audioStart,
+  setaudioStart,
+  audioEnd,
+  setaudioEnd,
+  audioEndDuration,
+  setaudioDuration,
+  backgroudAudio,
+  startTopicCap
 }: any): JSX.Element {
   const [matchTabletMobile, setmatchTabletMobile] = useState<boolean>(false);
 
@@ -95,12 +106,18 @@ function Captionx({
     useState<boolean>(false);
 
 
-  const [backgroudAudio, setbackgroudAudio] =
-    useState<boolean>(true);
 
-  const [audioStart, setaudioStart] = useState(0);
+  useEffect(() => {
+    if (startTopicCap) {
 
-  const [audioEnd, setaudioEnd] = useState(0);
+      UploadSuperData(
+        finalImageData,
+        finalImageDataSD,
+        finalImageDataBASE64
+      );
+
+    }
+  }, [startTopicCap]);
 
 
   const { REACT_APP_SUPERSTARZ_URL } = process.env;
@@ -187,7 +204,6 @@ function Captionx({
   );
 
 
-  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
 
 
@@ -271,8 +287,8 @@ function Captionx({
               name: Audioname,
               sender: idReducer,
               post: tg,
-              audioStart: audioStart,
-              audioEnd: audioEnd,
+              backgroudAudio: backgroudAudio,
+
             };
 
 
@@ -315,7 +331,7 @@ function Captionx({
       });
 
 
-  }, [audioStart, audioEnd, Audioname, idReducer])
+  }, [audioStart, audioEnd, Audioname, idReducer, backgroudAudio])
 
   const UpdatePostDatabaseStatus200 = useCallback((datak: any, b: any) => {
 
@@ -360,9 +376,17 @@ function Captionx({
         urlxx = holderx[0].urlA;
 
 
-        setloadmode('Uploading Audio');
+
 
         xx = interactContentAudiox;
+
+
+        // Step 1: Get the size of the Blob in bytes
+        const sizeInBytesxx = interactContentAudiox.size;
+        // Step 2: Convert size from bytes to megabytes
+        const sizeInMegabytesxx = Math.ceil(sizeInBytesxx / (1024 * 1024));
+
+        setloadmode(`Processing Audio ( ${sizeInMegabytesxx}MB ) ! Thank you for your patience.`);
 
         Axios.put(urlxx, xx)
           .then((response) => {
@@ -372,7 +396,26 @@ function Captionx({
               let imagelinkx = urlxx.split("?")[0];
               let imagelinkl = imagelinkx.split("/").pop();
               var audiolink = imagelinkl;
-              console.log(audiolink);
+              ///console.log(audiolink);
+
+
+              var kobx = {
+                audio: imagelinkl,
+                currentTimestamp: audioStart,
+                Durationx: audioEndDuration
+              };
+
+
+              ///call transcode here
+              Axios.post(`${REACT_APP_SUPERSTARZ_URL}/transAudio`, {
+                values: kobx,
+              }).then((response) => {
+                if (response.status === 200) {
+                }
+              }).catch(function (error) {
+                console.log(error);
+              });
+
 
 
               calldatabase(datak, 1, audiolink);
@@ -461,6 +504,14 @@ function Captionx({
           // alert('thumb');
           urlxx = h2;
           xx = v2;
+
+          // Step 1: Get the size of the Blob in bytes
+          const sizeInBytes2 = v2.size;
+          // Step 2: Convert size from bytes to megabytes
+          const sizeInMegabytes2 = Math.ceil(sizeInBytes2 / (1024 * 1024));
+
+          setloadmode(`Processing Video ( ${sizeInMegabytes2}MB ) ! Thank you for your patience.`);
+
           Axios.put(urlxx, xx)
             .then((response) => {
 
@@ -471,28 +522,30 @@ function Captionx({
                 let imagelinkjjka = imagelinkx.split("/").pop();
                 s3finalvid2 = imagelinkjjka;
 
-
-                Axios.put(holder[0].urlVIDimage2, vidbackup2)
-                  .then((response) => {
-
-                    setsupeFilterLoadFadex(false);
-                    if (response.status === 200) {
-                      setsupeFilterLoadFadex(true);
+                setsupeFilterLoadFadex(true);
+                calldatabaseVid();
 
 
-                      let imagelinkbb2 = holder[0].urlVIDimage2.split("?")[0];
-                      let imagelinkdd = imagelinkbb2.split("/").pop();
-                      s3finalvid2backup = imagelinkdd;
 
 
-                      calldatabaseVid();
-                      ///console.log(imagelinkx);
-                    }
-                  })
-                  .catch(function (error) {
-                    setsupeFilterLoadFadex(false);
-                    console.log(error);
-                  });
+                var kobx = {
+                  vidxx: imagelinkjjka,
+                  currentTimestamp: currentTimestamp2,
+                  Durationx: Durationx2
+                };
+
+
+                ///call transcode here
+                Axios.post(`${REACT_APP_SUPERSTARZ_URL}/trans`, {
+                  values: kobx,
+                }).then((response) => {
+                  if (response.status === 200) {
+                  }
+                }).catch(function (error) {
+                  console.log(error);
+                });
+
+
               }
             })
             .catch(function (error) {
@@ -512,6 +565,15 @@ function Captionx({
         // alert('thumb');
         urlx = h1;
         x = v1;
+
+
+        // Step 1: Get the size of the Blob in bytes
+        const sizeInBytes = v1.size;
+        // Step 2: Convert size from bytes to megabytes
+        const sizeInMegabytes = Math.ceil(sizeInBytes / (1024 * 1024));
+
+        setloadmode(`Processing Video ( ${sizeInMegabytes}MB ) ! Thank you for your patience.`);
+
         Axios.put(urlx, x)
           .then((response) => {
 
@@ -523,28 +585,30 @@ function Captionx({
               s3finalvid = imagelinkka;
 
 
-              Axios.put(holder[0].urlVIDimage1, vidbackup1)
-                .then((response) => {
-
-                  setsupeFilterLoadFadex(false);
-                  if (response.status === 200) {
-                    setsupeFilterLoadFadex(true);
-
-                    let imagelinkbb = holder[0].urlVIDimage1.split("?")[0];
-                    let imagelinkkq = imagelinkbb.split("/").pop();
-                    s3finalvidbackup = imagelinkkq;
+              setsupeFilterLoadFadex(true);
+              calltwo();
 
 
-                    calltwo();
 
-                    ///console.log(imagelink);
-                  }
-                })
-                .catch(function (error) {
-                  setsupeFilterLoadFadex(false);
-                  console.log(error);
-                });
-              ///console.log(imagelink);
+
+              var kobx = {
+                vidxx: imagelinkka,
+                currentTimestamp: currentTimestamp,
+                Durationx: Durationx
+              };
+
+
+              ///call transcode here
+              Axios.post(`${REACT_APP_SUPERSTARZ_URL}/trans`, {
+                values: kobx,
+              }).then((response) => {
+                if (response.status === 200) {
+                }
+              }).catch(function (error) {
+                console.log(error);
+              });
+
+
             }
           })
           .catch(function (error) {
@@ -591,7 +655,10 @@ function Captionx({
           /// alert('UploadingPost');
           console.log(holder);
 
+
+
           setloadmode('Uploading Video');
+
 
           PutImageInS3WithURLVid(type, type2, holder[0].urlVid, holder[0].urlVid2, a, b, base64, vidbackup1, vidbackup2, holder);
 
@@ -876,6 +943,7 @@ function Captionx({
   const GetSecureURL = (hdBlob: any, thumbBlob: any, hdBase64: any) => {
     var kob = {
       count: finalImageData.length + 1,
+
     };
 
     Axios.post(`${REACT_APP_SUPERSTARZ_URL}/get_signed_url_4upload_post`, {
@@ -914,62 +982,6 @@ function Captionx({
 
 
 
-  /////
-  const convertAndSetAudioUrl = (file: any) => {
-    const reader = new FileReader();
-
-    reader.onloadend = () => {
-      // This is the data URL
-      const audioDataUrl = reader.result;
-      setAudioUrl(audioDataUrl);
-      setShowAudio(true);
-
-    };
-
-    // Read the file as a Data URL
-    reader.readAsDataURL(file);
-
-  };
-
-  ////
-  const handleFileChangex = async (event: ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-
-    // Clear the input value to allow the same file to be selected again
-    if (event.target && event.target.value) {
-      event.target.value = '';
-    }
-
-    if (file) {
-      try {
-        // Check if the selected file is an audio file
-        if (file.type.startsWith('audio/')) {
-          // Audio file handling logic
-
-          // For example, setting the audio file to state variables
-          // Assuming setAudioData is your state setter for audio data
-
-          setAudioname(file.name);
-          convertAndSetAudioUrl(file);
-
-          // You might also handle the audio data URL or Blob here if needed
-          // ...
-
-        } else {
-          // Handle non-audio file selection, possibly show an error message
-          console.error('Selected file is not an audio file');
-        }
-
-      } catch (error) {
-        console.error('Error processing the audio file:', error);
-      }
-    }
-  };
-
-  // Make sure to define or update your state setters like setAudioData
-  // and other relevant states and logic as needed.
-
-
 
 
   return (
@@ -995,6 +1007,9 @@ function Captionx({
       ></Grid>
 
         {ShowAudio ? <AudioEditor
+          setaudioDuration={setaudioDuration}
+          audioStart={audioStart}
+          audioEnd={audioEnd}
           setaudioStart={setaudioStart}
           setaudioEnd={setaudioEnd}
           setAudioUrl={setAudioUrl}
@@ -1029,7 +1044,8 @@ function Captionx({
               width: "65%",
               height: "53vh",
               objectFit: 'cover',
-              marginLeft: '10vw'
+              marginLeft: '10vw',
+              borderRadius: '10%'
             }}
             alt="Image"
           /> : null}
@@ -1054,49 +1070,6 @@ function Captionx({
 
 
 
-          <Grid
-            item
-            xs={12}
-            style={{
-              padding: "0px",
-              height: '5vh',
-              marginTop: '-5vh',
-              display: interactContentAudiotype === 1 ? 'block' : 'none'
-            }}
-          >
-
-
-            <CircleIcon
-              onClick={
-                () => {
-                  setbackgroudAudio(!backgroudAudio);
-                }
-              }
-              className={
-                darkmodeReducer
-                  ? "make-small-icons-clickable-lightCrop dontallowhighlighting zuperkingIcon "
-                  : "make-small-icons-clickable-darkCrop dontallowhighlighting zuperkingIcon  "
-              }
-              style={{
-                fontSize: matchTabletMobile ? `${mobilefont}vh` : `${pcfont - 1}vw`,
-                marginRight: "5vw",
-                color: backgroudAudio ? 'green' : 'red'
-              }}
-
-            />
-            <span
-              style={{
-                position: 'relative', // Absolute position for the text
-                top: '-10%', // Center vertically
-                fontFamily: 'fantasy',
-                fontSize: matchTabletMobile ? `${mobilefont}vh` : `1.2vw`,
-              }}
-            >
-              {backgroudAudio ? 'Allow Audio Play During Interaction' : 'Stop Audio Play During Interaction'}
-            </span>
-
-
-          </Grid>
 
 
           <Grid
@@ -1110,29 +1083,9 @@ function Captionx({
             }}
           >
 
-            <input
-              type="file"
-              ref={fileInputRef}
-              style={{ display: 'none' }}
-              onChange={handleFileChangex}
-            />
+
             <MusicNoteIcon
-              onClick={
-                () => {
 
-                  if (interactContentAudiotype === 1) {
-
-                    if (fileInputRef.current) {
-                      fileInputRef.current.click();
-                    }
-                  } else {
-                    if (fileInputRef.current) {
-                      fileInputRef.current.click();
-                    }
-
-                  }
-                }
-              }
               className={
                 darkmodeReducer
                   ? "make-small-icons-clickable-lightCrop dontallowhighlighting zuperkingIcon "
@@ -1257,6 +1210,7 @@ function Captionx({
           xs={12}
           style={{
             padding: "0px",
+
           }}
         ></Grid>
         <Grid
@@ -1266,17 +1220,14 @@ function Captionx({
             margin: "auto",
             textAlign: "center",
             height: "0px",
-            marginTop: '30vh'
+            marginTop: '3vh',
+            visibility: 'hidden'
           }}
         >
           <CheckIcon
             onClick={() => {
               //////postdata();
-              UploadSuperData(
-                finalImageData,
-                finalImageDataSD,
-                finalImageDataBASE64
-              );
+
             }}
             className={
               darkmodeReducer

@@ -44,7 +44,13 @@ function VideoEditorx({ VideoUrl, VideoUrl2, ShowVideo2, ShowVideo, setShowVideo
   setvidBackUpURL,
   vidBackUpURL,
   vidBackUpURL2,
-  setvidBackUpURL2, }: any): JSX.Element {
+  setvidBackUpURL2,
+  setCurrentTimestamp,
+  currentTimestamp,
+  setDuration,
+  setCurrentTimestamp2,
+  currentTimestamp2,
+  setDuration2 }: any): JSX.Element {
 
   ///
 
@@ -59,7 +65,7 @@ function VideoEditorx({ VideoUrl, VideoUrl2, ShowVideo2, ShowVideo, setShowVideo
   const Timer2 = useRef<ReturnType<typeof setTimeout> | null>(null);
   const Timer1 = useRef<ReturnType<typeof setTimeout> | null>(null);
   const Timer3 = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const wait = 2000;
+  const wait = 50;
 
   ///
   ///DARKMODE FROM REDUX
@@ -74,14 +80,21 @@ function VideoEditorx({ VideoUrl, VideoUrl2, ShowVideo2, ShowVideo, setShowVideo
 
   const darkmodeReducer = darkmode;
 
-  const [currentTimestamp, setCurrentTimestamp] = useState(0);
+
+  const [EndTimestamp, setEndTimestamp] = useState(0);
+
+
 
   const updateCurrentTimestamp = () => {
     sethideend(false);
     if (videoPlayerRef.current) {
 
       var x = videoPlayerRef.current.currentTime;
-      setCurrentTimestamp(x);
+      if (ShowVideo2) {
+        setCurrentTimestamp2(x - 1);
+      } else {
+        setCurrentTimestamp(x - 1);
+      }
 
       setprocessing(true);
 
@@ -105,12 +118,44 @@ function VideoEditorx({ VideoUrl, VideoUrl2, ShowVideo2, ShowVideo, setShowVideo
   const [Preview, setPreview] = useState(false);
 
 
+
+
   const stopRecording = () => {
-    if (recorderRef.current && recorderRef.current.state === "recording") {
-      recorderRef.current.stop();
-      if (videoPlayerRef.current) {
-        videoPlayerRef.current.pause();
-      }
+    /////////
+    if (videoPlayerRef.current) {
+      var xx = videoPlayerRef.current.currentTime;
+      setEndTimestamp(xx);
+    }
+    if (videoPlayerRef.current) {
+      videoPlayerRef.current.pause();
+    }
+
+
+    if (Timer2.current) {
+      clearTimeout(Timer2.current);
+    }
+
+    if (Timer1.current) {
+      clearTimeout(Timer1.current);
+    }
+
+    setRecordedVideoUrl(VideoUrl);
+    setRec(true);
+    setprocessing(false);
+
+    ////////
+  };
+
+  const startRecording = (sourceVideoUrl: any, startTime: any, durationMaximum: any) => {
+
+    const video = videoPlayerRef.current;
+
+    if (video) {
+      video.src = sourceVideoUrl;
+      video.currentTime = startTime;
+
+      video.play();
+
 
       if (Timer2.current) {
         clearTimeout(Timer2.current);
@@ -119,81 +164,19 @@ function VideoEditorx({ VideoUrl, VideoUrl2, ShowVideo2, ShowVideo, setShowVideo
       if (Timer1.current) {
         clearTimeout(Timer1.current);
       }
-      if (Timer3.current) {
-        clearTimeout(Timer3.current);
-      }
-      sethideend(true);
-      Timer3.current = setTimeout(() => {
+      Timer2.current = setTimeout(() => {
+
+
+        if (videoPlayerRef.current) {
+
+          var xx = videoPlayerRef.current.currentTime;
+          setEndTimestamp(xx);
+        }
+        setRecordedVideoUrl(sourceVideoUrl);
+        video.pause();
+        setRec(true);
         setprocessing(false);
-      }, wait);
-    }
-  };
-
-
-  const startRecording = (sourceVideoUrl: any, startTime: any, duration: any) => {
-
-    const video = videoPlayerRef.current;
-
-    if (video) {
-      video.src = sourceVideoUrl;
-      video.currentTime = startTime;
-
-      video.onloadedmetadata = () => {
-        video.currentTime = startTime;
-      };
-
-      video.onseeked = () => {
-        video.play();
-        const stream = video.captureStream();
-
-        // Specify MIME type and quality parameters
-        const options = {
-          mimeType: 'video/webm; codecs=vp9', // or 'video/mp4' based on browser support
-          videoBitsPerSecond: 500000 // Adjust bitrate as needed
-        };
-
-        if (MediaRecorder.isTypeSupported(options.mimeType)) {
-          recorderRef.current = new MediaRecorder(stream, options);
-        } else {
-          recorderRef.current = new MediaRecorder(stream); // Fallback to default settings
-        }
-
-        const chunks: any = [];
-        recorderRef.current.ondataavailable = (e: any) => chunks.push(e.data);
-        recorderRef.current.onstop = () => {
-          const blob: any = new Blob(chunks, { type: options.mimeType });
-          setRecordedBlob(blob);
-          const url: any = URL.createObjectURL(blob);
-          setRecordedVideoUrl(url);
-          video.pause();
-
-          if (Timer1.current) {
-            clearTimeout(Timer1.current);
-          }
-          if (Timer2.current) {
-            clearTimeout(Timer2.current);
-          }
-
-          Timer1.current = setTimeout(() => {
-            setRec(true);
-            setprocessing(false);
-          }, wait);
-        };
-
-        recorderRef.current.start();
-        if (Timer2.current) {
-          clearTimeout(Timer2.current);
-        }
-
-        if (Timer1.current) {
-          clearTimeout(Timer1.current);
-        }
-        Timer2.current = setTimeout(() => {
-          recorderRef.current && recorderRef.current.stop();
-        }, duration * 1000);
-      };
-
-      video.load();
+      }, durationMaximum * 1000);
     }
   };  // Call this function when you want to start recording
   // For example: startRecording(VideoUrl, 0, 10) for a 10-second clip from the start
@@ -216,23 +199,57 @@ function VideoEditorx({ VideoUrl, VideoUrl2, ShowVideo2, ShowVideo, setShowVideo
 
   }
 
-  const Save = useCallback(() => {
-    if (ShowVideo2) {
 
-      setinteractContentvideo2(RecordedBlob);
-      setinteractContenttype2(1);
-      setadjustinteract2(true);
-      close(true);
+  async function fetchVideoAsBlob(videoUrl: any) {
+    try {
+      // Fetch the video data from the URL
+      const response = await fetch(videoUrl);
 
-    } else {
+      // Convert the response data into a Blob object
+      const videoBlob = await response.blob();
 
-      setinteractContentvideo(RecordedBlob);
-      setinteractContenttype(1);
-      setadjustinteract1(true);
-      close(true);
-
+      return videoBlob;
+    } catch (error) {
+      console.error('Error fetching video:', error);
+      return null;
     }
-  }, [RecordedBlob, ShowVideo2])
+  }
+
+  const Save = useCallback(() => {
+
+
+    fetchVideoAsBlob(VideoUrl)
+      .then(blob => {
+        if (blob) {
+          if (ShowVideo2) {
+            var Durationxxx = EndTimestamp - currentTimestamp2;
+            setDuration2(Durationxxx);
+          } else {
+            var Durationxxx = EndTimestamp - currentTimestamp;
+            setDuration(Durationxxx);
+          }
+
+
+          /// alert(`Video  start from: ${currentTimestamp} with duration:   ${Durationxxx}`);
+          if (ShowVideo2) {
+            setinteractContentvideo2(blob);
+            setinteractContenttype2(1);
+            setadjustinteract2(true);
+            close(true);
+          } else {
+            setinteractContentvideo(blob);
+            setinteractContenttype(1);
+            setadjustinteract1(true);
+            close(true);
+          }
+        } else {
+          console.log('Failed to fetch video or convert to Blob.');
+        }
+      });
+
+
+
+  }, [RecordedBlob, ShowVideo2, VideoUrl, currentTimestamp, currentTimestamp2, EndTimestamp])
 
 
 
@@ -254,47 +271,48 @@ function VideoEditorx({ VideoUrl, VideoUrl2, ShowVideo2, ShowVideo, setShowVideo
 
 
   useEffect(() => {
-    if (recordedVideoUrl && ShowVideo) {
-      const video: any = videoRef.current;
-      const canvas = canvasRef.current;
-      const context = canvas.getContext('2d');
-
-      const captureImage = () => {
-        context.drawImage(video, 0, 0, canvas.width, canvas.height);
-        canvas.toBlob((blob: any) => { // Convert canvas to Blob
-          const blobx = blob; // Create an object URL for the Blob
-          if (ShowVideo2) {
-            setvidBackUpURL2(blobx); // Set the state
-          } else {
-            setvidBackUpURL(blobx); // Set the state
-          }
-        }, 'image/png');
+    var starttime = 0;
+    if (ShowVideo2) {
+      starttime = currentTimestamp2;
+    } else {
+      starttime = currentTimestamp;
+    }
 
 
+    const video = videoPlayerRefx.current;
+    let isPlaying = false;
 
-
-
+    if (video) {
+      const handlePlay = () => {
+        isPlaying = true;
       };
 
-      video.addEventListener('loadeddata', () => {
-        canvas.width = video.videoWidth;
-        canvas.height = video.videoHeight;
-      });
+      const handleTimeUpdate = () => {
+        if (isPlaying && (video.currentTime < starttime || video.currentTime > EndTimestamp)) {
 
-      video.addEventListener('seeked', captureImage);
+          video.currentTime = starttime;
+          video.pause();
+          isPlaying = false;
+        }
+      };
 
-      video.src = recordedVideoUrl;
-      video.load();
-      video.currentTime = currentTimestamp + 2; // Change this to seek to a different time
+      const handleSeek = () => {
+        if (video.currentTime < starttime || video.currentTime > EndTimestamp) {
+          video.currentTime = starttime;
+        }
+      };
+
+      video.addEventListener('play', handlePlay);
+      video.addEventListener('timeupdate', handleTimeUpdate);
+      video.addEventListener('seeked', handleSeek);
 
       return () => {
-        video.removeEventListener('seeked', captureImage);
+        video.removeEventListener('play', handlePlay);
+        video.removeEventListener('timeupdate', handleTimeUpdate);
+        video.removeEventListener('seeked', handleSeek);
       };
     }
-  }, [recordedVideoUrl, currentTimestamp, ShowVideo2, ShowVideo]);
-
-
-
+  }, [currentTimestamp, currentTimestamp2, EndTimestamp, ShowVideo2]);
 
   ////**     < VideoFFmpeg VideoUrl={RecordedBlob} />*////
   return (

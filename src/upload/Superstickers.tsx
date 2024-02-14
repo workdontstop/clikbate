@@ -104,7 +104,12 @@ function Superstickersx({
   vidBackUpURL,
   vidBackUpURL2,
   setvidBackUpURL2,
-
+  setCurrentTimestamp,
+  currentTimestamp,
+  setDuration,
+  setCurrentTimestamp2,
+  currentTimestamp2,
+  setDuration2
 }: any): JSX.Element {
   const [superundoArray, setsuperundoArray] = useState<any>([]);
 
@@ -126,6 +131,8 @@ function Superstickersx({
   var mobilefont = 4.8;
 
   var sizex: "small" | "medium" | undefined = undefined;
+
+
 
 
 
@@ -4012,6 +4019,14 @@ function Superstickersx({
 
 
           <VideoEditor
+            setCurrentTimestamp={setCurrentTimestamp}
+            currentTimestamp={currentTimestamp}
+            setDuration={setDuration}
+
+            setCurrentTimestamp2={setCurrentTimestamp2}
+            currentTimestamp2={currentTimestamp2}
+            setDuration2={setDuration2}
+
             setvidBackUpURL={setvidBackUpURL}
             vidBackUpURL={vidBackUpURL}
             vidBackUpURL2={vidBackUpURL2}

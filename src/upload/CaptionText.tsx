@@ -56,7 +56,8 @@ function CaptionTextx({
     sizex, font1, font2,
     updatecaptiontop,
     captionvalues,
-    transform, width
+    transform, width,
+
 
 }: any): JSX.Element {
 
@@ -117,18 +118,19 @@ function CaptionTextx({
                     transform: transform,
                     width: width,
                     paddingBottom: "0px",
+                    paddingTop: "1.5vh",
                     position: "fixed",
-                    bottom: "4vh",
+                    bottom: "8vh",
                     left: "36.5vw",
                     zIndex: 26,
-                    padding: '2.2vh',
-                    borderRadius: '2.5%',
+                    padding: '0vh',
+                    borderRadius: '4%',
                     backgroundImage: PaperStyleReducer,
                 }}
                 label="Share Your Thoughts"
                 type="text"
                 name="topic"
-                variant="standard"
+                variant='outlined'
             />{" "}
         </>
     );

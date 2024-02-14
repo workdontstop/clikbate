@@ -163,7 +163,7 @@ function Menux({
 
   const animationmenu = useSpring({
     config: {
-      duration: 1000,
+      duration: 500,
     },
     opacity: shownav ? 1 : 0,
     marginTop: shownav2 ? `0vh` : `-60vh`,
@@ -175,19 +175,6 @@ function Menux({
 
 
   const jayme = useCallback((e: any) => {
-
-
-    if (matchMobile) {
-      e.stopPropagation();
-      e.preventDefault();
-    }
-
-    var datascroll: number = matchPc
-      ? paperPostScrollRef.current.scrollTop
-      : paperPostScrollRef.current.scrollTop;
-
-    setstartPostScroll(datascroll);
-
 
     if (menuTimer5.current) {
       clearTimeout(menuTimer5.current);
@@ -202,62 +189,45 @@ function Menux({
 
       if (ShowBigPlay) { } else {
         ///dispatch(UpdateMenuNav(true));
-
         setShownav(true);
-        dispatch(SnapToggleAction(false))
+        /// dispatch(SnapToggleAction(false))
       }
       menuTimer2.current = setTimeout(function () {
         setShownav(false);
-        dispatch(SnapToggleAction(true));
+        /// dispatch(SnapToggleAction(true));
 
-      }, 2600);
-    }, 2000);
-
-
+      }, 2400);
+    }, 1000);
 
 
 
 
 
-  }, [ShowBigPlay,
-    miniLayoutPost,
-    window.scrollY,
-    shownav,
-    paperPostScrollRef,
-    endPostScroll,
-    callstartonce,
-    startPostScroll,
-    shownavTop,
-    haltedTop,
-    HidePostDataOnScroll,
-    showModalForm,
 
-  ]);
+
+  }, [ShowBigPlay]);
 
 
 
   ///
 
 
-  const handleScroll = (e: any) => {
-
-    alert('j');
-    // Prevent scroll events from propagating to the parent element
-
-  };
-
 
   useEffect(() => {
-    matchPc
-      ? paperPostScrollRef.current.addEventListener("scroll", jayme)
-      : paperPostScrollRef.current.addEventListener("scroll", jayme);
-
-    return () => {
-      matchPc
-        ? paperPostScrollRef.current.removeEventListener("scroll", jayme)
-        : paperPostScrollRef.current.removeEventListener("scroll", jayme);
+    const handleScroll = (e: any) => {
+      jayme(e); // Call your jayme function here
     };
-  }, [jayme]);
+
+    const paperPostScrollRefCurrent = paperPostScrollRef.current;
+    if (paperPostScrollRefCurrent) {
+      paperPostScrollRefCurrent.addEventListener("scroll", handleScroll);
+
+      return () => {
+        paperPostScrollRefCurrent.removeEventListener("scroll", handleScroll);
+      };
+    }
+  }, [paperPostScrollRef, jayme]);
+
 
 
 

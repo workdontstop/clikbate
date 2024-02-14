@@ -149,6 +149,32 @@ function Profilex({
 
 
 
+  ///
+  ///
+  ///
+  /// GET LOGGED USER DATA FROM REDUX STORE
+  interface RootStateReducerImage {
+    UserdataReducer: {
+      image: string;
+      memeberPageid: number;
+      id: number;
+
+    };
+  }
+  const { image, id, memeberPageid } = useSelector((state: RootStateReducerImage) => ({
+    ...state.UserdataReducer,
+  }));
+  const imageReducer = image;
+  const idReducer = id;
+  const memeberPageidReducer = memeberPageid;
+
+  /////
+  /////
+  /////
+
+
+
+
   useEffect(() => {
 
     if (showProfiileData) {
@@ -554,7 +580,9 @@ function Profilex({
 
 
 
-            if (idReducer === GuestReducer) { dispatch(UpdateAlertReducer('Welcome to ClikBate , Express Yourself and have fun.', 3)); }
+            if (idReducer === GuestReducer && memeberPageidReducer === 0) {
+              dispatch(UpdateAlertReducer('Welcome to ClikBate , Express Yourself and have fun.', 3));
+            }
 
 
             /**  if (activateLoaderReducer) {
@@ -579,11 +607,11 @@ function Profilex({
                   setStopMini(false)
                 }, 2000);
               } else {
-                setminiProfile(true);
+                if (memeberPageidReducer === 0) {
+                } else { setminiProfile(true); }
               }
               ///////////
             }, 1000);
-
 
             if (postTimer3.current) {
               clearTimeout(postTimer3.current);
@@ -634,7 +662,11 @@ function Profilex({
 
                 postTimer7.current = setTimeout(() => {
 
-                  scrollToRef();
+
+                  if (idReducer === GuestReducer) { } else {
+                    scrollToRef();
+                  }
+
                   ////
                   navvScroll();
                   ///
@@ -645,7 +677,7 @@ function Profilex({
                   postTimer8.current = setTimeout(() => {
                     setAllowAllHdImagesShow(true)
 
-                  }, 5000)
+                  }, 2000)
 
 
                 }, 2900)
@@ -664,6 +696,9 @@ function Profilex({
       }
     },
     [StopMini,
+      idReducer,
+      GuestReducer,
+      memeberPageidReducer,
       screenHeightReducer,
       itemheight,
       itemheighthold,
@@ -748,6 +783,8 @@ function Profilex({
 
 
 
+
+
   const onPostsItemClicked = useCallback((index: number) => {
 
     setindexRoll(index);
@@ -756,11 +793,12 @@ function Profilex({
 
     setActiveCanvas(index);
 
+
     if (itemCLICKED[index]) {
 
 
 
-      dispatch(SnapToggleAction(true));
+      ///dispatch(SnapToggleAction(true));
 
 
       if (snapTimer.current) {
@@ -779,7 +817,7 @@ function Profilex({
 
 
 
-      dispatch(SnapToggleAction(false));
+      ///dispatch(SnapToggleAction(false));
 
 
 
@@ -871,22 +909,7 @@ function Profilex({
     fontOptions = "1.9rem";
   }
 
-  ///
-  ///
-  ///
-  /// GET LOGGED USER DATA FROM REDUX STORE
-  interface RootStateReducerImage {
-    UserdataReducer: {
-      image: string;
 
-      id: number;
-    };
-  }
-  const { image, id } = useSelector((state: RootStateReducerImage) => ({
-    ...state.UserdataReducer,
-  }));
-  const imageReducer = image;
-  const idReducer = id;
 
   const blank = () => { };
 

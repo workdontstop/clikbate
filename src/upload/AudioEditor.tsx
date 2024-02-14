@@ -19,6 +19,9 @@ function AudioEditorx({
   setinteractContentAudiotype,
   setaudioEnd,
   setaudioStart,
+  audioStart,
+  audioEnd,
+  setaudioDuration
 }: any): JSX.Element {
   // Reference to the audio element
 
@@ -28,6 +31,8 @@ function AudioEditorx({
   }
 
   const audioPlayerRef = useRef<HTMLaudioElementWithCapture>(null);
+
+  const audioPreviewRef = useRef<HTMLaudioElementWithCapture>(null);
 
 
   const dispatch = useDispatch();
@@ -56,26 +61,18 @@ function AudioEditorx({
 
   const recordingTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
+
+
+
   const startRecording = () => {
     const audio = audioPlayerRef.current;
     if (audio) {
-      const stream = audio.captureStream();
-      const options = { mimeType: "audio/webm" };
+
 
       audio.play();
 
-      recorderRef.current = new MediaRecorder(stream, options);
-
-      const chunks: any = [];
-      recorderRef.current.ondataavailable = (e) => chunks.push(e.data);
-      recorderRef.current.onstop = () => {
-        const blob = new Blob(chunks, { type: options.mimeType });
-        const url: any = URL.createObjectURL(blob);
-        setRecordedAudioUrl(url);
-        setProcessing(false);
-      };
-
-      recorderRef.current.start();
+      setRecordedAudioUrl(AudioUrl);
+      setaudioStart(audioPlayerRef.current.currentTime);
       setRecording(true);
 
       // Set a timer to stop recording after 15 seconds
@@ -88,44 +85,83 @@ function AudioEditorx({
 
 
   const stopRecording = () => {
-    // Clear the timer if it's set
-    if (recordingTimerRef.current) {
-      clearTimeout(recordingTimerRef.current);
-      recordingTimerRef.current = null;
-    }
+    const audio = audioPlayerRef.current;
 
-    if (audioPlayerRef.current) setaudioEnd(audioPlayerRef.current.currentTime);
 
-    if (recorderRef.current && recorderRef.current.state === "recording") {
-      recorderRef.current.stop();
+    if (audio) {
+      setaudioEnd(audio.currentTime);
+      audio.pause();
       setRecording(false);
-      const audio = audioPlayerRef.current;
-      if (audio) { audio.pause() };
-    }
+
+
+    };
+
+
   };
 
   const [p, setp] = useState(false);
 
+
+  async function fetchAudioAsBlob(audioUrl: any) {
+    try {
+      // Fetch the audio data from the URL
+      const response = await fetch(audioUrl);
+
+      // Convert the response data into a Blob object
+      const audioBlob = await response.blob();
+
+      return audioBlob;
+    } catch (error) {
+      console.error('Error fetching audio:', error);
+      return null;
+    }
+  }
+
+
+
+
+
   const saveRecording = useCallback(async () => {
     if (recordedAudioUrl) {
-      const response = await fetch(recordedAudioUrl);
-      ///const responsex = await fetch(AudioUrl);
-      const blob = await response.blob();
-      ////const blob = await responsex.blob();
-      setinteractContentAudio(blob);
-      setinteractContentAudiotype(1);
 
 
-      dispatch(UpdateA(blob, 1));
-      /// setShowAudio(false);
-      ///setp(true);
+      fetchAudioAsBlob(AudioUrl)
+        .then(blob => {
+          if (blob) {
+
+
+            var Durationxxx = audioEnd - audioStart;
+            setaudioDuration(Durationxxx);
+
+
+            /////not used
+            setinteractContentAudio(blob);
+
+            /////used for gui during upload(testing)
+            setinteractContentAudiotype(1);
+
+            /////used for upload
+            dispatch(UpdateA(blob, 1));
+
+
+
+
+            /// setShowAudio(false);
+            ///setp(true);
+
+          } else {
+            console.log('Failed to fetch video or convert to Blob.');
+          }
+        });
+
+
+
     }
   }, [
+    audioEnd,
     AudioUrl,
+    audioStart,
     recordedAudioUrl,
-    setinteractContentAudio,
-    setinteractContentAudiotype,
-    setShowAudio,
   ]);
 
   const closeEditor = () => {
@@ -182,6 +218,42 @@ function AudioEditorx({
 
 
 
+  useEffect(() => {
+
+    const audio = audioPreviewRef.current;
+    let isPlaying = false;
+
+    if (audio) {
+      const handlePlay = () => {
+        isPlaying = true;
+      };
+
+      const handleTimeUpdate = () => {
+        if (isPlaying && (audio.currentTime < audioStart || audio.currentTime > audioEnd)) {
+          audio.currentTime = audioStart;
+          audio.pause();
+          isPlaying = false;
+        }
+      };
+
+      const handleSeek = () => {
+        if (audio.currentTime < audioStart || audio.currentTime > audioEnd) {
+          audio.currentTime = audioStart;
+        }
+      };
+
+      audio.addEventListener('play', handlePlay);
+      audio.addEventListener('timeupdate', handleTimeUpdate);
+      audio.addEventListener('seeked', handleSeek);
+
+      return () => {
+        audio.removeEventListener('play', handlePlay);
+        audio.removeEventListener('timeupdate', handleTimeUpdate);
+        audio.removeEventListener('seeked', handleSeek);
+      };
+    }
+  }, [audioStart, audioEnd, p, recordedAudioUrl]);
+
   return (
     <>
       <Grid
@@ -221,13 +293,12 @@ function AudioEditorx({
         />
         {
 
-          p ? recordedAudioUrl ?
-            <audio
-              ref={audioPlayerRef}
-              src={recordedAudioUrl}
-              controls
-              style={{ width: "50%", margin: "auto", textAlign: "center" }}
-            ></audio> : null :
+          p && recordedAudioUrl ? <audio
+            ref={audioPreviewRef}
+            src={recordedAudioUrl}
+            controls
+            style={{ width: "50%", margin: "auto", textAlign: "center" }}
+          ></audio> :
 
             AudioUrl ?
               <audio
@@ -284,8 +355,6 @@ function AudioEditorx({
 
             onClick={
               () => {
-
-                if (audioPlayerRef.current) { setaudioStart(audioPlayerRef.current.currentTime); }
                 startRecording();
 
               }}
@@ -337,7 +406,7 @@ function AudioEditorx({
           <Grid item
             onClick={
               () => {
-                if (audioPlayerRef.current) { setaudioEnd(audioPlayerRef.current.currentTime); }
+
                 stopRecording();
               }}
 

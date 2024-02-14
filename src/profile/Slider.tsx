@@ -14,9 +14,10 @@ import { RootStateOrAny, useSelector, useDispatch } from "react-redux";
 import { matchMobile, matchPc, matchTablet } from "../DetectDevice";
 import ZoomOutIcon from "@mui/icons-material/ZoomOut";
 import { Loader } from "./Loader";
-import { UpdateInteract } from ".././GlobalActions";
+import { UpdateInteract, MuteAction } from ".././GlobalActions";
 import { Tutorial } from "../Tutorial";
 import VideocamOffIcon from '@material-ui/icons/VideocamOff';
+import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 
 function Sliderx({
   slides,
@@ -137,7 +138,7 @@ function Sliderx({
 
   const [InteractedDark, setInteractedDark] = useState(false);
 
-
+  const [HaltAudio, setHaltAudio] = useState(false);
 
 
 
@@ -259,14 +260,9 @@ function Sliderx({
 
 
   useEffect(() => {
-
-
-
-
-
-    setdateint(new Date().getTime());
-
-
+    if (post) {
+      setdateint(new Date().getTime());
+    }
 
   }, [post]);
 
@@ -519,59 +515,42 @@ function Sliderx({
 
   const [Tutorialx, setTutorialx] = useState(false);
 
+
+
+
+  const startInteraction = useCallback(() => {
+    setactiveAudio(pey);
+    ///stop interaction first 
+    setinteract(false);
+    setinteractContent("");
+    setinteracttypeAll(0);
+    setfadeout(false);
+    ///stop interaction first 
+    ////alert('kk');
+    if (HasInteractivity) {
+      if (showIntImage) {
+      } else {
+        ////load interact image
+        setshowIntImage(true);
+      }
+      setshowSpinx(true);
+      setTimeout(() => {
+        setInteractClicked(true);
+
+        if (AllowAllHdImagesShow) {
+          setAllowCallCanvas(true);
+        }
+      }, 500);
+    }
+    ////check for interaction and display canvas image flip
+  }, [itemCLICKED[pey], HasInteractivity, showIntImage, postDivRef, AllowAllHdImagesShow])
+
+
+
   useLayoutEffect(() => {
     if (itemCLICKED[pey]) {
 
-      setTimeout(() => {
-
-      }, 1500);
-
-
-
-      setactiveAudio(pey);
-
-
-      ///stop interaction first 
-      setinteract(false);
-      setinteractContent("");
-      setinteracttypeAll(0);
-      setfadeout(false);
-      ///stop interaction first 
-
-      ////alert('kk');
-
-
-
-      if (HasInteractivity) {
-
-
-
-
-
-        if (showIntImage) {
-        } else {
-          ////load interact image
-          setshowIntImage(true);
-        }
-
-        setshowSpinx(true);
-
-
-
-        setTimeout(() => {
-          setInteractClicked(true);
-
-
-
-          if (AllowAllHdImagesShow) {
-
-            setAllowCallCanvas(true);
-          }
-
-
-        }, 1500);
-      }
-      ////check for interaction and display canvas image flip
+      startInteraction();
     } else {
       setAllowCallCanvas(false);
       setshowSpinx(false);
@@ -629,9 +608,14 @@ function Sliderx({
     /////alert('kkhhh');
 
     if (matchMobile) {
-      const newclickArray = [...itemCLICKED];
-      newclickArray[pey] = true;
-      setitemCLICKED(newclickArray);
+
+
+      setTimeout(() => {
+        const newclickArray = [...itemCLICKED];
+        newclickArray[pey] = true;
+        setitemCLICKED(newclickArray);
+      }, 160)
+
     }
 
   }, [itemCLICKED[pey], matchMobile])
@@ -646,13 +630,14 @@ function Sliderx({
 
       setpause(false);
 
-      setHideCann(true);
+      ///setHideCann(true);
 
       var d = videoDuration;
 
       if (interacttypeAll === 1) {
 
         d = 17000;
+
       } else { }
 
 
@@ -666,7 +651,7 @@ function Sliderx({
 
       interacttime.current = setTimeout(() => {
         setfadeout(true);
-        closeItemClick();
+        /// closeItemClick();
 
 
         if (interacttime2.current) {
@@ -674,7 +659,19 @@ function Sliderx({
         }
         //alert('kk');
 
+
+
         interacttime2.current = setTimeout(() => {
+
+          if (interacttypeAll === 1) {
+
+
+            if (post.backgroudaudio === 1) {
+              setHaltAudio(false);
+            }
+          }
+
+          ///alert('jj');
           ///  dispatch(UpdateInteract('', false));
           setshowSpin(false);
           setHideCann(false);
@@ -686,6 +683,8 @@ function Sliderx({
           setinteractContent("");
           setinteracttypeAll(0);
           setfadeout(false);
+
+
         }, 1800);
       }, d);
     } else {
@@ -701,16 +700,23 @@ function Sliderx({
 
   useEffect(() => {
 
-    var d = 10000;
+    if (interact) {
+
+      var d1 = 10000;
 
 
-    if (interacttypeAll === 1) {
-      d = 200000;
+
+      setVideoDuration(d1);
+
+
+      //alert(d);
+
+      IntClose();
+
     }
-    setVideoDuration(d);
-    //alert(d);
 
-    IntClose();
+
+
   }, [interact, interacttypeAll]);
 
   const [HideCann, setHideCann] = useState(false);
@@ -1094,8 +1100,15 @@ function Sliderx({
 
 
 
+
             if (post.interact1b || post.interact1a) {
               if (clicked === 1 && clikarc2) {
+
+
+                if (post.backgroudaudio === 1 && post.interacttype2 === 1) {
+                  setHaltAudio(true);
+                }
+
 
                 setTimeout(() => {
                   /// alert(`xx: ${xx}, xnew: ${xnew}`);
@@ -1113,17 +1126,23 @@ function Sliderx({
 
                   if (post.interacttype2 === 1 && isAppleDevice) {
 
-                    setinteractContent(post.vid2backup);
+                    setinteractContent(post.interact1b);
                   } else {
                     setinteractContent(post.interact1b);
                   }
 
                   setinteracttypeAll(post.interacttype2);
-                }, 1000);
+                }, 600);
 
-
+                closeItemClick();
 
               } else if (clicked === 1 && clikarc1) {
+
+
+                if (post.backgroudaudio === 1 && post.interacttype1 === 1) {
+                  setHaltAudio(true);
+                }
+
 
                 setTimeout(() => {
                   /// alert(`xx: ${xx}, xnew: ${xnew}`);
@@ -1140,13 +1159,14 @@ function Sliderx({
 
                   if (post.interacttype1 === 1 && isAppleDevice) {
 
-                    setinteractContent(post.vid1backup);
+                    setinteractContent(post.interact1a);
                   } else {
                     setinteractContent(post.interact1a);
                   }
                   setinteracttypeAll(post.interacttype1);
-                }, 1000)
+                }, 600)
 
+                closeItemClick();
 
               } else if (clicked === 1) {
 
@@ -1184,7 +1204,7 @@ function Sliderx({
         });
       }
     },
-    [data, imageWidthcss, imageHeightcss, interact, videoDuration, isAppleDevice,]
+    [data, imageWidthcss, imageHeightcss, interact, videoDuration, isAppleDevice]
   );
 
 
@@ -1442,13 +1462,13 @@ function Sliderx({
         />
 
 
-        <Tutorial type={1} index={pey} />
+        <Tutorial type={1} index={pey} post={post} />
 
-        <Tutorial type={2} index={pey} />
+        <Tutorial type={2} index={pey} post={post} />
 
-        <Tutorial type={3} index={pey} />
+        <Tutorial type={3} index={pey} post={post} />
 
-        <Tutorial type={4} index={pey} />
+        <Tutorial type={4} index={pey} post={post} />
 
 
         <div
@@ -1514,6 +1534,7 @@ function Sliderx({
         {slides.length > 0 ? (
           interactContent ? null : (
             <SliderNumber
+              startInteraction={startInteraction}
               showSpin={showSpinx}
               setshowSpin={setshowSpinx}
               ActiveCanvas={ActiveCanvas}
@@ -1662,25 +1683,26 @@ function Sliderx({
 
 
             {post.audioData && itemCLICKED[pey] && activeAudio === pey ?
-              muteaudioReducer ? null : (
-                <audio
-                  ref={audioPlayerRef}
-                  src={`${REACT_APP_CLOUNDFRONT}${post.audioData}`}
-                  autoPlay  // This attribute enables autoplay
-                  loop  // This attribute enables looping
-                  style={{
-                    cursor: "pointer",
-                    height: "10px",
-                    objectFit: "contain",
-                    zIndex: 0,
-                    position: "absolute",
-                    margin: "auto",
-                    textAlign: "center",
-                    top: "-200vh",
-                    width: "10px",
-                  }}
-                ></audio>
-              ) : null}
+              muteaudioReducer ? null :
+                HaltAudio ? null : (
+                  <audio
+                    ref={audioPlayerRef}
+                    src={`${REACT_APP_CLOUNDFRONT}audio/${post.audioData}`}
+                    autoPlay  // This attribute enables autoplay
+                    loop  // This attribute enables looping
+                    style={{
+                      cursor: "pointer",
+                      height: "10px",
+                      objectFit: "contain",
+                      zIndex: 0,
+                      position: "absolute",
+                      margin: "auto",
+                      textAlign: "center",
+                      top: "-200vh",
+                      width: "10px",
+                    }}
+                  ></audio>
+                ) : null}
 
 
             {interact && HasInteractivity && ActiveCanvas === pey ? (
@@ -1690,39 +1712,19 @@ function Sliderx({
 
                 isAppleDevice ? <>
 
-                  <VideocamOffIcon
-                    onClick={() => {
-                      /// pauseAudio(true);
-                    }}
-                    className={
-                      darkmodeReducer
-                        ? "make-small-icons-clickable-lightCrop dontallowhighlighting zupermenulight "
-                        : "make-small-icons-clickable-darkCrop dontallowhighlighting zupermenudark  "
-                    }
-                    style={{
-                      color: darkmodeReducer ? '#ffffff' : '#000000',
-                      fontSize: '5vh',
-                      transform: "scale(1.6)",
-                      transition: "transform 0.1s",
-                      position: "fixed",
-                      top: '2vh',
-                      left: '45vw',
-                      zIndex: 200000,
-                      opacity: 1,
-                    }}
-                  />
 
-                  <img
-                    className={fadeout ? "fadeboyinOut" : "fadeboyinInt"}
 
-                    src={`${REACT_APP_CLOUNDFRONT}${interactContent}`}
+                  <video
+
                     onClick={() => {
                       if (InteractedDark) {
                         ////////
+
                         if (InteractTimerxx.current) {
                           clearTimeout(InteractTimerxx.current);
                         }
-                        dispatch(UpdateInteract(interactContent, 1));
+
+                        dispatch(UpdateInteract(interactContent, 2));
                         setInteractedDark(false);
                         setinteract(false);
                         setinteractContent("");
@@ -1736,12 +1738,18 @@ function Sliderx({
                         /////////////////
                       } else {
 
+                        if (post.backgroudaudio === 1) {
+                          setHaltAudio(false);
+                        }
+
+                        //// alert('jj');
+
                         setInteractedDark(true);
                         if (InteractTimerxx.current) {
                           clearTimeout(InteractTimerxx.current);
                         }
                         InteractTimerxx.current = setTimeout(() => {
-                          closeItemClick();
+                          ///closeItemClick();
                           setInteractedDark(false);
                           setinteract(false);
                           setinteractContent("");
@@ -1755,9 +1763,13 @@ function Sliderx({
                         }, 1100)
 
                       }
-
-
                     }}
+                    autoPlay
+                    playsInline
+                    ///controls
+                    ref={videoPlayerReff}
+
+                    src={`${REACT_APP_CLOUNDFRONT}videos/${interactContent}`}
                     style={{
                       filter: InteractedDark ? 'brightness(40%)' : '',
                       cursor: "pointer",
@@ -1772,9 +1784,10 @@ function Sliderx({
                       backgroundColor: darkmodeReducer
                         ? "rgb(20,20,20,0.82)"
                         : "rgb(210,210,210,0.77)",
-                    }}
-                  />
 
+                    }}>
+
+                  </video>
                 </> :
                   <video
 
@@ -1799,12 +1812,18 @@ function Sliderx({
                         /////////////////
                       } else {
 
+
+                        if (post.backgroudaudio === 1) {
+                          setHaltAudio(false);
+                        }
+                        /// alert('jj');
+
                         setInteractedDark(true);
                         if (InteractTimerxx.current) {
                           clearTimeout(InteractTimerxx.current);
                         }
                         InteractTimerxx.current = setTimeout(() => {
-                          closeItemClick();
+                          ///closeItemClick();
                           setInteractedDark(false);
                           setinteract(false);
                           setinteractContent("");
@@ -1823,7 +1842,8 @@ function Sliderx({
                     }}
                     onLoadedData={handleVideoLoad}
                     ref={videoPlayerReff}
-                    src={`${REACT_APP_CLOUNDFRONT}${interactContent}`}
+
+                    src={`${REACT_APP_CLOUNDFRONT}videos/${interactContent}`}
                     style={{
                       filter: InteractedDark ? 'brightness(40%)' : '',
                       cursor: "pointer",
@@ -1848,6 +1868,7 @@ function Sliderx({
                   src={`${REACT_APP_CLOUNDFRONT}${interactContent}`}
                   onClick={() => {
                     if (InteractedDark) {
+                      /// closeItemClick();
                       ////////
                       if (InteractTimerxx.current) {
                         clearTimeout(InteractTimerxx.current);
@@ -1866,12 +1887,15 @@ function Sliderx({
                       /////////////////
                     } else {
 
+
+                      ///alert('jj');
+
                       setInteractedDark(true);
                       if (InteractTimerxx.current) {
                         clearTimeout(InteractTimerxx.current);
                       }
                       InteractTimerxx.current = setTimeout(() => {
-                        closeItemClick();
+                        ///closeItemClick();
                         setInteractedDark(false);
                         setinteract(false);
                         setinteractContent("");

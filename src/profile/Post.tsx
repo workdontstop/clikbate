@@ -1348,46 +1348,26 @@ function Postx({
 
               :
 
-              isAppleDevice ?
-                <MusicOffIcon
-                  onClick={() => {
-                    pauseAudio(true);
-                  }}
-                  className={
-                    darkmodeReducer
-                      ? "make-small-icons-clickable-lightCrop dontallowhighlighting zupermenulight "
-                      : "make-small-icons-clickable-darkCrop dontallowhighlighting zupermenudark  "
-                  }
-                  style={{
-                    color: darkmodeReducer ? '#ffffff' : '#000000',
-                    fontSize: postcommentfont,
-                    marginRight: "5vw",
-                    transform: Zoomxm ? "scale(2.2)" : "scale(1.2)",
-                    transition: "transform 0.1s",
-                    position: "relative",
-                    zIndex: 20,
-                    opacity: 1,
-                  }}
-                /> : <AudiotrackIcon
-                  onClick={() => {
-                    pauseAudio(true);
-                  }}
-                  className={
-                    darkmodeReducer
-                      ? "make-small-icons-clickable-lightCrop dontallowhighlighting zupermenulight "
-                      : "make-small-icons-clickable-darkCrop dontallowhighlighting zupermenudark  "
-                  }
-                  style={{
-                    color: darkmodeReducer ? '#ffffff' : '#000000',
-                    fontSize: postcommentfont,
-                    marginRight: "5vw",
-                    transform: Zoomxm ? "scale(2.2)" : "scale(1.2)",
-                    transition: "transform 0.1s",
-                    position: "relative",
-                    zIndex: 20,
-                    opacity: 1,
-                  }}
-                />
+              <AudiotrackIcon
+                onClick={() => {
+                  pauseAudio(true);
+                }}
+                className={
+                  darkmodeReducer
+                    ? "make-small-icons-clickable-lightCrop dontallowhighlighting zupermenulight "
+                    : "make-small-icons-clickable-darkCrop dontallowhighlighting zupermenudark  "
+                }
+                style={{
+                  color: darkmodeReducer ? '#ffffff' : '#000000',
+                  fontSize: postcommentfont,
+                  marginRight: "5vw",
+                  transform: Zoomxm ? "scale(2.2)" : "scale(1.2)",
+                  transition: "transform 0.1s",
+                  position: "relative",
+                  zIndex: 20,
+                  opacity: 1,
+                }}
+              />
 
             }
 

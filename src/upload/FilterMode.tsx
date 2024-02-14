@@ -1,10 +1,13 @@
 import React, {
+  ChangeEvent,
   useRef,
   useState,
   useCallback,
   useEffect,
   useLayoutEffect,
 } from "react";
+
+
 import { matchPc, matchTablet, matchMobile } from "../DetectDevice";
 import { Grid, GridSize } from "@material-ui/core";
 import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
@@ -13,7 +16,6 @@ import { useSpring, animated } from "react-spring";
 import Masonry from "@mui/lab/Masonry";
 import CircleIcon from "@mui/icons-material/Circle";
 import { SuperCrop } from "./SuperCrop";
-import MusicNoteIcon from "@mui/icons-material/MusicNote";
 import PhotoIcon from "@mui/icons-material/Photo";
 import GifIcon from "@mui/icons-material/Gif";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
@@ -31,6 +33,9 @@ import date from "date-and-time";
 import AdjustIcon from '@material-ui/icons/Adjust';
 import { CaptionText } from "./CaptionText";
 import { Tutorial } from "../Tutorial";
+import AddCircleIcon from '@material-ui/icons/AddCircle';
+import MusicNoteIcon from "@mui/icons-material/MusicNote";
+import { AudioEditor } from "./AudioEditor";
 
 ///Axios.defaults.withCredentials = true;
 
@@ -221,6 +226,12 @@ function FilterModex({
 
 
 
+  const [currentTimestamp, setCurrentTimestamp] = useState(0);
+  const [Durationx, setDuration] = useState(0);
+
+  const [currentTimestamp2, setCurrentTimestamp2] = useState(0);
+  const [Durationx2, setDuration2] = useState(0);
+
 
 
 
@@ -242,6 +253,74 @@ function FilterModex({
 
 
   const [AllowCaption, setAllowCaption] = useState(false);
+
+
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+
+
+  const [backgroudAudio, setbackgroudAudio] = useState<number>(0);
+
+  const [audioStart, setaudioStart] = useState(0);
+  const [audioEnd, setaudioEnd] = useState(0);
+  const [audioEndDuration, setaudioDuration] = useState(0);
+
+
+  /////
+  const convertAndSetAudioUrl = (file: any) => {
+    const reader = new FileReader();
+
+    reader.onloadend = () => {
+      // This is the data URL
+      const audioDataUrl = reader.result;
+      setAudioUrl(audioDataUrl);
+      setShowAudio(true);
+
+    };
+
+    // Read the file as a Data URL
+    reader.readAsDataURL(file);
+
+  };
+
+
+
+  ////
+  const handleFileChangex = async (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+
+    // Clear the input value to allow the same file to be selected again
+    if (event.target && event.target.value) {
+      event.target.value = '';
+    }
+
+    if (file) {
+      try {
+        // Check if the selected file is an audio file
+        if (file.type.startsWith('audio/')) {
+          // Audio file handling logic
+
+          // For example, setting the audio file to state variables
+          // Assuming setAudioData is your state setter for audio data
+
+          setAudioname(file.name);
+          convertAndSetAudioUrl(file);
+
+          // You might also handle the audio data URL or Blob here if needed
+          // ...
+
+        } else {
+          // Handle non-audio file selection, possibly show an error message
+          console.error('Selected file is not an audio file');
+        }
+
+      } catch (error) {
+        console.error('Error processing the audio file:', error);
+      }
+    }
+  };
+
+  // Make sure to define or update your state setters like setAudioData
+  // and other relevant states and logic as needed.
 
 
 
@@ -1045,6 +1124,14 @@ function FilterModex({
               }}
             >
               <Superstickers
+                setCurrentTimestamp={setCurrentTimestamp}
+                currentTimestamp={currentTimestamp}
+                setDuration={setDuration}
+
+                setCurrentTimestamp2={setCurrentTimestamp2}
+                currentTimestamp2={currentTimestamp2}
+                setDuration2={setDuration2}
+
                 setvidBackUpURL={setvidBackUpURL}
                 vidBackUpURL={vidBackUpURL}
                 vidBackUpURL2={vidBackUpURL2}
@@ -1131,6 +1218,19 @@ function FilterModex({
 
 
               <Caption
+                startTopicCap={startTopicCap}
+                audioStart={audioStart}
+                setaudioStart={setaudioStart}
+                audioEnd={audioEnd}
+                setaudioEnd={setaudioEnd}
+                audioEndDuration={audioEndDuration}
+                setaudioDuration={setaudioDuration}
+                backgroudAudio={backgroudAudio}
+
+                currentTimestamp2={currentTimestamp2}
+                Durationx2={Durationx2}
+                currentTimestamp={currentTimestamp}
+                Durationx={Durationx}
                 vidBackUpURL={vidBackUpURL}
                 vidBackUpURL2={vidBackUpURL2}
                 captionvalues={captionvalues}
@@ -1184,33 +1284,97 @@ function FilterModex({
 
 
 
+      {startSuperSticker || startTopicCap ?
+        null : <Grid
+          className={
+            darkmodeReducer
+              ? "dontallowhighlighting"
+              : "dontallowhighlighting  "
+          }
+          xs={12}
+          item
+          style={{
 
-      {startSuperSticker ? null :
-
-        startTopicCap ? null :
-
-          <Grid
-            item
-            xs={6}
+            height: "0px",
+            position: "fixed",
+            top: "35vh",
+            zIndex: 11,
+            left: '10vw',
+          }}
+        >
+          <AddCircleIcon
+            onClick={() => {
+              superstickerz(0);
+            }}
+            className={
+              darkmodeReducer
+                ? "make-small-icons-clickable-lightCrop dontallowhighlighting zuperkingIcon "
+                : "make-small-icons-clickable-darkCrop dontallowhighlighting zuperkingIcon  "
+            }
             style={{
-              padding: "0px",
-              height: '0px',
+              color: "#ffffff",
+              fontSize: matchTabletMobile
+                ? `${mobilefont}vh`
+                : `${pcfont}vw`,
+            }}
+          />
 
+          <p style={{
+            marginTop: '5vh',
+            fontFamily: "Roboto Condensed",
+            fontWeight: 'bolder', fontSize: '3vh',
+            filter: darkmodeReducer
+              ? "drop-shadow(1.2px 0.1px 1.92px rgba(255, 255, 255, 0.6))"
+              : "drop-shadow(1.2px 0.1px 1.92px rgba(41, 53, 70, 8.35))",
+            marginLeft: '-1vw'
+
+          }}>Add Media</p>
+        </Grid>
+      }
+
+      <input
+        type="file"
+        ref={fileInputRef}
+        style={{ display: 'none' }}
+        onChange={handleFileChangex}
+      />
+      {startSuperSticker || startTopicCap ?
+        null :
+
+        <>
+          <Grid
+            className={
+              darkmodeReducer
+                ? "dontallowhighlighting"
+                : "dontallowhighlighting  "
+            }
+            xs={12}
+            item
+            style={{
+              height: "0px",
+              position: "fixed",
+              top: "35vh",
+              zIndex: 11,
+              right: '10vw',
             }}
           >
+            <MusicNoteIcon
+              onClick={
+                () => {
 
-            <CaptionText
-              updatecaptiontop={updatecaptiontop}
-              sizex={sizex} font1={font1} font2={font2}
-              captionvalues={captionvalues}
-              transform={transform} width={width} />
+                  if (interactContentAudiotype === 1) {
 
+                    if (fileInputRef.current) {
+                      fileInputRef.current.click();
+                    }
+                  } else {
+                    if (fileInputRef.current) {
+                      fileInputRef.current.click();
+                    }
 
-
-            <CheckIcon
-              onClick={() => {
-                setAllowCaption(true);
-              }}
+                  }
+                }
+              }
               className={
                 darkmodeReducer
                   ? "make-small-icons-clickable-lightCrop dontallowhighlighting zuperkingIcon "
@@ -1221,15 +1385,159 @@ function FilterModex({
                 fontSize: matchTabletMobile
                   ? `${mobilefont}vh`
                   : `${pcfont}vw`,
-                right: "37.5%",
-                position: 'fixed',
-                zIndex: 2,
-                bottom: '5.4vh',
-                display: startTopicCap ? 'none' : 'block'
               }}
             />
 
-          </Grid>}
+            {interactContentAudiotype === 1 ?
+
+              <p style={{
+                marginTop: '5vh',
+                fontFamily: "Roboto Condensed",
+                fontWeight: 'bolder', fontSize: '2.4vh',
+                filter: darkmodeReducer
+                  ? "drop-shadow(1.2px 0.1px 1.92px rgba(255, 255, 255, 0.6))"
+                  : "drop-shadow(1.2px 0.1px 1.92px rgba(41, 53, 70, 8.35))",
+                marginLeft: '-7vw',
+                position: 'absolute',
+                overflow: 'hidden',
+                width: '18vw'
+
+              }}> {Audioname}</p> : <p style={{
+                marginTop: '5vh',
+                fontFamily: "Roboto Condensed",
+                fontWeight: 'bolder', fontSize: '3vh',
+                filter: darkmodeReducer
+                  ? "drop-shadow(1.2px 0.1px 1.92px rgba(255, 255, 255, 0.6))"
+                  : "drop-shadow(1.2px 0.1px 1.92px rgba(41, 53, 70, 8.35))",
+                marginLeft: '-1vw',
+
+              }}>Add Audio</p>}
+
+          </Grid >
+
+          <Grid
+            item
+            xs={12}
+            style={{
+              height: "0px",
+              position: "fixed",
+              top: "55vh",
+              zIndex: 11,
+              right: '4vw',
+              display: interactContentAudiotype === 1 ? 'block' : 'none'
+            }}
+          >
+
+
+            <CircleIcon
+              onClick={
+                () => {
+
+
+                  if (backgroudAudio === 1) {
+                    setbackgroudAudio(0);
+                  } else {
+                    setbackgroudAudio(1);
+                  }
+                }
+              }
+              className={
+                darkmodeReducer
+                  ? "make-small-icons-clickable-lightCrop dontallowhighlighting zuperkingIcon "
+                  : "make-small-icons-clickable-darkCrop dontallowhighlighting zuperkingIcon  "
+              }
+              style={{
+                fontSize: matchTabletMobile ? `${mobilefont}vh` : `${pcfont - 1.4}vw`,
+                marginRight: "1vw",
+
+                color: backgroudAudio === 0 ? 'green' : 'red'
+              }}
+
+            />
+            <span
+              style={{
+                position: 'relative', // Absolute position for the text
+                top: '-10%', // Center vertically
+                fontFamily: 'fantasy',
+                fontSize: matchTabletMobile ? `${mobilefont}vh` : `1.2vw`,
+              }}
+            >
+              {backgroudAudio === 0 ? ' Play During Interaction' : 'Stop During Interaction'}
+            </span>
+
+
+          </Grid>
+
+        </>
+
+      }
+
+
+      {
+        ShowAudio ? <AudioEditor
+          setaudioDuration={setaudioDuration}
+          audioStart={audioStart}
+          audioEnd={audioEnd}
+          setaudioStart={setaudioStart}
+          setaudioEnd={setaudioEnd}
+          setAudioUrl={setAudioUrl}
+          setAudioname={setAudioname}
+          AudioUrl={AudioUrl}
+          ShowAudio={ShowAudio}
+          setShowAudio={setShowAudio}
+          setinteractContentAudio={setinteractContentAudio}
+          setinteractContentAudiotype={setinteractContentAudiotype}
+        /> : null
+      }
+
+
+      {
+        startSuperSticker ? null :
+
+          startTopicCap ? null :
+
+            <Grid
+              item
+              xs={6}
+              style={{
+                padding: "0px",
+                height: '0px',
+
+              }}
+            >
+
+              <CaptionText
+                updatecaptiontop={updatecaptiontop}
+                sizex={sizex} font1={font1} font2={font2}
+                captionvalues={captionvalues}
+                transform={transform} width={width} />
+
+
+
+              <CheckIcon
+                onClick={() => {
+                  setAllowCaption(true);
+                }}
+                className={
+                  darkmodeReducer
+                    ? "make-small-icons-clickable-lightCrop dontallowhighlighting zuperkingIcon "
+                    : "make-small-icons-clickable-darkCrop dontallowhighlighting zuperkingIcon  "
+                }
+                style={{
+                  color: "#ffffff",
+                  fontSize: matchTabletMobile
+                    ? `${mobilefont}vh`
+                    : `${pcfont}vw`,
+                  right: "37.5%",
+                  position: 'fixed',
+                  zIndex: 2,
+                  bottom: '9vh',
+                  display: startTopicCap ? 'none' : 'block'
+                }}
+              />
+
+            </Grid>
+      }
 
 
 

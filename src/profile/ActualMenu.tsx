@@ -248,7 +248,7 @@ function ActualMenux({ showModalFormMenu, setshowModalFormMenu, postData, setsup
 
         Timerjj.current = setTimeout(() => {
           setSignup(true)
-        }, 6000);
+        }, 1000);
 
       } else {
         setSignup(false)

@@ -28,6 +28,23 @@ var app = express();
 var cors = require("cors");
 const path = require("path");
 const multer = require("multer");
+/////
+/////
+/////
+/////
+const aws_sdk_1 = __importDefault(require("aws-sdk"));
+const accessKeyId = process.env.BUCKET_ACCESS_KEY;
+const secretAccessKey = process.env.BUCKET_SECRET_KEY;
+const region = "us-east-1"; // Replace with your desired region
+/////
+// Call the function
+///getVideos()
+////.then((keys) => console.log("Keys:", keys))
+////.catch((error) => console.error("Error:", error));
+///
+////
+///
+///
 if (process.env.APP_STATE === "dev") {
     var corsOptions = {
         origin: "http://192.168.0.39:3000",
@@ -140,8 +157,8 @@ SELECT
   (SELECT COUNT(*) FROM emotions WHERE post = posts.id AND type = 4) AS funny,
 
   (SELECT file FROM audio WHERE post = posts.id) AS audioData,
-  (SELECT audiostart FROM audio WHERE post = posts.id) AS audioDataStart,
-  (SELECT audioend FROM audio WHERE post = posts.id) AS audioDataEnd,
+  (SELECT backgroudaudio FROM audio WHERE post = posts.id) AS backgroudaudio,
+
 
   interacttype1, interacttype2, rad1, rad2, members.profile_image, members.username, color1, posts.id, sender, post_count, topic,
   caption, item1, thumb1, itemtype1, interact1a, interact1ax, interact1ay, interact1b, interact1bx, interact1by, item2,vid1backup,vid2backup,time
@@ -183,8 +200,7 @@ WHERE post = posts.id and user = ?)EmoIn,
          WHERE post = posts.id and type=4)funny, 
 
           (SELECT file FROM audio WHERE post = posts.id) AS audioData,
-  (SELECT audiostart FROM audio WHERE post = posts.id) AS audioDataStart,
-  (SELECT audioend FROM audio WHERE post = posts.id) AS audioDataEnd,
+  (SELECT backgroudaudio FROM audio WHERE post = posts.id) AS backgroudaudio,
          
          
         
@@ -203,8 +219,8 @@ const updatebillboardPic2 = `UPDATE members SET billboard2 = ?, billboardthumb2 
 const createpost = `INSERT INTO posts (sender,post_count,topic,caption,item1,thumb1,itemtype1,interact1a,interact1ax,interact1ay,
   interact1b,interact1bx,interact1by,rad1,rad2,interacttype1,interacttype2,item2,vid1backup,vid2backup,time)
    VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`;
-const y = `INSERT INTO audio (file,name,sender,post,audiostart,audioend,time)
-VALUES (?,?,?,?,?,?,?)`;
+const y = `INSERT INTO audio (file,name,sender,post,backgroudAudio,time)
+VALUES (?,?,?,?,?,?)`;
 const createComment = `INSERT INTO comments (post,com,commented_by,date) VALUES (?,?,?,?)`;
 const getComments = ` SELECT 
 
@@ -314,8 +330,7 @@ WHERE post = posts.id and user = ?)EmoIn,
          WHERE post = posts.id and type=4)funny,
          
           (SELECT file FROM audio WHERE post = posts.id) AS audioData,
-  (SELECT audiostart FROM audio WHERE post = posts.id) AS audioDataStart,
-  (SELECT audioend FROM audio WHERE post = posts.id) AS audioDataEnd,
+  (SELECT backgroudaudio FROM audio WHERE post = posts.id) AS backgroudaudio,
          
          
          interacttype1,interacttype2,rad1,rad2,members.profile_image,members.username,color1,posts.id,sender,post_count,topic,
@@ -357,8 +372,7 @@ WHERE post = posts.id and user = ?)EmoIn,
          WHERE post = posts.id and type=4)funny, 
 
           (SELECT file FROM audio WHERE post = posts.id) AS audioData,
-  (SELECT audiostart FROM audio WHERE post = posts.id) AS audioDataStart,
-  (SELECT audioend FROM audio WHERE post = posts.id) AS audioDataEnd,
+  (SELECT backgroudaudio FROM audio WHERE post = posts.id) AS backgroudaudio,
          
          
         interacttype1,interacttype2,rad1,rad2,members.profile_image,members.username,color1,posts.id,sender,post_count,topic,
@@ -827,8 +841,7 @@ app.post("/post_upload_audio_data", (req, res, next) => __awaiter(void 0, void 0
             values.name,
             values.sender,
             values.post,
-            values.audioStart,
-            values.audioEnd,
+            values.backgroudAudio,
             currentTime,
         ]);
         ///const insertedId = result.insertId;
@@ -839,6 +852,148 @@ app.post("/post_upload_audio_data", (req, res, next) => __awaiter(void 0, void 0
         return res.send({ message: "audio  upload failed" });
     }
 }));
+app.post("/transAudio", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { values } = req.body;
+    ///console.log(values.vidxx);
+    // Function to convert time in seconds to format "hh:mm:ss.SSS"
+    function formatTime(seconds) {
+        const date = new Date(seconds * 1000);
+        return date.toISOString().substring(11, 23);
+    }
+    // Convert start time to desired format
+    const startTime = formatTime(values.currentTimestamp);
+    const transcodeVideos = (video) => __awaiter(void 0, void 0, void 0, function* () {
+        const transcoder = new aws_sdk_1.default.ElasticTranscoder({
+            accessKeyId,
+            secretAccessKey,
+            region,
+        });
+        // Define the clip settings
+        const clipSettings = {
+            TimeSpan: {
+                StartTime: startTime,
+                Duration: Math.ceil(values.Durationx).toString(), // Duration of the clip (5 seconds)
+            },
+        };
+        // Create the transcoding job with clip settings
+        const job = yield transcoder
+            .createJob({
+            PipelineId: "1706976033901-h5v774",
+            Input: {
+                Key: video,
+                Container: "mp3",
+                TimeSpan: clipSettings.TimeSpan, // Include the clip settings here
+            },
+            Output: {
+                Key: `audio/${video}`,
+                PresetId: "1351620000001-100130",
+            },
+        })
+            .promise();
+        // Wait for the transcoding job to complete
+        yield waitForTranscodingCompletion(job.Job.Id, transcoder);
+        // Delete the original video from the root folder after transcoding
+        const s3 = new aws_sdk_1.default.S3({
+            accessKeyId,
+            secretAccessKey,
+            region,
+        });
+        yield s3
+            .deleteObject({
+            Key: video,
+            Bucket: "clikbatebucket",
+        })
+            .promise();
+    });
+    const waitForTranscodingCompletion = (jobId, transcoder) => __awaiter(void 0, void 0, void 0, function* () {
+        while (true) {
+            const { Job } = yield transcoder
+                .readJob({
+                Id: jobId,
+            })
+                .promise();
+            const { Status } = Job;
+            if (Status === "Complete" || Status === "Error") {
+                break;
+            }
+            // Wait for a short duration before checking the job status again
+            yield new Promise((resolve) => setTimeout(resolve, 5000));
+        }
+    });
+    const videos = values.audio;
+    transcodeVideos(videos);
+}));
+app.post("/trans", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { values } = req.body;
+    ///console.log(values.vidxx);
+    // Function to convert time in seconds to format "hh:mm:ss.SSS"
+    function formatTime(seconds) {
+        const date = new Date(seconds * 1000);
+        return date.toISOString().substring(11, 23);
+    }
+    // Convert start time to desired format
+    const startTime = formatTime(values.currentTimestamp);
+    const transcodeVideos = (video) => __awaiter(void 0, void 0, void 0, function* () {
+        const transcoder = new aws_sdk_1.default.ElasticTranscoder({
+            accessKeyId,
+            secretAccessKey,
+            region,
+        });
+        // Define the clip settings
+        const clipSettings = {
+            TimeSpan: {
+                StartTime: startTime,
+                Duration: Math.ceil(values.Durationx).toString(), // Duration of the clip (5 seconds)
+            },
+        };
+        // Create the transcoding job with clip settings
+        const job = yield transcoder
+            .createJob({
+            PipelineId: "1706976033901-h5v774",
+            Input: {
+                Key: video,
+                Container: "mp4",
+                TimeSpan: clipSettings.TimeSpan, // Include the clip settings here
+            },
+            Output: {
+                Key: `videos/${video}`,
+                PresetId: "1351620000001-000010",
+            },
+        })
+            .promise();
+        // Wait for the transcoding job to complete
+        yield waitForTranscodingCompletion(job.Job.Id, transcoder);
+        // Delete the original video from the root folder after transcoding
+        const s3 = new aws_sdk_1.default.S3({
+            accessKeyId,
+            secretAccessKey,
+            region,
+        });
+        yield s3
+            .deleteObject({
+            Key: video,
+            Bucket: "clikbatebucket",
+        })
+            .promise();
+    });
+    const waitForTranscodingCompletion = (jobId, transcoder) => __awaiter(void 0, void 0, void 0, function* () {
+        while (true) {
+            const { Job } = yield transcoder
+                .readJob({
+                Id: jobId,
+            })
+                .promise();
+            const { Status } = Job;
+            if (Status === "Complete" || Status === "Error") {
+                break;
+            }
+            // Wait for a short duration before checking the job status again
+            yield new Promise((resolve) => setTimeout(resolve, 5000));
+        }
+    });
+    const videos = values.vidxx;
+    transcodeVideos(videos);
+}));
 app.post("/post_upload_data", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { values } = req.body;
     var currentTime = new Date();
@@ -846,12 +1001,14 @@ app.post("/post_upload_data", (req, res, next) => __awaiter(void 0, void 0, void
     var intx2 = null;
     if (values.interacttype1 === 1) {
         intx1 = values.vid1;
+        ////
     }
     else {
         intx1 = values.all[0].interact1;
     }
     if (values.interacttype2 === 1) {
         intx2 = values.vid2;
+        ////
     }
     else {
         intx2 = values.all[0].interact2;

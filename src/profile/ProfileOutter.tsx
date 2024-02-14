@@ -1951,7 +1951,7 @@ function ProfileOutter() {
               <Grid item xs={12} style={{
                 height: "0px",
                 width: '100%', position: "fixed", zIndex: 6, padding: "0px", paddingRight: '6.3vw', textAlign: 'right', bottom: '6vh',
-                opacity: '0.3', visibility: postData ? limit === 0 ? 'hidden' : shownav ? 'visible' : 'hidden' : 'hidden'
+                opacity: '0.5', visibility: postData ? limit === 0 ? 'hidden' : shownav ? 'visible' : 'hidden' : 'hidden'
               }}>
                 <ExpandLessIcon
                   onClick={() => {
@@ -2283,6 +2283,8 @@ function ProfileOutter() {
                   <img
                     onClick={() => {
                       dispatch(UpdateInteract('', 0));
+
+
                     }}
                     className="dontallowhighlighting"
 
