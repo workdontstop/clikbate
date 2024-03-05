@@ -272,7 +272,7 @@ function Billboardx({
   var favclass = matchPc ? "favPc" : matchTablet ? "favTablet" : "favMobile";
   var fanclass = matchPc ? "fanPc" : matchTablet ? "fanTablet" : "fanMobile";
 
-  var fontConnectText = matchPc ? "1.2vw" : matchTablet ? "2.5vw" : "1.92vh";
+  var fontConnectText = matchPc ? "1.2vw" : matchTablet ? "2.5vw" : "2.1vh";
   var fontConnectnum = matchPc ? "1.75vw" : matchTablet ? "3.9vw" : "2.3vh";
 
   var billboardDynamicHeight = matchPc ? "65vh" : matchTablet ? "57vw" : "34vh";

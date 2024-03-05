@@ -109,7 +109,8 @@ function Superstickersx({
   setDuration,
   setCurrentTimestamp2,
   currentTimestamp2,
-  setDuration2
+  setDuration2,
+  callInnerButton
 }: any): JSX.Element {
   const [superundoArray, setsuperundoArray] = useState<any>([]);
 
@@ -377,6 +378,21 @@ function Superstickersx({
   const updateshinezoom = (e: any, data: any) => {
     setshinezoom(data);
   };
+
+
+
+  useEffect(() => {
+    if (callInnerButton === 1) {
+      setstickerOPtionsDefault(1);
+      clearFilterDrag();
+    } else if (callInnerButton === 2) {
+      setstartmerge(true);
+    } else if (callInnerButton === 3) {
+      setstickerOPtionsDefault(4);
+    } else {
+
+    }
+  }, [callInnerButton])
 
   const handleTouchStart = (e: any, type: any) => {
     ////mouseover(0);
@@ -3406,7 +3422,8 @@ function Superstickersx({
                 style={{
                   padding: "20px",
                   paddingBottom: "40px",
-                  visibility: restoreswitcher === 1 ? 'hidden' : 'visible'
+                  visibility: restoreswitcher === 1 ? 'hidden' : startmerge ? 'hidden' : 'visible'
+
                 }}
               >
                 <TitleIcon
@@ -3434,7 +3451,7 @@ function Superstickersx({
                 style={{
                   padding: "20px",
                   paddingBottom: "40px",
-                  visibility: restoreswitcher === 1 ? 'hidden' : 'visible'
+                  visibility: restoreswitcher === 1 ? 'hidden' : startmerge ? 'hidden' : 'visible'
                 }}
               >
                 <InsertPhotoIcon
@@ -3463,7 +3480,7 @@ function Superstickersx({
                   style={{
                     padding: "20px",
                     paddingBottom: "40px",
-                    visibility: restoreswitcher === 1 ? 'hidden' : 'visible'
+                    visibility: restoreswitcher === 1 ? 'hidden' : startmerge ? 'hidden' : 'visible'
                   }}
                 >
                   <RestoreIcon
@@ -3516,6 +3533,7 @@ function Superstickersx({
                       fontSize: matchTabletMobile
                         ? `${mobilefont}vh`
                         : `${pcfont}vw`,
+                      visibility: startmerge ? 'hidden' : 'visible'
                     }}
                   />
                 </Grid>
@@ -3529,7 +3547,7 @@ function Superstickersx({
             style={{
               padding: "20px",
               paddingBottom: "20px",
-              visibility: restoreswitcher === 1 ? 'hidden' : 'visible',
+              visibility: restoreswitcher === 1 ? 'hidden' : startmerge ? 'hidden' : 'visible',
             }}
           >
             <TouchAppIcon

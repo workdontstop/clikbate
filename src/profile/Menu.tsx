@@ -65,6 +65,8 @@ function Menux({
 
   const [haltedTop, sethaltedTop] = useState<boolean>(false);
 
+  const [HideClickOnce, setHideClickOnce] = useState(true);
+
 
   const [startPostScroll, setstartPostScroll] = useState<number>(0);
   const [callstartonce, setcallstartonce] = useState<boolean>(false);
@@ -365,7 +367,7 @@ function Menux({
                     md={8}
                     style={{
                       height: "0px",
-                      marginTop: matchPc ? "-90vh" : isSafariaa ? '-79vh' : "-76vh",
+                      marginTop: matchPc ? "-90vh" : isSafariaa ? '-78vh' : "-89vh",
 
                     }}
                   >
@@ -400,7 +402,25 @@ function Menux({
                             height: "0px",
                           }}
                         >
+                          {matchMobile ?
+                            <CheckBoxOutlineBlankIcon
+                              style={{
+                                margin: "auto",
+                                marginLeft: '-8vw',
+                                position: 'absolute'
 
+
+                              }}
+                            />
+                            : <CheckBoxOutlineBlankIcon
+                              style={{
+                                margin: "auto",
+                                top: '0.8vh',
+                                marginLeft: '-2.2vw',
+                                position: 'absolute',
+
+                              }}
+                            />}
                           <>     < span
                             className={
                               darkmodeReducer
@@ -439,6 +459,7 @@ function Menux({
                           onClick={(e: any) => {
                             ////dispatch(UpdateOptionsTop(true));
                             setShowModalFormMenu(true);
+                            setHideClickOnce(false);
                           }}
                           className={
                             darkmodeReducer
@@ -476,7 +497,27 @@ function Menux({
                               color: darkmodeReducer ? "#eeeeee" : "#444444",
                             }}
                           >
-                            {Signup ? 'Sign In' : MenuDataReducer}
+                            {matchMobile ?
+                              <CheckBoxOutlineBlankIcon
+                                style={{
+                                  margin: "auto",
+                                  marginLeft: '-8vw',
+                                  position: 'absolute'
+
+
+                                }}
+                              />
+                              : <CheckBoxOutlineBlankIcon
+                                style={{
+                                  margin: "auto",
+                                  top: '0.8vh',
+                                  marginLeft: '-2.2vw',
+                                  position: 'absolute',
+
+                                }}
+                              />}
+
+                            {HideClickOnce && GuestReducer === idReducer ? 'Click Me' : Signup ? 'Sign In' : MenuDataReducer}
                           </span>
 
 

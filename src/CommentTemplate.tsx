@@ -41,7 +41,8 @@ function CommentTemplatex({
   CommentHistoryData,
   setcommentHistoryScroll,
   setCommentHistoryData,
-  dontallowspring
+  dontallowspring,
+  keypost
 }: any): JSX.Element {
   ///
   ///
@@ -611,6 +612,7 @@ function CommentTemplatex({
           </Grid>
           (
           <ModalCommentLayout
+            keypost={keypost}
             setshowComAddBack={setshowComAddBack}
             showComAddBack={showComAddBack}
             setcommentHistoryScroll={setcommentHistoryScroll}

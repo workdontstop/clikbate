@@ -426,7 +426,7 @@ function Connectx({
             alignItems: "center",
             justifyContent: "left",
             zIndex: 1,
-            paddingLeft: matchPc ? "1.4vw" : matchTablet ? "2.3vw" : "3.1vw",
+            paddingLeft: matchPc ? "1.4vw" : matchTablet ? "2.3vw" : "2.1vw",
             height: "0px",
             fontFamily: "Arial, Helvetica, sans-seri",
           }}

@@ -33,6 +33,8 @@ import SlowMotionVideoIcon from '@material-ui/icons/SlowMotionVideo';
 import { UserdataReg } from "../log/actions/UserdataAction";
 import { UpdateTutorials } from "../GlobalActions";
 
+import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
+
 
 
 import { LoginButtons } from "../log/LogButtons";
@@ -135,6 +137,9 @@ function ProfileOutter() {
 
 
   const [postData, setPostData] = useState<Array<any>>([]);
+
+  const [keypost, setkeypost] = useState(0);
+
   const [postDatainner, setpostDatainner] = useState<Array<any>>([[]]);
   const [postDatainnerThumb, setpostDatainnerThumb] = useState<Array<any>>([
     [],
@@ -1036,6 +1041,7 @@ function ProfileOutter() {
       obj.itemCLICKED = false;
       obj.onLoadDataOnce = false;
       obj.ActiveAutoPlay = true;
+      obj.ActiveAutoPost = 0;
       obj.itemInteractGo = false;
       obj.lim = postLim;
     });
@@ -1208,7 +1214,7 @@ function ProfileOutter() {
     setTimeout(() => {
 
       dispatch(UpdateMenuData(data));
-    }, 6000)
+    }, 14000)
 
 
 
@@ -1715,6 +1721,28 @@ function ProfileOutter() {
                   </>
                 ) : null}
 
+
+                <Grid item xs={6} style={{
+                  padding: '0px',
+                  fontWeight: 'bolder',
+                  marginLeft: matchTablet || matchMobile ? '10vw' : '10vw',
+                  top: matchTablet || matchMobile ? "58vh" : '52vh',
+                  fontFamily: "Arial, Helvetica, sans-serif",
+                  fontSize:
+                    matchTablet || matchMobile ? "2.6vh" : "3.6vh",
+                  position: 'absolute',
+                  opacity: '0.9',
+                  color: darkmodeReducer ? 'white' : 'black',
+                  overflow: 'hidden',
+                  display: miniProfile ? 'none' : 'block',
+                }}>
+
+                  {memeberPageidReducer === 0 ? 'Feeds' : `${MemberProfileData.username}'s Page`}
+                </Grid>
+
+
+
+
                 <Billboard
                   sliderIndex={sliderIndex}
                   setSliderIndex={setSliderIndex}
@@ -1884,8 +1912,27 @@ function ProfileOutter() {
                         : "24px",
                     marginTop: matchTablet ? "10px" : "-0.5vh",
                     zIndex: 1,
+
+
                   }}
                 >
+
+                  <p style={{
+                    fontWeight: 'bolder',
+                    marginTop: '1vh', textAlign: 'center',
+                    fontFamily: "Arial, Helvetica, sans-serif",
+                    opacity: '0.9', color: darkmodeReducer ? 'white' : 'black'
+                  }}>
+                    <CheckBoxOutlineBlankIcon
+                      style={{
+                        margin: "auto",
+                        fontSize:
+                          matchTablet || matchMobile ? "1.8vh" : "2vh",
+
+                      }}
+                    />
+
+                  </p>
                   <OptionsSlider
                     selectedImage={selectedImage}
                     setselectedImage={setselectedImage}
@@ -1979,11 +2026,14 @@ function ProfileOutter() {
 
               </Grid>
 
+
+
               {showProfiileData ? (
                 <Grid item xs={12} style={{
                   position: "relative", zIndex: 1, padding: "0px"
                 }}>
                   <Profile
+                    setkeypost={setkeypost}
                     historyScrollonload={historyScrollonload}
                     callhistoryModal={callhistoryModal}
                     openmodalhistory={openmodalhistory}
@@ -2082,7 +2132,7 @@ function ProfileOutter() {
                         backgroundColor: darkmodeReducer
                           ? "rgba(50,50,50,0.85)"
                           : "rgba(210,210,210,0.86)",
-                        height: "75%",
+                        height: matchMobile ? "63%" : '64.5%',
                         marginTop: "0vh",
                         textAlign: "center",
                         justifyContent: "center",
@@ -2152,7 +2202,7 @@ function ProfileOutter() {
                         backgroundColor: darkmodeReducer
                           ? "rgba(50,50,50,0.85)"
                           : "rgba(210,210,210,0.86)",
-                        height: "75%",
+                        height: matchMobile ? "63%" : '64.5%',
                         marginTop: "0vh",
                         textAlign: "center",
                         justifyContent: "center",
@@ -2203,7 +2253,7 @@ function ProfileOutter() {
                         backgroundColor: darkmodeReducer
                           ? "rgba(50,50,50,0.85)"
                           : "rgba(210,210,210,0.86)",
-                        height: "75%",
+                        height: matchMobile ? "63%" : '64.5%',
                         marginTop: "0vh",
                         textAlign: "center",
                         justifyContent: "center",
@@ -2353,6 +2403,7 @@ function ProfileOutter() {
                   commentHistoryScroll={commentHistoryScroll}
                   CommentHistoryData={CommentHistoryData}
                   postData={postData}
+                  keypost={keypost}
                   scrollLocation={scrollLocation}
                   typeEmo={typeEmo}
                   connectTemplateGo={connectTemplateGo}

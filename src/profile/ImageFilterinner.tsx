@@ -236,7 +236,7 @@ function ImageFilterinnerx({
 
 
   function FilterGradient(width: any, height: any, type: string) {
-    var filtercolorMode = 0.35;
+    var filtercolorMode = 0.45;
     var ctx = canvasRefdummy.current.getContext("2d");
     canvasRefdummy.current.height = height;
     canvasRefdummy.current.width = width;
@@ -327,7 +327,7 @@ function ImageFilterinnerx({
     } else if (type === "mint") {
 
       gradient.addColorStop(0.5, "#21483e");
-      gradient.addColorStop(0.75, "#302831");
+      gradient.addColorStop(0.65, "#302831");
       gradient.addColorStop(0.1, "#203131");
     } else if (type === "nebula") {
       const reducedColor1 = convertColor('#3b1858', filtercolorMode);
@@ -477,7 +477,7 @@ function ImageFilterinnerx({
 
       previewFileReadimage.onload = function () {
         const ctx = canvasRef.current.getContext("2d");
-        const qualityValue = 1;
+        const qualityValue = 0.98;
 
         if (
           previewFileReadimage.naturalWidth > previewFileReadimage.naturalHeight
@@ -547,20 +547,20 @@ function ImageFilterinnerx({
 
           if (type === "lift") {
             ctx.filter =
-              "contrast(0.99) brightness(0.98) blur(0px) saturate(126%)";
+              "contrast(0.99) brightness(1.04) blur(0px) saturate(146%)";
           } else if (type === "sahara") {
-            ctx.filter = "contrast(1.2) brightness(0.91) saturate(104%)";
+            ctx.filter = "contrast(1.1) brightness(0.9) saturate(104%)";
           } else if (type === "jentle") {
             ctx.filter =
-              "contrast(1.25) brightness(0.76) hue-rotate(20deg) saturate(90%) ";
+              "contrast(1.25) brightness(0.74) hue-rotate(20deg) saturate(90%) ";
           } else if (type === "mint") {
-            ctx.filter = "contrast(1.25) brightness(0.77)  saturate(135%)  ";
+            ctx.filter = "contrast(1.25) brightness(0.9)  saturate(135%)  ";
           } else if (type === "nebula") {
-            ctx.filter = "contrast(1.1) brightness(1.03)";
+            ctx.filter = "contrast(1.1) brightness(1.04)";
           } else if (type === "juice") {
             if (method === "thumb" && matchMobile) {
               ctx.filter =
-                "contrast(1.16) brightness(0.99) saturate(185%) blur(0px)";
+                "contrast(1.15) brightness(0.1.01) saturate(185%) blur(0px)";
             } else {
               ctx.filter =
                 "contrast(0.96) brightness(1) saturate(185%) blur(0.55px)";
@@ -576,7 +576,7 @@ function ImageFilterinnerx({
             ctx.filter =
               "contrast(0.95) brightness(1.05.2) saturate(45%) blur(0px)";
           } else if (type === "vintage") {
-            ctx.filter = " contrast(1.2)  brightness(0.87.6)  saturate(38%)";
+            ctx.filter = " contrast(1.2)  brightness(0.77.6)  saturate(38%)";
           } else {
           }
 
@@ -624,8 +624,8 @@ function ImageFilterinnerx({
               w * 0.65
             );
 
-            gradient.addColorStop(0, "rgba(255, 255, 255,0.01)");
-            gradient.addColorStop(1, "rgba(0,0,0,0.001)");
+            gradient.addColorStop(0, "rgba(255, 255, 255,0.000001)");
+            gradient.addColorStop(1, "rgba(0,0,0,0.000001)");
 
             ctx.fillStyle = gradient;
             ctx.fillRect(0, 0, width, height);
@@ -654,7 +654,7 @@ function ImageFilterinnerx({
               w * 0.4
             );
 
-            gradient.addColorStop(0, " rgba(255, 255, 255,0.001)");
+            gradient.addColorStop(0, " rgba(255, 255, 255,0.011)");
             gradient.addColorStop(1, "#403d6149");
 
             ctx.fillStyle = gradient;
@@ -686,7 +686,7 @@ function ImageFilterinnerx({
               w * 0.65
             );
 
-            gradient.addColorStop(0, "rgba(255, 255, 255, 0.006)");
+            gradient.addColorStop(0, "rgba(255, 255, 255, 0.01)");
             gradient.addColorStop(1, "rgba(0, 0, 0, 0.08)");
 
             ctx.fillStyle = gradient;

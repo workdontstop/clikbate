@@ -58,6 +58,13 @@ if (process.env.APP_STATE === "dev") {
   app.use(cors(corsOptionsx));
 }
 
+const bill1 = "909ab1e9e39f50fcc96a6f55124d81c8";
+const bill1b = "4bc9f798a1e4a964f27b3e6e6d10954c";
+const bill2 = "6a2b5a7e86fc51463969fe9ee843a8d2";
+const bill2b = "e93e1f41c6716ba2105f9d5b1bb0a69e";
+const profilepic = "fa58aa7a3ea386f840f6ad1bee4a63ba";
+const profilepicb = "71b00aa039352fb20eaa588568d08429";
+
 // Commenting out COOP and COEP headers
 // app.use((req, res, next) => {
 //   res.set("Cross-Origin-Opener-Policy", "same-origin");
@@ -735,6 +742,28 @@ app.post("/delPost", async (req: Request, res: Response) => {
   try {
     const chronologicaldata = await execPoolQuery(delPost, [values.id]);
 
+    if (chronologicaldata) {
+      var imag = values.post.item1;
+      // Split the URL string by '/'
+      var parts = imag.split("/");
+      // Get the last part of the URL, which should be the ID
+      var image = parts[parts.length - 1];
+      deleteMediaFromS3(image);
+
+      var thumb = values.post.thumb1;
+      deleteMediaFromS3(thumb);
+
+      var interact1 = values.post.interact1a;
+      if (interact1) {
+        deleteMediaFromS3(interact1);
+      }
+
+      var interact2 = values.post.interact1b;
+      if (interact2) {
+        deleteMediaFromS3(interact2);
+      }
+    }
+
     return res.send({
       ///gettingcookie: userSessionData,
       message: "deleted post",
@@ -882,6 +911,24 @@ app.post("/get_signed_url_4upload", async (req: any, res: any) => {
   res.send({ url });
 });
 
+const deleteMediaFromS3 = async (media: string) => {
+  // Delete the original video from the root folder after transcoding
+  const s3 = new aws.S3({
+    accessKeyId,
+    secretAccessKey,
+    region,
+  });
+
+  await s3
+    .deleteObject({
+      Key: media,
+      Bucket: "clikbatebucket",
+    })
+    .promise();
+
+  console.log("deleted bill");
+};
+
 app.put("/profile_upload_data", async (req: Request, res: Response) => {
   const { values } = req.body;
 
@@ -894,6 +941,13 @@ app.put("/profile_upload_data", async (req: Request, res: Response) => {
       0,
       values.id,
     ]);
+
+    if (execPoolQuery) {
+      ///console.log();
+      deleteMediaFromS3(values.pic);
+      deleteMediaFromS3(values.picthumb);
+    }
+
     return res.send({ message: "profile image data updated" });
   } catch {
     return res.send({ message: "Failed" });
@@ -910,12 +964,21 @@ app.put("/billboard_upload_data", async (req: any, res: any, next: any) => {
         values.imagedataThumb,
         values.id,
       ]);
+      if (execPoolQuery) {
+        ///console.log();
+        deleteMediaFromS3(values.imagedataOld2);
+        deleteMediaFromS3(values.imagedataThumbOld2);
+      }
     } else {
       await execPoolQuery(updatebillboardPic, [
         values.imagedata,
         values.imagedataThumb,
         values.id,
       ]);
+      if (execPoolQuery) {
+        deleteMediaFromS3(values.imagedataOld);
+        deleteMediaFromS3(values.imagedataThumbOld);
+      }
     }
 
     return res.send({
@@ -1566,12 +1629,12 @@ app.post(
             values.inputedUsername,
             hash,
             values.inputedEmail,
-            "909ab1e9e39f50fcc96a6f55124d81c8",
-            "4bc9f798a1e4a964f27b3e6e6d10954c",
-            "6a2b5a7e86fc51463969fe9ee843a8d2",
-            "e93e1f41c6716ba2105f9d5b1bb0a69e",
-            "bee47642a8d647d7fa3d763670506bb8",
-            "c3b1f107a3b5722c34a2364decba6a6a",
+            bill1,
+            bill1b,
+            bill2,
+            bill2b,
+            profilepic,
+            profilepicb,
             color,
             color,
             0,

@@ -45,7 +45,8 @@ function Loaderx({ sliderLoader, autoSlideDisplay, post }: any): JSX.Element {
   return (
     <>
       <Grid
-        container
+        item
+        xs={12}
         className={
           darkmodeReducer
             ? `${sliderLoader} turLight`
@@ -53,11 +54,12 @@ function Loaderx({ sliderLoader, autoSlideDisplay, post }: any): JSX.Element {
         }
         style={{
           backgroundColor: post ? post.color1 : colorReducer,
-          height: "0.7vh",
+          height: "0.8vh",
           position: "absolute",
           display: autoSlideDisplay,
           zIndex: 100000,
           top: "0em",
+          width: '92%'
         }}
       ></Grid>
     </>

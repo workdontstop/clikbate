@@ -108,6 +108,33 @@ function CaptionTextx({
 
     return (
         <>
+
+            <TextField
+                size={sizex}
+                inputProps={{ style: { fontSize: font1 } }}
+                InputLabelProps={{ style: { fontSize: font2 } }}
+                onChange={updatecaptiontop}
+                value={captionvalues.caption}
+                style={{
+                    transform: transform,
+                    width: width,
+                    paddingBottom: "0px",
+                    paddingTop: "1.5vh",
+                    position: "fixed",
+                    bottom: "27vh",
+                    left: "40.5vw",
+                    zIndex: 26,
+                    padding: '0vh',
+                    borderRadius: '4%',
+                    backgroundImage: PaperStyleReducer,
+                }}
+                label="Share Your Thoughts"
+                type="text"
+                name="caption"
+                variant='outlined'
+            />{" "}
+
+
             <TextField
                 size={sizex}
                 inputProps={{ style: { fontSize: font1 } }}
@@ -116,18 +143,18 @@ function CaptionTextx({
                 value={captionvalues.topic}
                 style={{
                     transform: transform,
-                    width: width,
+                    width: '13vw',
                     paddingBottom: "0px",
                     paddingTop: "1.5vh",
                     position: "fixed",
-                    bottom: "8vh",
-                    left: "36.5vw",
+                    bottom: "43vh",
+                    left: "40.5vw",
                     zIndex: 26,
                     padding: '0vh',
                     borderRadius: '4%',
                     backgroundImage: PaperStyleReducer,
                 }}
-                label="Share Your Thoughts"
+                label="Topic"
                 type="text"
                 name="topic"
                 variant='outlined'

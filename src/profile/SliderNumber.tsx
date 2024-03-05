@@ -4,8 +4,12 @@ import FilterNoneOutlinedIcon from "@mui/icons-material/FilterNoneOutlined";
 import LayersOutlinedIcon from "@mui/icons-material/LayersOutlined";
 import ZoomOutIcon from "@mui/icons-material/ZoomOut";
 import { Grid, Switch, DialogContent } from "@material-ui/core";
+import VideocamIcon from '@material-ui/icons/Videocam';
 import { matchMobile } from "../DetectDevice";
+import { Loader } from "./Loader";
+import TheatersIcon from '@material-ui/icons/Theaters';
 
+import MusicOffIcon from '@material-ui/icons/MusicOff';
 
 function SliderNumberx({
   activeSlide,
@@ -20,7 +24,9 @@ function SliderNumberx({
   HasInteractivity,
   startInteractivity,
   post,
-  ActiveCanvas, showSpin, setshowSpin
+  ActiveCanvas, showSpin, setshowSpin,
+  autoSlideDisplay,
+  sliderLoader
 }: any): JSX.Element {
   const startplay = () => {
     if (ActiveAutoPlay[pey]) {
@@ -78,16 +84,20 @@ function SliderNumberx({
   return (
     <>
 
-      {showSpin ?
-        <Grid item xs={12} style={{ position: 'absolute', zIndex: 100, padding: '3vh', visibility: HasInteractivity ? 'visible' : 'hidden' }}>
-          <div className="spinner zuperxyinfo" style={{
-            borderTop: `8px solid ${post.color1}`, boxShadow: `0 0 8.5px, ${post.color1}`
-          }}></div>
-        </Grid> :
+
+
+
+
+      {showSpin && sliderLoader ?
+        <Loader
+          post={post}
+          autoSlideDisplay={autoSlideDisplay}
+          sliderLoader={sliderLoader}
+        />
+        :
 
         null
       }
-
 
 
 
@@ -133,41 +143,72 @@ function SliderNumberx({
           </> : (
           <>
             {" "}
-            <div
-              onClick={() => {
-                ///startplay();
-              }}
-              style={{
-                position: "absolute",
-                zIndex: 30,
-                left: matchMobile ? '1vh' : 30,
-                cursor: "pointer",
-                top: matchMobile ? '1vh' : "5vh",
-                fontFamily: "Arial, Helvetica, sans-serif",
-                fontWeight: "bolder",
-                opacity: 1,
-                height: "0px",
-                padding: "0px",
-              }}
-            >
-              <span
-                className={HasInteractivity ? "zuperkingtur heartbeat" : darkmodeReducer ? "turx" : "turdark"}
+            {post.interacttype1 === 1 || post.interacttype2 === 1 ?
+              <VideocamIcon
+                onClick={() => {
+
+
+                }}
+                className={HasInteractivity ? darkmodeReducer
+                  ? "make-small-icons-clickable-lightCrop dontallowhighlighting zupermenulight heartbeat"
+                  : "make-small-icons-clickable-darkCrop dontallowhighlighting zupermenudark heartbeat " :
+                  darkmodeReducer
+                    ? "make-small-icons-clickable-lightCrop dontallowhighlighting zupermenulight "
+                    : "make-small-icons-clickable-darkCrop dontallowhighlighting zupermenudark  "}
+
                 style={{
-                  padding: "7px",
-                  paddingLeft: HasInteractivity ? matchMobile ? '3.3vw' : "0.9vw" : '10px',
-                  paddingRight: HasInteractivity ? matchMobile ? '3.3vw' : "0.9vw" : '10px',
+                  color: darkmodeReducer ? '#ffffff' : '#ffffff',
+                  transform: matchMobile ? 'scale(0.4)' : 'scale(0.75)',
+                  position: "absolute",
+                  zIndex: 30,
                   backgroundColor: post.color1,
-                  borderRadius: "50%",
-                  fontSize: "0.92vw",
-                  display: total === 1 ? HasInteractivity ? 'block' : 'none' : 'block',
-                  color: darkmodeReducer ? "#ffffff" : "#000000",
-                  transform: matchMobile ? 'scale(0.15)' : 'scale(0.3)'
-                }
-                }
+                  left: matchMobile ? '1vh' : 30,
+                  cursor: "pointer",
+                  top: matchMobile ? '1vh' : "5vh",
+                  fontFamily: "Arial, Helvetica, sans-serif",
+                  fontWeight: "bolder",
+                  opacity: 1,
+                  padding: "2px",
+                }}
+              /> :
+              <div
+                onClick={() => {
+                  ///startplay();
+                }}
+                style={{
+                  position: "absolute",
+                  zIndex: 30,
+                  left: matchMobile ? '1vh' : 30,
+                  cursor: "pointer",
+                  top: matchMobile ? '1vh' : "5vh",
+                  fontFamily: "Arial, Helvetica, sans-serif",
+                  fontWeight: "bolder",
+                  opacity: 1,
+                  height: "0px",
+                  padding: "0px",
+                }}
               >
-                <span style={{ opacity: HasInteractivity && total === 1 ? 0 : 1 }}>{total}</span>
-              </span>
-            </div>{" "}
+                <span
+                  className={HasInteractivity ? "zuperkingtur heartbeat" : darkmodeReducer ? "turx" : "turdark"}
+                  style={{
+                    padding: "7px",
+                    paddingLeft: HasInteractivity ? matchMobile ? '3.3vw' : "0.9vw" : '10px',
+                    paddingRight: HasInteractivity ? matchMobile ? '3.3vw' : "0.9vw" : '10px',
+                    backgroundColor: post.color1,
+                    borderRadius: "50%",
+                    fontSize: "0.92vw",
+                    display: total === 1 ? HasInteractivity ? 'block' : 'none' : 'block',
+                    color: darkmodeReducer ? "#ffffff" : "#000000",
+                    transform: matchMobile ? 'scale(0.15)' : 'scale(0.3)'
+                  }
+                  }
+                >
+                  <span style={{ opacity: HasInteractivity && total === 1 ? 0 : 1 }}>{total}</span>
+                </span>
+              </div>}
+
+
+
           </>
         )
       }

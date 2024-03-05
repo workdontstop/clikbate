@@ -7,6 +7,7 @@ import { Scrollbars } from "react-custom-scrollbars-2";
 
 import EditTwoToneIcon from "@mui/icons-material/EditTwoTone";
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
+import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
 
 import { AboutColor } from "./AboutColor";
@@ -76,7 +77,8 @@ function ModalCommentLayoutx({
   setcommentHistoryScroll,
   setCommentHistoryData,
   showComAddBack,
-  setshowComAddBack
+  setshowComAddBack,
+  keypost
 
 }: any): JSX.Element {
   ///alert(containerHeight);
@@ -272,10 +274,15 @@ function ModalCommentLayoutx({
   const [showdelete, setshowdelete] = useState(false);
 
 
+
+
+
+
   const DelPost = useCallback(() => {
 
     var colorboy = {
       id: CommentPostid.id,
+      post: postData[keypost]
     };
 
     Axios.post(
@@ -295,7 +302,7 @@ function ModalCommentLayoutx({
         /////alert(error);
       });
 
-  }, [CommentPostid]);
+  }, [CommentPostid, postData, keypost]);
 
 
   return (
@@ -319,7 +326,7 @@ function ModalCommentLayoutx({
                 serverErrorData={serverErrorData}
               />
 
-              {CommentPostid.sender === idReducer ? <MoreHorizIcon
+              {CommentPostid.sender === idReducer ? <DeleteOutlineIcon
                 onClick={() => {
 
                   setshowdelete(true)
@@ -342,94 +349,6 @@ function ModalCommentLayoutx({
               /> : null}
 
 
-              {showdelete ? <>
-
-                <Grid
-                  item
-                  xs={12}
-                  style={{
-                    position: "fixed",
-                    height: "110%",
-                    padding: '0px',
-                    width: '100%',
-                    top: '-3vh',
-                    backgroundColor: darkmodeReducer ? 'rgb(10,10,10,0.8)' : 'rgb(255,255,255,0.6)',
-                    color: darkmodeReducer ? '#dddddd' : '#444444',
-                    zIndex: '2000',
-                    fontFamily: 'sans-serif'
-
-                  }}
-                >
-
-
-
-
-                  <Grid
-                    item
-                    xs={12}
-                    style={{
-                      position: "relative",
-                      padding: '0px',
-                      fontSize: '4vh',
-                      top: '5vh',
-                      margin: 'auto',
-                      textAlign: 'center',
-                      fontWeight: 'bolder',
-                      opacity: 0.9
-
-                    }}
-                  >
-                    Delete This Post
-
-                  </Grid>
-
-                  <Grid
-                    item
-
-                    xs={12}
-                    style={{
-                      position: "relative",
-
-                      padding: '0px',
-                      top: '30vh',
-                      margin: 'auto',
-                      textAlign: 'center'
-
-                    }}
-                  >
-                    <span onClick={() => {
-
-                      DelPost();
-                    }} className={
-                      darkmodeReducer
-                        ? "make-small-icons-clickable-darkMenu dontallowhighlighting zuperkingIcon"
-                        : "make-small-icons-clickable-lightMenu dontallowhighlighting zuperking"
-                    } style={{ padding: '4vh' }}>Yes</span>
-
-                  </Grid>
-
-
-                  <Grid
-                    item
-                    xs={12}
-                    style={{
-                      position: "relative",
-
-                      padding: '0px',
-                      top: '58vh',
-                      margin: 'auto',
-                      textAlign: 'center'
-
-                    }}
-                  >
-
-                    <span onClick={() => { setshowdelete(false) }} className={
-                      darkmodeReducer
-                        ? "make-small-icons-clickable-darkMenu dontallowhighlighting zuperkingIcon"
-                        : "make-small-icons-clickable-lightMenu dontallowhighlighting zuperking"
-                    } style={{ padding: '4vh' }}>No</span>
-                  </Grid>
-                </Grid ></> : null}
               <DialogContent
                 className={`${fadeSlidingimage} modalImageCustomSlider FormDialog-containerx dontallowhighlighting`}
                 onClick={onBackgroundFocus}
@@ -573,9 +492,9 @@ function ModalCommentLayoutx({
           ) : (
             /*PC PC PC PC PC PC PC PC PC PC PC PC PC PC PC PC PC PC PC PC PC PC PC PC
         PC PC PC PC PC PC PC PC PC PC PC PC */ /*MOBILE MOBILE MOBILE MOBILE
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    MOBILE MOBILEMOBILE MOBILE MOBILE MOBILE MOBILE MOBILE MOBILEMOBILE MOBILE
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        MOBILE MOBILE MOBILE MOBILE MOBILEMOBILE MOBILE MOBILE MOBILE MOBILE
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        MOBILE MOBILE MOBILE*/
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        MOBILE MOBILEMOBILE MOBILE MOBILE MOBILE MOBILE MOBILE MOBILEMOBILE MOBILE
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            MOBILE MOBILE MOBILE MOBILE MOBILEMOBILE MOBILE MOBILE MOBILE MOBILE
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            MOBILE MOBILE MOBILE*/
             <DialogContent
               className="Hide-mobile-Scrollbar  fadermodal FormDialog-container-mobile dontallowhighlighting"
               ref={imagescrollRef}
@@ -584,6 +503,7 @@ function ModalCommentLayoutx({
                 cursor: "pointer",
                 padding: "0px",
                 zIndex: 100,
+                height: '101vh',
                 backgroundImage: PaperStyleReducer,
               }}
             >
@@ -596,6 +516,11 @@ function ModalCommentLayoutx({
                   }}
                 >
                   <Grid container>
+
+
+
+
+
                     <Grid
                       item
                       xs={12}
@@ -617,6 +542,29 @@ function ModalCommentLayoutx({
                         alt="SuperstarZ"
                         style={mobileLogmodalanimation}
                       />
+
+
+                      {CommentPostid.sender === idReducer ? <DeleteOutlineIcon
+                        onClick={() => {
+
+                          setshowdelete(true)
+                        }}
+                        className={
+                          darkmodeReducer
+                            ? "make-small-icons-clickable-darkab dontallowhighlighting zuperkingIcon "
+                            : "make-small-icons-clickable-lightab  dontallowhighlighting zuperkingIcon  "
+                        }
+                        style={{
+                          color: "#ffffff",
+                          fontSize: "6vh",
+                          position: "fixed",
+                          opacity: zoomedModal ? 0.3 : 0.4,
+                          top: zoomedModal ? "0vh" : "3vh",
+                          left: "3.8vw",
+                          zIndex: 200,
+
+                        }}
+                      /> : null}
                     </Grid>
                     <Grid
                       item
@@ -698,6 +646,104 @@ function ModalCommentLayoutx({
       MOBILEMOBILE MOBILE MOBILE MOBILE MOBILE MOBILE MOBILEMOBILE MOBILE MOBILE
       MOBILE MOBILE MOBILE MOBILE MOBILE MOBILE MOBILE*/
       }
+
+
+      {showdelete ? <>
+
+        <Grid
+          item
+          xs={12}
+          style={{
+            position: "fixed",
+            height: "110%",
+            padding: '0px',
+            width: '100%',
+            top: '-3vh',
+            backgroundColor: darkmodeReducer ? 'rgb(10,10,10,0.8)' : 'rgb(255,255,255,0.6)',
+            color: darkmodeReducer ? '#dddddd' : '#444444',
+            zIndex: '2000',
+            fontFamily: 'sans-serif'
+
+          }}
+        >
+
+
+
+
+          <Grid
+            item
+            xs={12}
+            style={{
+              position: "relative",
+              padding: '0px',
+              fontSize: '4vh',
+              top: '5vh',
+              margin: 'auto',
+              textAlign: 'center',
+              fontWeight: 'bolder',
+              opacity: 0.9
+
+            }}
+          >
+            Delete This Post
+
+          </Grid>
+
+          <Grid
+            item
+
+            xs={12}
+            style={{
+              position: "relative",
+
+              padding: '0px',
+              top: '30vh',
+              margin: 'auto',
+              textAlign: 'center'
+
+            }}
+          >
+            <span onClick={() => {
+
+              DelPost();
+            }} className={
+              darkmodeReducer
+                ? "make-small-icons-clickable-darkMenu dontallowhighlighting zuperkingIcon"
+                : "make-small-icons-clickable-lightMenu dontallowhighlighting zuperking"
+            } style={{
+              borderRadius: '20%', padding: '4vh',
+              color: darkmodeReducer ? '#000000' : '#ffffff',
+              backgroundColor: darkmodeReducer ? '#ffffff' : '#000000'
+            }}>Yes</span>
+
+          </Grid>
+
+
+          <Grid
+            item
+            xs={12}
+            style={{
+              position: "relative",
+
+              padding: '0px',
+              top: '58vh',
+              margin: 'auto',
+              textAlign: 'center'
+
+            }}
+          >
+
+            <span onClick={() => { setshowdelete(false) }} className={
+              darkmodeReducer
+                ? "make-small-icons-clickable-darkMenu dontallowhighlighting zuperkingIcon"
+                : "make-small-icons-clickable-lightMenu dontallowhighlighting zuperking"
+            } style={{
+              borderRadius: '20%', padding: '4vh',
+              color: darkmodeReducer ? '#000000' : '#ffffff',
+              backgroundColor: darkmodeReducer ? '#ffffff' : '#000000'
+            }}>No</span>
+          </Grid>
+        </Grid ></> : null}
     </>
   );
 }

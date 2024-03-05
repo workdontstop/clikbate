@@ -18,6 +18,10 @@ import CircleIcon from "@mui/icons-material/Circle";
 import { SuperCrop } from "./SuperCrop";
 import PhotoIcon from "@mui/icons-material/Photo";
 import GifIcon from "@mui/icons-material/Gif";
+import TextFormatIcon from "@mui/icons-material/TextFormat";
+import InsertPhotoIcon from "@mui/icons-material/InsertPhoto";
+import TitleIcon from '@mui/icons-material/Title';
+import TouchAppIcon from '@mui/icons-material/TouchApp';
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import Axios from "axios";
 import CropIcon from "@mui/icons-material/Crop";
@@ -36,6 +40,7 @@ import { Tutorial } from "../Tutorial";
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 import MusicNoteIcon from "@mui/icons-material/MusicNote";
 import { AudioEditor } from "./AudioEditor";
+import CloseIcon from '@material-ui/icons/Close';
 
 ///Axios.defaults.withCredentials = true;
 
@@ -143,6 +148,10 @@ function FilterModex({
   const [duplicateItemupload, setduplicateItemupload] = useState<any>([]);
 
   const [superUploadedImageName, setsuperUploadedImageName] = useState<any>([]);
+
+  const [hidetextz, sethidetextz] = useState(false);
+
+
 
   const [FilterSliderHeight, setFilterSliderHeight] = useState(0);
   const [FilterSliderWidth, setFilterSliderWidth] = useState(0);
@@ -258,12 +267,33 @@ function FilterModex({
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
 
+  const [callInnerButton, setcallInnerButton] = useState(0);
+
   const [backgroudAudio, setbackgroudAudio] = useState<number>(0);
 
   const [audioStart, setaudioStart] = useState(0);
   const [audioEnd, setaudioEnd] = useState(0);
   const [audioEndDuration, setaudioDuration] = useState(0);
 
+  const [ConfirmUpload, setConfirmUpload] = useState(false);
+
+
+
+  useEffect(() => {
+    if (startSuperSticker) {
+    } else {
+      setcallInnerButton(0);
+    }
+  }, [startSuperSticker])
+
+
+  useEffect(() => {
+    setTimeout(() => {
+      sethidetextz(true);
+    }, 6000)
+
+
+  }, [activatefilterImageReducer])
 
   /////
   const convertAndSetAudioUrl = (file: any) => {
@@ -759,7 +789,7 @@ function FilterModex({
     }
   };
 
-  var pcfont = 2.9;
+  var pcfont = 2.4;
 
   var mobilefont = 4.8;
 
@@ -1124,6 +1154,7 @@ function FilterModex({
               }}
             >
               <Superstickers
+                callInnerButton={callInnerButton}
                 setCurrentTimestamp={setCurrentTimestamp}
                 currentTimestamp={currentTimestamp}
                 setDuration={setDuration}
@@ -1285,51 +1316,160 @@ function FilterModex({
 
 
       {startSuperSticker || startTopicCap ?
-        null : <Grid
-          className={
-            darkmodeReducer
-              ? "dontallowhighlighting"
-              : "dontallowhighlighting  "
-          }
-          xs={12}
-          item
-          style={{
+        null : <>
 
-            height: "0px",
-            position: "fixed",
-            top: "35vh",
-            zIndex: 11,
-            left: '10vw',
-          }}
-        >
-          <AddCircleIcon
-            onClick={() => {
-              superstickerz(0);
-            }}
+          <Grid
             className={
               darkmodeReducer
-                ? "make-small-icons-clickable-lightCrop dontallowhighlighting zuperkingIcon "
-                : "make-small-icons-clickable-darkCrop dontallowhighlighting zuperkingIcon  "
+                ? "dontallowhighlighting"
+                : "dontallowhighlighting  "
             }
+            xs={12}
+            item
             style={{
-              color: "#ffffff",
-              fontSize: matchTabletMobile
-                ? `${mobilefont}vh`
-                : `${pcfont}vw`,
+              height: "0px",
+              position: "fixed",
+              top: "67vh",
+              zIndex: 11,
+              left: '14vw',
             }}
-          />
+          >
+            <TitleIcon
+              onClick={() => {
+                superstickerz(0);
+                setTimeout(() => { setcallInnerButton(1); }, 25)
 
-          <p style={{
-            marginTop: '5vh',
-            fontFamily: "Roboto Condensed",
-            fontWeight: 'bolder', fontSize: '3vh',
-            filter: darkmodeReducer
-              ? "drop-shadow(1.2px 0.1px 1.92px rgba(255, 255, 255, 0.6))"
-              : "drop-shadow(1.2px 0.1px 1.92px rgba(41, 53, 70, 8.35))",
-            marginLeft: '-1vw'
+              }}
+              className={
+                darkmodeReducer
+                  ? "make-small-icons-clickable-lightCrop dontallowhighlighting zuperkingIcon "
+                  : "make-small-icons-clickable-darkCrop dontallowhighlighting zuperkingIcon  "
+              }
+              style={{
+                color: "#ffffff",
+                fontSize: matchTabletMobile
+                  ? `${mobilefont}vh`
+                  : `${pcfont}vw`,
+              }}
+            />
 
-          }}>Add Media</p>
-        </Grid>
+            <p style={{
+              marginTop: '2vh',
+              fontFamily: "Roboto Condensed",
+              fontWeight: 'bolder',
+              fontSize: '2.4vh',
+              filter: darkmodeReducer
+                ? "drop-shadow(1.2px 0.1px 1.92px rgba(255, 255, 255, 0.6))"
+                : "drop-shadow(1.2px 0.1px 1.92px rgba(41, 53, 70, 8.35))",
+              marginLeft: '-1vw',
+              visibility: hidetextz ? 'hidden' : 'visible',
+              color: darkmodeReducer ? '#ffffff' : '#000000'
+
+            }}>Add Text</p>
+          </Grid>
+
+
+          <Grid
+            className={
+              darkmodeReducer
+                ? "dontallowhighlighting"
+                : "dontallowhighlighting  "
+            }
+            xs={12}
+            item
+            style={{
+              height: "0px",
+              position: "fixed",
+              top: "50vh",
+              zIndex: 11,
+              left: '14vw',
+            }}
+          >
+            <InsertPhotoIcon
+              onClick={() => {
+                superstickerz(0);
+                setTimeout(() => { setcallInnerButton(2); }, 25)
+
+              }}
+              className={
+                darkmodeReducer
+                  ? "make-small-icons-clickable-lightCrop dontallowhighlighting zuperkingIcon "
+                  : "make-small-icons-clickable-darkCrop dontallowhighlighting zuperkingIcon  "
+              }
+              style={{
+                color: "#ffffff",
+                fontSize: matchTabletMobile
+                  ? `${mobilefont}vh`
+                  : `${pcfont}vw`,
+              }}
+            />
+
+            <p style={{
+              marginTop: '2vh',
+              fontFamily: "Roboto Condensed",
+              fontWeight: 'bolder',
+              fontSize: '2.4vh',
+              filter: darkmodeReducer
+                ? "drop-shadow(1.2px 0.1px 1.92px rgba(255, 255, 255, 0.6))"
+                : "drop-shadow(1.2px 0.1px 1.92px rgba(41, 53, 70, 8.35))",
+              marginLeft: '-1vw',
+              visibility: hidetextz ? 'hidden' : 'visible',
+              color: darkmodeReducer ? '#ffffff' : '#000000'
+
+            }}>Add a Sticker</p>
+          </Grid>
+
+          <Grid
+            className={
+              darkmodeReducer
+                ? "dontallowhighlighting"
+                : "dontallowhighlighting  "
+            }
+            xs={12}
+            item
+            style={{
+              height: "0px",
+              position: "fixed",
+              top: "33vh",
+              zIndex: 11,
+              left: '14vw',
+            }}
+          >
+            <TouchAppIcon
+              onClick={() => {
+                superstickerz(0);
+                setTimeout(() => { setcallInnerButton(3); }, 25)
+              }}
+              className={
+                darkmodeReducer
+                  ? "make-small-icons-clickable-lightCrop dontallowhighlighting zuperkingIcon "
+                  : "make-small-icons-clickable-darkCrop dontallowhighlighting zuperkingIcon  "
+              }
+              style={{
+                color: "#ffffff",
+                fontSize: matchTabletMobile
+                  ? `${mobilefont}vh`
+                  : `${pcfont}vw`,
+              }}
+            />
+
+            <p style={{
+              marginTop: '2vh',
+              fontFamily: "Roboto Condensed",
+              fontWeight: 'bolder',
+              fontSize: '2.4vh',
+              filter: darkmodeReducer
+                ? "drop-shadow(1.2px 0.1px 1.92px rgba(255, 255, 255, 0.6))"
+                : "drop-shadow(1.2px 0.1px 1.92px rgba(41, 53, 70, 8.35))",
+              marginLeft: '-1vw',
+              visibility: hidetextz ? 'hidden' : 'visible',
+              color: darkmodeReducer ? '#ffffff' : '#000000'
+
+            }}>Add interaction</p>
+          </Grid>
+
+
+        </>
       }
 
       <input
@@ -1410,6 +1550,8 @@ function FilterModex({
                   ? "drop-shadow(1.2px 0.1px 1.92px rgba(255, 255, 255, 0.6))"
                   : "drop-shadow(1.2px 0.1px 1.92px rgba(41, 53, 70, 8.35))",
                 marginLeft: '-1vw',
+                visibility: hidetextz ? 'hidden' : 'visible',
+                color: darkmodeReducer ? '#ffffff' : '#000000'
 
               }}>Add Audio</p>}
 
@@ -1506,17 +1648,15 @@ function FilterModex({
               }}
             >
 
-              <CaptionText
-                updatecaptiontop={updatecaptiontop}
-                sizex={sizex} font1={font1} font2={font2}
-                captionvalues={captionvalues}
-                transform={transform} width={width} />
+
 
 
 
               <CheckIcon
                 onClick={() => {
-                  setAllowCaption(true);
+                  /// setAllowCaption(true);
+
+                  setConfirmUpload(true);
                 }}
                 className={
                   darkmodeReducer
@@ -1527,18 +1667,21 @@ function FilterModex({
                   color: "#ffffff",
                   fontSize: matchTabletMobile
                     ? `${mobilefont}vh`
-                    : `${pcfont}vw`,
-                  right: "37.5%",
-                  position: 'fixed',
+                    : `${pcfont + 2.1}vw`,
+                  left: "84.5%",
+                  position: 'absolute',
+                  borderRadius: '80%',
                   zIndex: 2,
-                  bottom: '9vh',
-                  display: startTopicCap ? 'none' : 'block'
+                  bottom: '28vh',
+                  display: startTopicCap ? 'none' : 'block',
+
                 }}
               />
 
+
+
             </Grid>
       }
-
 
 
 
@@ -1583,6 +1726,127 @@ function FilterModex({
           ></Grid>
         </Grid>
       </Grid>
+
+
+
+      {ConfirmUpload ? startTopicCap ? null :
+        <Grid
+          container
+
+          style={{
+            height: "100%", position: "fixed", top: "2vh", padding: "0px",
+            zIndex: 200,
+
+            backgroundColor: darkmodeReducer ? 'rgb(000,000,000,0.64)' : 'rgb(180,180,180,0.8)'
+          }}
+        >
+          <Grid
+            item
+            xs={4}
+            style={{
+              padding: '0px'
+            }}
+          ></Grid>
+          <Grid
+            item
+            xs={4}
+            style={{
+              marginTop: '36vh',
+
+              padding: '0px',
+              backgroundColor: darkmodeReducer
+                ? "rgba(50,50,50,0.98)"
+                : "rgba(200,200,200,0.85)",
+              height: '50vh',
+              borderRadius: '20px',
+
+            }}
+          >
+
+            <Grid
+              item
+              xs={12}
+              style={{
+                padding: '0px',
+                textAlign: 'center',
+                fontFamily: "Roboto Condensed",
+                color: darkmodeReducer ? '#ffffff' : '#000000'
+              }}
+            >Upload Post</Grid>
+
+
+
+            <CloseIcon
+              onClick={() => {
+                setConfirmUpload(false);
+
+              }}
+              className={
+                darkmodeReducer
+                  ? "make-small-icons-clickable-lightCrop dontallowhighlighting zuperkingIcon "
+                  : "make-small-icons-clickable-darkCrop dontallowhighlighting zuperkingIcon  "
+              }
+              style={{
+                color: colorReducer,
+                fontSize: matchTabletMobile
+                  ? `${mobilefont}vh`
+                  : `${pcfont}vw`,
+                left: "62%",
+                position: 'absolute',
+                borderRadius: '80%',
+                zIndex: 2,
+                bottom: '61vh',
+                display: startTopicCap ? 'none' : 'block',
+
+              }}
+            />
+
+            <CheckIcon
+              onClick={() => {
+                setAllowCaption(true);
+
+              }}
+              className={
+                darkmodeReducer
+                  ? "make-small-icons-clickable-lightCrop dontallowhighlighting zuperkingIcon "
+                  : "make-small-icons-clickable-darkCrop dontallowhighlighting zuperkingIcon  "
+              }
+              style={{
+                color: colorReducer,
+                fontSize: matchTabletMobile
+                  ? `${mobilefont}vh`
+                  : `${pcfont}vw`,
+                left: "62%",
+                position: 'absolute',
+                borderRadius: '80%',
+                zIndex: 2,
+                bottom: '46vh',
+                display: startTopicCap ? 'none' : 'block',
+
+              }}
+            />
+
+            <CaptionText
+              updatecaptiontop={updatecaptiontop}
+              sizex={sizex} font1={font1} font2={font2}
+              captionvalues={captionvalues}
+              transform={transform} width={width} />
+
+          </Grid>
+          <Grid
+            item
+            xs={4}
+            style={{
+              padding: '0px'
+            }}
+          ></Grid>
+
+        </Grid> : null
+      }
+
+
+
+
     </>
   );
 }

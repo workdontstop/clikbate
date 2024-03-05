@@ -78,7 +78,8 @@ function Profilex({
   ShowBigPlay,
   callhistoryModal,
   openmodalhistory,
-  historyScrollonload
+  historyScrollonload,
+  setkeypost
 }: any) {
   const [countAutoplay, setcountAutoplay] = useState<number>(0);
 
@@ -92,6 +93,9 @@ function Profilex({
 
 
   const canvasRefIn: any = useRef(null);
+
+
+
 
   ///
 
@@ -251,7 +255,6 @@ function Profilex({
 
 
 
-  const [ActiveCanvas, setActiveCanvas] = useState(0);
 
   const [ActiveCanvasx, setActiveCanvasx] = useState(0);
 
@@ -263,6 +266,8 @@ function Profilex({
   const [onLoadDataOnce, setonLoadDataOnce] = useState<Array<boolean>>([]);
 
   const [ActiveAutoPlay, setActiveAutoPlay] = useState<Array<boolean>>([]);
+
+  const [ActiveAutoPost, setActiveAutoPost] = useState<Array<number>>([]);
 
   var heightplus = matchPc ? 0.38 : matchTablet ? 0.3 : 0.265;
   var postbackheighthold = document.documentElement.clientHeight * heightplus;
@@ -288,6 +293,14 @@ function Profilex({
   const postTimer7 = useRef<ReturnType<typeof setTimeout> | null>(null);
   const postTimer8 = useRef<ReturnType<typeof setTimeout> | null>(null);
 
+
+
+
+
+
+  const tTimer = useRef<ReturnType<typeof setTimeout> | null>(
+    null
+  );
 
 
 
@@ -405,6 +418,13 @@ function Profilex({
         (obj: any) => obj.ActiveAutoPlay
       );
       setActiveAutoPlay(initialsetActiveAutoPlay);
+
+      const initialsetsetActiveAutoPost = postData.map(
+        (obj: any) => obj.ActiveAutoPost
+      );
+      setActiveAutoPost(initialsetsetActiveAutoPost);
+
+
     }
   }, [postData, showProfiileData]);
 
@@ -478,7 +498,7 @@ function Profilex({
 
           var choppedwidth = percentage(
             screenHeightReducer,
-            matchPc ? 55 : matchTablet ? 52 : 35
+            matchPc ? 55 : matchTablet ? 52 : 5
           );
 
           if (imageHeight < choppedwidth) {
@@ -581,7 +601,7 @@ function Profilex({
 
 
             if (idReducer === GuestReducer && memeberPageidReducer === 0) {
-              dispatch(UpdateAlertReducer('Welcome to ClikBate , Express Yourself and have fun.', 3));
+              dispatch(UpdateAlertReducer('Create Interactive Content, Express Your Views And Show Your Creativity Here.', 3));
             }
 
 
@@ -648,7 +668,7 @@ function Profilex({
                 postTimer6.current = setTimeout(() => {
                   setAllowAllHdImagesShow(true)
 
-                }, 7900)
+                }, 2000)
 
               } else {
 
@@ -663,7 +683,7 @@ function Profilex({
                 postTimer7.current = setTimeout(() => {
 
 
-                  if (idReducer === GuestReducer) { } else {
+                  if (idReducer === GuestReducer || memeberPageidReducer === 0) { } else {
                     scrollToRef();
                   }
 
@@ -677,7 +697,7 @@ function Profilex({
                   postTimer8.current = setTimeout(() => {
                     setAllowAllHdImagesShow(true)
 
-                  }, 2000)
+                  }, 1200)
 
 
                 }, 2900)
@@ -785,16 +805,26 @@ function Profilex({
 
 
 
-  const onPostsItemClicked = useCallback((index: number) => {
+
+  const InitializingInteraction = (index: number) => {
 
     setindexRoll(index);
 
     clearAllTimers();
 
-    setActiveCanvas(index);
+  }
+
+  const [currentClicked, setcurrentClicked] = useState(-1);
+
+  const onPostsItemClicked = useCallback((index: number, type: number) => {
+
+
+
+    InitializingInteraction(index);
 
 
     if (itemCLICKED[index]) {
+
 
 
 
@@ -812,11 +842,13 @@ function Profilex({
       newclickArray[index] = false;
       setitemCLICKED(newclickArray);
       postitemSHOWFULLHEIGHT(index, 1);
-      setTimeout(() => { scrollToPost(index); }, 500)
+      if (type == 0) { setTimeout(() => { scrollToPost(index); }, 500) }
+
     } else {
 
 
 
+      setcurrentClicked(index);
       ///dispatch(SnapToggleAction(false));
 
 
@@ -964,7 +996,7 @@ function Profilex({
     setTimeout(function () {
       dispatch(UpdateLoader(false));
       if (showThisComponenet) setshowThisComponenet(false);
-    }, 7500);
+    }, 4000);
 
     setTimeout(function () {
       if (ShowLoader2) {
@@ -1119,7 +1151,7 @@ function Profilex({
             paddingLeft: miniProfile ? (matchPc ? "6vw" : "0vw") : "0vw",
             paddingRight: miniProfile ? (matchPc ? "6vw" : "0vw") : "0vw",
             height: "auto",
-            marginTop: matchMobile ? '3vh' : '5.5vh',
+            marginTop: matchMobile ? '10vh' : '5.5vh',
             marginLeft: miniProfile && matchPc ? '5.5vw' : '0px',
           }}
         >
@@ -1214,6 +1246,12 @@ function Profilex({
 
                   <div key={i} style={{ display: miniProfile ? "none" : "block", }}>
                     <Post
+                      setkeypost={setkeypost}
+                      currentClicked={currentClicked}
+                      InitializingInteraction={InitializingInteraction}
+                      ActiveAutoPost={ActiveAutoPost}
+                      setActiveAutoPost={setActiveAutoPost}
+
                       setitemCLICKED={setitemCLICKED}
                       AllowAllHdImagesShow={AllowAllHdImagesShow}
                       clearAllTimers={clearAllTimers}
@@ -1224,7 +1262,7 @@ function Profilex({
                       Added={Added}
                       addpostDivRefRoll={addpostDivRefRoll}
                       canvasRefIn={canvasRefIn}
-                      ActiveCanvas={ActiveCanvas}
+
                       postItemsRef={postItemsRef}
                       postDatainnerInteraction2={postDatainnerInteraction2}
                       postDatainnerInteraction1={postDatainnerInteraction1}

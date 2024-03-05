@@ -33,6 +33,7 @@ import {
 import { Connect } from "./Connect";
 import { Slider } from "./Slider";
 import { useInView } from "react-intersection-observer";
+import { isSafari } from "react-device-detect";
 
 function MiniPostx({
   pey,
@@ -285,18 +286,22 @@ function MiniPostx({
   }, [post]);
 
 
-  var postprofiletop = matchPc ? "-5.8vh" : matchTablet ? "-9.3vh" : "-5.7vh";
+  var postprofiletop = matchPc ? "-5.8vh" : matchTablet ? "-9.3vh" : "-6.4vh";
   var posttopicfont = matchPc ? "1.25vw" : matchTablet ? "1.8vh" : "1.6vh";
 
   var postusernamefont = matchPc ? "1.1vw" : matchTablet ? "2.32vh" : "1.7vh";
   var postusernameleft = matchPc ? "41.1%" : matchTablet ? "15.5%" : "20%";
+
+  var postusernameleftx = matchPc ? "14.5%" : matchTablet ? "15.5%" : "20%";
+
   var postcirclefont = matchPc ? ShowBigPlay ? '1.4vw' : "0.7vw" : matchTablet ? "1.2vw" : ShowBigPlay ? '3vh' : "1.1vh";
   var postcirclefontx = matchPc ? ShowBigPlay ? '2.2vw' : "1.4vw" : matchTablet ? "1.2vw" : ShowBigPlay ? '4.1vh' : "2.2vh";
 
   var dotspace = matchPc ? "1.7vw" : matchTablet ? "1.9vh" : "1.9vh";
   var dotspace2 = matchPc ? "0.9vw" : matchTablet ? "1.9vh" : "1.9vh";
 
-  var postusernametop = matchPc ? "-6vh" : matchTablet ? "-11.9vh" : "-2.5vh";
+  var postusernametop = matchPc ? "-6vh" : matchTablet ? "-11.9vh" : "-3.5vh";
+  var postusernametopx = matchPc ? "-3vh" : matchTablet ? "-11.9vh" : "-5.5vh";
 
   var profilewidth = matchPc
     ? miniLayoutPost
@@ -391,24 +396,27 @@ function MiniPostx({
 
 
   useEffect(() => {
-    // Function to check if a string is likely a file name
-    const isFileName = (str: any) => {
-      // Example regex for a typical file name (adjust as needed)
-      const fileNameRegex = /^[a-zA-Z0-9._-]+$/;
-      return fileNameRegex.test(str);
-    };
 
-    // Iterate through postDatainnerInteraction1
-    let foundFileName = postDatainnerInteraction1.some(isFileName);
 
-    if (!foundFileName) {
-      // If not found in the first array, check in postDatainnerInteraction2
-      foundFileName = postDatainnerInteraction2.some(isFileName);
+
+    if (post.interact1a) {
+      setHasInteractivity(true);
+      ///alert(post.interact1a);
+    } else {
+
     }
 
-    // Set the state based on the presence of a file name
-    setHasInteractivity(foundFileName);
-  }, [postDatainnerInteraction1, postDatainnerInteraction2, itemCLICKED]);
+
+
+    if (post.interact2a) {
+      setHasInteractivity(true);
+      ///alert(post.interact1a);
+    } else {
+
+    }
+
+
+  }, [post, itemCLICKED]);
 
 
 
@@ -605,7 +613,45 @@ function MiniPostx({
 
           </div>
 
-
+          <div
+            className={
+              darkmodeReducer ? "zuperxyinfoPostDark" : "zuperxyinfoPostLight"
+            }
+            style={{
+              visibility: miniLayoutPost ? "hidden" : "visible",
+              top: postusernametopx,
+              position: "relative",
+              display: "flex", //flex
+              alignItems: "center",
+              justifyContent: "left",
+              zIndex: 50,
+              color: "#ffffffff",
+              paddingLeft: "2vw",
+              fontFamily: "Arial, Helvetica, sans-seri",
+              marginLeft: postusernameleftx,
+              textAlign: matchMobile ? "center" : 'left',
+              left: matchMobile ? '6vw' : '0px',
+              height: "0px",
+            }}
+          >
+            <span>
+              <span
+                className={
+                  darkmodeReducer ? "zuperkinglight" : "zuperkinglight"
+                }
+                style={{
+                  color: darkmodeReducer ? "#ffffff" : "#ffffff",
+                }}
+              >
+                <span
+                  style={{
+                    fontWeight: "bold",
+                    fontSize: postusernamefont,
+                    display: 'block'
+                  }}
+                >
+                  {post.username}
+                </span>  </span>  </span></div>
 
           {/*///////////////////////////////////////////////////////////////////////////USERNAME AND TOPIC*/}
           <div
@@ -625,8 +671,10 @@ function MiniPostx({
               fontFamily: "Arial, Helvetica, sans-seri",
               marginLeft: postusernameleft,
               textAlign: "center",
-              left: matchMobile ? '6vw' : '0px',
+              left: matchMobile ? '5vw' : '0px',
               height: "0px",
+
+
             }}
           >
             <span>
@@ -636,15 +684,19 @@ function MiniPostx({
                 }
                 style={{
                   color: darkmodeReducer ? "#ffffff" : "#ffffff",
+
                 }}
               >
                 <span
                   style={{
                     fontWeight: "bold",
                     fontSize: postusernamefont,
+                    fontFamily: "Roboto Condensed",
+                    display: 'none'
+
                   }}
                 >
-                  {post.username}
+                  {post.topic}
                 </span>
 
                 <span
@@ -656,69 +708,6 @@ function MiniPostx({
                   .
                 </span>
 
-
-
-                <span
-
-                  onClick={() => {
-                    if (ShowBigPlay) {
-                      clearAllTimers();
-                    }
-                  }}
-                  onTouchStart={() => {
-                    setBigCircle(true);
-                  }}
-                  onTouchEnd={() => {
-                    setBigCircle(false);
-                  }}
-
-                  onMouseOver={() => {
-                    setBigCircle(true);
-                  }}
-                  onMouseOut={() => {
-                    setBigCircle(false);
-                  }}
-
-                  className={ShowBigPlay ? `blinkingxx` : `    `}
-                  style={{
-                    marginLeft: matchMobile ? ShowBigPlay ? '1vw' : '1vw' : '1vw',
-                    position: 'absolute',
-                    cursor: BigCircle ? ShowBigPlay ? "pointer" : "default" : "default",
-
-                  }}
-                >
-                  {CommSho ?
-
-
-                    <CommentIcon
-                      className={darkmode ? 'zuperkingIconPostDark' : "zuperkingIconPostLightx"}
-                      style={{
-                        fontSize: postcirclefontx,
-                        color: post.color1,
-                        transform: BigCircle ? "scale(2.7)" : "scale(1)", opacity: 0.6,
-                        transition: "transform 0.05s",
-                      }}
-                    /> : FavIcon ?
-                      <SentimentVerySatisfiedIcon
-                        className={darkmode ? 'zuperkingIconPostDark' : "zuperkingIconPostLightx"}
-                        style={{
-                          fontSize: postcirclefontx,
-                          color: post.color1,
-                          transform: BigCircle ? "scale(2.7)" : "scale(1)", opacity: 0.6,
-                          transition: "transform 0.05s",
-                        }}
-                      /> :
-                      <CircleIcon
-                        className={darkmode ? 'zuperkingIconPostDark' : "zuperkingIconPostLightx"}
-                        style={{
-                          fontSize: postcirclefont,
-                          color: post.color1,
-                          transform: BigCircle ? "scale(2.7)" : "scale(1)", opacity: 0.6,
-                          transition: "transform 0.05s",
-                        }}
-                      />}
-
-                </span>
 
 
 
@@ -765,12 +754,13 @@ function MiniPostx({
               style={{
                 fontWeight: "bold",
                 color: darkmodeReducer ? "#ffffff" : "#000000",
-                fontSize: matchPc ? "2.1vh" : "1.5vh",
+                fontSize: matchPc ? "2.1vh" : isSafari ? '1.8vh' : "1.9vh",
                 zIndex: 5,
                 paddingLeft: matchPc ? "7vw" : matchTablet ? "2.3vw" : "4vw",
                 height: "0px",
                 fontFamily: "Arial, Helvetica, sans-serif",
                 opacity: darkmodeReducer ? "0.6" : "0.8",
+                display: 'block'
               }}
             >   <p>
                 {post.topic}
@@ -782,7 +772,7 @@ function MiniPostx({
 
           {/*///////////////////////////////////////////////////////////////////////////PROFILE-PIC*/}
         </div>
-      </animated.div>
+      </animated.div >
     </>
   );
 }

@@ -76,7 +76,7 @@ function ServerErrorx({
 
 
   if (matchMobile) {
-    severerrorData = "2.2vh";
+    severerrorData = "2.44vh";
     severerrorEmoji = "2.7vh";
     severerrorEmojiLeft = "4vw";
   } else {
@@ -144,6 +144,7 @@ function ServerErrorx({
                     className="sever-error-data"
                     style={{
                       fontSize: severerrorData,
+                      lineHeight: '4vh',
                       paddingLeft: "3vw",
                     }}
                     xs={11}

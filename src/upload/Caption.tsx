@@ -1105,7 +1105,7 @@ function Captionx({
                 fontSize: matchTabletMobile ? `${mobilefont}vh` : `1.3vw`,
               }}
             >
-              {interactContentAudiotype === 1 ? Audioname : 'Add Audio Sample'}
+              {interactContentAudiotype === 1 ? Audioname : 'Uploading Post'}
             </span>
 
 

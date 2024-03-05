@@ -161,24 +161,32 @@ function Tutorialx({ type, index, post }: any) {
   const [hide4, sethide4] = useState(false);
 
   useEffect(() => {
-
     if (idReducer === GuestReducer) {
       setTimeout(() => {
         sethide1(true)
-      }, 14000)
-
-      setTimeout(() => {
-        sethide2(true)
       }, 16000)
 
       setTimeout(() => {
-        sethide3(true)
+        sethide2(true)
       }, 18000)
 
       setTimeout(() => {
-        sethide4(true)
+        sethide3(true)
       }, 20000)
+
+      setTimeout(() => {
+        sethide4(true)
+      }, 22000)
+
+    } else {
+
+
     }
+    //////*****
+
+    /*  
+ */
+
   }, [post, idReducer, GuestReducer])
 
 
@@ -220,7 +228,7 @@ function Tutorialx({ type, index, post }: any) {
               position: 'absolute',
               cursor: 'pointer',
               borderRadius: '20px',
-            }}>Click On Image For Interactions
+            }}>Click On Post For Interactions
 
             <CancelIcon
               style={{

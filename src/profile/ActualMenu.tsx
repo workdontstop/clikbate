@@ -88,17 +88,25 @@ function ActualMenux({ showModalFormMenu, setshowModalFormMenu, postData, setsup
   const MemberProfileDataReducer = MemberProfileData;
 
 
+  ///
+  ///
+  ///
+  ///DARKMODE FROM REDUX
   interface RootStateGlobalReducer {
     GlobalReducer: {
       darkmode: boolean;
       MenuData: String;
-      Guest: number,
-
+      pagenum: number,
+      Guest: number
     };
   }
-  const { darkmode, MenuData, Guest } = useSelector((state: RootStateGlobalReducer) => ({
+  const { darkmode, MenuData, pagenum, Guest } = useSelector((state: RootStateGlobalReducer) => ({
     ...state.GlobalReducer,
   }));
+
+  const pagenumReducer = pagenum;
+
+
 
   const darkmodeReducer = darkmode;
 
@@ -141,35 +149,107 @@ function ActualMenux({ showModalFormMenu, setshowModalFormMenu, postData, setsup
   const Timer2 = useRef<ReturnType<typeof setTimeout> | null>(null);
   const Timervv = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  var menufont = matchMobile ? '3.5vh' : '1.35vw';
+  var menufont = matchMobile ? '4vh' : '1.35vw';
 
   var colr = darkmodeReducer ? "#ffffff" : '#111111';
 
   var pushh = '1vw';
 
+  var pixmyprofile = matchMobile ? '1.8px' : '3.8px';
 
 
 
-  const GoToMemberF = () => {
+
+  const GoToMemberF = useCallback(() => {
     dispatch(Updatepagenum(0));
     dispatch(UserInfoUpdateMEMBER(-1));
     dispatch(UserInfoUpdateMEMBER(0));
 
+    var tt = 20;
+
+    var n, d;
 
 
-  };
+
+    n = MemberProfileDataReducer.username;
+    d = {
+      type: 1,
+      id: memeberPageidReducer,
+      index: tt,
+      data: postData,
+      innerid: 0,
+      pagenumReducer: pagenumReducer,
+    };
 
 
-  const GoToMemberP = () => {
+    window.history.replaceState(d, "", `${n}`);
+
+    let modalName = `${usernameReducer}`;
+
+    var dd = {
+      type: 1,
+      id: idReducer,
+      innerid: 0,
+      pagenumReducer: pagenumReducer,
+    };
+
+
+
+
+
+    window.history.pushState(dd, "", modalName);
+
+    //
+
+
+  }, [pagenumReducer, memeberPageidReducer, idReducer, MemberProfileDataReducer, usernameReducer]);
+
+
+
+  const GoToMemberP = useCallback(() => {
     dispatch(Updatepagenum(0));
     dispatch(UserInfoUpdateMEMBER(-1));
 
     dispatch(UserInfoUpdateMEMBER(idReducer));
 
+    var tt = 20;
+
+    var n, d;
+
+
+
+    n = MemberProfileDataReducer.username;
+    d = {
+      type: 1,
+      id: memeberPageidReducer,
+      index: tt,
+      data: postData,
+      innerid: 0,
+      pagenumReducer: pagenumReducer,
+    };
+
+
+    window.history.replaceState(d, "", `${n}`);
+
+    let modalName = `${usernameReducer}`;
+
+    var dd = {
+      type: 1,
+      id: idReducer,
+      innerid: 0,
+      pagenumReducer: pagenumReducer,
+    };
+
+
+
+
+
+    window.history.pushState(dd, "", modalName);
+
     //
 
 
-  };
+  }, [pagenumReducer, memeberPageidReducer, idReducer, MemberProfileDataReducer, usernameReducer]);
 
 
   const GoToMemberLoaderUpP = () => {
@@ -453,7 +533,7 @@ function ActualMenux({ showModalFormMenu, setshowModalFormMenu, postData, setsup
               src={logoimage}
               alt="SuperstarZ logo"
               style={{
-                textAlign: "center", opacity: matchMobile ? darkmodeReducer ? 0.7 : 0.9 : darkmodeReducer ? 0.3 : 0.5,
+                textAlign: "center", opacity: darkmodeReducer ? 0.8 : 0.7,
                 width: '25%', height: '20%'
               }}
             />
@@ -472,7 +552,7 @@ function ActualMenux({ showModalFormMenu, setshowModalFormMenu, postData, setsup
               style={{
                 ...stylesxx,
                 position: 'fixed',
-                bottom: '22vh',
+                bottom: '14vh',
                 marginLeft: '42vw',
                 height: 'auto'
               }}
@@ -492,7 +572,7 @@ function ActualMenux({ showModalFormMenu, setshowModalFormMenu, postData, setsup
                 src={logoimage}
                 alt="SuperstarZ logo"
                 style={{
-                  textAlign: "center", opacity: matchMobile ? darkmodeReducer ? 0.4 : 0.7 : darkmodeReducer ? 0.3 : 0.5,
+                  textAlign: "center", opacity: matchMobile ? darkmodeReducer ? 0.65 : 0.7 : darkmodeReducer ? 0.3 : 0.5,
                   width: '30%', height: '20%'
                 }}
               />
@@ -514,7 +594,7 @@ function ActualMenux({ showModalFormMenu, setshowModalFormMenu, postData, setsup
             xs={12} style={{ position: 'fixed', top: matchMobile ? '17.5vh' : '39vh', zIndex: 20, right: '0px', width: '100%' }}>
 
             <Grid
-              xs={12} style={{ width: '100%', alignContent: 'center', display: 'grid', opacity: '0.59' }}>
+              xs={12} style={{ width: '100%', alignContent: 'center', display: 'grid', opacity: '0.59', }}>
 
 
               {
@@ -543,6 +623,9 @@ function ActualMenux({ showModalFormMenu, setshowModalFormMenu, postData, setsup
                   }} key={i}
                     className={i === 6 || i === 5 || i === 4 || i === 3 || i === 0 ? "dontallowhighlighting " : "click-effect dontallowhighlighting "}
                     style={{
+                      border: memeberPageidReducer === 0 && i === 2 ? darkmodeReducer ? `${pixmyprofile} solid #333333` : `${pixmyprofile} solid #aaaaaa` :
+                        memeberPageidReducer !== 0 && i === 1 ? darkmodeReducer ? `${pixmyprofile} solid #333333` : `${pixmyprofile} solid #aaaaaa` : '',
+                      borderRadius: '0%',
                       padding: '0.8vh',
                       cursor: i === 6 || i === 5 || i === 4 || i === 3 || i === 0 ? 'default' : 'pointer'
                     }}>
@@ -720,8 +803,7 @@ function ActualMenux({ showModalFormMenu, setshowModalFormMenu, postData, setsup
                     <span
                       style={{
                         color: colr,
-                        fontSize: matchMobile ? '2.42vh' : "1.2vw",
-
+                        fontSize: matchMobile ? '2.62vh' : "1.2vw",
                         marginLeft: matchMobile ? '13vw' : '5vw',
                         opacity: i === 1 || i === 2 || i === 7 ? '1' : '0.3'
                       }}>

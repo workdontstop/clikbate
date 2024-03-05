@@ -59,6 +59,9 @@ function MenuInnerx({
     ...state.GlobalReducer,
   }));
 
+
+
+
   const darkmodeReducer = darkmode;
 
   const MenuDataReducer = MenuData;
@@ -350,7 +353,7 @@ function MenuInnerx({
             style={{
               zIndex: 1,
               padding: "0px",
-              top: matchPc ? (typeTop ? "-2vh" : "0vh") : "0vh",
+              top: matchPc ? '-1.7vh' : "-2vh",
               position: "relative",
               margin: "0 auto",
               overflow: "hidden",
@@ -665,6 +668,7 @@ function MenuInnerx({
                               if (ActiveSlide === i) {
                                 //alert('kk');
                                 GoToMemberLoaderUp();
+
                               }
                             }}
                             style={{
@@ -745,6 +749,7 @@ function MenuInnerx({
                             ///alert('kk');
                             if (memeberPageidReducer === idReducer || memeberPageidReducer === 0) {
                               GoToMemberLoaderUp();
+
                             }
                           }
                         }}

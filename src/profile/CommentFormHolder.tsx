@@ -24,7 +24,9 @@ import ReplyAllIcon from "@mui/icons-material/ReplyAll";
 import QuickreplyIcon from "@mui/icons-material/Quickreply";
 import { ICommentTemplate, IGrid } from "../log/log-Interfaces";
 import CircleIcon from "@mui/icons-material/Circle";
-import CommentIcon from "@mui/icons-material/Comment";
+
+import ChatBubbleOutlineIcon from '@material-ui/icons/ChatBubbleOutline';
+
 import { IconButton, InputAdornment, TextField } from "@material-ui/core";
 import TextareaAutosize from "@mui/base/TextareaAutosize";
 import { DialogContent } from "@material-ui/core";
@@ -1000,12 +1002,13 @@ function CommentFormHolderx({
               {/*///////////////////////////////////////////////////////////////////////////VIEW COMMENTS*/}
             </>
           )}
-          <CommentIcon
+          <ChatBubbleOutlineIcon
             onClick={startAddComment}
             className={
               darkmodeReducer
-                ? "make-small-icons-clickable-darkab dontallowhighlighting zuperkingIcon "
-                : "make-small-icons-clickable-lightab  dontallowhighlighting   "
+                ?
+                "make-small-icons-clickable-lightab  dontallowhighlighting   " :
+                "make-small-icons-clickable-darkab dontallowhighlighting zuperkingIcon "
             }
             style={{
               display: reactionTemplateGo
@@ -1013,7 +1016,7 @@ function CommentFormHolderx({
                 : showComAddBack
                   ? "none"
                   : "block",
-              color: darkmodeReducer ? "#ffffff" : "#000000",
+              color: darkmodeReducer ? "#000000" : "#ffffff",
               fontSize: "2vw",
               opacity: 0.6,
               position: "fixed",
@@ -1322,12 +1325,12 @@ function CommentFormHolderx({
                         commentData3={commentData3}
                       />
                     )}
-                    <CommentIcon
+                    <ChatBubbleOutlineIcon
                       onClick={startAddComment}
                       className={
                         darkmodeReducer
-                          ? "make-small-icons-clickable-darkab dontallowhighlighting zuperkingIcon "
-                          : "make-small-icons-clickable-lightab  dontallowhighlighting   "
+                          ? "make-small-icons-clickable-lightab  dontallowhighlighting   " :
+                          "make-small-icons-clickable-darkab dontallowhighlighting zuperkingIcon "
                       }
                       style={{
                         display: reactionTemplateGo
@@ -1335,7 +1338,7 @@ function CommentFormHolderx({
                           : showComAddBack
                             ? "none"
                             : "block",
-                        color: darkmodeReducer ? "#ffffff" : "#000000",
+                        color: darkmodeReducer ? "#000000" : "#ffffff",
                         fontSize: "5vh",
                         opacity: matchMobile ? 0.8 : 0.6,
                         position: "fixed",

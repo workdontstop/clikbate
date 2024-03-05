@@ -406,8 +406,13 @@ function UploadProfilePicx({
     UserdataReducer: {
       id: number;
       username: string;
-      billboard1: string;
       billboardstate: number;
+      billboard1: string;
+      billboardthumb1: string;
+      billboard2: string;
+      billboardthumb2: string;
+      image: string;
+      imageThumb: string;
     };
   }
 
@@ -415,7 +420,7 @@ function UploadProfilePicx({
   ///
   ///
   /// GET SCREENHEIGHT FROM REDUX STORE
-  const { id, username, billboard1, billboardstate } = useSelector(
+  const { id, username, billboard1, billboardstate, billboardthumb1, billboard2, billboardthumb2, image, imageThumb } = useSelector(
     (state: RootUserdataReducer) => ({
       ...state.UserdataReducer,
     })
@@ -488,6 +493,8 @@ function UploadProfilePicx({
           console.log(response);
           if (response.status === 200) {
             setsuperLoadFadex(true);
+
+
             if (allow) {
               let imagelinkhh = urlx.split("?")[0];
               let imagelink = imagelinkhh.split("/").pop();
@@ -509,6 +516,10 @@ function UploadProfilePicx({
                 var zzaatak = {
                   imagedata: s3finaldatax[0],
                   imagedataThumb: imagelink,
+                  imagedataOld: billboard1,
+                  imagedataThumbOld: billboardthumb1,
+                  imagedataOld2: billboard2,
+                  imagedataThumbOld2: billboardthumb2,
                   id: idReducer,
                   type: bi,
                 };
@@ -518,6 +529,12 @@ function UploadProfilePicx({
                 var datak = {
                   imagedata: s3finaldatax[0],
                   imagedataThumb: imagelink,
+                  imagedataOld: billboard1,
+                  imagedataThumbOld: billboardthumb1,
+                  imagedataOld2: billboard2,
+                  imagedataThumbOld2: billboardthumb2,
+                  pic: image,
+                  picthumb: imageThumb,
                   id: idReducer,
                   color: color.darkVibrant,
                   color2: color.darkVibrant,
@@ -549,7 +566,7 @@ function UploadProfilePicx({
           alert("caption erroerrr");
         });
     },
-    [idReducer, s3finaldatax, billboard1Reducer, billboardstateReducer, sliderIndex]
+    [idReducer, s3finaldatax, billboard1Reducer, billboardstateReducer, sliderIndex, billboard1, billboard2, billboardthumb1, billboardthumb2]
   );
 
   const UpdateBillboardDatabaseStatus200 = (datak: any, b: any) => {
