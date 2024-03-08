@@ -80,7 +80,7 @@ function ServerErrorx({
     severerrorEmoji = "2.7vh";
     severerrorEmojiLeft = "4vw";
   } else {
-    severerrorData = "1.25vw";
+    severerrorData = "1.15vw";
     severerrorEmoji = "1.6vw";
     severerrorEmojiLeft = "";
   }
@@ -106,7 +106,7 @@ function ServerErrorx({
       if (AlertDataReducer) {
         dispatch(UpdateAlertReducer(null, 0));
       }
-    }, 5000);
+    }, 5500);
   }, [AlertDataReducer]);
 
   return (

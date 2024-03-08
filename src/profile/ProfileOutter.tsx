@@ -68,6 +68,58 @@ function ProfileOutter() {
 
 
 
+  const [deferredPrompt, setDeferredPrompt] = useState<Event | null>(null);
+  const [isPWAInstalled, setIsPWAInstalled] = useState<boolean>(false);
+
+
+  useEffect(() => {
+    const handleBeforeInstallPrompt = (event: Event) => {
+      // Check if the PWA is already installed
+      if ((navigator as any).standalone || window.matchMedia('(display-mode: standalone)').matches) {
+        setIsPWAInstalled(true);
+        return;
+      }
+
+      // Prevent the default browser prompt
+      event.preventDefault();
+      // Store the event object for later use
+      setDeferredPrompt(event);
+    };
+
+    // Add event listener for beforeinstallprompt
+    window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+
+    return () => {
+      // Cleanup by removing the event listener when the component unmounts
+      window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+    };
+  }, []);
+
+  const handleInstallClick = () => {
+    // Check if the deferredPrompt is available
+    if (deferredPrompt) {
+      // Show the installation prompt
+      (deferredPrompt as any).prompt();
+
+
+
+      // Wait for the user to respond to the prompt
+      (deferredPrompt as any).userChoice
+        .then((choiceResult: { outcome: string }) => {
+          if (choiceResult.outcome === 'accepted') {
+            console.log('User accepted the installation prompt');
+            // Set the flag indicating the PWA has been installed
+            setIsPWAInstalled(true);
+          } else {
+            console.log('User dismissed the installation prompt');
+          }
+          // Reset the deferredPrompt variable
+          setDeferredPrompt(null);
+        });
+    }
+  };
+
+
   useEffect(() => {
 
     if (matchMobile) {
@@ -2503,55 +2555,113 @@ function ProfileOutter() {
 
               {
                 matchMobile ?
+                  isPWAInstalled ?
+                    <Grid
+                      item
+                      style={{
+                        height: "35vh",
+                        width: '100%',
+                        marginLeft: '0px',
+                        zIndex: 5,
+                        position: 'fixed',
+                        transition: 'ease-in',
 
-                  <Grid
-                    item
-                    style={{
-                      height: "35vh",
-                      width: '100%',
-                      marginLeft: '0px',
-                      zIndex: 5,
-                      position: 'fixed',
-                      transition: 'ease-in',
+                        paddingTop: '4.5vh',
+                        bottom: '0vh',
+                        backgroundColor: darkmodeReducer
+                          ? "rgba(50,50,50,0.85)"
+                          : "rgba(200,200,200,0.75)",
 
-                      paddingTop: '4.5vh',
-                      bottom: '0vh',
-                      backgroundColor: darkmodeReducer
-                        ? "rgba(50,50,50,0.85)"
-                        : "rgba(200,200,200,0.75)",
+                        borderTopRightRadius: '5vh',
+                        borderTopLeftRadius: '5vh',
+                        display: idReducer === GuestReducer ? SignInReducer ? 'block' : 'none' : 'none',
 
-                      borderTopRightRadius: '5vh',
-                      borderTopLeftRadius: '5vh',
-                      display: idReducer === GuestReducer ? SignInReducer ? 'block' : 'none' : 'none',
+                      }}
+                    >
+                      <LoginButtons OpenModalForm={OpenModalForm} type={1} />
+                    </Grid> : <Grid
+                      item
+                      style={{
+                        height: "35vh",
+                        width: '100%',
+                        marginLeft: '0px',
+                        zIndex: 5,
+                        position: 'fixed',
+                        transition: 'ease-in',
 
-                    }}
-                  >
-                    <LoginButtons OpenModalForm={OpenModalForm} type={1} />
-                  </Grid>
+                        paddingTop: '4.5vh',
+                        bottom: '0vh',
+                        backgroundColor: darkmodeReducer
+                          ? "rgba(50,50,50,0.85)"
+                          : "rgba(200,200,200,0.75)",
+
+                        borderTopRightRadius: '5vh',
+                        borderTopLeftRadius: '5vh',
+                        display: idReducer === GuestReducer ? SignInReducer ? 'block' : 'none' : 'none',
+                        textAlign: 'center',
+
+
+                      }}
+                    >
+                      <button onClick={handleInstallClick} style={{
+                        borderRadius: '20px', padding: '5vh', cursor: 'pointer'
+                      }}>
+                        Install App
+                      </button>
+                    </Grid>
                   :
 
-                  <Grid
-                    item
-                    style={{
-                      height: "20vh",
-                      width: '50%',
-                      marginLeft: '25vw',
-                      zIndex: 5,
-                      position: 'fixed',
-                      bottom: '0vh',
-                      backgroundColor: darkmodeReducer
-                        ? "rgba(50,50,50,0.85)"
-                        : "rgba(220,220,220,0.75)",
+                  isPWAInstalled ?
+                    <Grid
+                      item
+                      style={{
+                        height: "20vh",
+                        width: '50%',
+                        marginLeft: '25vw',
+                        zIndex: 5,
+                        position: 'fixed',
+                        bottom: '0vh',
+                        backgroundColor: darkmodeReducer
+                          ? "rgba(50,50,50,0.85)"
+                          : "rgba(220,220,220,0.75)",
 
-                      borderTopRightRadius: '5vh',
-                      borderTopLeftRadius: '5vh',
-                      display: idReducer === GuestReducer ? SignInReducer ? 'block' : 'none' : 'none',
+                        borderTopRightRadius: '5vh',
+                        borderTopLeftRadius: '5vh',
+                        display: idReducer === GuestReducer ? SignInReducer ? 'block' : 'none' : 'none',
 
-                    }}
-                  >
+                      }}
+                    >
 
-                    <LoginButtons OpenModalForm={OpenModalForm} />
-                  </Grid>
+                      <LoginButtons OpenModalForm={OpenModalForm} />
+                    </Grid> : <Grid
+                      item
+                      style={{
+                        height: "20vh",
+                        width: '50%',
+                        marginLeft: '25vw',
+                        zIndex: 5,
+                        position: 'fixed',
+                        bottom: '0vh',
+                        backgroundColor: darkmodeReducer
+                          ? "rgba(50,50,50,0.85)"
+                          : "rgba(220,220,220,0.75)",
+
+                        borderTopRightRadius: '5vh',
+                        borderTopLeftRadius: '5vh',
+                        display: idReducer === GuestReducer ? SignInReducer ? 'block' : 'none' : 'none',
+                        textAlign: 'center',
+                        paddingTop: '2vh'
+
+                      }}
+                    >
+
+                      <button onClick={handleInstallClick} style={{
+                        borderRadius: '20px', padding: '5vh', cursor: 'pointer'
+                      }}>
+                        Install App
+                      </button>
+
+                    </Grid>
               }
 
 

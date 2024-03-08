@@ -325,6 +325,41 @@ function Home(): JSX.Element {
 
   const updateColor = () => { };
   const profilex = () => { };
+
+
+  const handleDownload = () => {
+    // Check if service worker is registered
+
+
+    if ("serviceWorker" in navigator) {
+
+
+      // Get the service worker registration
+      navigator.serviceWorker.ready
+        .then(registration => {
+          ///alert('knbvk');
+          // Trigger the update check
+          registration.update();
+        })
+        .catch(error => {
+          console.error('Service worker registration failed:', error);
+        });
+
+
+
+    } else {
+      alert("j");
+    }
+
+
+
+
+  };
+
+
+
+
+
   return (
     <MuiThemeProvider theme={themeGeneralSettings}>
       <Paper
@@ -401,6 +436,8 @@ function Home(): JSX.Element {
             </Grid>
 
             <Grid item xs={3} sm={3} md={4}></Grid>
+
+
 
             <LoginButtons OpenModalForm={OpenModalForm} type={0} />
 
