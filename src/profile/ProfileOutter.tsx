@@ -76,45 +76,58 @@ function ProfileOutter() {
 
 
 
-  useEffect(() => {
+  const dd = () => {
 
     if ((navigator as any).standalone || window.matchMedia('(display-mode: standalone)').matches) {
       setIsPWAInstalled(true);
       setPWAInstall(false); // Hide download button if PWA is already installed
 
-    } else {
 
+    } else {
+      setIsPWAInstalled(false);
+      setPWAInstall(true); // H
     }
 
+  }
 
-  }, [postData])
+
+  const media = window.matchMedia('(display-mode: standalone)').matches;
+  const navigatorx = (navigator as any).standalone;
+  const andref = document.referrer.includes('android-app://');
 
   useEffect(() => {
 
+    dd();
+
+  }, [postData, media, navigatorx, andref])
+
+
+
+
+  useEffect(() => {
     const handleBeforeInstallPrompt = (event: Event) => {
-      // Check if the PWA is already installed
 
       // Prevent the default browser prompt
       event.preventDefault();
       // Store the event object for later use
       setDeferredPrompt(event);
+
+      setIsPWAInstalled(true);
+      setPWAInstall(false); // 
     };
+
+
 
     // Add event listener for beforeinstallprompt
     window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
 
-    // Check if PWA is installed when component mounts
-    const isInstalled = localStorage.getItem('isPWAInstalled');
-    if (isInstalled === 'true') {
-      ////setIsPWAInstalled(true);
-      ////setPWAInstall(false); // Hide download button if PWA is already installed
-    } else {
-      /// setPWAInstall(true);
-    }
+
 
     return () => {
-      // Cleanup by removing the event listener when the component unmounts
+      // Cleanup by removing the event listeners when the component unmounts
       window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+
+
     };
   }, []);
 
@@ -130,10 +143,8 @@ function ProfileOutter() {
         .then((choiceResult: { outcome: string }) => {
           if (choiceResult.outcome === 'accepted') {
             console.log('User accepted the installation prompt');
-            // Set the flag indicating the PWA has been installed
             setIsPWAInstalled(true);
-            ///setPWAInstall(false); // Hide download button after successful installation
-            localStorage.setItem('isPWAInstalled', 'true'); // Persist installation status
+            setPWAInstall(false);
           } else {
             console.log('User dismissed the installation prompt');
           }
@@ -142,6 +153,7 @@ function ProfileOutter() {
         });
     }
   };
+
 
 
 
