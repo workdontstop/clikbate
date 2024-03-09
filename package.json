@@ -35,6 +35,7 @@
     "env-cmd": "^10.1.0",
     "ffmpeg": "^0.0.4",
     "jquery": "^3.6.4",
+    "mkcert": "^3.2.0",
     "react": "^18.0.0",
     "react-colorful": "^5.5.1",
     "react-custom-scrollbars-2": "^4.4.0",

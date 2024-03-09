@@ -67,6 +67,7 @@ function ProfileOutter() {
   const dispatch = useDispatch();
 
 
+  const [postData, setPostData] = useState<Array<any>>([]);
 
   const [deferredPrompt, setDeferredPrompt] = useState<Event | null>(null);
   const [isPWAInstalled, setIsPWAInstalled] = useState<boolean>(false);
@@ -75,15 +76,23 @@ function ProfileOutter() {
 
 
 
+  useEffect(() => {
+
+    if ((navigator as any).standalone || window.matchMedia('(display-mode: standalone)').matches) {
+      setIsPWAInstalled(true);
+      setPWAInstall(false); // Hide download button if PWA is already installed
+
+    } else {
+
+    }
+
+
+  }, [postData])
 
   useEffect(() => {
+
     const handleBeforeInstallPrompt = (event: Event) => {
       // Check if the PWA is already installed
-      if ((navigator as any).fullscreen || window.matchMedia('(display-mode: fullscreen)').matches) {
-        setIsPWAInstalled(true);
-        setPWAInstall(false); // Hide download button if PWA is already installed
-        return;
-      }
 
       // Prevent the default browser prompt
       event.preventDefault();
@@ -204,7 +213,7 @@ function ProfileOutter() {
   const [ShowBigPlay, setShowBigPlay] = useState(false);
 
 
-  const [postData, setPostData] = useState<Array<any>>([]);
+
 
   const [keypost, setkeypost] = useState(0);
 
