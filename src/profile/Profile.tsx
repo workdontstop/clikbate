@@ -79,7 +79,8 @@ function Profilex({
   callhistoryModal,
   openmodalhistory,
   historyScrollonload,
-  setkeypost
+  setkeypost,
+  PWAInstall
 }: any) {
   const [countAutoplay, setcountAutoplay] = useState<number>(0);
 
@@ -1246,6 +1247,7 @@ function Profilex({
 
                   <div key={i} style={{ display: miniProfile ? "none" : "block", }}>
                     <Post
+                      PWAInstall={PWAInstall}
                       setkeypost={setkeypost}
                       currentClicked={currentClicked}
                       InitializingInteraction={InitializingInteraction}

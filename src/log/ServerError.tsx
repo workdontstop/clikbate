@@ -76,7 +76,7 @@ function ServerErrorx({
 
 
   if (matchMobile) {
-    severerrorData = "2.44vh";
+    severerrorData = "2.22vh";
     severerrorEmoji = "2.7vh";
     severerrorEmojiLeft = "4vw";
   } else {
@@ -106,7 +106,7 @@ function ServerErrorx({
       if (AlertDataReducer) {
         dispatch(UpdateAlertReducer(null, 0));
       }
-    }, 5500);
+    }, 6500);
   }, [AlertDataReducer]);
 
   return (

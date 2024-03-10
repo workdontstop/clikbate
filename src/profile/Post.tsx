@@ -24,6 +24,12 @@ import { matchMobile, matchPc, matchTablet } from "../DetectDevice";
 import { Slider } from "./Slider";
 import { Connect } from "./Connect";
 
+import laughim from "../images/emotions/laugh.png";
+import ooim from "../images/emotions/oo.png";
+
+
+
+
 import ZoomOutIcon from "@mui/icons-material/ZoomOut";
 import AddIcon from "@mui/icons-material/Add";
 import PanoramaFishEyeIcon from "@mui/icons-material/PanoramaFishEye";
@@ -111,7 +117,8 @@ function Postx({
   setActiveAutoPost,
   InitializingInteraction,
   currentClicked,
-  setkeypost
+  setkeypost,
+  PWAInstall
 }: any) {
   const { REACT_APP_SUPERSTARZ_URL, REACT_APP_APPX_STATE } = process.env;
 
@@ -140,6 +147,18 @@ function Postx({
   const Emofontcom = post.commentCount > 9 ? "0.7vw" : "0.75vw";
 
   const [Ein, setEin] = useState(0);
+
+
+
+  const [dateint, setdateint] = useState<any>(null);
+
+
+  useEffect(() => {
+    if (post) {
+      setdateint(new Date().getTime());
+    }
+
+  }, [post]);
 
 
   const profileImageref = useRef<any>();
@@ -1136,6 +1155,7 @@ function Postx({
             {/*///////////////////////////////////////////////////////////////////////////POST DATA*/}
 
             <Slider
+              dateint={dateint}
               setinteractContent={setinteractContentx}
               interactContent={interactContentx}
               setmuteaudioState={setmuteaudioState}
@@ -1591,7 +1611,7 @@ function Postx({
                     >
                       <img
                         className={emotionClass}
-                        src={`./images/emotions/oo.png`}
+                        src={ooim}
                         alt="a superstarz post "
                         style={{
                           cursor: "pointer",
@@ -1660,7 +1680,7 @@ function Postx({
                     >
                       <img
                         className={emotionClass}
-                        src={`./images/emotions/laugh.png`}
+                        src={laughim}
                         alt="a superstarz post "
                         style={{
                           cursor: "pointer",
@@ -1995,7 +2015,7 @@ function Postx({
                     profileImageref={profileImageref}
                     calculateconnectPosition={calculateconnectPosition}
                     profilewidth={profilewidth}
-                    postprofiletop={isSafari ? '-7.7vh' : postprofiletop}
+                    postprofiletop={isSafari ? '-7.7vh' : PWAInstall ? postprofiletop : '-7.7vh'}
                     optionsClass={optionsClass}
                     post={post}
                     profileImagethumbLeft={profileImagethumbLeft}
@@ -2013,7 +2033,7 @@ function Postx({
                     style={{
                       width: "79%",
                       visibility: miniLayoutPost ? "hidden" : "visible",
-                      top: isSafari ? '-11vh' : postusernametop2,
+                      top: isSafari ? '-11vh' : PWAInstall ? postusernametop2 : '-11vh',
                       position: "relative",
                       display: "flex", //flex
                       alignItems: "center",
@@ -2041,7 +2061,7 @@ function Postx({
 
                           style={{
                             fontWeight: "bold",
-                            fontSize: isSafari ? '1.8vh' : postusernamefont,
+                            fontSize: isSafari ? '1.8vh' : PWAInstall ? postusernamefont : '1.8vh',
                             cursor: 'pointer',
 
                           }}
@@ -2065,7 +2085,7 @@ function Postx({
                               marginLeft: matchMobile ? '5vw' : '1.2vw',
                               fontFamily: "Arial, Helvetica, sans-serif",
                               fontWeight: "bolder",
-                              opacity: 1,
+                              opacity: 0.5,
                               padding: "2px",
                             }}
                           /> : null}
@@ -2087,7 +2107,7 @@ function Postx({
                     style={{
                       width: "79%",
                       visibility: miniLayoutPost ? "hidden" : "visible",
-                      top: isSafari ? '-9vh' : postusernametop,
+                      top: isSafari ? '-9vh' : PWAInstall ? postusernametop : '-9vh',
                       position: "relative",
                       display: "flex", //flex
                       alignItems: "center",
@@ -2115,7 +2135,7 @@ function Postx({
 
                           style={{
                             fontWeight: "bold",
-                            fontSize: isSafari ? '1.8vh' : postusernamefont,
+                            fontSize: isSafari ? '1.8vh' : PWAInstall ? postusernamefont : '1.8vh',
                             cursor: 'pointer',
                             fontFamily: "Roboto Condensed",
 
@@ -2210,7 +2230,7 @@ function Postx({
                               style={{
                                 fontSize: postcirclefont,
                                 color: post.color1,
-                                transform: BigCircle ? "scale(5)" : "scale(2.2)", opacity: 0.6,
+                                transform: BigCircle ? "scale(4)" : "scale(1.5)", opacity: 0.6,
                                 transition: "transform 0.05s",
 
                               }}
@@ -2221,7 +2241,7 @@ function Postx({
                               style={{
                                 fontSize: postcirclefont,
                                 color: post.color1,
-                                transform: BigCircle ? "scale(5)" : "scale(2.2)", opacity: 0.6,
+                                transform: BigCircle ? "scale(4)" : "scale(1.5)", opacity: 0.6,
                                 transition: "transform 0.05s",
                               }}
                             />
@@ -2231,7 +2251,7 @@ function Postx({
                               style={{
                                 fontSize: postcirclefont,
                                 color: post.color1,
-                                transform: BigCircle ? "scale(5)" : "scale(2.2)", opacity: 0.6,
+                                transform: BigCircle ? "scale(4)" : "scale(1.5)", opacity: 0.6,
                                 transition: "transform 0.05s",
 
                               }}
@@ -2281,7 +2301,7 @@ function Postx({
 
                         <span
                           style={{
-                            fontSize: isSafari ? '1.6vh' : posttopicfont,
+                            fontSize: isSafari ? '1.6vh' : PWAInstall ? posttopicfont : '1.6vh',
                             fontFamily: "Arial, Helvetica, sans-seri",
                             fontWeight: "bold",
                             opacity: 0.9,
@@ -2368,7 +2388,7 @@ function Postx({
                         : "zuperxyinfoPostLight"
                     }
                     style={{
-                      top: isSafari ? '-6.3vh' : postoptionstop,
+                      top: isSafari ? '-6.3vh' : PWAInstall ? postoptionstop : '-6.3vh',
                       marginLeft: matchMobile ? '84vw' : '43vw',
                       position: "relative",
                       transition: "all 350ms ease",
@@ -2419,7 +2439,7 @@ function Postx({
                     {ZoomBigEmo3 ? (
                       <img
                         className={emotionClass}
-                        src={`./images/emotions/oo.png`}
+                        src={ooim}
                         alt="a superstarz post "
                         style={{
                           cursor: "pointer",
@@ -2459,7 +2479,7 @@ function Postx({
                         {" "}
                         <img
                           className={emotionClass}
-                          src={`./images/emotions/laugh.png`}
+                          src={laughim}
                           alt="a superstarz post "
                           style={{
                             cursor: "pointer",

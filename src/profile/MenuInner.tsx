@@ -842,7 +842,7 @@ function MenuInnerx({
 
                           marginBottom: "2.2px",
                         }}
-                        src={`./images/options/${im}`}
+                        src={im}
                       />
                   )}
 

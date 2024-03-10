@@ -32,6 +32,8 @@ import { UpdateInteract, UpdateAlertReducer } from ".././GlobalActions";
 import SlowMotionVideoIcon from '@material-ui/icons/SlowMotionVideo';
 import { UserdataReg } from "../log/actions/UserdataAction";
 import { UpdateTutorials } from "../GlobalActions";
+import SuperstarzIconLight from "../images/s.png";
+import SuperstarzIconDark from "../images/sd.png";
 
 import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
 
@@ -370,6 +372,17 @@ function ProfileOutter() {
 
   const [BlockonFirstLoad, setBlockonFirstLoad] = useState(true);
 
+
+
+  var logoimage;
+
+  if (darkmodeReducer) {
+
+    logoimage = SuperstarzIconDark;
+  } else {
+
+    logoimage = SuperstarzIconLight;
+  }
 
 
 
@@ -1772,7 +1785,7 @@ function ProfileOutter() {
                   : "postscroll-lightm"
             }
             style={{
-              scrollSnapType: snapStartReducer ? "y mandatory" : 'none',
+              scrollSnapType: 'none',
               backgroundImage: PaperStyleReducer,
               borderRadius: "0px",
               height: "100vh",
@@ -2122,6 +2135,7 @@ function ProfileOutter() {
                   position: "relative", zIndex: 1, padding: "0px"
                 }}>
                   <Profile
+                    PWAInstall={PWAInstall}
                     setkeypost={setkeypost}
                     historyScrollonload={historyScrollonload}
                     callhistoryModal={callhistoryModal}
@@ -2221,7 +2235,7 @@ function ProfileOutter() {
                         backgroundColor: darkmodeReducer
                           ? "rgba(50,50,50,0.85)"
                           : "rgba(210,210,210,0.86)",
-                        height: matchMobile ? "63%" : '64.5%',
+                        height: matchMobile ? "53%" : '64.5%',
                         marginTop: "0vh",
                         textAlign: "center",
                         justifyContent: "center",
@@ -2291,7 +2305,7 @@ function ProfileOutter() {
                         backgroundColor: darkmodeReducer
                           ? "rgba(50,50,50,0.85)"
                           : "rgba(210,210,210,0.86)",
-                        height: matchMobile ? "63%" : '64.5%',
+                        height: matchMobile ? "53%" : '64.5%',
                         marginTop: "0vh",
                         textAlign: "center",
                         justifyContent: "center",
@@ -2342,7 +2356,7 @@ function ProfileOutter() {
                         backgroundColor: darkmodeReducer
                           ? "rgba(50,50,50,0.85)"
                           : "rgba(210,210,210,0.86)",
-                        height: matchMobile ? "63%" : '64.5%',
+                        height: matchMobile ? "53%" : '64.5%',
                         marginTop: "0vh",
                         textAlign: "center",
                         justifyContent: "center",
@@ -2618,10 +2632,47 @@ function ProfileOutter() {
                       }}
                     >
                       <button onClick={handleInstallClick} style={{
-                        borderRadius: '20px', padding: '5vh', cursor: 'pointer'
+                        borderRadius: '20px', padding: '5vh', cursor: 'pointer', backgroundColor: darkmodeReducer ? '#333333' : '#0b1728',
+                        color: darkmodeReducer ? '#ffffff' : '#ffffff'
                       }}>
-                        Install App
+
+                        <img
+                          onClick={() => {
+
+
+                          }}
+
+                          src={logoimage}
+                          alt="SuperstarZ logo"
+                          style={{
+                            textAlign: "center", opacity: darkmodeReducer ? 0.8 : 0.7,
+                            width: '14%', height: 'auto', padding: '0px', position: 'absolute', left: '12vw', top: '5.5vh',
+
+                          }}
+                        />
+                        INSTALL WEB APP
                       </button>
+
+                      <span
+                        onClick={() => {
+                          alert('coming soon');
+                        }} style={{
+                          textAlign: "center", opacity: darkmodeReducer ? 0.5 : 0.5, left: '80vw',
+                          color: 'red',
+                          fontFamily: "Arial, Helvetica, sans-seri",
+                          fontWeight: 'bolder',
+                          fontSize: '1.6vh',
+                          padding: '0px', position: 'absolute', bottom: '28vh',
+                        }}>Install Help?</span>
+
+                      <span style={{
+                        textAlign: "center", opacity: darkmodeReducer ? 0.4 : 0.4, left: '37vw',
+                        color: darkmodeReducer ? '#ffffff' : '#000000',
+                        fontFamily: "Arial, Helvetica, sans-seri",
+                        fontWeight: 'bolder',
+                        padding: '0px', position: 'absolute', bottom: '1vh',
+                      }}>Better On App</span>
+
                     </Grid> : <Grid
                       item
                       style={{
@@ -2652,7 +2703,7 @@ function ProfileOutter() {
                     <Grid
                       item
                       style={{
-                        height: "20vh",
+                        height: "25vh",
                         width: '50%',
                         marginLeft: '25vw',
                         zIndex: 5,
@@ -2672,10 +2723,48 @@ function ProfileOutter() {
                     >
 
                       <button onClick={handleInstallClick} style={{
-                        borderRadius: '20px', padding: '5vh', cursor: 'pointer'
+                        borderRadius: '20px', padding: '5vh', cursor: 'pointer', backgroundColor: darkmodeReducer ? '#333333' : '#0b1728',
+                        color: darkmodeReducer ? '#ffffff' : '#ffffff'
                       }}>
-                        Install App
+
+                        <img
+                          onClick={() => {
+
+
+                          }}
+
+                          src={logoimage}
+                          alt="SuperstarZ logo"
+                          style={{
+                            textAlign: "center", opacity: darkmodeReducer ? 0.8 : 0.7,
+                            width: '10%', height: 'auto', padding: '0px', position: 'absolute', left: '12vw', top: '3vh',
+
+                          }}
+                        />
+                        INSTALL WEB APP
                       </button>
+
+                      <span
+
+                        onClick={() => {
+                          alert('coming soon');
+                        }}
+                        style={{
+                          textAlign: "center", opacity: darkmodeReducer ? 0.5 : 0.5, left: '40vw',
+                          color: 'red',
+                          fontFamily: "Arial, Helvetica, sans-seri",
+                          cursor: 'pointer',
+                          fontWeight: 'bolder',
+                          padding: '0px', position: 'absolute', bottom: '21vh',
+                        }}>Install Help?</span>
+
+                      <span style={{
+                        textAlign: "center", opacity: darkmodeReducer ? 0.4 : 0.4, left: '40vw',
+                        color: darkmodeReducer ? '#ffffff' : '#000000',
+                        fontFamily: "Arial, Helvetica, sans-seri",
+                        fontWeight: 'bolder',
+                        padding: '0px', position: 'absolute', bottom: '1vh',
+                      }}>Better On App</span>
 
                     </Grid> : <Grid
                       item

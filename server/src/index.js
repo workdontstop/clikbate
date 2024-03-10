@@ -47,7 +47,7 @@ const region = "us-east-1"; // Replace with your desired region
 ///
 if (process.env.APP_STATE === "dev") {
     var corsOptions = {
-        origin: "http://localhost:3000",
+        origin: "http://192.168.0.39:3000",
         credentials: true,
         optionsSuccessStatus: 200,
     };

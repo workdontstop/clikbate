@@ -73,7 +73,8 @@ function Sliderx({
   currentClicked,
   setmuteaudioState,
   setinteractContent,
-  interactContent
+  interactContent,
+  dateint
 
 
 }: any): JSX.Element {
@@ -442,7 +443,6 @@ function Sliderx({
 
 
 
-  const [dateint, setdateint] = useState<any>(null);
 
 
 
@@ -453,12 +453,6 @@ function Sliderx({
 
 
 
-  useEffect(() => {
-    if (post) {
-      setdateint(new Date().getTime());
-    }
-
-  }, [post]);
 
 
 
@@ -2005,6 +1999,35 @@ function Sliderx({
 
               />
 
+
+
+              {i === 0 && HasInteractivity && ActiveCanvas === pey ? (
+                <canvas
+                  onMouseUp={(e: any) => {
+                    handleTouchStartIn(e, 0);
+                  }}
+
+                  onTouchStart={(e: any) => {
+                    handleTouchStartIn(e, 1);
+                  }}
+                  ref={canvasRefIn}
+                  style={{
+                    cursor: "pointer",
+                    padding: "0px",
+                    position: "absolute",
+                    zIndex: 11,
+                    height: '0px',
+                    width: '0px',
+                    top: "0vh",
+                    margin: "auto",
+                    filter: interactContent && interact && HasInteractivity && ActiveCanvas === pey ? 'blur(11px)' : 'blur(0px)',
+                    backgroundColor: ''
+
+                  }}
+                />
+              ) : null}
+
+
               <img
                 ref={pic}
                 className={
@@ -2025,41 +2048,11 @@ function Sliderx({
                   height: '100%',
                   position: "absolute",
                   padding: "0px",
-
-                  top: '-200000vh',
-
                   zIndex: 0,
 
                 }}
                 crossOrigin="anonymous"
               /></> : null}
-
-
-            {i === 0 && HasInteractivity && ActiveCanvas === pey ? (
-              <canvas
-                onMouseUp={(e: any) => {
-                  handleTouchStartIn(e, 0);
-                }}
-
-                onTouchStart={(e: any) => {
-                  handleTouchStartIn(e, 1);
-                }}
-                ref={canvasRefIn}
-                style={{
-                  cursor: "pointer",
-                  padding: "0px",
-                  position: "absolute",
-                  zIndex: 11,
-                  height: '0px',
-                  width: '0px',
-                  top: "0vh",
-                  margin: "auto",
-                  filter: interactContent && interact && HasInteractivity && ActiveCanvas === pey ? 'blur(11px)' : 'blur(0px)',
-                  backgroundColor: ''
-
-                }}
-              />
-            ) : null}
 
 
 

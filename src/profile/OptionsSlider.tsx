@@ -11,7 +11,10 @@ import { MenuInner } from "./MenuInner";
 import { ImageFilterinner } from "./ImageFilterinner";
 import AddIcon from "@mui/icons-material/Add";
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
-
+import im1 from "../images/options/1.jpg";
+import im2 from "../images/options/2.jpg";
+import im3 from "../images/options/3.jpg";
+import im4 from "../images/options/4.jpg";
 
 function OptionsSliderx({
   getSliderWidth,
@@ -174,6 +177,8 @@ function OptionsSliderx({
   ///OPTIONS SLIDER VARIABLES DISCRIBING ITEMS
   const [CropSaved, setCropSaved] = useState(false);
 
+
+
   const optionsImages =
     typeUpload === 2
       ? ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13"]
@@ -181,8 +186,8 @@ function OptionsSliderx({
         ? ["1", "2", "3", "4"]
         : typeUpload === 0
           ? typeTop
-            ? ["5", "6", "1.jpg", "2.jpg", "3.jpg", "4.jpg"]
-            : ["1.jpg", "2.jpg", "3.jpg", "4.jpg", "5", "6"]
+            ? ["5", "6", im1, im2, im3, im4]
+            : [im1, im2, im3, im4, "5", "6"]
           : ["1"];
 
   ///
