@@ -163,20 +163,12 @@ function Tutorialx({ type, index, post }: any) {
   useEffect(() => {
     if (idReducer === GuestReducer) {
       setTimeout(() => {
-        sethide1(true)
-      }, 16000)
+        sethide1(true);
+        sethide2(true);
+        sethide3(true);
+        sethide4(true);
+      }, 100)
 
-      setTimeout(() => {
-        sethide2(true)
-      }, 18000)
-
-      setTimeout(() => {
-        sethide3(true)
-      }, 20000)
-
-      setTimeout(() => {
-        sethide4(true)
-      }, 22000)
 
     } else {
 

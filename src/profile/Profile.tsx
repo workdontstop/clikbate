@@ -602,7 +602,7 @@ function Profilex({
 
 
             if (idReducer === GuestReducer && memeberPageidReducer === 0) {
-              dispatch(UpdateAlertReducer('Create Interactive Content, Express Your Views And Show Your Creativity Here.', 3));
+              dispatch(UpdateAlertReducer('Imagine A Thumbnail With Multiple Videos, Express Yourself. Have Fun ', 3));
             }
 
 

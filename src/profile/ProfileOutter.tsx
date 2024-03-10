@@ -157,9 +157,16 @@ function ProfileOutter() {
   };
 
 
+  useEffect(() => {
+    const currentHost = window.location.hostname;
+    if (currentHost === 'clickbate.com') {
+      window.location.replace('https://www.clickbate.com');
+    }
+  }, [])
 
 
   useEffect(() => {
+    ////////////////////////////////////////////////LEAVE ALERT LEAVE ALERT ///////////////////////////////////////////
 
     if (matchMobile) {
       const handleBeforeUnload = (e: BeforeUnloadEvent) => {
@@ -169,14 +176,17 @@ function ProfileOutter() {
         e.returnValue = 'Are you sure you want to leave?';
       };
 
-      window.addEventListener('beforeunload', handleBeforeUnload);
+      //window.addEventListener('beforeunload', handleBeforeUnload);
 
       return () => {
         // Clean up the event listener when the component unmounts
-        window.removeEventListener('beforeunload', handleBeforeUnload);
+        /// window.removeEventListener('beforeunload', handleBeforeUnload);
       };
     }
+
   }, []);
+
+
 
   ///
   ///
@@ -319,6 +329,8 @@ function ProfileOutter() {
 
 
   const [clikplay, setclikplay] = useState(false);
+
+
 
 
 
@@ -2574,6 +2586,7 @@ function ProfileOutter() {
 
 
                 <Menu
+                  PWAInstall={PWAInstall}
                   showModalForm={showModalForm}
                   shownav={shownav}
                   setShownav={setShownav}
