@@ -763,21 +763,18 @@ function Postx({
 
   var emoNum4 = matchPc
     ? itemcroptype[pey] === 2
-      ? 3.5
-      : 6.4
+      ? 3.1
+      : 6.3
     : matchTablet
       ? 20
       : itemcroptype[pey] === 3
         ? 7
         : 6.7;
 
-
-  var emoNum3xx = -1.3;
-
   var emoNum3 = matchPc
     ? itemcroptype[pey] === 2
-      ? -7.5
-      : -4.6
+      ? -7.7
+      : -4.8
     : matchTablet
       ? 20
       : itemcroptype[pey] === 3
@@ -837,19 +834,19 @@ function Postx({
 
   var postusernametop = matchPc ? "5vh" : matchTablet ? "-11.9vh" : "-7.5vh";
 
-  var postusernametop2 = matchPc ? "3vh" : matchTablet ? "-11.9vh" : "-10.5vh";
+  var postusernametop2 = matchPc ? "2.5vh" : matchTablet ? "-11.9vh" : "-10.5vh";
 
   var postusernamefont = matchPc ? "1vw" : matchTablet ? "2.32vh" : "2vh";
 
   var postusernameleft = matchPc ? "11.1%" : matchTablet ? "15.5%" : "20%";
 
-  var postusernamefontx = matchPc ? "0.9vw" : matchTablet ? "2.02vh" : "1.8vh";
+  var postusernamefontx = matchPc ? "0.8vw" : matchTablet ? "0.9vh" : "1.5vh";
 
   var postcirclefont = matchPc ? "0.95vw" : matchTablet ? "1.2vw" : "2.1vh";
   var dotspace = matchPc ? "1.7vw" : matchTablet ? "1.9vh" : "1.9vh";
   var dotspace2 = matchPc ? "0.9vw" : matchTablet ? "1.9vh" : "1.9vh";
 
-  var posttopicfont = matchPc ? "1.2vw" : matchTablet ? "1.8vh" : "1.9vh";
+  var posttopicfont = matchPc ? "1.15vw" : matchTablet ? "1.8vh" : "1.9vh";
 
   var postcaptiontop = matchPc ? "-1.85vh" : matchTablet ? "-9.2vh" : "-9.6vh";
   var postcaptionfont = matchPc ? "1.2vw" : matchTablet ? "2.35vh" : "1.75vh";
@@ -1330,7 +1327,7 @@ function Postx({
 
               style={{
                 marginLeft: matchMobile ? '90vw' : "46vw",
-                top: matchMobile ? '3.7vh' : `5.2vh`,
+                top: PWAInstall ? matchMobile ? '3.5vh' : `5.2vh` : matchMobile ? '2.8vh' : `5.2vh`,
                 fontWeight: 'bold',
                 padding: "0px",
                 cursor: "pointer",
@@ -1431,8 +1428,8 @@ function Postx({
                 <div
                   className='post-background-dark'
                   style={{
-                    height: `${postbackheight / 1.03}px`,
-                    marginTop: `-${postbackheight / 1.03}px`,
+                    height: PWAInstall ? `${postbackheight / 1.03}px` : matchMobile ? `${postbackheight / 1.14}px` : `${postbackheight / 1.03}px`,
+                    marginTop: PWAInstall ? `-${postbackheight / 1.03}px` : matchMobile ? `-${postbackheight / 1.14}px` : `-${postbackheight / 1.03}px`,
                     position: "relative",
                     transition: "all 350ms ease",
                     zIndex: 12,
@@ -1584,8 +1581,7 @@ function Postx({
                     item
                     xs={12}
                     style={{
-
-                      top: PWAInstall ? `-${emo2}vh` : matchMobile ? `-12.5vh` : `-${emo2}vh`,
+                      top: `-${emo2}vh`,
                       width: matchPc ? "3vw" : matchTablet ? "5vw" : "15vw",
                       height: matchPc ? "5vh" : matchTablet ? "7vh" : "5.5vh",
                       position: "relative",
@@ -1654,7 +1650,7 @@ function Postx({
                     item
                     xs={12}
                     style={{
-                      top: PWAInstall ? `-${emo}vh` : matchMobile ? `-8vh` : `-${emo}vh`,
+                      top: `-${emo}vh`,
                       width: matchPc ? "3vw" : matchTablet ? "5vw" : "15vw",
                       height: matchPc ? "5vh" : matchTablet ? "7vh" : "5.5vh",
                       position: "relative",
@@ -1843,8 +1839,7 @@ function Postx({
                       transform: matchMobile ? Zoomx1 ? "scale(1.4)" : "scale(0.7)" : Zoomx1 ? "scale(2.7)" : "scale(1)",
                       transition: "transform 0.1s",
                       cursor: "pointer",
-
-                      top: PWAInstall ? `-${emoNum3}vh` : matchMobile ? `-${emoNum3xx}vh` : `-${emoNum3}vh`,
+                      top: `${emoNum3}vh`,
                       position: "absolute",
                       zIndex: 8,
                       fontFamily: "Arial, Helvetica, sans-seri",
@@ -1925,7 +1920,7 @@ function Postx({
                       transform: matchMobile ? Zoomx2 ? "scale(1.4)" : "scale(0.7)" : Zoomx2 ? "scale(2.7)" : "scale(1)",
                       transition: "transform 0.1s",
                       cursor: "pointer",
-                      top: PWAInstall ? `-${emoNum4}vh` : matchMobile ? `-9vh` : `-${emoNum4}vh`,
+                      top: `${emoNum4}vh`,
                       position: "absolute",
                       zIndex: 8,
                       fontFamily: "Arial, Helvetica, sans-seri",
@@ -2020,7 +2015,7 @@ function Postx({
                     profileImageref={profileImageref}
                     calculateconnectPosition={calculateconnectPosition}
                     profilewidth={profilewidth}
-                    postprofiletop={isSafari ? '-7.7vh' : PWAInstall ? postprofiletop : matchMobile ? '-5.7vh' : postprofiletop}
+                    postprofiletop={isSafari ? '-7.7vh' : postprofiletop}
                     optionsClass={optionsClass}
                     post={post}
                     profileImagethumbLeft={profileImagethumbLeft}
@@ -2038,7 +2033,7 @@ function Postx({
                     style={{
                       width: "79%",
                       visibility: miniLayoutPost ? "hidden" : "visible",
-                      top: isSafari ? '-11vh' : PWAInstall ? postusernametop2 : matchMobile ? '-9vh' : postusernametop2,
+                      top: isSafari ? '-12vh' : postusernametop2,
                       position: "relative",
                       display: "flex", //flex
                       alignItems: "center",
@@ -2066,7 +2061,7 @@ function Postx({
 
                           style={{
                             fontWeight: "bold",
-                            fontSize: isSafari ? '1.8vh' : PWAInstall ? postusernamefont : matchMobile ? '1.8vh' : postusernamefont,
+                            fontSize: isSafari ? '1.7vh' : postusernamefont,
                             cursor: 'pointer',
 
                           }}
@@ -2112,7 +2107,7 @@ function Postx({
                     style={{
                       width: "79%",
                       visibility: miniLayoutPost ? "hidden" : "visible",
-                      top: isSafari ? '-9vh' : PWAInstall ? postusernametop : matchMobile ? '-7vh' : postusernametop,
+                      top: isSafari ? '-9vh' : postusernametop,
                       position: "relative",
                       display: "flex", //flex
                       alignItems: "center",
@@ -2140,7 +2135,7 @@ function Postx({
 
                           style={{
                             fontWeight: "bold",
-                            fontSize: isSafari ? '1.8vh' : PWAInstall ? postusernamefont : matchMobile ? '1.8vh' : postusernamefont,
+                            fontSize: isSafari ? '1.8vh' : postusernamefont,
                             cursor: 'pointer',
                             fontFamily: "Roboto Condensed",
 
@@ -2306,7 +2301,7 @@ function Postx({
 
                         <span
                           style={{
-                            fontSize: isSafari ? '1.6vh' : PWAInstall ? posttopicfont : matchMobile ? '1.6vh' : posttopicfont,
+                            fontSize: isSafari ? '1.6vh' : posttopicfont,
                             fontFamily: "Arial, Helvetica, sans-seri",
                             fontWeight: "bold",
                             opacity: 0.9,
@@ -2393,7 +2388,7 @@ function Postx({
                         : "zuperxyinfoPostLight"
                     }
                     style={{
-                      top: isSafari ? '-6.3vh' : PWAInstall ? postoptionstop : matchMobile ? '-4.3vh' : postoptionstop,
+                      top: isSafari ? '-6.3vh' : postoptionstop,
                       marginLeft: matchMobile ? '84vw' : '43vw',
                       position: "relative",
                       transition: "all 350ms ease",

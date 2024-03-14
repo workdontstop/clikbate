@@ -17,6 +17,7 @@ const mysql = require("mysql");
 const fs = require("fs");
 const sharp = require("sharp");
 const unlinkFile = util.promisify(fs.unlink);
+const https = require("https");
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
 const cookieParser = require("cookie-parser");

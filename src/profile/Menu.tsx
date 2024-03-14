@@ -368,8 +368,12 @@ function Menux({
                     md={8}
                     style={{
                       height: "0px",
-                      marginTop: matchPc ? "-90vh" : isSafariaa ? '-78vh' : PWAInstall ? "-89vh" :
-                        matchMobile ? '-78vh' : "-89vh",
+
+                      marginTop: matchPc ? "-90vh" : PWAInstall ? isSafariaa ? '-78vh' : "-89vh" : "-89vh"
+
+
+
+
 
                     }}
                   >

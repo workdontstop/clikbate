@@ -2676,6 +2676,7 @@ function ProfileOutter() {
                           fontWeight: 'bolder',
                           fontSize: '1.6vh',
                           padding: '0px', position: 'absolute', bottom: '28vh',
+                          display: 'none'
                         }}>Install Help?</span>
 
                       <span style={{
@@ -2769,7 +2770,8 @@ function ProfileOutter() {
                           cursor: 'pointer',
                           fontWeight: 'bolder',
                           padding: '0px', position: 'absolute', bottom: '21vh',
-                        }}>Install Help?</span>
+                          display: 'none'
+                        }}>  </span>
 
                       <span style={{
                         textAlign: "center", opacity: darkmodeReducer ? 0.4 : 0.4, left: '40vw',
