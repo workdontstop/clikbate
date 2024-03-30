@@ -463,8 +463,8 @@ function Billboardx({
                       fontWeight: "bolder",
                       fontSize: fontConnectText,
                       backgroundColor: darkmodeReducer
-                        ? "rgba(005, 005, 005, 0.29)"
-                        : "rgba(255, 255, 255, 0.35)",
+                        ? "rgba(005, 005, 005, 0)"
+                        : "rgba(255, 255, 255, 0)",
                       padding: "1px  ",
                       opacity: darkmodeReducer
                         ? 0.7 : 0.73,
@@ -494,8 +494,8 @@ function Billboardx({
                       fontSize: fontConnectnum,
                       marginRight: matchPc ? "0.45vw" : "0.5vw",
                       backgroundColor: darkmodeReducer
-                        ? "rgba(005, 005, 005, 0.2)"
-                        : "rgba(255, 255, 255, 0.03)",
+                        ? "rgba(005, 005, 005, 0)"
+                        : "rgba(255, 255, 255, 0)",
                       display: hidefanReducer ? "none" : "inline",
                     }}
                     className={`fontfamilyArial zuperxyinfo ${fanclass}  `}
@@ -519,8 +519,8 @@ function Billboardx({
                       fontWeight: "bolder",
                       fontSize: fontConnectText,
                       backgroundColor: darkmodeReducer
-                        ? "rgba(005, 005, 005, 0.29)"
-                        : "rgba(255, 255, 255, 0.35)",
+                        ? "rgba(005, 005, 005, 0)"
+                        : "rgba(255, 255, 255, 0)",
 
                       padding: "1px  ",
                       opacity: darkmodeReducer
@@ -548,8 +548,8 @@ function Billboardx({
                     style={{
                       cursor: "pointer",
                       backgroundColor: darkmodeReducer
-                        ? "rgba(005, 005, 005, 0.2)"
-                        : "rgba(255, 255, 255, 0.03)",
+                        ? "rgba(005, 005, 005, 0)"
+                        : "rgba(255, 255, 255, 0)",
                       fontWeight: "bolder",
                       fontSize: fontConnectnum,
 

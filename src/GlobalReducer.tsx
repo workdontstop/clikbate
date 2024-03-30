@@ -31,7 +31,8 @@ import {
   interactHintState_LOADER,
   EditHintState_LOADER,
   interactionstartHintState_LOADER,
-  UPDATE_MuteAUDIO
+  UPDATE_MuteAUDIO,
+  UPDATE_AUDIOINDEX
 } from "./global_ActionTypes";
 
 ////////////OPTIONS TOP SHOW  DATA////////////////
@@ -316,6 +317,7 @@ const initialState = {
   interactContentAudiox: null,
   interactContentAudiotypex: 0,
   muteaudio: false,
+  ActiveAudioIndex: 1000,
 
   ////For example const initialState = { person: null as Person };
 };
@@ -402,6 +404,12 @@ export const GlobalReducer = (
       return {
         ...state,
         muteaudio: action.payload,
+      };
+
+    case UPDATE_AUDIOINDEX:
+      return {
+        ...state,
+        ActiveAudioIndex: action.payload,
       };
 
 

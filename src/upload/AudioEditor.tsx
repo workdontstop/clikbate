@@ -252,7 +252,7 @@ function AudioEditorx({
         audio.removeEventListener('seeked', handleSeek);
       };
     }
-  }, [audioStart, audioEnd, p, recordedAudioUrl]);
+  }, [audioStart, audioEnd, p, recordedAudioUrl, AudioUrl]);
 
   return (
     <>

@@ -312,7 +312,7 @@ function VideoEditorx({ VideoUrl, VideoUrl2, ShowVideo2, ShowVideo, setShowVideo
         video.removeEventListener('seeked', handleSeek);
       };
     }
-  }, [currentTimestamp, currentTimestamp2, EndTimestamp, ShowVideo2]);
+  }, [currentTimestamp, currentTimestamp2, EndTimestamp, ShowVideo2, Preview, rec, recordedVideoUrl]);
 
   ////**     < VideoFFmpeg VideoUrl={RecordedBlob} />*////
   return (

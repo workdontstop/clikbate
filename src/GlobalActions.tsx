@@ -31,7 +31,8 @@ import {
   interactHintState_LOADER,
   EditHintState_LOADER,
   interactionstartHintState_LOADER,
-  UPDATE_MuteAUDIO
+  UPDATE_MuteAUDIO,
+  UPDATE_AUDIOINDEX
 } from "./global_ActionTypes";
 
 export function DarkmodeAction(newDarkModeData: boolean) {
@@ -275,6 +276,15 @@ export function UpdateTutorials(typexx: number, state: boolean) {
 export function MuteAction(Payload: any) {
   return {
     type: UPDATE_MuteAUDIO,
+    payload: Payload,
+  };
+}
+
+
+
+export function MuteIndexAudio(Payload: any) {
+  return {
+    type: UPDATE_AUDIOINDEX,
     payload: Payload,
   };
 }

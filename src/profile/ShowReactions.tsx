@@ -367,6 +367,8 @@ function ShowReactionsx({
                 fontFamily: "Arial, Helvetica, sans-seri",
                 color: darkmodeReducer ? "#ffffff" : "#000000",
                 fontWeight: 'bold',
+                overflow: 'hidden',
+                width: '95%',
               }}
             >
               {post.username}

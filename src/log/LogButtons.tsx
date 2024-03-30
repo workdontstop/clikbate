@@ -114,7 +114,7 @@ function LoginButtonsx({ OpenModalForm, type }: any) {
         container
         className={matchPc ? "containerloginpc" : "containerloginmobile "}
         item
-        style={{ marginTop: matchMobile ? "-2.5vh" : "0px", padding: "0px" }}
+        style={{ marginTop: matchMobile ? "-2.5vh" : "1vh", padding: "0px" }}
 
       >
 
@@ -134,14 +134,14 @@ function LoginButtonsx({ OpenModalForm, type }: any) {
             position: 'absolute',
             right: '1vw',
             top: matchMobile ? '0vh' : '0px',
+            display: type === 20 ? 'none' : 'block'
           }}
         />
 
 
+        {matchMobile ? null : <Grid item xs={false} sm={1}></Grid>}
 
-        <Grid item xs={1} sm={3} md={2}></Grid>
-
-        <Grid item className="buttonpad buttonshake" xs={10} sm={6} md={3}>
+        <Grid item className="buttonpad buttonshake" xs={6} sm={4}>
           <Button
             onClick={() => {
 
@@ -176,12 +176,12 @@ function LoginButtonsx({ OpenModalForm, type }: any) {
           </Button>
         </Grid>
 
-        {matchMobile ? <Grid item xs={12} md={false}></Grid> : null}
+
+        {matchMobile ? null : <Grid item xs={false} sm={2}></Grid>}
 
 
-        <Grid item xs={1} sm={3} md={2}></Grid>
 
-        <Grid item className="buttonpad buttonshake" xs={10} sm={6} md={3}>
+        <Grid item className="buttonpad buttonshake" xs={6} sm={4}>
           <Button
             onClick={() => {
               if (type === 0) { OpenModalForm(0) } else {

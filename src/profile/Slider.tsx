@@ -14,7 +14,7 @@ import { RootStateOrAny, useSelector, useDispatch } from "react-redux";
 import { matchMobile, matchPc, matchTablet } from "../DetectDevice";
 import ZoomOutIcon from "@mui/icons-material/ZoomOut";
 
-import { UpdateInteract, MuteAction } from ".././GlobalActions";
+import { UpdateInteract, MuteAction, MuteIndexAudio } from ".././GlobalActions";
 import { Tutorial } from "../Tutorial";
 import VideocamOffIcon from '@material-ui/icons/VideocamOff';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
@@ -61,20 +61,23 @@ function Sliderx({
   checkifClicked,
   postDivRef,
   paperPostScrollRef,
-  setactiveAudio,
-  activeAudio,
   AllowAllHdImagesShow,
-  setitemCLICKED,
   audioPlayerRef,
   ActiveAutoPost,
   setActiveAutoPost,
-  InitializingInteraction,
+  InitializingAutoPlayIndex,
   setshowSliderLoaderxx,
   currentClicked,
   setmuteaudioState,
   setinteractContent,
   interactContent,
-  dateint
+  dateint,
+  setShowPad,
+  setStopShowPad,
+  setShowAudioIcon,
+  setShowEmoIcon,
+  setlatestInview,
+
 
 
 }: any): JSX.Element {
@@ -91,6 +94,34 @@ function Sliderx({
 
 
 
+
+  interface RootStateGlobalReducer {
+    GlobalReducer: {
+      snapStart: boolean;
+      darkmode: boolean;
+      screenHeight: number;
+      muteaudio: boolean,
+      ActiveAudioIndex: number
+    };
+  }
+
+
+
+  ///
+  ///
+  ///
+  /// GET SCREENHEIGHT FROM REDUX STORE
+  const { screenHeight, darkmode, snapStart, muteaudio, ActiveAudioIndex } =
+    useSelector((state: RootStateGlobalReducer) => ({
+      ...state.GlobalReducer,
+    }));
+  const screenHeightReducer = screenHeight;
+  const darkmodeReducer = darkmode;
+  const snapStartReducer = snapStart;
+
+  const muteaudioReducer = muteaudio;
+
+  const ActiveAudioIndexReducer = ActiveAudioIndex;
 
   const videoPlayerReff = useRef<HTMLVideoElementWithCapture>(null);
 
@@ -116,7 +147,7 @@ function Sliderx({
 
   const { ref, inView, entry } = useInView({
     /* Optional options */
-    threshold: 0.94,
+    threshold: 0.55,
 
 
   });
@@ -130,6 +161,7 @@ function Sliderx({
 
   const sTimercc = useRef<ReturnType<typeof setTimeout> | null>(null);
   const sTimerccxx = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const sTimerccxxhh = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const SlideimageRef = useRef<HTMLImageElement>(null);
 
@@ -178,18 +210,7 @@ function Sliderx({
 
 
   //////REDUCE AUDIO VOLUME
-  useEffect(() => {
-    if (post.audioData && itemCLICKED[pey] && activeAudio === pey) {
-
-      setTimeout(() => {
-        if (audioPlayerRef.current) {
-          // Set volume to desired level (between 0 and 1)
-          audioPlayerRef.current.volume = matchMobile ? 0.4 : 0.3; // Example: setting volume to 50%
-        }
-      }, 20)
-
-    }
-  }, [post, itemCLICKED[pey], activeAudio, matchMobile])
+  ///audioPlayerRef
 
 
   useEffect(() => {
@@ -216,6 +237,22 @@ function Sliderx({
 
     if (inView) {
 
+      setlatestInview(pey);
+
+      setShowPad(true);
+
+
+      setShowAudioIcon(true);
+      setShowEmoIcon(true);
+      if (sTimerccxxhh.current) {
+        clearTimeout(sTimerccxxhh.current);
+      }
+      sTimerccxxhh.current = setTimeout(() => {
+        setShowAudioIcon(false);
+        setShowEmoIcon(false);
+      }, 5000)
+
+
       if (interactContent && interact && ActiveCanvas === pey) {
 
       } else {
@@ -230,7 +267,7 @@ function Sliderx({
         }
         ///calls active post key without clicking on post
         setActiveCanvas(pey);
-        InitializingInteraction(pey);
+        InitializingAutoPlayIndex(pey);
         ///calls active post key without clicking on post
 
 
@@ -249,34 +286,16 @@ function Sliderx({
 
       sTimerccxx.current = setTimeout(() => {
 
-        if (itemCLICKED[pey] && matchPc) {
+        setShowAudioIcon(true);
+        setShowPad(false);
+
+        dispatch(MuteIndexAudio(1000));
+
+        setActiveCanvas(-1);
+        stopInteraction();
 
 
-          if (itemcroptype[pey] === 2) {
-
-            sTimercc.current = setTimeout(() => {
-              //alert('ll');
-              setActiveCanvas(-1);
-              stopInteraction();
-
-            }, 30000);
-
-
-
-          } else {
-
-            setActiveCanvas(-1);
-            stopInteraction();
-          }
-
-
-
-        } else {
-          setActiveCanvas(-1);
-          stopInteraction();
-        }
-
-      }, 4000)
+      }, 40)
 
 
 
@@ -306,7 +325,7 @@ function Sliderx({
 
       startinview();
 
-    }, 2000)
+    }, 1500)
   }, [inView]);
   /// const getWidth = () => window.innerWidth;
   ///var newGetWidth = getWidth() * slides.length;
@@ -370,30 +389,6 @@ function Sliderx({
 
 
 
-  interface RootStateGlobalReducer {
-    GlobalReducer: {
-      snapStart: boolean;
-      darkmode: boolean;
-      screenHeight: number;
-      muteaudio: boolean,
-    };
-  }
-
-
-
-  ///
-  ///
-  ///
-  /// GET SCREENHEIGHT FROM REDUX STORE
-  const { screenHeight, darkmode, snapStart, muteaudio } =
-    useSelector((state: RootStateGlobalReducer) => ({
-      ...state.GlobalReducer,
-    }));
-  const screenHeightReducer = screenHeight;
-  const darkmodeReducer = darkmode;
-  const snapStartReducer = snapStart;
-
-  const muteaudioReducer = muteaudio;
 
 
   ///
@@ -738,12 +733,14 @@ function Sliderx({
     setshowSpinx(false);
     setinteract(false);
     setinteractContent("");
+    setStopShowPad(false);
     setinteracttypeAll(0);
     setfadeout(false);
 
   }
 
   const startInteraction = useCallback(() => {
+
 
 
     if (sTimercc.current) {
@@ -785,6 +782,38 @@ function Sliderx({
   }, [itemCLICKED[pey], HasInteractivity, showIntImage, postDivRef, AllowAllHdImagesShow])
 
 
+  const ClickAudio = useCallback(() => {
+
+
+
+    dispatch(MuteIndexAudio(pey));
+
+
+
+
+    if (audioPlayerRef.current) {
+      if (audioPlayerRef.current.volume > 0 || audioPlayerRef.current.volume < 1) {
+        audioPlayerRef.current.volume = 1;
+      } else {
+        if (audioPlayerRef.current.volume === 0) {
+          audioPlayerRef.current.volume = 1;
+
+        } else {
+          audioPlayerRef.current.volume = 0;
+        }
+      }
+    }
+
+
+
+
+
+
+  }, [audioPlayerRef])
+
+
+
+
 
   useLayoutEffect(() => {
     if (sTimercc.current) {
@@ -793,7 +822,9 @@ function Sliderx({
 
     if (itemCLICKED[pey]) {
 
-      setactiveAudio(pey);
+
+
+
 
       startInteraction();
 
@@ -832,67 +863,6 @@ function Sliderx({
   const [bigPixel2, setbigPixel2] = useState(false);
 
 
-  useEffect(() => {
-    if (itemCLICKED[pey]) {
-
-
-
-      if (Interactionloaded || showSpin && sliderLoader) {
-
-
-      } else {
-        if (interacttimex.current) {
-          clearTimeout(interacttimex.current);
-        }
-
-        interacttimex.current = setTimeout(() => {
-          if (post.interact1a) {
-            stopInteraction();
-            setbigPixel1(true);
-
-            setTimeout(() => {
-              startInteraction();
-            }, 120);
-
-            setTimeout(() => {
-              stopInteraction();
-              setbigPixel1(false);
-              startInteraction();
-              ///
-              CallInteractStart1();
-            }, 1500);
-
-            ///CallInteractStart2
-          } else {
-            if (post.interact2a) {
-              stopInteraction();
-              setbigPixel2(true);
-
-              setTimeout(() => {
-                startInteraction();
-              }, 120);
-
-              setTimeout(() => {
-                stopInteraction();
-                setbigPixel2(false);
-                startInteraction();
-                ///
-                CallInteractStart2();
-              }, 1500);
-
-              ///CallInteractStart2
-            }
-          }
-        }, 3000)
-
-
-      }
-
-    } else {
-
-
-    }
-  }, [itemCLICKED[pey], Interactionloaded, showSpin, sliderLoader, matchMobile]);
 
 
 
@@ -1017,6 +987,7 @@ function Sliderx({
           }
           setinteract(false);
           setinteractContent("");
+          setStopShowPad(false);
           setinteracttypeAll(0);
           setfadeout(false);
 
@@ -1122,50 +1093,69 @@ function Sliderx({
   const [calledInteraction, setcalledInteraction] = useState(false);
 
 
+
+
+
+
   const CallInteractStart2 = useCallback(() => {
 
 
-    if (interacttimex.current) {
-      clearTimeout(interacttimex.current);
-    }
 
-    if (post.backgroudaudio === 1 && post.interacttype2 === 1) {
-      setHaltAudio(true);
-    } else {
+
+    if (itemCLICKED[pey]) {
+
+      dispatch(MuteIndexAudio(pey));
+      if (audioPlayerRef.current) { audioPlayerRef.current.volume = 1; }
+
+
+      if (interacttimex.current) {
+        clearTimeout(interacttimex.current);
+      }
+
+      if (post.backgroudaudio === 1 && post.interacttype2 === 1) {
+        setHaltAudio(true);
+      } else {
+
+        if (post.interacttype2 === 1 && isAppleDevice) {
+          setHaltAudio(true);
+          setTimeout(() => {
+            setHaltAudio(false);
+          }, 1800)
+        }
+      }
+
+
+
+      /// alert(`xx: ${xx}, xnew: ${xnew}`);
+
+      /// dispatch(UpdateInteract(post.interact1b, true));
+      ///stop interaction first 
+      setInteractedDark(false);
+      setinteract(false);
+      setinteractContent("");
+
+      setinteracttypeAll(0);
+      setfadeout(false);
+      ///stop interaction first 
+      spin(10000000000000);
+      setinteract(true);
 
       if (post.interacttype2 === 1 && isAppleDevice) {
-        setHaltAudio(true);
-        setTimeout(() => {
-          setHaltAudio(false);
-        }, 1000)
+
+        setinteractContent(post.interact1b);
+        setStopShowPad(true);
+      } else {
+        setinteractContent(post.interact1b);
+        setStopShowPad(true);
       }
+
+      setinteracttypeAll(post.interacttype2);
+
+
+
     }
+  }, [itemCLICKED[pey], post, isAppleDevice])
 
-
-
-    /// alert(`xx: ${xx}, xnew: ${xnew}`);
-
-    /// dispatch(UpdateInteract(post.interact1b, true));
-    ///stop interaction first 
-    setInteractedDark(false);
-    setinteract(false);
-    setinteractContent("");
-    setinteracttypeAll(0);
-    setfadeout(false);
-    ///stop interaction first 
-    spin(10000000000000);
-    setinteract(true);
-
-    if (post.interacttype2 === 1 && isAppleDevice) {
-
-      setinteractContent(post.interact1b);
-    } else {
-      setinteractContent(post.interact1b);
-    }
-
-    setinteracttypeAll(post.interacttype2);
-
-  }, [post, isAppleDevice])
 
 
 
@@ -1173,45 +1163,52 @@ function Sliderx({
 
 
 
-    if (interacttimex.current) {
-      clearTimeout(interacttimex.current);
-    }
+    if (itemCLICKED[pey]) {
 
-    if (post.backgroudaudio === 1 && post.interacttype1 === 1) {
-      setHaltAudio(true);
-    } else {
+      dispatch(MuteIndexAudio(pey));
+      if (audioPlayerRef.current) { audioPlayerRef.current.volume = 1; }
+      if (interacttimex.current) {
+        clearTimeout(interacttimex.current);
+      }
+
+      if (post.backgroudaudio === 1 && post.interacttype1 === 1) {
+        setHaltAudio(true);
+      } else {
+
+        if (post.interacttype1 === 1 && isAppleDevice) {
+          setHaltAudio(true);
+          setTimeout(() => {
+            setHaltAudio(false);
+          }, 1800)
+        }
+      }
+
+
+
+      /// alert(`xx: ${xx}, xnew: ${xnew}`);
+
+      ///stop interaction first 
+      setInteractedDark(false);
+      setinteract(false);
+      setinteractContent("");
+      setinteracttypeAll(0);
+      setfadeout(false);
+      ///stop interaction first 
+      spin(10000000000000);
+      setinteract(true);
 
       if (post.interacttype1 === 1 && isAppleDevice) {
-        setHaltAudio(true);
-        setTimeout(() => {
-          setHaltAudio(false);
-        }, 1000)
+
+        setinteractContent(post.interact1a);
+        setStopShowPad(true);
+      } else {
+        setinteractContent(post.interact1a);
+        setStopShowPad(true);
       }
+      setinteracttypeAll(post.interacttype1);
     }
 
-
-
-    /// alert(`xx: ${xx}, xnew: ${xnew}`);
-
-    ///stop interaction first 
-    setInteractedDark(false);
-    setinteract(false);
-    setinteractContent("");
-    setinteracttypeAll(0);
-    setfadeout(false);
-    ///stop interaction first 
-    spin(10000000000000);
-    setinteract(true);
-
-    if (post.interacttype1 === 1 && isAppleDevice) {
-
-      setinteractContent(post.interact1a);
-    } else {
-      setinteractContent(post.interact1a);
-    }
-    setinteracttypeAll(post.interacttype1);
-
-  }, [post, isAppleDevice])
+  }, [post, isAppleDevice, itemCLICKED[pey]])
 
 
   const drawInteraction = useCallback(
@@ -1334,10 +1331,10 @@ function Sliderx({
           if (post.interact1a || post.interact1b) {
             //alert('jj');
 
-            var scaleFactor1 = matchMobile ? bigPixel1 ? 1.1 : 1.019 : bigPixel1 ? 1.1 : 1.013; // You can adjust this value to control the zoom level
+            var scaleFactor1 = matchMobile ? bigPixel1 ? 1.1 : 1.023 : bigPixel1 ? 1.1 : 1.018; // You can adjust this value to control the zoom level
 
 
-            var scaleFactor2 = matchMobile ? bigPixel2 ? 1.1 : 1.019 : bigPixel2 ? 1.1 : 1.013; // You can adjust this value to control the zoom level
+            var scaleFactor2 = matchMobile ? bigPixel2 ? 1.1 : 1.023 : bigPixel2 ? 1.1 : 1.018; // You can adjust this value to control the zoom level
 
             if (post.interact1a) {
               if (typex === 0 || typex === 3) {
@@ -1563,16 +1560,25 @@ function Sliderx({
                   case 1:
                     setinteract(false);
                     setinteractContent("");
+                    setStopShowPad(false);
                     setinteracttypeAll(0);
                     setfadeout(false);
 
-                    context.clearRect(0, 0, canvasRefIn.current.width, canvasRefIn.current.width);
 
-                    if (tiim.current) {
-                      clearTimeout(tiim.current);
-                    }
+                    ClickAudio();
+
+
+
+                    ////THIS STOPS INTERACTION
+                    ///if (tiim.current) {
+                    //// clearTimeout(tiim.current);
+                    ////  } 
+                    /////THIS STOPS INTERACTION
+
+
+                    ///context.clearRect(0, 0, canvasRefIn.current.width, canvasRefIn.current.width);
                     ///setHasInteractivity(false);
-                    clickslider(event);
+                    ////clickslider(event);
                     break;
 
                 }
@@ -1749,16 +1755,9 @@ function Sliderx({
     }
   };
 
-  // Remember to clean up the event listener when the component unmounts or when the video source changes
-  useEffect(() => {
-    return () => {
-      if (videoPlayerReff.current) {
-        //////videoPlayerReff.current.removeEventListener('ended', handleVideoEnd);
-      }
-    };
-  }, [interactContent]);
 
 
+  ////setactiveAudio(pey);
 
 
 
@@ -1974,7 +1973,10 @@ function Sliderx({
             {AllowAllHdImagesShow ? <>
 
               <img
-                onMouseDown={clickslider}
+                onMouseDown={() => {
+
+                  ClickAudio();
+                }}
                 className={
                   darkmodeReducer ? "turlightpostdark" : "turlightpostlight"
                 }
@@ -2056,26 +2058,24 @@ function Sliderx({
 
 
 
-            {post.audioData && itemCLICKED[pey] && activeAudio === pey ?
-
-              muteaudioReducer ? null :
-                <audio
-                  ref={audioPlayerRef}
-                  src={`${REACT_APP_CLOUNDFRONT}audio/${post.audioData}`}
-                  autoPlay  // This attribute enables autoplay
-                  loop  // This attribute enables looping
-                  style={{
-                    cursor: "pointer",
-                    height: "10px",
-                    objectFit: "contain",
-                    zIndex: 0,
-                    position: "absolute",
-                    margin: "auto",
-                    textAlign: "center",
-                    top: "-200vh",
-                    width: "10px",
-                  }}
-                ></audio> : null}
+            {post.audioData && itemCLICKED[pey] && ActiveAudioIndexReducer === pey ?
+              <audio
+                ref={audioPlayerRef}
+                src={`${REACT_APP_CLOUNDFRONT}audio/${post.audioData}`}
+                autoPlay  // This attribute enables autoplay
+                loop  // This attribute enables looping
+                style={{
+                  cursor: "pointer",
+                  height: "10px",
+                  objectFit: "contain",
+                  zIndex: 0,
+                  position: "absolute",
+                  margin: "auto",
+                  textAlign: "center",
+                  top: "-200vh",
+                  width: "10px",
+                }}
+              ></audio> : null}
 
 
             {interact && HasInteractivity && ActiveCanvas === pey ? (
@@ -2101,6 +2101,7 @@ function Sliderx({
                         setInteractedDark(false);
                         setinteract(false);
                         setinteractContent("");
+                        setStopShowPad(false);
                         setinteracttypeAll(0);
                         setfadeout(false);
                         if (sc.current) {
@@ -2126,6 +2127,7 @@ function Sliderx({
                           setInteractedDark(false);
                           setinteract(false);
                           setinteractContent("");
+                          setStopShowPad(false);
                           setinteracttypeAll(0);
                           setfadeout(false);
                           if (sc.current) {
@@ -2173,6 +2175,7 @@ function Sliderx({
                         setInteractedDark(false);
                         setinteract(false);
                         setinteractContent("");
+                        setStopShowPad(false);
                         setinteracttypeAll(0);
                         setfadeout(false);
                         if (sc.current) {
@@ -2198,6 +2201,7 @@ function Sliderx({
                           setInteractedDark(false);
                           setinteract(false);
                           setinteractContent("");
+                          setStopShowPad(false);
                           setinteracttypeAll(0);
                           setfadeout(false);
                           if (sc.current) {
@@ -2247,6 +2251,7 @@ function Sliderx({
                       setInteractedDark(false);
                       setinteract(false);
                       setinteractContent("");
+                      setStopShowPad(false);
                       setinteracttypeAll(0);
                       setfadeout(false);
                       if (sc.current) {
@@ -2269,6 +2274,7 @@ function Sliderx({
                         setInteractedDark(false);
                         setinteract(false);
                         setinteractContent("");
+                        setStopShowPad(false);
                         setinteracttypeAll(0);
                         setfadeout(false);
                         if (sc.current) {

@@ -323,27 +323,7 @@ function CommentTemplatex({
     }
   };
 
-  ///
-  ///
-  ///
-  /// ESCAPE KEY CLOSE MODAL
-  const escapePress = useCallback(
-    (e) => {
-      if (e.key === "Escape" && showModalForm) {
-        if (aboutTemp) {
-          CloseModalForm(0, 2);
-          ////updateColor();
-        } else {
-          CloseModalForm(0, 2);
-        }
-      }
-    },
-    [showModalForm, CloseModalForm, updateColor]
-  );
-  useEffect(() => {
-    document.addEventListener("keydown", escapePress);
-    return () => document.removeEventListener("keydown", escapePress);
-  }, [escapePress]);
+
 
   ///
   ///

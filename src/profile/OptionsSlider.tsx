@@ -71,7 +71,8 @@ function OptionsSliderx({
   setselectedImage,
   setcropimage,
   postData,
-  AllowCaption
+  AllowCaption,
+  setUploadGPT
 
 }: any) {
   ///
@@ -224,25 +225,24 @@ function OptionsSliderx({
   const modalanimation = useSpring({
     config: {
       mass: 1,
-      tension: 1200,  // Doubled tension for quicker response
-      friction: 20,  // Reduced friction for faster slide
-    }
-
-    ,
+      tension: 400, // Increased tension for snappier animation
+      friction: 15, // Reduced friction for smoother yet snappy transition
+    },
     transform: `translateX(${ShowHideNegativeValue}${translate}px)`,
     height: "auto",
     display: "flex",
-    width: `auto`,
-    padding: "0px",
+    width: "auto",
+    padding: "0",
     margin: "auto",
     paddingLeft: typeTop
       ? matchPc
-        ? "0px"
+        ? "0"
         : matchTablet
           ? "22px"
           : "9px"
-      : "0px",
+      : "0",
   });
+
 
   ///
   ///
@@ -556,6 +556,7 @@ function OptionsSliderx({
         </>
       ) : typeUpload === 0 ? (
         <MenuInner
+          setUploadGPT={setUploadGPT}
           postData={postData}
           selectedImage={selectedImage}
           setselectedImage={setselectedImage}

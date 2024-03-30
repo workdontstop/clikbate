@@ -44,7 +44,7 @@ function Menux({
   shownav,
   setShownav,
   showModalForm,
-  PWAInstall
+  WebsiteMode
 
 }: any) {
   ///
@@ -179,6 +179,11 @@ function Menux({
 
   const jayme = useCallback((e: any) => {
 
+    if (shownav) {
+      setShownav(false);
+    }
+
+
     if (menuTimer5.current) {
       clearTimeout(menuTimer5.current);
     }
@@ -208,7 +213,7 @@ function Menux({
 
 
 
-  }, [ShowBigPlay]);
+  }, [ShowBigPlay, shownav]);
 
 
 
@@ -369,7 +374,7 @@ function Menux({
                     style={{
                       height: "0px",
 
-                      marginTop: matchPc ? "-90vh" : PWAInstall ? isSafariaa ? '-78vh' : "-89vh" : "-89vh"
+                      marginTop: matchPc ? "-90vh" : WebsiteMode ? isSafariaa ? '-78vh' : "-89vh" : "-89vh"
 
 
 

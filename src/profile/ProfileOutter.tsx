@@ -6,9 +6,12 @@ import { Billboard } from "./Billboard";
 import "./profile.css";
 import { Connect } from "./Connect";
 import { Profile } from "./Profile";
+import { GenerateAndUpload } from "./GenerateAndUpload";
 
+import CancelIcon from '@material-ui/icons/Cancel';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import Axios from "axios";
 import { CommentTemplate } from "../CommentTemplate";
 import { Upload } from "../upload/Upload";
@@ -35,10 +38,6 @@ import { UpdateTutorials } from "../GlobalActions";
 import SuperstarzIconLight from "../images/s.png";
 import SuperstarzIconDark from "../images/sd.png";
 
-import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
-
-
-
 import { LoginButtons } from "../log/LogButtons";
 
 
@@ -54,6 +53,8 @@ import {
 
 function ProfileOutter() {
   const { REACT_APP_SUPERSTARZ_URL, REACT_APP_CLOUNDFRONT, REACT_APP_APPX_STATE } = process.env;
+
+  const isAppleDevice = /Mac|iPhone|iPad|iPod/.test(navigator.userAgent);
 
   var billdefaultbill =
     "https://superstarz-data-tank.s3.eu-west-2.amazonaws.com/fc284f4924c7405bb44ab8e2c3f05891";///not used
@@ -73,21 +74,24 @@ function ProfileOutter() {
 
   const [deferredPrompt, setDeferredPrompt] = useState<Event | null>(null);
   const [isPWAInstalled, setIsPWAInstalled] = useState<boolean>(false);
-  const [PWAInstall, setPWAInstall] = useState<boolean>(true);
+  const [WebsiteMode, setWebsiteMode] = useState<boolean>(true);
+
+  const [UploadGPT, setUploadGPT] = useState(false);
 
 
+  const [ShowInstallHelp, setShowInstallHelp] = useState(false);
 
 
   const dd = () => {
 
     if ((navigator as any).standalone || window.matchMedia('(display-mode: standalone)').matches) {
       setIsPWAInstalled(true);
-      setPWAInstall(false); // Hide download button if PWA is already installed
+      setWebsiteMode(false); // Hide download button if PWA is already installed
 
 
     } else {
       setIsPWAInstalled(false);
-      setPWAInstall(true); // H
+      setWebsiteMode(true); // H
     }
 
   }
@@ -115,7 +119,7 @@ function ProfileOutter() {
       setDeferredPrompt(event);
 
       setIsPWAInstalled(true);
-      setPWAInstall(false); // 
+      setWebsiteMode(false); // 
     };
 
 
@@ -135,6 +139,9 @@ function ProfileOutter() {
 
 
   const handleInstallClick = () => {
+
+    setShowInstallHelp(true);
+    //alert('kk');
     // Check if the deferredPrompt is available
     if (deferredPrompt) {
       // Show the installation prompt
@@ -146,7 +153,7 @@ function ProfileOutter() {
           if (choiceResult.outcome === 'accepted') {
             console.log('User accepted the installation prompt');
             setIsPWAInstalled(true);
-            setPWAInstall(false);
+            setWebsiteMode(false);
           } else {
             console.log('User dismissed the installation prompt');
           }
@@ -331,6 +338,7 @@ function ProfileOutter() {
   const [clikplay, setclikplay] = useState(false);
 
 
+  const [Loaderx, setLoaderx] = useState(false);
 
 
 
@@ -458,6 +466,29 @@ function ProfileOutter() {
   const usernameReducer = username;
   const MemberProfileDataReducer = MemberProfileData;
 
+
+  ///show
+  ////Allow 
+  ///lockVisibility
+
+  const [showESC, setshowESC] = useState(false);
+  const [showESCLock, setshowESCLock] = useState(false);
+
+  useEffect(() => {
+    if (showESCLock) { } else {
+      setTimeout(() => {
+        setshowESC(true);
+        setTimeout(() => {
+          setshowESC(false);
+          setshowESCLock(true);
+
+        }, 10000)
+      }, 12000)
+    }
+  }, [postData, showESCLock]);
+
+
+
   useEffect(() => {
     setminiProfile(false);
 
@@ -482,17 +513,6 @@ function ProfileOutter() {
       }
 
 
-
-
-
-
-
-
-
-
-
-
-
       Axios.post(`${REACT_APP_SUPERSTARZ_URL}/checkIsLoggedxx`, {
         values: valax,
       }, {
@@ -508,10 +528,12 @@ function ProfileOutter() {
             ////  alert('kk');
             if (memeberPageidReducer === 0) {
               callfeeds(0, pagenumReducer);
-            } else { callfeeds(response.data.payload.id, pagenumReducer); }
+            } else {
+              callfeeds(response.data.payload.id, pagenumReducer);
+            }
 
           } else if (response.data.message === "logged out") {
-            alert("Ongoing Security Updates, Pls Try Again Later");
+            alert("Ongoing Security Updates Or You Are Logged Out, Pls Try Again Later");
           }
         })
         .catch(function (error) {
@@ -584,6 +606,8 @@ function ProfileOutter() {
   ///CLOSE LOG MODAL
   const [OpenModalFormOnce, setOpenModalFormOnce] = useState<boolean>(false);
 
+
+
   const CloseModalForm = useCallback(
     (DeviceBackButtonClicked: number, type: any) => {
       if (type === 1) {
@@ -613,6 +637,26 @@ function ProfileOutter() {
   );
 
 
+  ///
+  ///
+  ///
+  /// ESCAPE KEY CLOSE MODAL
+  const escapePress = useCallback(
+    (e) => {
+      if (e.key === "Escape") {
+        window.history.back();
+      }
+    },
+    [showModalForm, CloseModalForm, updateColor]
+
+
+  );
+  useEffect(() => {
+    document.addEventListener("keydown", escapePress);
+    return () => document.removeEventListener("keydown", escapePress);
+  }, [escapePress]);
+
+
   const [formtype, setFormtype] = useState<number>(1);
 
 
@@ -620,7 +664,7 @@ function ProfileOutter() {
 
   const OpenModalForm = useCallback(
     (type: any) => {
-      var dd = { type: 0, id: 0, innerid: 0, pagenumReducer: pagenumReducer };
+      var dd = { type: 0, id: 0, index: 200, innerid: 0, pagenumReducer: pagenumReducer };
       if (type === 1) {
         let modalName = "Biography";
         setaboutTemplateGo(true);
@@ -812,13 +856,15 @@ function ProfileOutter() {
   }
 
 
+  const [latestInview, setlatestInview] = useState(0);
 
+  const postDivRefx = useRef<any[]>([]);
   ///
   ///
   ///
   window.onpopstate = (e: any) => {
 
-    setStopMini(true);
+
 
     var historyDataType = JSON.stringify(window.history.state.type);
     let historyDataTypeInt = parseInt(historyDataType);
@@ -832,179 +878,198 @@ function ProfileOutter() {
     ///alert(parseInt(historyIndex));
     setScrollTo(historyIndexInt);
 
-    if (historyIndexInt === 0) {
 
-      sethistoryScrollonload(0);
+    if (historyIndexInt === 400) {
 
-    } else {
 
-      sethistoryScrollonload(historyIndexInt);
+      setminiProfile(true);
+
+      setTimeout(() => {
+        postDivRefx.current[latestInview].scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
+      }, 500)
 
     }
+    else {
 
-    var historyData = window.history.state.data;
+      setStopMini(true);
 
+      if (historyIndexInt === 0) {
 
+        sethistoryScrollonload(0);
 
+      } else {
 
-    var historyDataAll = window.history.state.AllMemberData;
+        sethistoryScrollonload(historyIndexInt);
 
-    var historycomOriginalData = window.history.state.comOriginalData;
+      }
 
-    var comScroll = JSON.stringify(window.history.state.comScroll);
-    let historycomScroll = parseInt(comScroll);
-
-
-    var limValuexx = JSON.stringify(window.history.state.pagenumReducer);
-    let limValue = 0;
-    if (parseInt(limValuexx)) limValue = parseInt(limValuexx);
+      var historyData = window.history.state.data;
 
 
 
-    ///var limValue = 0;
-    //// alert(limValue)
-    ////////
 
-    var comidhistoryData = window.history.state.comid;
-    var DiscussionImagehistoryData = window.history.state.DiscussionImage;
+      var historyDataAll = window.history.state.AllMemberData;
 
-    var reactTypeHis = JSON.stringify(window.history.state.reactType);
-    let historyreactTypeHis = parseInt(reactTypeHis);
+      var historycomOriginalData = window.history.state.comOriginalData;
 
-    dispatch(Updatepagenum(limValue));
+      var comScroll = JSON.stringify(window.history.state.comScroll);
+      let historycomScroll = parseInt(comScroll);
 
 
-
-    if (historyDataTypeInt === 0 || historyDataTypeInt === 1) {
-
-
-    } else {
-
-      setshowThisComponenet(true);
-    }
+      var limValuexx = JSON.stringify(window.history.state.pagenumReducer);
+      let limValue = 0;
+      if (parseInt(limValuexx)) limValue = parseInt(limValuexx);
 
 
-    ///alert(historyDataTypeInt);
 
-    if (
-      historyDataTypeInt === 0 ||
-      historyDataTypeInt === 5 ||
-      historyDataTypeInt === 7 ||
-      historyDataTypeInt === 9
-    ) {
+      ///var limValue = 0;
+      //// alert(limValue)
+      ////////
+
+      var comidhistoryData = window.history.state.comid;
+      var DiscussionImagehistoryData = window.history.state.DiscussionImage;
+
+      var reactTypeHis = JSON.stringify(window.history.state.reactType);
+      let historyreactTypeHis = parseInt(reactTypeHis);
+
+      dispatch(Updatepagenum(limValue));
 
 
-      /// alert('jj');
-      callpopstatewithoutdata(
-        historyData,
-        historyDataTypeInt,
-        comidhistoryData,
-        DiscussionImagehistoryData,
-        historycomOriginalData,
-        historycomScroll,
-        historyreactTypeHis,
-        limValue
-      );
-    } else if (
-      historyDataTypeInt === 1 ||
-      historyDataTypeInt === 6 ||
-      historyDataTypeInt === 8 ||
-      historyDataTypeInt === 10
-    ) {
 
+      if (historyDataTypeInt === 0 || historyDataTypeInt === 1) {
+
+
+      } else {
+
+        setshowThisComponenet(true);
+      }
+
+
+      ///alert(historyDataTypeInt);
 
       if (
-
-        showModalUploadProfile ||
-        showModalUploadTask ||
-        activatecropImageReducer ||
-        showModalForm
+        historyDataTypeInt === 0 ||
+        historyDataTypeInt === 5 ||
+        historyDataTypeInt === 7 ||
+        historyDataTypeInt === 9
       ) {
-        CloseModalxx();
-      } else {
-        /////IF DATA IN CACHE(history data) DONT CALL FEEDS FROM SERVER
-        if (historyData) {
-          const arr = historyData;
-          setHistoryDataMan(arr);
-
-          setallowCallMemberFeeds(false);
-
-          dispatch(UserInfoUpdateMEMBER(historyIdInt));
-
-          dispatch(UserInfoUpdateMEMBERDATA(historyDataAll));
-
-          setshowProfiileData(false);
-
-          responsex(arr, limValue);
 
 
+        /// alert('jj');
+        callpopstatewithoutdata(
+          historyData,
+          historyDataTypeInt,
+          comidhistoryData,
+          DiscussionImagehistoryData,
+          historycomOriginalData,
+          historycomScroll,
+          historyreactTypeHis,
+          limValue
+        );
+      } else if (
+        historyDataTypeInt === 1 ||
+        historyDataTypeInt === 6 ||
+        historyDataTypeInt === 8 ||
+        historyDataTypeInt === 10
+      ) {
 
-          if (historyDataTypeInt === 6) {
-            setCommentHistoryData(historycomOriginalData);
-            setcommentHistoryScroll(historycomScroll);
 
-            setCommentPostid(comidhistoryData);
-            setDiscussionImage(DiscussionImagehistoryData);
+        if (
 
-
-            setcallhistoryModal(200)
-          } else if (historyDataTypeInt === 8) {
-            setCommentHistoryData(historycomOriginalData);
-            setcommentHistoryScroll(historycomScroll);
-
-            setconnectTemplateGo(0);
-            setCommentPostid(comidhistoryData);
-            setDiscussionImage(DiscussionImagehistoryData);
-
-            setcallhistoryModal(300)
-
-            settypeEmo(historyreactTypeHis);
-          } else if (historyDataTypeInt === 10) {
-            setCommentHistoryData(historycomOriginalData);
-            setcommentHistoryScroll(historycomScroll);
-
-            setcallhistoryModal(400);
-            setconnectTemplateGo(historyreactTypeHis);
-          } else {
-          }
+          showModalUploadProfile ||
+          showModalUploadTask ||
+          activatecropImageReducer ||
+          showModalForm
+        ) {
+          CloseModalxx();
         } else {
-          ///alert("sikii");
-          //setallowCallMemberFeeds(true);
-          dispatch(UserInfoUpdateMEMBER(historyIdInt));
+          /////IF DATA IN CACHE(history data) DONT CALL FEEDS FROM SERVER
+          if (historyData) {
+            const arr = historyData;
+            setHistoryDataMan(arr);
 
-          setallowCallMemberFeeds(true);
-          if (historyDataTypeInt === 6) {
-            setCommentHistoryData(historycomOriginalData);
-            setcommentHistoryScroll(historycomScroll);
+            setallowCallMemberFeeds(false);
 
-            setCommentPostid(comidhistoryData);
-            setDiscussionImage(DiscussionImagehistoryData);
+            dispatch(UserInfoUpdateMEMBER(historyIdInt));
 
-            setcallhistoryModal(200)
-          } else if (historyDataTypeInt === 8) {
-            setCommentHistoryData(historycomOriginalData);
-            setcommentHistoryScroll(historycomScroll);
+            dispatch(UserInfoUpdateMEMBERDATA(historyDataAll));
 
-            setconnectTemplateGo(0);
-            setCommentPostid(comidhistoryData);
-            setDiscussionImage(DiscussionImagehistoryData);
+            setshowProfiileData(false);
 
-            setcallhistoryModal(300)
-            settypeEmo(historyreactTypeHis);
-          } else if (historyDataTypeInt === 10) {
-            setCommentHistoryData(historycomOriginalData);
-            setcommentHistoryScroll(historycomScroll);
+            responsex(arr, limValue);
 
-            setcallhistoryModal(400)
-            setconnectTemplateGo(historyreactTypeHis);
+
+
+            if (historyDataTypeInt === 6) {
+              setCommentHistoryData(historycomOriginalData);
+              setcommentHistoryScroll(historycomScroll);
+
+              setCommentPostid(comidhistoryData);
+              setDiscussionImage(DiscussionImagehistoryData);
+
+
+              setcallhistoryModal(200)
+            } else if (historyDataTypeInt === 8) {
+              setCommentHistoryData(historycomOriginalData);
+              setcommentHistoryScroll(historycomScroll);
+
+              setconnectTemplateGo(0);
+              setCommentPostid(comidhistoryData);
+              setDiscussionImage(DiscussionImagehistoryData);
+
+              setcallhistoryModal(300)
+
+              settypeEmo(historyreactTypeHis);
+            } else if (historyDataTypeInt === 10) {
+              setCommentHistoryData(historycomOriginalData);
+              setcommentHistoryScroll(historycomScroll);
+
+              setcallhistoryModal(400);
+              setconnectTemplateGo(historyreactTypeHis);
+            } else {
+            }
           } else {
+            ///alert("sikii");
+            //setallowCallMemberFeeds(true);
+            dispatch(UserInfoUpdateMEMBER(historyIdInt));
+
+            setallowCallMemberFeeds(true);
+            if (historyDataTypeInt === 6) {
+              setCommentHistoryData(historycomOriginalData);
+              setcommentHistoryScroll(historycomScroll);
+
+              setCommentPostid(comidhistoryData);
+              setDiscussionImage(DiscussionImagehistoryData);
+
+              setcallhistoryModal(200)
+            } else if (historyDataTypeInt === 8) {
+              setCommentHistoryData(historycomOriginalData);
+              setcommentHistoryScroll(historycomScroll);
+
+              setconnectTemplateGo(0);
+              setCommentPostid(comidhistoryData);
+              setDiscussionImage(DiscussionImagehistoryData);
+
+              setcallhistoryModal(300)
+              settypeEmo(historyreactTypeHis);
+            } else if (historyDataTypeInt === 10) {
+              setCommentHistoryData(historycomOriginalData);
+              setcommentHistoryScroll(historycomScroll);
+
+              setcallhistoryModal(400)
+              setconnectTemplateGo(historyreactTypeHis);
+            } else {
+            }
           }
         }
+      } else {
       }
-    } else {
+
+
     }
-
-
 
 
 
@@ -1152,13 +1217,15 @@ function ProfileOutter() {
       obj.itemcroptype = "0";
       obj.itemFinalPostHeight = "0";
       obj.itemOriginalPostHeight = "0";
-      obj.itemCLICKED = false;
+      obj.itemCLICKED = true;
       obj.onLoadDataOnce = false;
       obj.ActiveAutoPlay = true;
       obj.ActiveAutoPost = 0;
       obj.itemInteractGo = false;
       obj.lim = postLim;
     });
+
+
 
     const newArrxt: any = [[...postDatainner]];
     const newArrxt1: any = [[...postDatainnerInteraction1]];
@@ -2021,33 +2088,17 @@ function ProfileOutter() {
                     height: "20vh",
                     paddingLeft: matchPc
                       ? "25px"
-                      : matchTablet
-                        ? "42px"
-                        : "24px",
-                    marginTop: matchTablet ? "10px" : "-0.5vh",
+                      : "24px",
+                    marginTop: "-0.5vh",
                     zIndex: 1,
 
 
                   }}
                 >
 
-                  <p style={{
-                    fontWeight: 'bolder',
-                    marginTop: '1vh', textAlign: 'center',
-                    fontFamily: "Arial, Helvetica, sans-serif",
-                    opacity: '0.9', color: darkmodeReducer ? 'white' : 'black'
-                  }}>
-                    <CheckBoxOutlineBlankIcon
-                      style={{
-                        margin: "auto",
-                        fontSize:
-                          matchTablet || matchMobile ? "1.8vh" : "2vh",
 
-                      }}
-                    />
-
-                  </p>
                   <OptionsSlider
+                    setUploadGPT={setUploadGPT}
                     selectedImage={selectedImage}
                     setselectedImage={setselectedImage}
                     setsuperSettings={setsuperSettings}
@@ -2112,7 +2163,7 @@ function ProfileOutter() {
               <Grid item xs={12} style={{
                 height: "0px",
                 width: '100%', position: "fixed", zIndex: 6, padding: "0px", paddingRight: '6.3vw', textAlign: 'right', bottom: '6vh',
-                opacity: '0.5', visibility: postData ? limit === 0 ? 'hidden' : shownav ? 'visible' : 'hidden' : 'hidden'
+                opacity: '0.6', visibility: postData ? limit === 0 ? 'hidden' : shownav ? 'visible' : 'hidden' : 'hidden'
               }}>
                 <ExpandLessIcon
                   onClick={() => {
@@ -2140,6 +2191,35 @@ function ProfileOutter() {
 
               </Grid>
 
+              {matchMobile ? null :
+                showESC ?
+                  <>
+                    <Grid item xs={12} style={{
+                      height: "0px",
+                      width: '12.5%', position: "fixed", zIndex: 6, padding: "0px", paddingRight: '6.3vw', textAlign: 'right', top: '12vh',
+                      opacity: '0.7',
+                    }}>
+                      <h1 className={
+                        darkmodeReducer
+                          ? "make-small-icons-clickable-lightCrop turdark dontallowhighlighting zuperkingIcon "
+                          : "make-small-icons-clickable-darkCrop  turdark dontallowhighlighting zuperkingIcon  "
+                      }
+                        style={{
+                          fontSize:
+                            "1.4vw",
+                          marginTop: '-6vh', padding: "3px",
+                          fontFamily: "Arial, Helvetica, sans-seri",
+
+                        }}>
+
+                        ESC
+                      </h1>
+
+                    </Grid>
+
+                  </> : null}
+
+
 
 
               {showProfiileData ? (
@@ -2147,7 +2227,9 @@ function ProfileOutter() {
                   position: "relative", zIndex: 1, padding: "0px"
                 }}>
                   <Profile
-                    PWAInstall={PWAInstall}
+                    postDivRefx={postDivRefx}
+                    setlatestInview={setlatestInview}
+                    WebsiteMode={WebsiteMode}
                     setkeypost={setkeypost}
                     historyScrollonload={historyScrollonload}
                     callhistoryModal={callhistoryModal}
@@ -2586,7 +2668,7 @@ function ProfileOutter() {
 
 
                 <Menu
-                  PWAInstall={PWAInstall}
+                  WebsiteMode={WebsiteMode}
                   showModalForm={showModalForm}
                   shownav={shownav}
                   setShownav={setShownav}
@@ -2619,11 +2701,11 @@ function ProfileOutter() {
 
               {
                 matchMobile ?
-                  PWAInstall ?
+                  WebsiteMode ?
                     <Grid
                       item
                       style={{
-                        height: "35vh",
+                        height: "18vh",
                         width: '100%',
                         marginLeft: '0px',
                         zIndex: 5,
@@ -2649,6 +2731,25 @@ function ProfileOutter() {
                         color: darkmodeReducer ? '#ffffff' : '#ffffff'
                       }}>
 
+                        <CancelIcon
+                          onClick={() => {
+
+                            setWebsiteMode(false);
+                          }}
+                          className={`${darkmodeReducer
+                            ? "make-small-icons-clickable-darkMenu dontallowhighlighting zuperkingIcon"
+                            : "make-small-icons-clickable-lightMenu dontallowhighlighting zuperking"
+                            } `}
+                          style={{
+                            fontSize: '8vh',
+                            color: darkmodeReducer ? '#ffffff' : '#000000',
+                            position: 'absolute',
+                            right: '1vw',
+                            top: '0px',
+                            display: 'none'
+
+                          }}
+                        />
                         <img
                           onClick={() => {
 
@@ -2659,7 +2760,8 @@ function ProfileOutter() {
                           alt="SuperstarZ logo"
                           style={{
                             textAlign: "center", opacity: darkmodeReducer ? 0.8 : 0.7,
-                            width: '14%', height: 'auto', padding: '0px', position: 'absolute', left: '12vw', top: '5.5vh',
+                            width: '14%', height: 'auto', padding: '0px', position: 'absolute', left: '1vw', top: '0.6vh',
+                            display: 'none'
 
                           }}
                         />
@@ -2680,17 +2782,17 @@ function ProfileOutter() {
                         }}>Install Help?</span>
 
                       <span style={{
-                        textAlign: "center", opacity: darkmodeReducer ? 0.4 : 0.4, left: '37vw',
+                        textAlign: "center", opacity: darkmodeReducer ? 0.4 : 0.4, left: '65vw',
                         color: darkmodeReducer ? '#ffffff' : '#000000',
                         fontFamily: "Arial, Helvetica, sans-seri",
                         fontWeight: 'bolder',
-                        padding: '0px', position: 'absolute', bottom: '1vh',
+                        padding: '0px', position: 'absolute', bottom: '14.5vh',
                       }}>Better On App</span>
 
                     </Grid> : <Grid
                       item
                       style={{
-                        height: "35vh",
+                        height: "23vh",
                         width: '100%',
                         marginLeft: '0px',
                         zIndex: 5,
@@ -2713,11 +2815,11 @@ function ProfileOutter() {
                     </Grid>
                   :
 
-                  PWAInstall ?
+                  WebsiteMode ?
                     <Grid
                       item
                       style={{
-                        height: "25vh",
+                        height: "15.8vh",
                         width: '50%',
                         marginLeft: '25vw',
                         zIndex: 5,
@@ -2729,9 +2831,11 @@ function ProfileOutter() {
 
                         borderTopRightRadius: '5vh',
                         borderTopLeftRadius: '5vh',
-                        display: 'block',
+
                         textAlign: 'center',
-                        paddingTop: '2vh'
+                        paddingTop: '2vh',
+
+                        display: 'none'
 
                       }}
                     >
@@ -2740,6 +2844,28 @@ function ProfileOutter() {
                         borderRadius: '20px', padding: '5vh', cursor: 'pointer', backgroundColor: darkmodeReducer ? '#333333' : '#0b1728',
                         color: darkmodeReducer ? '#ffffff' : '#ffffff'
                       }}>
+
+
+                        <CancelIcon
+                          onClick={() => {
+
+                            setWebsiteMode(false);
+                          }}
+                          className={`${darkmodeReducer
+                            ? "make-small-icons-clickable-darkMenu dontallowhighlighting zuperkingIcon"
+                            : "make-small-icons-clickable-lightMenu dontallowhighlighting zuperking"
+                            } `}
+                          style={{
+                            fontSize: '3.8vw',
+                            color: darkmodeReducer ? '#ffffff' : '#000000',
+                            position: 'absolute',
+                            right: '1vw',
+                            top: '0px',
+                            display: 'none'
+
+                          }}
+                        />
+
 
                         <img
                           onClick={() => {
@@ -2751,7 +2877,8 @@ function ProfileOutter() {
                           alt="SuperstarZ logo"
                           style={{
                             textAlign: "center", opacity: darkmodeReducer ? 0.8 : 0.7,
-                            width: '10%', height: 'auto', padding: '0px', position: 'absolute', left: '12vw', top: '3vh',
+                            width: '7%', height: 'auto', padding: '0px', position: 'absolute', left: '0.4vw', top: '1vh',
+                            display: 'none'
 
                           }}
                         />
@@ -2778,7 +2905,7 @@ function ProfileOutter() {
                         color: darkmodeReducer ? '#ffffff' : '#000000',
                         fontFamily: "Arial, Helvetica, sans-seri",
                         fontWeight: 'bolder',
-                        padding: '0px', position: 'absolute', bottom: '1vh',
+                        padding: '0px', position: 'absolute', bottom: '12vh',
                       }}>Better On App</span>
 
                     </Grid> : <Grid
@@ -2805,6 +2932,166 @@ function ProfileOutter() {
                     </Grid>
               }
 
+
+
+
+              {UploadGPT ? matchMobile ?
+
+                <>
+                  <Grid
+                    onClick={() => {
+                      if (Loaderx) { } else {
+                        setUploadGPT(false)
+                      }
+                    }}
+                    item
+                    style={{
+                      cursor: 'pointer',
+                      height: "100vh",
+                      width: '100%',
+                      zIndex: 4,
+                      position: 'fixed',
+                      top: '0vh',
+                      backgroundColor: darkmodeReducer
+                        ? "rgba(50,50,50,0.65)"
+                        : "rgba(130,130,130,0.55)",
+                      display: 'none',
+                    }}
+                  >
+                  </Grid>
+
+                  <Grid
+                    item
+                    style={{
+                      height: "80vh",
+                      width: '50%',
+                      marginLeft: '25vw',
+                      zIndex: 5,
+                      position: 'fixed',
+                      top: '15vh',
+                      backgroundColor: darkmodeReducer
+                        ? "rgba(50,50,50,0.95)"
+                        : "rgba(220,220,220,0.9)",
+
+                      borderRadius: '5vh',
+
+                      display: 'none',
+                    }}
+                  >
+                  </Grid>
+
+                </> :
+
+                <>
+                  <Grid
+                    item
+                    onClick={() => {
+                      if (Loaderx) { } else {
+                        setUploadGPT(false)
+                      }
+                    }}
+                    style={{
+                      cursor: 'pointer',
+                      height: "100vh",
+                      width: '100%',
+                      zIndex: 4,
+                      position: 'fixed',
+                      top: '0vh',
+                      backgroundColor: darkmodeReducer
+                        ? "rgba(50,50,50,0.65)"
+                        : "rgba(130,130,130,0.55)",
+                      display: 'block',
+                    }}
+                  >
+                  </Grid>
+
+                  <Grid
+                    item
+                    style={{
+                      height: "80vh",
+                      width: '50%',
+                      marginLeft: '25vw',
+                      zIndex: 5,
+                      position: 'fixed',
+                      top: '10vh',
+                      backgroundColor: darkmodeReducer
+                        ? "rgba(50,50,50,0.95)"
+                        : "rgba(220,220,220,0.9)",
+                      borderRadius: '5vh',
+                      display: 'block',
+                    }}
+                  >
+
+                    <GenerateAndUpload
+                      setUploadGPT={setUploadGPT}
+                      Loader={Loaderx}
+                      setLoader={setLoaderx}
+                      OpenUploadModal={OpenUploadModal} />
+                  </Grid>
+
+                </>
+                : null
+              }
+
+
+
+              <Grid
+                className="dontallowhighlighting"
+                item
+                onClick={() => {
+                  setShowInstallHelp(false)
+                }}
+                style={{
+
+                  height: "100vh",
+                  position: 'fixed',
+                  top: '0vh',
+                  width: '100vw',
+                  zIndex: 3000000,
+                  textAlign: 'center',
+                  backgroundColor: darkmodeReducer
+                    ? "rgb(20,20,20,0.72)"
+                    : "rgb(210,210,210,0.65)",
+                  display: ShowInstallHelp ? 'block' : 'none',
+                  alignItems: 'center',
+                  cursor: 'default',
+
+
+                }}
+              >
+                {matchMobile ? <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '85vh' }}>
+                  <img
+                    onClick={() => {
+                      setShowInstallHelp(false)
+                    }}
+                    className="dontallowhighlighting"
+
+                    src={isAppleDevice ? `${REACT_APP_CLOUNDFRONT}Scroll Down.png` : `${REACT_APP_CLOUNDFRONT}Untitled designmjjjj.png`}
+                    style={{
+                      cursor: 'pointer',
+                      height: 'auto',
+                      width: '100vw',
+                      maxWidth: '100%',
+                      margin: 'auto',
+                      position: 'relative',
+                    }}
+                    alt="Your Alt Text"
+                  />
+                </div>
+                  : <img onClick={() => {
+                    setShowInstallHelp(false)
+                  }}
+                    className="dontallowhighlighting"
+                    src={isAppleDevice ? `${REACT_APP_CLOUNDFRONT}Untitled design.png`
+                      : `${REACT_APP_CLOUNDFRONT}Untitled design.png`}
+
+                    style={{
+                      cursor: 'pointer', margin: 'auto', height: '70vh', marginTop: '30vh',
+                      width: 'auto'
+                    }} />
+                }
+
+              </Grid>
 
 
 

@@ -90,6 +90,7 @@ function Taskbarx({
 
   useEffect(() => {
     if (showModalUploadTask) {
+      /// console.log(selectedImageReducer);
       setHidecropper(false);
       setratiox(1);
       setTimeout(() => { setshowAlll(true) }, 600)

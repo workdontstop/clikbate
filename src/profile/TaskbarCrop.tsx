@@ -186,6 +186,8 @@ function TaskbarCropx({
 
 
     useEffect(() => {
+
+
         setprevimage(selectedImageReducer);
         setcropImage(selectedImageReducer[0])
         sethideCrop(false);
@@ -314,6 +316,7 @@ function TaskbarCropx({
                             } else {
                                 const updatedRay: any = [...ray];
                                 updatedRay[g] = dataUrl;
+
 
                                 itemUploadRef.current[g].src = dataUrl;
                                 itemUploadRefSD.current[g].src = dataUrl2;

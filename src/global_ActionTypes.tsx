@@ -70,5 +70,8 @@ export const minimiseHintState_LOADER = "minimiseHintState_LOADER";
 export const UPDATE_MuteAUDIO = "UPDATE_MuteAUDIO";
 
 
+export const UPDATE_AUDIOINDEX = " UPDATE_AUDIOINDEX";
+
+
 
 

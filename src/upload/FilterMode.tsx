@@ -354,18 +354,78 @@ function FilterModex({
 
 
 
-  ///
-  ///
-  /// SANITISE LOG IN FORM INPUT CLIENT SIDE
+
+
+
   const updatecaptiontop = useCallback(
     (e: any) => {
       const { name, value } = e.target;
-      setcaptionvalues({ ...captionvalues, [name]: value });
 
+
+
+
+
+      let usernameCleaner = /[^a-zA-Z0-9\s.,!?'"“”‘’–—:;()[\]{}<>\/\\`~@#$%^&*_+=|\-😀-🙏👍-🙌💩-🦄\u{1F600}-\u{1F64F}\u{1F300}-\u{1F5FF}\u{1F680}-\u{1F6FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}]/gu;
+
+
+
+
+      // Updated regex to allow emojis
+
+      let cleanValue = value.replace(usernameCleaner, "");
+
+      let usernameLimiter = /^.{0}$/;
+
+      var x = 0
+
+
+
+
+      if (name === "topic") {
+
+        usernameLimiter = /^.{40}$/;
+
+        x = 40;
+
+      } else {
+
+        usernameLimiter = /^.{45}$/;
+
+        x = 45;
+
+      }
+
+
+      let finalUsername = cleanValue.replace(usernameLimiter, "");
+
+      let checkUsernameClean = usernameCleaner.test(value);
+      let checkUsernameLimited = usernameLimiter.test(cleanValue);
+
+      if (checkUsernameClean) {
+      } else {
+      }
+
+      let userNameLength = finalUsername.length;
+
+
+      if (checkUsernameClean) {
+      } else {
+        if (checkUsernameLimited || userNameLength > x) {
+
+        } else {
+          setcaptionvalues({ ...captionvalues, [name]: value });
+
+        }
+      }
 
     },
     [captionvalues]
   );
+
+
+
+
+
 
 
 

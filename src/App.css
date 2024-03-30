@@ -6,6 +6,19 @@
   padding-top: 12px;
 }
 
+@keyframes AnimateWidth {
+  from {
+    width: 0%;
+  }
+  to {
+    width: 55%;
+  }
+}
+
+.AnimateLoaderDalle {
+  animation: AnimateWidth 0.7s infinite forwards; /* Animation applied to both classes */
+}
+
 .app-paper-style {
   height: 100vh;
   text-align: center;
@@ -1148,12 +1161,7 @@
     rgb(150, 150, 150, 0.25),
     rgb(150, 150, 150, 0.3),
     rgb(150, 150, 150, 0.35),
-    rgb(150, 150, 150, 0.4),
-    rgb(150, 150, 150, 0.45),
-    rgba(150, 150, 150, 0.5),
-    rgb(150, 150, 150, 0.56),
-    rgb(150, 150, 150, 0.61),
-    rgb(150, 150, 150, 0.66)
+    rgb(150, 150, 150, 0.4)
   );
 }
 

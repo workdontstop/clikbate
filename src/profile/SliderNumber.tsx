@@ -102,45 +102,7 @@ function SliderNumberx({
 
 
       {
-        itemCLICKED[pey] ? ActiveCanvas === pey ?
-          null : <>
-            {" "}
-            <div
-              onClick={() => {
-                ///startplay();
-              }}
-              style={{
-                position: "absolute",
-                zIndex: 30,
-                left: matchMobile ? '1vh' : 30,
-                cursor: "pointer",
-                top: matchMobile ? '1vh' : "5vh",
-                fontFamily: "Arial, Helvetica, sans-serif",
-                fontWeight: "bolder",
-                opacity: 1,
-                height: "0px",
-                padding: "0px",
-              }}
-            >
-              <span
-                className={HasInteractivity ? "zuperkingtur heartbeat" : darkmodeReducer ? "turx" : "turdark"}
-                style={{
-                  padding: "7px",
-                  paddingLeft: HasInteractivity ? matchMobile ? '3.3vw' : "0.9vw" : '10px',
-                  paddingRight: HasInteractivity ? matchMobile ? '3.3vw' : "0.9vw" : '10px',
-                  backgroundColor: post.color1,
-                  borderRadius: "50%",
-                  fontSize: "0.92vw",
-                  display: total === 1 ? HasInteractivity ? 'block' : 'none' : 'block',
-                  color: darkmodeReducer ? "#ffffff" : "#000000",
-                  transform: matchMobile ? 'scale(0.15)' : 'scale(0.3)'
-                }
-                }
-              >
-                <span style={{ opacity: HasInteractivity && total === 1 ? 0 : 1 }}>{total}</span>
-              </span>
-            </div>{" "}
-          </> : (
+        (
           <>
             {" "}
             {post.interacttype1 === 1 || post.interacttype2 === 1 ?

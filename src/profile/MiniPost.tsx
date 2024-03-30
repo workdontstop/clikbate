@@ -20,8 +20,10 @@ import CircleIcon from "@mui/icons-material/Circle";
 import { RootStateOrAny, useSelector, useDispatch } from "react-redux";
 import { matchMobile, matchPc, matchTablet } from "../DetectDevice";
 import { UserInfoUpdateMEMBER } from "../log/actions/UserdataAction";
+import VideocamIcon from '@material-ui/icons/Videocam';
 
 
+import AudiotrackIcon from '@material-ui/icons/Audiotrack';
 import AddIcon from "@mui/icons-material/Add";
 import {
   UpdateLoader,
@@ -81,7 +83,10 @@ function MiniPostx({
   postDatainnerInteraction2,
   postDatainnerInteraction1,
   clearAllTimers,
-  AllowAllHdImagesShow
+  AllowAllHdImagesShow,
+  InitializingAutoPlayIndex
+
+
 
 }: any) {
   const { REACT_APP_SUPERSTARZ_URL, REACT_APP_CLOUNDFRONT, REACT_APP_APPX_STATE } = process.env;
@@ -136,9 +141,40 @@ function MiniPostx({
 
   const [AllowFadoutMiniThumb, setAllowFadoutMiniThumb] = useState(false);
 
+  const historyBoy = () => {
 
+
+
+    var tt = 0;
+
+    var n, d;
+
+    n = '';
+    d = {
+      type: 1,
+      id: 0,
+      index: 400,
+      data: postData,
+      innerid: 0,
+      pagenumReducer: pagenumReducer,
+    };
+    window.history.replaceState(d, "", `${n}`);
+
+    let modalName = ``;
+
+    var dd = {
+      type: 1,
+      id: 0,
+      innerid: 0,
+      pagenumReducer: pagenumReducer,
+    };
+    window.history.pushState(dd, "", modalName);
+
+  }
 
   useEffect(() => {
+
+
     setTimeout(() => {
       if (zoomClickedIndex === 0) {
         setshowIndex(false);
@@ -286,7 +322,7 @@ function MiniPostx({
   }, [post]);
 
 
-  var postprofiletop = matchPc ? "-5.8vh" : matchTablet ? "-9.3vh" : "-6.4vh";
+  var postprofiletop = matchPc ? "-5.8vh" : matchTablet ? "-9.3vh" : "-2.4vh";
   var posttopicfont = matchPc ? "1.25vw" : matchTablet ? "1.8vh" : "1.6vh";
 
   var postusernamefont = matchPc ? "1.1vw" : matchTablet ? "2.32vh" : "1.7vh";
@@ -301,7 +337,7 @@ function MiniPostx({
   var dotspace2 = matchPc ? "0.9vw" : matchTablet ? "1.9vh" : "1.9vh";
 
   var postusernametop = matchPc ? "-6vh" : matchTablet ? "-11.9vh" : "-3.5vh";
-  var postusernametopx = matchPc ? "-3vh" : matchTablet ? "-11.9vh" : "-5.5vh";
+  var postusernametopx = matchPc ? "-3vh" : matchTablet ? "-11.9vh" : "-2.5vh";
 
   var profilewidth = matchPc
     ? miniLayoutPost
@@ -426,6 +462,8 @@ function MiniPostx({
   const [isWide, setIsWide] = useState(false);
 
   const handleImageLoad = (e: any) => {
+
+
     const { naturalWidth, naturalHeight } = e.target;
     const aspectRatio = naturalWidth / naturalHeight;
     if (naturalWidth > naturalHeight) {
@@ -453,77 +491,201 @@ function MiniPostx({
             paddingLeft: matchMobile ? "0px" : "0px",
             paddingRight: matchMobile ? "0px" : "0px",
             paddingTop: matchMobile ? "10px" : "3px",
-            scrollSnapAlign: snapStartReducer ? "start" : 'none'
+
 
           }}
         >
           {/*///////////////////////////////////////////////////////////////////////////POST DATA*/}
 
-          {matchMobile ? <div
+          {matchMobile ? <>
+            {" "}
+            {post.interacttype1 === 1 || post.interacttype2 === 1 ?
+              <VideocamIcon
+                onClick={() => {
 
-            style={{
-              position: "absolute",
-              zIndex: 30,
-              right: -14,
-              cursor: "pointer",
-              top: matchMobile ? '1vh' : "4vh",
-              fontFamily: "Arial, Helvetica, sans-serif",
-              fontWeight: "bolder",
-              opacity: 1,
-              height: "0px",
-              padding: "0px",
-            }}
-          >
-            <span
-              className={HasInteractivity ? "zuperkingtur heartbeat" : darkmodeReducer ? "turx" : "turdark"}
-              style={{
-                padding: "7px",
-                paddingLeft: HasInteractivity ? matchMobile ? '3.3vw' : "0.9vw" : '10px',
-                paddingRight: HasInteractivity ? matchMobile ? '3.3vw' : "0.9vw" : '10px',
-                backgroundColor: post.color1,
-                borderRadius: "50%",
-                fontSize: "0.92vw",
-                display: HasInteractivity ? 'block' : 'none',
-                color: darkmodeReducer ? "#ffffff" : "#000000",
-                transform: matchMobile ? 'scale(0.15)' : 'scale(0.3)'
-              }
-              }
-            >
-              <span style={{ opacity: 0 }}>{0}</span>
-            </span>
-          </div> : <div
 
-            style={{
-              position: "absolute",
-              zIndex: 30,
-              left: 30,
-              cursor: "pointer",
-              top: "4vh",
-              fontFamily: "Arial, Helvetica, sans-serif",
-              fontWeight: "bolder",
-              opacity: 1,
-              height: "0px",
-              padding: "0px",
-            }}
-          >
-            <span
-              className={HasInteractivity ? "zuperkingtur heartbeat" : darkmodeReducer ? "turx" : "turdark"}
+                }}
+                className={HasInteractivity ? darkmodeReducer
+                  ? "make-small-icons-clickable-lightCrop dontallowhighlighting zupermenulight heartbeat"
+                  : "make-small-icons-clickable-darkCrop dontallowhighlighting zupermenudark heartbeat " :
+                  darkmodeReducer
+                    ? "make-small-icons-clickable-lightCrop dontallowhighlighting zupermenulight "
+                    : "make-small-icons-clickable-darkCrop dontallowhighlighting zupermenudark  "}
+
+                style={{
+                  color: darkmodeReducer ? '#ffffff' : '#ffffff',
+                  transform: matchMobile ? 'scale(0.4)' : 'scale(0.58)',
+                  position: "absolute",
+                  zIndex: 30,
+                  backgroundColor: post.color1,
+                  left: matchMobile ? '1vh' : 30,
+                  cursor: "pointer",
+                  top: matchMobile ? '1vh' : "5vh",
+                  fontFamily: "Arial, Helvetica, sans-serif",
+                  fontWeight: "bolder",
+                  opacity: 1,
+                  padding: "2px",
+                }}
+              /> :
+              <div
+                onClick={() => {
+                  ///startplay();
+                }}
+                style={{
+                  position: "absolute",
+                  zIndex: 30,
+                  left: matchMobile ? '1vh' : 30,
+                  cursor: "pointer",
+                  top: matchMobile ? '1vh' : "5vh",
+                  fontFamily: "Arial, Helvetica, sans-serif",
+                  fontWeight: "bolder",
+                  opacity: 1,
+                  height: "0px",
+                  padding: "0px",
+                }}
+              >
+                <span
+                  className={HasInteractivity ? "zuperkingtur heartbeat" : darkmodeReducer ? "turx" : "turdark"}
+                  style={{
+                    padding: "7px",
+                    paddingLeft: HasInteractivity ? matchMobile ? '3.3vw' : "0.9vw" : '10px',
+                    paddingRight: HasInteractivity ? matchMobile ? '3.3vw' : "0.9vw" : '10px',
+                    backgroundColor: post.color1,
+                    borderRadius: "50%",
+                    fontSize: '0.8vw',
+                    display: HasInteractivity ? 'block' : 'none',
+                    color: darkmodeReducer ? "#ffffff" : "#000000",
+                    transform: matchMobile ? 'scale(0.15)' : 'scale(0.3)'
+                  }
+                  }
+                >
+                  <span style={{ opacity: HasInteractivity ? 0 : 1 }}>{0}</span>
+                </span>
+              </div>}
+
+            <AudiotrackIcon
+              onClick={() => {
+
+
+              }}
+              className={
+                darkmodeReducer
+                  ? "make-small-icons-clickable-lightCrop dontallowhighlighting zupermenulight "
+                  : "make-small-icons-clickable-darkCrop dontallowhighlighting zupermenudark  "}
+
               style={{
-                padding: "7px",
-                paddingLeft: HasInteractivity ? matchMobile ? '3.3vw' : "0.9vw" : '10px',
-                paddingRight: HasInteractivity ? matchMobile ? '3.3vw' : "0.9vw" : '10px',
+                color: darkmodeReducer ? '#ffffff' : '#ffffff',
+                transform: matchMobile ? 'scale(0.6)' : 'scale(0.9)',
+                position: "absolute",
+                zIndex: 30,
                 backgroundColor: post.color1,
-                borderRadius: "50%",
-                fontSize: "0.92vw",
-                display: HasInteractivity ? 'block' : 'none',
-                color: darkmodeReducer ? "#ffffff" : "#000000",
-                transform: matchMobile ? 'scale(0.15)' : 'scale(0.26)'
-              }
-              }
-            >
-              <span style={{ opacity: 0 }}>{0}</span>
-            </span>
-          </div>}
+                left: matchMobile ? '40vw' : '30vw',
+                cursor: "pointer",
+                top: matchMobile ? '1.5vh' : "5vh",
+                fontFamily: "Arial, Helvetica, sans-serif",
+                fontWeight: "bolder",
+                display: post.audioData ? 'block' : 'none',
+                opacity: 1,
+                padding: "2px",
+              }}
+            />
+
+
+          </> : <>
+            {" "}
+            {post.interacttype1 === 1 || post.interacttype2 === 1 ?
+              <VideocamIcon
+                onClick={() => {
+
+
+                }}
+                className={HasInteractivity ? darkmodeReducer
+                  ? "make-small-icons-clickable-lightCrop dontallowhighlighting zupermenulight heartbeat"
+                  : "make-small-icons-clickable-darkCrop dontallowhighlighting zupermenudark heartbeat " :
+                  darkmodeReducer
+                    ? "make-small-icons-clickable-lightCrop dontallowhighlighting zupermenulight "
+                    : "make-small-icons-clickable-darkCrop dontallowhighlighting zupermenudark  "}
+
+                style={{
+                  color: darkmodeReducer ? '#ffffff' : '#ffffff',
+                  transform: matchMobile ? 'scale(0.4)' : 'scale(0.58)',
+                  position: "absolute",
+                  zIndex: 30,
+                  backgroundColor: post.color1,
+                  left: matchMobile ? '1vh' : 30,
+                  cursor: "pointer",
+                  top: matchMobile ? '1vh' : "5vh",
+                  fontFamily: "Arial, Helvetica, sans-serif",
+                  fontWeight: "bolder",
+                  opacity: 1,
+                  padding: "2px",
+                }}
+              /> :
+              <div
+                onClick={() => {
+                  ///startplay();
+                }}
+                style={{
+                  position: "absolute",
+                  zIndex: 30,
+                  left: matchMobile ? '1vh' : 30,
+                  cursor: "pointer",
+                  top: matchMobile ? '1vh' : "5vh",
+                  fontFamily: "Arial, Helvetica, sans-serif",
+                  fontWeight: "bolder",
+                  opacity: 1,
+                  height: "0px",
+                  padding: "0px",
+                }}
+              >
+                <span
+                  className={HasInteractivity ? "zuperkingtur heartbeat" : darkmodeReducer ? "turx" : "turdark"}
+                  style={{
+                    padding: "7px",
+                    paddingLeft: HasInteractivity ? matchMobile ? '3.3vw' : "0.9vw" : '10px',
+                    paddingRight: HasInteractivity ? matchMobile ? '3.3vw' : "0.9vw" : '10px',
+                    backgroundColor: post.color1,
+                    borderRadius: "50%",
+                    fontSize: "0.92vw",
+                    display: HasInteractivity ? 'block' : 'none',
+                    color: darkmodeReducer ? "#ffffff" : "#000000",
+                    transform: matchMobile ? 'scale(0.15)' : 'scale(0.3)'
+                  }
+                  }
+                >
+                  <span style={{ opacity: HasInteractivity ? 0 : 1 }}>{0}</span>
+                </span>
+              </div>}
+
+            <AudiotrackIcon
+              onClick={() => {
+
+
+              }}
+              className={
+                darkmodeReducer
+                  ? "make-small-icons-clickable-lightCrop dontallowhighlighting zupermenulight "
+                  : "make-small-icons-clickable-darkCrop dontallowhighlighting zupermenudark  "}
+
+              style={{
+                color: darkmodeReducer ? '#ffffff' : '#ffffff',
+                transform: 'scale(0.9)',
+                position: "absolute",
+                zIndex: 30,
+                backgroundColor: post.color1,
+                left: '30vw',
+                cursor: "pointer",
+                top: "5vh",
+                fontFamily: "Arial, Helvetica, sans-serif",
+                fontWeight: "bolder",
+                display: post.audioData ? 'block' : 'none',
+                opacity: 1,
+                padding: "2px",
+              }}
+            />
+
+
+          </>}
           {" "}
 
 
@@ -534,6 +696,8 @@ function MiniPostx({
             <img
               onLoad={handleImageLoad}
               onClick={() => {
+
+                historyBoy();
                 setzoomClickedIndex(pey + 1);
                 setSliderIndexMini(0);
                 setminiProfile(false);
@@ -564,7 +728,7 @@ function MiniPostx({
                   itemcroptype[pey] === 1 || itemcroptype[pey] === 2
                     ? "50% top"
                     : "50% 50",
-
+                borderRadius: '2vh',
                 zIndex: 0,
 
               }}
@@ -576,6 +740,8 @@ function MiniPostx({
             {AllowAllHdImagesShow ? <img
               onLoad={handleImageLoad}
               onClick={() => {
+                historyBoy();
+
                 setzoomClickedIndex(pey + 1);
                 setSliderIndexMini(0);
                 setminiProfile(false);
@@ -603,7 +769,7 @@ function MiniPostx({
                   itemcroptype[pey] === 1 || itemcroptype[pey] === 2
                     ? "50% top"
                     : "50% 50",
-
+                borderRadius: '2vh',
                 zIndex: 1,
 
 
@@ -756,7 +922,7 @@ function MiniPostx({
                 color: darkmodeReducer ? "#ffffff" : "#000000",
                 fontSize: matchPc ? "2.1vh" : isSafari ? '1.8vh' : "1.9vh",
                 zIndex: 5,
-                paddingLeft: matchPc ? "7vw" : matchTablet ? "2.3vw" : "4vw",
+                paddingLeft: matchPc ? "7vw" : matchTablet ? "2.3vw" : "17vw",
                 height: "0px",
                 fontFamily: "Arial, Helvetica, sans-serif",
                 opacity: darkmodeReducer ? "0.6" : "0.8",

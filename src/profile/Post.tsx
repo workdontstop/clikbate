@@ -108,17 +108,16 @@ function Postx({
   itemInteractGo1,
   postItemsRef,
   ShowBigPlay,
-  activeAudio,
-  setactiveAudio,
+
   clearAllTimers,
   AllowAllHdImagesShow,
-  setitemCLICKED,
   ActiveAutoPost,
   setActiveAutoPost,
-  InitializingInteraction,
+  InitializingAutoPlayIndex,
   currentClicked,
   setkeypost,
-  PWAInstall
+  WebsiteMode,
+  setlatestInview
 }: any) {
   const { REACT_APP_SUPERSTARZ_URL, REACT_APP_APPX_STATE } = process.env;
 
@@ -148,6 +147,11 @@ function Postx({
 
   const [Ein, setEin] = useState(0);
 
+
+  const [ShowAudioIcon, setShowAudioIcon] = useState(true);
+
+
+  const [ShowEmoIcon, setShowEmoIcon] = useState(false);
 
 
   const [dateint, setdateint] = useState<any>(null);
@@ -310,7 +314,9 @@ function Postx({
 
 
 
+  const [ShowPad, setShowPad] = useState(false);
 
+  const [StopShowPad, setStopShowPad] = useState(false);
 
   const [autoSlideDuration] = useState(6000);
 
@@ -348,6 +354,15 @@ function Postx({
         ? `translateY(0%)`
         : `translateY(150%)`,
   });
+
+
+  const animationPad = useSpring({
+    opacity: ShowPad ? 1 : 0,
+    from: { opacity: 0 },
+    config: { duration: 1100 },
+  });
+
+
 
   useEffect(() => {
     setTimeout(() => {
@@ -836,7 +851,7 @@ function Postx({
 
   var postusernametop2 = matchPc ? "2.5vh" : matchTablet ? "-11.9vh" : "-10.5vh";
 
-  var postusernamefont = matchPc ? "1vw" : matchTablet ? "2.32vh" : "2vh";
+  var postusernamefont = matchPc ? "1vw" : matchTablet ? "2.32vh" : "1.9vh";
 
   var postusernameleft = matchPc ? "11.1%" : matchTablet ? "15.5%" : "20%";
 
@@ -846,7 +861,7 @@ function Postx({
   var dotspace = matchPc ? "1.7vw" : matchTablet ? "1.9vh" : "1.9vh";
   var dotspace2 = matchPc ? "0.9vw" : matchTablet ? "1.9vh" : "1.9vh";
 
-  var posttopicfont = matchPc ? "1.15vw" : matchTablet ? "1.8vh" : "1.9vh";
+  var posttopicfont = matchPc ? "1.34vw" : matchTablet ? "1.8vh" : "2.2vh";
 
   var postcaptiontop = matchPc ? "-1.85vh" : matchTablet ? "-9.2vh" : "-9.6vh";
   var postcaptionfont = matchPc ? "1.2vw" : matchTablet ? "2.35vh" : "1.75vh";
@@ -875,7 +890,7 @@ function Postx({
   var postcommentfontx = matchPc ? "1.8vw" : matchTablet ? "4vh" : "3.8vh";
   var postcommentwidth = matchPc ? "99.7%" : matchTablet ? "97.5%" : "95.5%";
 
-  var postoptionstop = matchPc ? "7.8vh" : matchTablet ? "-15.4vh" : "-4.5vh";
+  var postoptionstop = matchPc ? "7.8vh" : matchTablet ? "-15.4vh" : "-3.7vh";
   var postoptionsleft = matchPc ? "95.5%" : matchTablet ? "94.7%" : "91.5%";
   var postvertfont = matchPc ? "2.2vw" : matchTablet ? "3.6vh" : "3.6vh";
 
@@ -1155,6 +1170,11 @@ function Postx({
             {/*///////////////////////////////////////////////////////////////////////////POST DATA*/}
 
             <Slider
+              setlatestInview={setlatestInview}
+              setShowEmoIcon={setShowEmoIcon}
+              setShowAudioIcon={setShowAudioIcon}
+              setStopShowPad={setStopShowPad}
+              setShowPad={setShowPad}
               dateint={dateint}
               setinteractContent={setinteractContentx}
               interactContent={interactContentx}
@@ -1166,15 +1186,14 @@ function Postx({
               setActiveCanvas={setActiveCanvas}
               ActiveCanvas={ActiveCanvas}
 
-              InitializingInteraction={InitializingInteraction}
+              InitializingAutoPlayIndex={InitializingAutoPlayIndex}
               ActiveAutoPost={ActiveAutoPost}
               setActiveAutoPost={setActiveAutoPost}
 
               audioPlayerRef={audioPlayerRef}
-              setitemCLICKED={setitemCLICKED}
+
               AllowAllHdImagesShow={AllowAllHdImagesShow}
-              activeAudio={activeAudio}
-              setactiveAudio={setactiveAudio}
+
 
               paperPostScrollRef={paperPostScrollRef}
               postDivRef={postDivRef}
@@ -1244,7 +1263,7 @@ function Postx({
                 cursor: "pointer",
                 position: 'absolute',
                 marginLeft: matchMobile ? '48vw' : "24vw",
-                top: matchMobile ? '3.4vh' : `5.2vh`,
+                top: WebsiteMode ? matchMobile ? '3.4vh' : `5.2vh` : matchMobile ? '2.5vh' : `5.2vh`,
                 display: post.audioData && itemCLICKED[pey] ? 'block' : 'none'
 
               }}
@@ -1254,12 +1273,11 @@ function Postx({
 
               {
 
-                muteaudioReducer ?
+                ShowAudioIcon ?
 
-                  muteaudioState ? <MusicOffIcon
+                  <AudiotrackIcon
                     onClick={() => {
-                      pauseAudio(false);
-
+                      ///pauseAudio(true);
                     }}
                     className={
                       darkmodeReducer
@@ -1271,38 +1289,13 @@ function Postx({
                       fontSize: postcommentfontx,
                       marginRight: "5vw",
                       right: matchMobile ? '-17vw' : '-14.5vw',
-                      transform: Zoomxm ? "scale(2.3)" : "scale(1.3)",
+                      transform: matchMobile ? Zoomxm ? "scale(2.1)" : "scale(0.9)" : Zoomxm ? "scale(2.3)" : "scale(1.1)",
                       transition: "transform 0.1s",
                       position: "relative",
                       zIndex: 20,
                       opacity: 1,
                     }}
-                  />
-                    : null
-
-                  :
-                  muteaudioState ?
-                    <AudiotrackIcon
-                      onClick={() => {
-                        pauseAudio(true);
-                      }}
-                      className={
-                        darkmodeReducer
-                          ? "make-small-icons-clickable-lightCrop dontallowhighlighting zupermenulight "
-                          : "make-small-icons-clickable-darkCrop dontallowhighlighting zupermenudark  "
-                      }
-                      style={{
-                        color: darkmodeReducer ? '#ffffff' : '#000000',
-                        fontSize: postcommentfontx,
-                        marginRight: "5vw",
-                        right: matchMobile ? '-17vw' : '-14.5vw',
-                        transform: Zoomxm ? "scale(2.3)" : "scale(1.3)",
-                        transition: "transform 0.1s",
-                        position: "relative",
-                        zIndex: 20,
-                        opacity: 1,
-                      }}
-                    /> : null
+                  /> : null
 
               }
 
@@ -1327,7 +1320,7 @@ function Postx({
 
               style={{
                 marginLeft: matchMobile ? '90vw' : "46vw",
-                top: PWAInstall ? matchMobile ? '3.5vh' : `5.2vh` : matchMobile ? '2.8vh' : `5.2vh`,
+                top: WebsiteMode ? matchMobile ? '3.5vh' : `5.2vh` : matchMobile ? '2.8vh' : `5.2vh`,
                 fontWeight: 'bold',
                 padding: "0px",
                 cursor: "pointer",
@@ -1423,1063 +1416,1044 @@ function Postx({
 
 
 
-            {itemCLICKED[pey] ? null : (
-              <>
-                <div
-                  className='post-background-dark'
-                  style={{
-                    height: PWAInstall ? `${postbackheight / 1.03}px` : matchMobile ? `${postbackheight / 1.14}px` : `${postbackheight / 1.03}px`,
-                    marginTop: PWAInstall ? `-${postbackheight / 1.03}px` : matchMobile ? `-${postbackheight / 1.14}px` : `-${postbackheight / 1.03}px`,
-                    position: "relative",
-                    transition: "all 350ms ease",
-                    zIndex: 12,
-                    borderBottomLeftRadius: "0px",
-                    borderBottomRightRadius: "0px",
-                    backgroundColor: "",
-                  }}
-                >
-                  {/*///////////////////////////////////////////////////// opacity: 0.6,//////////////////////EMOTIONS*/}
+            {
 
+              ShowPad ? StopShowPad ? null : (
 
-                  <Grid
-                    item
-                    xs={12}
+                <>
+                  <animated.div
+                    className='post-background-dark'
                     style={{
-                      top: `-${emo}vh`,
-                      width: matchPc ? "3vw" : matchTablet ? "5vw" : "15vw",
-                      height: matchPc ? "5vh" : matchTablet ? "7vh" : "5.5vh",
-                      position: "relative",
-                      display: "flex",
-                      visibility: miniLayoutPost ? "hidden" : "visible",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      zIndex: 9,
-                      cursor: "pointer",
-                      left: matchPc ? "94%" : matchTablet ? "93%" : "85%",
-                      backgroundColor: emocolor,
-                      opacity: emoOpacity,
-                    }}
-                  >
-
-
-
-
-
-
-                    <span
-                      className={
-                        SpinLovely === 0
-                          ? `${themepadding}`
-                          : `${themepadding} spinnerEmo`
-                      }
-                      style={{
-                        padding: "2px",
-                        width: matchPc ? "1.8vw" : matchTablet ? "4vw" : "7.5vw",
-                        height: matchPc ? "1.8vw" : matchTablet ? "3vh" : "4vh",
-                        borderRadius: "50%",
-                        margin: "auto",
-                      }}
-                    >
-                      <img
-                        className={emotionClass}
-                        src={`./images/emotions/love.png`}
-                        alt="a superstarz post "
-                        style={{
-                          cursor: "pointer",
-                          boxShadow: darkmodeReducer
-                            ? "0 0 1px #555555"
-                            : "0 0 0.1px #222222",
-                          width: "100%",
-                          height: "auto",
-                          transform: Zoom1 ? "scale(1.3)" : "scale(1)",
-                          transition: "transform 2s",
-                          padding: "0px",
-                          objectFit: "contain",
-                          borderRadius: "50%",
-                          display: "none",
-                        }}
-                      />
-                    </span>{" "}
-                  </Grid>
-
-
-
-
-
-                  <Grid
-                    item
-                    xs={12}
-                    style={{
-                      top: `-${emo}vh`,
-                      width: matchPc ? "3vw" : matchTablet ? "5vw" : "15vw",
-                      height: matchPc ? "5vh" : matchTablet ? "7vh" : "5.5vh",
-                      position: "relative",
-                      display: "flex",
-                      visibility: miniLayoutPost ? "hidden" : "visible",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      zIndex: 9,
-                      left: matchPc ? "94%" : matchTablet ? "93%" : "85%",
-                      backgroundColor: emocolor,
-                      opacity: emoOpacity,
-                    }}
-                  >
-                    <span
-                      className={
-                        Spincool === 0
-                          ? `${themepadding}`
-                          : `${themepadding} spinnerEmo`
-                      }
-                      style={{
-                        padding: "2px",
-                        width: matchPc ? "1.8vw" : matchTablet ? "4vw" : "7.5vw",
-                        height: matchPc ? "1.8vw" : matchTablet ? "3vh" : "4vh",
-                        borderRadius: "50%",
-                        margin: "auto",
-                      }}
-                    >
-                      <img
-                        className={emotionClass}
-                        src={`./images/emotions/cool.png`}
-                        alt="a superstarz post "
-                        style={{
-                          cursor: "pointer",
-                          boxShadow: darkmodeReducer
-                            ? "0 0 1px #555555"
-                            : "0 0 0.1px #222222",
-                          width: "100%",
-                          height: "auto",
-                          padding: "0px",
-                          objectFit: "contain",
-                          borderRadius: "50%",
-                          transform: Zoom2 ? "scale(1.3)" : "scale(1)",
-                          transition: "transform 2s",
-                          display: "none",
-                        }}
-                      />
-                    </span>
-                  </Grid>
-
-                  <Grid
-                    onMouseEnter={(e: any) => {
-                      setZoom3(true);
-                      setZoomBigEmo3(true);
-                    }}
-                    onMouseLeave={(e: any) => {
-                      setZoom3(false);
-                      setZoomBigEmo3(false);
-                    }}
-                    onClick={() => {
-
-
-
-                      startSpin3();
-                      CallEmoBackend(3);
-
-
-                    }}
-                    item
-                    xs={12}
-                    style={{
-                      top: `-${emo2}vh`,
-                      width: matchPc ? "3vw" : matchTablet ? "5vw" : "15vw",
-                      height: matchPc ? "5vh" : matchTablet ? "7vh" : "5.5vh",
-                      position: "relative",
-                      display: "flex",
-                      visibility: miniLayoutPost ? "hidden" : "visible",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      zIndex: 9,
-                      left: matchPc ? "94%" : matchTablet ? "93%" : "85%",
-                      backgroundColor: emocolor,
-                      opacity: emoOpacity,
-                    }}
-                  >
-                    <span
-                      className={
-                        Spincare === 0
-                          ? `${themepadding}`
-                          : `${themepadding} spinnerEmott`
-                      }
-                      style={{
-                        padding: "2px",
-                        width: matchPc ? "1.8vw" : matchTablet ? "4vw" : "7vw",
-                        height: matchPc ? "1.8vw" : matchTablet ? "3vh" : "4vh",
-                        borderRadius: "50%",
-                        margin: "auto",
-                      }}
-                    >
-                      <img
-                        className={emotionClass}
-                        src={ooim}
-                        alt="a superstarz post "
-                        style={{
-                          cursor: "pointer",
-                          boxShadow: darkmodeReducer
-                            ? "0 0 1px #555555"
-                            : "0 0 0.1px #222222",
-                          width: "100%",
-                          height: "auto",
-                          padding: "0px",
-                          objectFit: "contain",
-                          borderRadius: "50%",
-                          transform: Zoom3 ? "scale(2)" : "scale(1.2)",
-                          transition: "transform 0.1s",
-                          opacity: 1
-                        }}
-                      />
-                    </span>
-                  </Grid>
-
-                  <Grid
-                    onMouseEnter={(e: any) => {
-                      setZoom4(true);
-                      setZoomBigEmo4(true);
-                    }}
-                    onMouseLeave={(e: any) => {
-                      setZoom4(false);
-                      setZoomBigEmo4(false);
-                    }}
-                    onClick={() => {
-
-                      startSpin4();
-                      CallEmoBackend(4);
-
-
-                    }}
-                    item
-                    xs={12}
-                    style={{
-                      top: `-${emo}vh`,
-                      width: matchPc ? "3vw" : matchTablet ? "5vw" : "15vw",
-                      height: matchPc ? "5vh" : matchTablet ? "7vh" : "5.5vh",
-                      position: "relative",
-                      display: "flex",
-                      visibility: miniLayoutPost ? "hidden" : "visible",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      zIndex: 9,
-                      left: matchPc ? "94%" : matchTablet ? "93%" : "85%",
-                      backgroundColor: emocolor,
-                      opacity: emoOpacity,
-                    }}
-                  >
-                    <span
-                      className={
-                        Spinfun === 0
-                          ? `${themepadding}`
-                          : `${themepadding} spinnerEmott`
-                      }
-                      style={{
-                        padding: "2px",
-                        width: matchPc ? "1.8vw" : matchTablet ? "4vw" : "7vw",
-                        height: matchPc ? "1.8vw" : matchTablet ? "3vh" : "4vh",
-                        borderRadius: "50%",
-                        margin: "auto",
-                      }}
-                    >
-                      <img
-                        className={emotionClass}
-                        src={laughim}
-                        alt="a superstarz post "
-                        style={{
-                          cursor: "pointer",
-                          boxShadow: darkmodeReducer
-                            ? "0 0 1px #555555"
-                            : "0 0 0.1px #222222",
-                          width: "100%",
-                          height: "auto",
-                          padding: "0px",
-                          objectFit: "contain",
-                          borderRadius: "50%",
-                          opacity: 1,
-                          transform: Zoom4 ? "scale(2)" : "scale(1.2)",
-                          transition: "transform 0.1s",
-                        }}
-                      />
-                    </span>
-                  </Grid>
-
-                  {/*///////////////////////////////////////////////////////////////////////////EMOTIONS*/}
-
-                  {/*///////////////////////////////////////////////////////////////////////////REACTION NUMBERS*/}
-                  < div
-                    className={
-                      darkmodeReducer ? "zuperkinglight" : "zuperkinglight"
-                    }
-                    style={{
-                      backgroundColor: emocolor,
-                      padding: Emo1Num === 0 ? "0px" : "5px",
-                      opacity: darkmodeReducer ? 0.89 : 0.84,
-                      cursor: "pointer",
-                      top: `${emoNum}vh`,
+                      ...animationPad,
+                      height: '0px',
+                      bottom: WebsiteMode ? isSafari ? `-${postbackheight / 1.03}px` :
+                        matchMobile ? `${postbackheight / 0.31}px` : `${postbackheight / 0.53}px` :
+                        matchMobile ? `${postbackheight / 0.33}px` : `${postbackheight / 0.08}px`,
                       position: "absolute",
-                      zIndex: 8,
-                      fontFamily: "Arial, Helvetica, sans-seri",
-                      width: Emo1Num === 0 ? "0px" : "6%",
-                      height: Emo1Num === 0 ? "0px" : "",
-                      marginLeft: "89%",
-                      fontSize: "1.2vw",
-                      fontWeight: "bold",
-                      textAlign: "center",
-                      transform: "scale(0.9)",
-                      visibility:
-                        Ein === null || Ein === 0 ? "hidden" : "visible",
-                    }}
-                  >
-                    <span
-                      onClick={() => {
-                        setconnectTemplateGo(0);
-                        setCommentPostid(postData[pey]);
-                        setDiscussionImage(postDatainner[pey]);
-                        OpenModalForm(3);
-                        settypeEmo(3);
-                      }}
-                      className={
-                        Emo1Num === 0 || Emo1Num === null
-                          ? ""
-                          : darkmodeReducer
-                            ? "turdark"
-                            : "turlight"
-                      }
-                      style={{
-                        padding: Emopad,
-                        paddingLeft: "10px",
-                        paddingRight: "10px",
-                        backgroundColor:
-                          Emo1Num === 0 || Emo1Num === null
-                            ? ""
-                            : darkmodeReducer
-                              ? "rgba(51,51,51,0.76)"
-                              : "rgba(255,255,255,0.7) ",
-
-                        borderRadius: "50%",
-                        fontSize: Emofont,
-                        color: darkmodeReducer ? "#ffffff" : "#000000",
-                        display: "none",
-                      }}
-                    >
-                      {Emo1Num === 0 ? "" : Emo1Num}
-                    </span>
-                  </div>
-
-                  <div
-                    className={
-                      darkmodeReducer ? "zuperkinglight" : "zuperkinglight"
-                    }
-                    style={{
-                      backgroundColor: emocolor,
-                      padding: Emo2Num === 0 ? "0px" : "5px",
-                      opacity: darkmodeReducer ? 0.89 : 0.84,
-                      cursor: "pointer",
-                      top: `${emoNum2}vh`,
-                      position: "absolute",
-                      zIndex: 8,
-                      fontFamily: "Arial, Helvetica, sans-seri",
-                      width: Emo2Num === 0 ? "0px" : "6%",
-                      height: Emo2Num === 0 ? "0px" : "",
-                      marginLeft: "89%",
-                      fontSize: "1.2vw",
-                      fontWeight: "bold",
-                      textAlign: "center",
-                      transform: "scale(0.9)",
-                      visibility:
-                        Ein === null || Ein === 0 ? "hidden" : "visible",
-                    }}
-                  >
-                    <span
-                      className={
-                        Emo2Num === 0 || Emo2Num === null
-                          ? ""
-                          : darkmodeReducer
-                            ? "turdark"
-                            : "turlight"
-                      }
-                      style={{
-                        padding: Emopad2,
-                        paddingLeft: "10px",
-                        paddingRight: "10px",
-                        backgroundColor:
-                          Emo2Num === 0 || Emo2Num === null
-                            ? ""
-                            : darkmodeReducer
-                              ? "rgba(51,51,51,0.76)"
-                              : "rgba(255,255,255,0.7) ",
-
-                        borderRadius: "50%",
-                        fontSize: Emofont2,
-                        color: darkmodeReducer ? "#ffffff" : "#000000",
-                        display: "none",
-                      }}
-                    >
-                      {Emo2Num === 0 ? "" : Emo2Num}
-                    </span>
-                  </div>
-
-                  <div
-
-                    onMouseEnter={(e: any) => {
-                      setZoomx1(true);
-
-                    }}
-                    onMouseLeave={(e: any) => {
-                      setZoomx1(false);
-
-                    }}
-
-
-                    className={
-                      ////Ein is emo in
-                      darkmodeReducer ? "zuperkinglight" : "zuperkinglight"
-                    }
-                    style={{
-                      backgroundColor: emocolor,
-                      padding: Emo3Num === 0 ? "0px" : "5px",
-                      opacity: darkmodeReducer ? 0.79 : 0.74,
-                      transform: matchMobile ? Zoomx1 ? "scale(1.4)" : "scale(0.7)" : Zoomx1 ? "scale(2.7)" : "scale(1)",
-                      transition: "transform 0.1s",
-                      cursor: "pointer",
-                      top: `${emoNum3}vh`,
-                      position: "absolute",
-                      zIndex: 8,
-                      fontFamily: "Arial, Helvetica, sans-seri",
-                      width: Emo3Num === 0 ? "0px" : "6%",
-                      height: Emo3Num === 0 ? "0px" : "",
-                      marginLeft: matchMobile ? '76%' : "88%",
-                      fontSize: "1.2vw",
-                      fontWeight: "bold",
-                      textAlign: "center",
-                      visibility:
-                        Ein === null || Ein === 0 ? "hidden" : "visible",
-                    }}
-                  >
-                    <span
-                      onClick={() => {
-                        dispatch(
-                          UpdateHistory(paperPostScrollRef.current.scrollTop)
-                        );
-                        dispatch(UpdatePostFromCom(postData));
-                        dispatch(
-                          UpdateCommentHistory(postData[pey], postData[pey].item2)
-                        );
-
-                        dispatch(UpdateReactType(3));
-
-                        setconnectTemplateGo(0);
-                        setCommentPostid(postData[pey]);
-                        setDiscussionImage(postData[pey].item2);
-                        OpenModalForm(3);
-                        settypeEmo(3);
-                      }}
-                      className={
-                        Emo3Num === 0 || Emo3Num === null
-                          ? ""
-                          : darkmodeReducer
-                            ? "turdark"
-                            : "turlight"
-                      }
-                      style={{
-                        padding: matchMobile ? '5px' : Emopad3,
-                        paddingLeft: matchMobile ? '10px' : "10px",
-                        paddingRight: matchMobile ? '10px' : "10px",
-                        backgroundColor:
-                          Emo3Num === 0 || Emo3Num === null
-                            ? ""
-                            : darkmodeReducer
-                              ? "rgba(51,51,51,0.76)"
-                              : "rgba(255,255,255,0.7) ",
-
-                        borderRadius: "50%",
-                        fontSize: matchMobile ? '2.7vh' : Emofont3,
-                        color: darkmodeReducer ? "#ffffff" : "#000000",
-                      }}
-                    >
-                      {Emo3Num === 0 ? "" : Emo3Num}
-                    </span>
-                  </div>
-
-                  <div
-                    className={
-                      darkmodeReducer ? "zuperkinglight" : "zuperkinglight"
-                    }
-
-                    onMouseEnter={(e: any) => {
-                      setZoomx2(true);
-
-                    }}
-                    onMouseLeave={(e: any) => {
-                      setZoomx2(false);
-
-                    }}
-
-
-                    style={{
-                      backgroundColor: emocolor,
-                      padding: Emo4Num === 0 ? "0px" : "5px",
-                      opacity: darkmodeReducer ? 0.79 : 0.74,
-                      transform: matchMobile ? Zoomx2 ? "scale(1.4)" : "scale(0.7)" : Zoomx2 ? "scale(2.7)" : "scale(1)",
-                      transition: "transform 0.1s",
-                      cursor: "pointer",
-                      top: `${emoNum4}vh`,
-                      position: "absolute",
-                      zIndex: 8,
-                      fontFamily: "Arial, Helvetica, sans-seri",
-                      width: Emo4Num === 0 ? "0px" : "6%",
-                      height: Emo4Num === 0 ? "0px" : "",
-                      marginLeft: matchMobile ? '76%' : "88%",
-                      fontSize: "1.2vw",
-                      fontWeight: "bold",
-                      textAlign: "center",
-                      visibility:
-                        Ein === null || Ein === 0 ? "hidden" : "visible",
-                    }}
-                  >
-                    <span
-                      onClick={() => {
-                        dispatch(
-                          UpdateHistory(paperPostScrollRef.current.scrollTop)
-                        );
-                        dispatch(UpdatePostFromCom(postData));
-                        dispatch(
-                          UpdateCommentHistory(postData[pey], postData[pey].item2)
-                        );
-
-                        dispatch(UpdateReactType(4));
-
-                        setconnectTemplateGo(0);
-                        setCommentPostid(postData[pey]);
-                        setDiscussionImage(postData[pey].item2);
-                        OpenModalForm(3);
-                        settypeEmo(4);
-                      }}
-                      className={
-                        Emo4Num === 0 || Emo4Num === null
-                          ? ""
-                          : darkmodeReducer
-                            ? "turdark"
-                            : "turlight"
-                      }
-                      style={{
-                        padding: matchMobile ? '5px' : Emopad3,
-                        paddingLeft: matchMobile ? '10px' : "10px",
-                        paddingRight: matchMobile ? '10px' : "10px",
-                        backgroundColor:
-                          Emo4Num === 0 || Emo4Num === null
-                            ? ""
-                            : darkmodeReducer
-                              ? "rgba(51,51,51,0.76)"
-                              : "rgba(255,255,255,0.7)",
-
-                        borderRadius: "50%",
-                        fontSize: matchMobile ? '2.7vh' : Emofont4,
-                        color: darkmodeReducer ? "#ffffff" : "#000000",
-                      }}
-                    >
-                      {Emo4Num === 0 ? "" : Emo4Num}
-                    </span>
-                  </div>
-                  {/*///////////////////////////////////////////////////////////////////////////REACTION NUMBERS*/}
-
-
-
-                  {/*///////////////////////////////////////////////////////////////////////////BACKPAD CLICKABLE*/}
-                  <div
-                    onClick={clickslider}
-                    style={{
-                      opacity: 0,
-                      cursor: "pointer",
-                      top: matchMobile ? `-9vh` : `-1vh`,
-                      position: "absolute",
-                      zIndex: 6,
-                      paddingLeft: "2vw",
-                      fontFamily: "Arial, Helvetica, sans-seri",
-                      height: "20vh",
-                      width: "100%",
-                      backgroundColor: "",
-                    }}
-                  ></div>
-                  {/*///////////////////////////////////////////////////////////////////////////BACKPAD CLICKABLE*/}
-
-
-                  {/*///////////////////////////////////////////////////////////////////////////PROFILE-PIC*/}
-
-                  <Connect
-                    GoToMember={GoToMember}
-                    Added={Added}
-                    setAdded={setAdded}
-                    PostCon={1}
-                    Comment={0}
-                    Reaction={0}
-                    Profile={0}
-                    Mini={0}
-                    profileImageref={profileImageref}
-                    calculateconnectPosition={calculateconnectPosition}
-                    profilewidth={profilewidth}
-                    postprofiletop={isSafari ? '-7.7vh' : postprofiletop}
-                    optionsClass={optionsClass}
-                    post={post}
-                    profileImagethumbLeft={profileImagethumbLeft}
-                    profileImagethumbTop={profileImagethumbTop}
-                  />
-                  {/*///////////////////////////////////////////////////////////////////////////PROFILE-PIC*/}
-
-                  {/*///////////////////////////////////////////////////////////////////////////USERNAME */}
-                  <div
-                    className={
-                      darkmodeReducer
-                        ? "zuperxyinfoPostDark"
-                        : "zuperxyinfoPostLight"
-                    }
-                    style={{
-                      width: "79%",
-                      visibility: miniLayoutPost ? "hidden" : "visible",
-                      top: isSafari ? '-12vh' : postusernametop2,
-                      position: "relative",
-                      display: "flex", //flex
-                      alignItems: "center",
-                      justifyContent: "left",
-                      zIndex: 1,
-                      paddingLeft: "2vw",
-                      fontFamily: "Arial, Helvetica, sans-seri",
-                      marginLeft: postusernameleft,
-                      height: "20px",
-                    }}
-                  >
-                    <span>
-                      <span
-                        className={
-                          darkmodeReducer ? "zuperkinglightx" : "zuperkinglight"
-                        }
-                        style={{
-                          color: darkmodeReducer ? "#eeeeee" : "#ffffff",
-                        }}
-                      >
-                        <span
-                          onClick={() => {
-                            GoToMemberLoaderUp();
-                          }}
-
-                          style={{
-                            fontWeight: "bold",
-                            fontSize: isSafari ? '1.7vh' : postusernamefont,
-                            cursor: 'pointer',
-
-                          }}
-                        >
-                          {post.username}
-
-                          {post.audioData ? <AudiotrackIcon
-                            onClick={() => {
-
-
-                            }}
-                            className={
-                              darkmodeReducer
-                                ? "make-small-icons-clickable-lightCrop dontallowhighlighting zupermenulight "
-                                : "make-small-icons-clickable-darkCrop dontallowhighlighting zupermenudark  "}
-
-                            style={{
-                              color: darkmodeReducer ? '#ffffff' : '#ffffff',
-                              fontSize: matchMobile ? '1.8vh' : '0.9vw',
-                              backgroundColor: post.color1,
-                              marginLeft: matchMobile ? '5vw' : '1.2vw',
-                              fontFamily: "Arial, Helvetica, sans-serif",
-                              fontWeight: "bolder",
-                              opacity: 0.5,
-                              padding: "2px",
-                            }}
-                          /> : null}
-
-                        </span>
-                      </span>
-                    </span>
-                  </div>
-
-                  {/*///////////////////////////////////////////////////////////////////////////USERNAME */}
-
-                  {/*///////////////////////////////////////////////////////////////////////////CAPTION AND TOPIC*/}
-                  <div
-                    className={
-                      darkmodeReducer
-                        ? "zuperxyinfoPostDark"
-                        : "zuperxyinfoPostLight"
-                    }
-                    style={{
-                      width: "79%",
-                      visibility: miniLayoutPost ? "hidden" : "visible",
-                      top: isSafari ? '-9vh' : postusernametop,
-                      position: "relative",
-                      display: "flex", //flex
-                      alignItems: "center",
-                      justifyContent: "left",
-                      zIndex: 1,
-                      paddingLeft: "2vw",
-                      fontFamily: "Arial, Helvetica, sans-seri",
-                      marginLeft: postusernameleft,
-                      height: "20px",
-                    }}
-                  >
-                    <span>
-                      <span
-                        className={
-                          darkmodeReducer ? "zuperkinglightx" : "zuperkinglight"
-                        }
-                        style={{
-                          color: darkmodeReducer ? "#eeeeee" : "#ffffff",
-                        }}
-                      >
-                        <span
-                          onClick={() => {
-                            GoToMemberLoaderUp();
-                          }}
-
-                          style={{
-                            fontWeight: "bold",
-                            fontSize: isSafari ? '1.8vh' : postusernamefont,
-                            cursor: 'pointer',
-                            fontFamily: "Roboto Condensed",
-
-                          }}
-                        >
-                          {post.topic ? post.topic : "Clikbate"}{" "}
-                        </span>
-
-                        <span
-                          style={{
-                            opacity: 0,
-                            fontSize: dotspace,
-
-
-                          }}
-                        >
-                          .
-                        </span>
-                        <span
-                          style={{
-                            opacity: 0,
-                            fontSize: dotspace,
-
-
-                          }}
-                        >
-                          .
-                        </span>
-                        <span
-                          style={{
-                            opacity: 0,
-                            fontSize: dotspace,
-
-
-                          }}
-                        >
-                          .
-                        </span>
-
-                        <span
-                          style={{
-                            opacity: 0,
-                            fontSize: dotspace,
-
-
-                          }}
-                        >
-                          .
-                        </span>
-
-
-                        <span className={ShowBigPlay ? 'blinkingxx' : ''}
-                          onClick={() => {
-
-                            if (ShowBigPlay) {
-                              clearAllTimers();
-                            } else {
-                              setsliderIndexMini(sliderIndex);
-                              setzoomClickedIndex(pey + 1);
-                              setminiProfile(true);
-                            }
-
-                          }}
-
-                          onTouchStart={() => {
-                            setBigCircle(true);
-                          }}
-                          onTouchEnd={() => {
-                            setBigCircle(false);
-                          }}
-
-                          onMouseOver={() => {
-                            setBigCircle(true);
-                          }}
-                          onMouseOut={() => {
-                            setBigCircle(false);
-                          }}
-
-                          style={{
-                            opacity: 0.9,
-                            cursor: BigCircle ? "pointer" : "default",
-
-
-                          }}
-                        >
-
-
-
-                          {itemcroptype[pey] === 1 ? (
-                            <AlbumIcon
-                              className="zuperkingtur"
-                              style={{
-                                fontSize: postcirclefont,
-                                color: post.color1,
-                                transform: BigCircle ? "scale(4)" : "scale(1.5)", opacity: 0.6,
-                                transition: "transform 0.05s",
-
-                              }}
-                            />
-                          ) : itemcroptype[pey] === 2 ? (
-                            <AlbumIcon
-                              className="zuperkingtur"
-                              style={{
-                                fontSize: postcirclefont,
-                                color: post.color1,
-                                transform: BigCircle ? "scale(4)" : "scale(1.5)", opacity: 0.6,
-                                transition: "transform 0.05s",
-                              }}
-                            />
-                          ) : (
-                            <CircleIcon
-                              className="zuperkingtur"
-                              style={{
-                                fontSize: postcirclefont,
-                                color: post.color1,
-                                transform: BigCircle ? "scale(4)" : "scale(1.5)", opacity: 0.6,
-                                transition: "transform 0.05s",
-
-                              }}
-                            />
-                          )}
-
-                        </span>
-                        <span
-                          style={{
-                            opacity: 0,
-                            fontSize: dotspace,
-
-
-                          }}
-                        >
-                          .
-                        </span>
-
-                        <span
-                          style={{
-                            opacity: 0,
-                            fontSize: dotspace,
-
-
-                          }}
-                        >
-                          .
-                        </span>
-                        <span
-                          style={{
-                            opacity: 0,
-                            fontSize: dotspace,
-
-
-                          }}
-                        >
-                          .
-                        </span>
-                        <span
-                          style={{
-                            opacity: 0,
-                            fontSize: dotspace2,
-                          }}
-                        >
-                          .
-                        </span>
-
-                        <span
-                          style={{
-                            fontSize: isSafari ? '1.6vh' : posttopicfont,
-                            fontFamily: "Arial, Helvetica, sans-seri",
-                            fontWeight: "bold",
-                            opacity: 0.9,
-                          }}
-                        >
-
-                          {
-                            //////////////////caption
-                          }
-
-                          <span style={{}}>     {post.caption}</span>
-
-
-                          {
-                            ////////////////  caption
-                          }
-
-                          <span style={{ padding: "5px" }}>
-                            <CircleIcon
-                              onClick={() => {
-                                setsliderIndexMini(sliderIndex);
-                                setzoomClickedIndex(pey + 1);
-                                setminiProfile(true);
-                              }}
-                              onMouseOver={() => {
-                                setBigCircle(true);
-                              }}
-                              onMouseOut={() => {
-                                setBigCircle(false);
-                              }}
-                              className="zuperkingtur"
-                              style={{
-                                display: 'none',
-                                fontSize: postcirclefont,
-                                color: "#fffff",
-                                transform: BigCircle ? "scale(2.5)" : "scale(1)",
-                                cursor: BigCircle ? "pointer" : "default",
-                                transition: "transform 0.5s",
-                              }}
-                            />
-                          </span>
-                        </span>
-                      </span>
-                    </span>
-                  </div>
-                  {/*///////////////////////////////////////////////////////////////////////////USERNAME AND TOPIC*/}
-                  {/*///////////////////////////////////////////////////////////////////////////CAPTION*/}
-                  <div
-                    style={{
-                      top: postcaptiontop,
-                      position: "relative",
-                      marginLeft: postcaptionleft,
-                      zIndex: 1,
-                      paddingLeft: "1.95vw",
-                      fontFamily: "Arial, Helvetica, sans-seri",
-                      height: postcaptionheight,
-                      width: postcaptionwidth,
-                      lineHeight: postcaptionline,
-                      overflow: "hidden",
-                      display: 'none'
-                    }}
-                  >
-                    <span
-                      className={textback}
-                      style={{
-                        verticalAlign: "middle",
-                        fontSize: postcaptionfont,
-                        fontWeight: "normal",
-                        margin: "0",
-                        opacity: darkmodeReducer ? 0.6 : 0.7,
-                        padding: "7px",
-                        justifyContent: "center",
-                        color: darkmodeReducer ? "#cccccc" : "#000000",
-                      }}
-                    ></span>
-                  </div>
-                  {/*///////////////////////////////////////////////////////////////////////////CAPTION*/}
-                  {/*///////////////////////////////////////////////////////////////////////////OPTIONS*/}
-
-                  <div
-                    className={
-                      darkmodeReducer
-                        ? "zuperxyinfoPostDark"
-                        : "zuperxyinfoPostLight"
-                    }
-                    style={{
-                      top: isSafari ? '-6.3vh' : postoptionstop,
-                      marginLeft: matchMobile ? '84vw' : '43vw',
-                      position: "relative",
+                      backgroundColor: '#00ccff',
                       transition: "all 350ms ease",
-                      display: "flex",
-                      visibility: miniLayoutPost ? "hidden" : "visible",
-                      alignItems: "center",
-                      justifyContent: "left",
-                      zIndex: 2,
-                      height: "0px",
-                      width: "98%",
-                      paddingLeft: "2vw",
-                      textAlign: 'center',
-                      opacity: darkmodeReducer ? 1 : 0.9,
+                      zIndex: 12,
+                      borderBottomLeftRadius: "0px",
+                      borderBottomRightRadius: "0px",
+
+
                     }}
                   >
-                    <span
-                      className={
-                        darkmodeReducer ? "zuperkinglightx" : "zuperkinglight"
-                      }
-                      style={{
-                        color: '#ffffff',
-                        padding: "0px",
-                        opacity: 0.8,
-                        fontSize: postusernamefontx,
-                        fontFamily: "Arial, Helvetica, sans-seri",
-                        cursor: "pointer",
+                    {/*///////////////////////////////////////////////////// opacity: 0.6,//////////////////////EMOTIONS*/}
 
+
+                    <Grid
+                      item
+                      xs={12}
+                      style={{
+                        top: `-${emo}vh`,
+                        width: matchPc ? "3vw" : matchTablet ? "5vw" : "15vw",
+                        height: matchPc ? "5vh" : matchTablet ? "7vh" : "5.5vh",
+                        position: "relative",
+                        display: "flex",
+                        visibility: miniLayoutPost ? "hidden" : "visible",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        zIndex: 9,
+                        cursor: "pointer",
+                        left: matchPc ? "94%" : matchTablet ? "93%" : "85%",
+                        backgroundColor: emocolor,
+                        opacity: emoOpacity,
                       }}
                     >
-                      {PostTime}
-                    </span>
-                  </div>
-                  {/*///////////////////////////////////////////////////////////////////////////OPTIONS*/}
 
-                  <Grid
-                    item
-                    className={Spincare ? "" : "changeOpacity"}
-                    xs={12}
-                    style={{
-                      padding: "0px",
-                      height: "0px",
-                      position: "fixed",
-                      width: "100%",
-                      top: ZoomBigEmo3 ? "14%" : "-20%",
-                      zIndex: 0,
-                    }}
-                  >
-                    {ZoomBigEmo3 ? (
-                      <img
-                        className={emotionClass}
-                        src={ooim}
-                        alt="a superstarz post "
+
+
+
+
+
+                      <span
+                        className={
+                          SpinLovely === 0
+                            ? `${themepadding}`
+                            : `${themepadding} spinnerEmo`
+                        }
                         style={{
-                          cursor: "pointer",
-                          boxShadow: darkmodeReducer
-                            ? "0 0 1px #555555"
-                            : "0 0 0.1px #222222",
-                          width: matchPc ? "20%" : "26%",
-                          marginLeft: "38%",
-                          opacity: Hideonload ? 0 : 0.7,
-                          height: "auto",
-                          padding: "0px",
-                          objectFit: "contain",
+                          padding: "2px",
+                          width: matchPc ? "1.8vw" : matchTablet ? "4vw" : "7.5vw",
+                          height: matchPc ? "1.8vw" : matchTablet ? "3vh" : "4vh",
                           borderRadius: "50%",
-                          transition: "transform 2s",
-                          display: ZoomBigEmo3 ? "block" : "none",
+                          margin: "auto",
                         }}
-                      />
-                    ) : null}{" "}
-                  </Grid>
+                      >
+                        <img
+                          className={emotionClass}
+                          src={`./images/emotions/love.png`}
+                          alt="a superstarz post "
+                          style={{
+                            cursor: "pointer",
+                            boxShadow: darkmodeReducer
+                              ? "0 0 1px #555555"
+                              : "0 0 0.1px #222222",
+                            width: "100%",
+                            height: "auto",
+                            transform: Zoom1 ? "scale(1.3)" : "scale(1)",
+                            transition: "transform 2s",
+                            padding: "0px",
+                            objectFit: "contain",
+                            borderRadius: "50%",
+                            display: "none",
+                          }}
+                        />
+                      </span>{" "}
+                    </Grid>
 
-                  <Grid
-                    item
-                    className={Spinfun ? "" : "changeOpacity"}
-                    xs={12}
-                    style={{
-                      padding: "0px",
-                      height: "0px",
-                      position: "fixed",
-                      width: "100%",
-                      top: ZoomBigEmo4 ? "14%" : "-20%",
-                      zIndex: 0,
-                    }}
-                  >
-                    {" "}
-                    {ZoomBigEmo4 ? (
-                      <>
-                        {" "}
+
+
+
+
+                    <Grid
+                      item
+                      xs={12}
+                      style={{
+                        top: `-${emo}vh`,
+                        width: matchPc ? "3vw" : matchTablet ? "5vw" : "15vw",
+                        height: matchPc ? "5vh" : matchTablet ? "7vh" : "5.5vh",
+                        position: "relative",
+                        display: "flex",
+                        visibility: miniLayoutPost ? "hidden" : "visible",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        zIndex: 9,
+                        left: matchPc ? "94%" : matchTablet ? "93%" : "85%",
+                        backgroundColor: emocolor,
+                        opacity: emoOpacity,
+                      }}
+                    >
+                      <span
+                        className={
+                          Spincool === 0
+                            ? `${themepadding}`
+                            : `${themepadding} spinnerEmo`
+                        }
+                        style={{
+                          padding: "2px",
+                          width: matchPc ? "1.8vw" : matchTablet ? "4vw" : "7.5vw",
+                          height: matchPc ? "1.8vw" : matchTablet ? "3vh" : "4vh",
+                          borderRadius: "50%",
+                          margin: "auto",
+                        }}
+                      >
+                        <img
+                          className={emotionClass}
+                          src={`./images/emotions/cool.png`}
+                          alt="a superstarz post "
+                          style={{
+                            cursor: "pointer",
+                            boxShadow: darkmodeReducer
+                              ? "0 0 1px #555555"
+                              : "0 0 0.1px #222222",
+                            width: "100%",
+                            height: "auto",
+                            padding: "0px",
+                            objectFit: "contain",
+                            borderRadius: "50%",
+                            transform: Zoom2 ? "scale(1.3)" : "scale(1)",
+                            transition: "transform 2s",
+                            display: "none",
+                          }}
+                        />
+                      </span>
+                    </Grid>
+
+                    <Grid
+                      onMouseEnter={(e: any) => {
+                        setZoom3(true);
+                        setZoomBigEmo3(true);
+                      }}
+                      onMouseLeave={(e: any) => {
+                        setZoom3(false);
+                        setZoomBigEmo3(false);
+                      }}
+                      onClick={() => {
+
+                        if (Ein === null || Ein === 0) {
+
+
+
+                          setShowEmoIcon(true);
+
+
+                          if (idReducer === GuestReducer) {
+                            dispatch(UpdateSign(true));
+                          } else {
+                            startSpin3();
+                            CallEmoBackend(3);
+
+                          }
+                        } else {
+
+                          dispatch(
+                            UpdateHistory(paperPostScrollRef.current.scrollTop)
+                          );
+                          dispatch(UpdatePostFromCom(postData));
+                          dispatch(
+                            UpdateCommentHistory(postData[pey], postData[pey].item2)
+                          );
+
+                          dispatch(UpdateReactType(3));
+
+                          setconnectTemplateGo(0);
+                          setCommentPostid(postData[pey]);
+                          setDiscussionImage(postData[pey].item2);
+                          OpenModalForm(3);
+                          settypeEmo(3);
+
+                        }
+
+
+
+
+
+
+                      }}
+                      item
+                      xs={12}
+                      style={{
+                        top: `-${emo2}vh`,
+                        width: matchPc ? "3vw" : matchTablet ? "5vw" : "15vw",
+                        height: matchPc ? "5vh" : matchTablet ? "7vh" : "5.5vh",
+                        position: "relative",
+                        display: "flex",
+                        visibility: miniLayoutPost ? "hidden" : "visible",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        zIndex: 9,
+                        left: matchPc ? "94%" : matchTablet ? "93%" : "85%",
+                        backgroundColor: emocolor,
+                        opacity: emoOpacity,
+                      }}
+                    >
+                      <span
+                        className={
+                          Spincare === 0
+                            ? `${themepadding}`
+                            : `${themepadding} spinnerEmott`
+                        }
+                        style={{
+                          padding: "2px",
+                          width: matchPc ? "1.8vw" : matchTablet ? "4vw" : "7vw",
+                          height: matchPc ? "1.8vw" : matchTablet ? "3vh" : "4vh",
+                          borderRadius: "50%",
+                          margin: "auto",
+                        }}
+                      >
+                        <img
+                          className={emotionClass}
+                          src={ooim}
+                          alt="a superstarz post "
+                          style={{
+                            cursor: "pointer",
+                            boxShadow: darkmodeReducer
+                              ? "0 0 1px #555555"
+                              : "0 0 0.1px #222222",
+                            width: "100%",
+                            height: "auto",
+                            padding: "0px",
+                            objectFit: "contain",
+                            borderRadius: "50%",
+                            transform: Zoom3 ? "scale(2)" : "scale(1.2)",
+                            transition: "transform 0.1s",
+                            opacity: 1
+                          }}
+                        />
+                      </span>
+                    </Grid>
+
+                    <Grid
+                      onMouseEnter={(e: any) => {
+                        setZoom4(true);
+                        setZoomBigEmo4(true);
+                      }}
+                      onMouseLeave={(e: any) => {
+                        setZoom4(false);
+                        setZoomBigEmo4(false);
+                      }}
+                      onClick={() => {
+
+                        if (Ein === null || Ein === 0) {
+
+                          setShowEmoIcon(true);
+
+                          if (idReducer === GuestReducer) {
+                            dispatch(UpdateSign(true));
+                          } else {
+                            startSpin4();
+                            CallEmoBackend(4);
+
+                          }
+
+                        } else {
+
+                          dispatch(
+                            UpdateHistory(paperPostScrollRef.current.scrollTop)
+                          );
+                          dispatch(UpdatePostFromCom(postData));
+                          dispatch(
+                            UpdateCommentHistory(postData[pey], postData[pey].item2)
+                          );
+
+                          dispatch(UpdateReactType(4));
+
+                          setconnectTemplateGo(0);
+                          setCommentPostid(postData[pey]);
+                          setDiscussionImage(postData[pey].item2);
+                          OpenModalForm(3);
+                          settypeEmo(4);
+
+                        }
+
+
+
+
+
+
+                      }}
+                      item
+                      xs={12}
+                      style={{
+                        top: `-${emo}vh`,
+                        width: matchPc ? "3vw" : matchTablet ? "5vw" : "15vw",
+                        height: matchPc ? "5vh" : matchTablet ? "7vh" : "5.5vh",
+                        position: "relative",
+                        display: "flex",
+                        visibility: miniLayoutPost ? "hidden" : "visible",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        zIndex: 9,
+                        left: matchPc ? "94%" : matchTablet ? "93%" : "85%",
+                        backgroundColor: emocolor,
+                        opacity: emoOpacity,
+                      }}
+                    >
+                      <span
+                        className={
+                          Spinfun === 0
+                            ? `${themepadding}`
+                            : `${themepadding} spinnerEmott`
+                        }
+                        style={{
+                          padding: "2px",
+                          width: matchPc ? "1.8vw" : matchTablet ? "4vw" : "7vw",
+                          height: matchPc ? "1.8vw" : matchTablet ? "3vh" : "4vh",
+                          borderRadius: "50%",
+                          margin: "auto",
+                        }}
+                      >
                         <img
                           className={emotionClass}
                           src={laughim}
+                          alt="a superstarz post "
+                          style={{
+                            cursor: "pointer",
+                            boxShadow: darkmodeReducer
+                              ? "0 0 1px #555555"
+                              : "0 0 0.1px #222222",
+                            width: "100%",
+                            height: "auto",
+                            padding: "0px",
+                            objectFit: "contain",
+                            borderRadius: "50%",
+                            opacity: 1,
+                            transform: Zoom4 ? "scale(2)" : "scale(1.2)",
+                            transition: "transform 0.1s",
+                          }}
+                        />
+                      </span>
+                    </Grid>
+
+                    {/*///////////////////////////////////////////////////////////////////////////EMOTIONS*/}
+
+                    {/*///////////////////////////////////////////////////////////////////////////REACTION NUMBERS*/}
+                    < div
+                      className={
+                        darkmodeReducer ? "zuperkinglight" : "zuperkinglight"
+                      }
+                      style={{
+                        backgroundColor: emocolor,
+                        padding: Emo1Num === 0 ? "0px" : "5px",
+                        opacity: darkmodeReducer ? 0.89 : 0.84,
+                        cursor: "pointer",
+                        top: `${emoNum}vh`,
+                        position: "absolute",
+                        zIndex: 8,
+                        fontFamily: "Arial, Helvetica, sans-seri",
+                        width: Emo1Num === 0 ? "0px" : "6%",
+                        height: Emo1Num === 0 ? "0px" : "",
+                        marginLeft: "89%",
+                        fontSize: "1.2vw",
+                        fontWeight: "bold",
+                        textAlign: "center",
+                        transform: "scale(0.9)",
+                        visibility:
+                          Ein === null || Ein === 0 ? "hidden" : "visible",
+                      }}
+                    >
+                      <span
+                        onClick={() => {
+                          setconnectTemplateGo(0);
+                          setCommentPostid(postData[pey]);
+                          setDiscussionImage(postDatainner[pey]);
+                          OpenModalForm(3);
+                          settypeEmo(3);
+                        }}
+                        className={
+                          Emo1Num === 0 || Emo1Num === null
+                            ? ""
+                            : darkmodeReducer
+                              ? "turdark"
+                              : "turlight"
+                        }
+                        style={{
+                          padding: Emopad,
+                          paddingLeft: "10px",
+                          paddingRight: "10px",
+                          backgroundColor:
+                            Emo1Num === 0 || Emo1Num === null
+                              ? ""
+                              : darkmodeReducer
+                                ? "rgba(51,51,51,0.76)"
+                                : "rgba(255,255,255,0.7) ",
+
+                          borderRadius: "50%",
+                          fontSize: Emofont,
+                          color: darkmodeReducer ? "#ffffff" : "#000000",
+                          display: "none",
+                        }}
+                      >
+                        {Emo1Num === 0 ? "" : Emo1Num}
+                      </span>
+                    </div>
+
+                    <div
+                      className={
+                        darkmodeReducer ? "zuperkinglight" : "zuperkinglight"
+                      }
+                      style={{
+                        backgroundColor: emocolor,
+                        padding: Emo2Num === 0 ? "0px" : "5px",
+                        opacity: darkmodeReducer ? 0.89 : 0.84,
+                        cursor: "pointer",
+                        top: `${emoNum2}vh`,
+                        position: "absolute",
+                        zIndex: 8,
+                        fontFamily: "Arial, Helvetica, sans-seri",
+                        width: Emo2Num === 0 ? "0px" : "6%",
+                        height: Emo2Num === 0 ? "0px" : "",
+                        marginLeft: "89%",
+                        fontSize: "1.2vw",
+                        fontWeight: "bold",
+                        textAlign: "center",
+                        transform: "scale(0.9)",
+                        visibility:
+                          Ein === null || Ein === 0 ? "hidden" : "visible",
+                      }}
+                    >
+                      <span
+                        className={
+                          Emo2Num === 0 || Emo2Num === null
+                            ? ""
+                            : darkmodeReducer
+                              ? "turdark"
+                              : "turlight"
+                        }
+                        style={{
+                          padding: Emopad2,
+                          paddingLeft: "10px",
+                          paddingRight: "10px",
+                          backgroundColor:
+                            Emo2Num === 0 || Emo2Num === null
+                              ? ""
+                              : darkmodeReducer
+                                ? "rgba(51,51,51,0.76)"
+                                : "rgba(255,255,255,0.7) ",
+
+                          borderRadius: "50%",
+                          fontSize: Emofont2,
+                          color: darkmodeReducer ? "#ffffff" : "#000000",
+                          display: "none",
+                        }}
+                      >
+                        {Emo2Num === 0 ? "" : Emo2Num}
+                      </span>
+                    </div>
+
+
+                    {ShowEmoIcon ? <div
+
+                      onMouseEnter={(e: any) => {
+                        setZoomx1(true);
+
+                      }}
+                      onMouseLeave={(e: any) => {
+                        setZoomx1(false);
+
+                      }}
+
+
+                      className={
+                        ////Ein is emo in
+                        darkmodeReducer ? "zuperkinglight" : "zuperkinglight"
+                      }
+                      style={{
+                        backgroundColor: emocolor,
+                        padding: Emo3Num === 0 ? "0px" : "5px",
+                        opacity: darkmodeReducer ? 0.79 : 0.74,
+                        transform: matchMobile ? Zoomx1 ? "scale(1.4)" : "scale(0.7)" : Zoomx1 ? "scale(2.7)" : "scale(1)",
+                        transition: "transform 0.1s",
+                        cursor: "pointer",
+                        top: `${emoNum3}vh`,
+                        position: "absolute",
+                        zIndex: 8,
+                        fontFamily: "Arial, Helvetica, sans-seri",
+                        width: Emo3Num === 0 ? "0px" : "6%",
+                        height: Emo3Num === 0 ? "0px" : "",
+                        marginLeft: matchMobile ? '76%' : "88%",
+                        fontSize: "1.2vw",
+                        fontWeight: "bold",
+                        textAlign: "center",
+                        visibility:
+                          Ein === null || Ein === 0 ? "hidden" : "visible",
+                      }}
+                    >
+                      <span
+                        onClick={() => {
+                          dispatch(
+                            UpdateHistory(paperPostScrollRef.current.scrollTop)
+                          );
+                          dispatch(UpdatePostFromCom(postData));
+                          dispatch(
+                            UpdateCommentHistory(postData[pey], postData[pey].item2)
+                          );
+
+                          dispatch(UpdateReactType(3));
+
+                          setconnectTemplateGo(0);
+                          setCommentPostid(postData[pey]);
+                          setDiscussionImage(postData[pey].item2);
+                          OpenModalForm(3);
+                          settypeEmo(3);
+                        }}
+                        className={
+                          Emo3Num === 0 || Emo3Num === null
+                            ? ""
+                            : darkmodeReducer
+                              ? "turdark"
+                              : "turlight"
+                        }
+                        style={{
+                          padding: matchMobile ? '5px' : Emopad3,
+                          paddingLeft: matchMobile ? '10px' : "10px",
+                          paddingRight: matchMobile ? '10px' : "10px",
+                          backgroundColor:
+                            Emo3Num === 0 || Emo3Num === null
+                              ? ""
+                              : darkmodeReducer
+                                ? "rgba(51,51,51,0.76)"
+                                : "rgba(255,255,255,0.7) ",
+
+                          borderRadius: "50%",
+                          fontSize: matchMobile ? '2.7vh' : Emofont3,
+                          color: darkmodeReducer ? "#ffffff" : "#000000",
+                        }}
+                      >
+                        {Emo3Num === 0 ? "" : Emo3Num}
+                      </span>
+                    </div> : null
+                    }
+
+
+                    {ShowEmoIcon ? <div
+                      className={
+                        darkmodeReducer ? "zuperkinglight" : "zuperkinglight"
+                      }
+
+                      onMouseEnter={(e: any) => {
+                        setZoomx2(true);
+
+                      }}
+                      onMouseLeave={(e: any) => {
+                        setZoomx2(false);
+
+                      }}
+
+
+                      style={{
+                        backgroundColor: emocolor,
+                        padding: Emo4Num === 0 ? "0px" : "5px",
+                        opacity: darkmodeReducer ? 0.79 : 0.74,
+                        transform: matchMobile ? Zoomx2 ? "scale(1.4)" : "scale(0.7)" : Zoomx2 ? "scale(2.7)" : "scale(1)",
+                        transition: "transform 0.1s",
+                        cursor: "pointer",
+                        top: `${emoNum4}vh`,
+                        position: "absolute",
+                        zIndex: 8,
+                        fontFamily: "Arial, Helvetica, sans-seri",
+                        width: Emo4Num === 0 ? "0px" : "6%",
+                        height: Emo4Num === 0 ? "0px" : "",
+                        marginLeft: matchMobile ? '76%' : "88%",
+                        fontSize: "1.2vw",
+                        fontWeight: "bold",
+                        textAlign: "center",
+                        visibility:
+                          Ein === null || Ein === 0 ? "hidden" : "visible",
+                      }}
+                    >
+                      <span
+                        onClick={() => {
+                          dispatch(
+                            UpdateHistory(paperPostScrollRef.current.scrollTop)
+                          );
+                          dispatch(UpdatePostFromCom(postData));
+                          dispatch(
+                            UpdateCommentHistory(postData[pey], postData[pey].item2)
+                          );
+
+                          dispatch(UpdateReactType(4));
+
+                          setconnectTemplateGo(0);
+                          setCommentPostid(postData[pey]);
+                          setDiscussionImage(postData[pey].item2);
+                          OpenModalForm(3);
+                          settypeEmo(4);
+                        }}
+                        className={
+                          Emo4Num === 0 || Emo4Num === null
+                            ? ""
+                            : darkmodeReducer
+                              ? "turdark"
+                              : "turlight"
+                        }
+                        style={{
+                          padding: matchMobile ? '5px' : Emopad3,
+                          paddingLeft: matchMobile ? '10px' : "10px",
+                          paddingRight: matchMobile ? '10px' : "10px",
+                          backgroundColor:
+                            Emo4Num === 0 || Emo4Num === null
+                              ? ""
+                              : darkmodeReducer
+                                ? "rgba(51,51,51,0.76)"
+                                : "rgba(255,255,255,0.7)",
+
+                          borderRadius: "50%",
+                          fontSize: matchMobile ? '2.7vh' : Emofont4,
+                          color: darkmodeReducer ? "#ffffff" : "#000000",
+                        }}
+                      >
+                        {Emo4Num === 0 ? "" : Emo4Num}
+                      </span>
+                    </div> : null}
+
+                    {/*///////////////////////////////////////////////////////////////////////////REACTION NUMBERS*/}
+
+
+
+
+
+                    {/*///////////////////////////////////////////////////////////////////////////PROFILE-PIC*/}
+
+                    <Connect
+                      GoToMember={GoToMember}
+                      Added={Added}
+                      setAdded={setAdded}
+                      PostCon={1}
+                      Comment={0}
+                      Reaction={0}
+                      Profile={0}
+                      Mini={0}
+                      profileImageref={profileImageref}
+                      calculateconnectPosition={calculateconnectPosition}
+                      profilewidth={profilewidth}
+                      postprofiletop={isSafari ? '-6.7vh' : postprofiletop}
+                      optionsClass={optionsClass}
+                      post={post}
+                      profileImagethumbLeft={profileImagethumbLeft}
+                      profileImagethumbTop={profileImagethumbTop}
+                    />
+                    {/*///////////////////////////////////////////////////////////////////////////PROFILE-PIC*/}
+
+                    {/*///////////////////////////////////////////////////////////////////////////USERNAME */}
+                    <div
+                      className={
+                        darkmodeReducer
+                          ? "zuperxyinfoPostDark"
+                          : "zuperxyinfoPostDark "
+                      }
+                      style={{
+                        width: "79%",
+                        visibility: miniLayoutPost ? "hidden" : "visible",
+                        top: isSafari ? '-10.5vh' : postusernametop2,
+                        position: "relative",
+                        display: "none", //flex
+                        alignItems: "center",
+                        justifyContent: "left",
+                        zIndex: 1,
+                        paddingLeft: "2vw",
+
+                        marginLeft: postusernameleft,
+                        height: "20px",
+                      }}
+                    >
+                      <span>
+                        <span
+                          className={
+                            darkmodeReducer ? "zuperkinglightx" : "zuperkinglightx"
+                          }
+                          style={{
+                            color: "#ffffff",
+                          }}
+                        >
+                          <span
+                            onClick={() => {
+                              GoToMemberLoaderUp();
+                            }}
+
+                            style={{
+                              fontWeight: "bold",
+                              fontSize: isSafari ? '1.6vh' : postusernamefont,
+                              cursor: 'pointer',
+                              fontFamily: "Roboto Condensed",
+                              opacity: 0.88,
+
+
+                            }}
+                          >
+
+
+                            {post.audioData ? <AudiotrackIcon
+                              onClick={() => {
+
+
+                              }}
+                              className={
+                                darkmodeReducer
+                                  ? "make-small-icons-clickable-lightCrop dontallowhighlighting zupermenulight "
+                                  : "make-small-icons-clickable-darkCrop dontallowhighlighting zupermenudark  "}
+
+                              style={{
+                                color: darkmodeReducer ? '#ffffff' : '#ffffff',
+                                fontSize: matchMobile ? '1.6vh' : '0.9vw',
+                                backgroundColor: post.color1,
+                                marginLeft: matchMobile ? '5vw' : '1.2vw',
+                                fontFamily: "Arial, Helvetica, sans-serif",
+                                fontWeight: "bolder",
+                                opacity: 0.5,
+                                padding: "2px",
+                              }}
+                            /> : null}
+
+                          </span>
+                        </span>
+                      </span>
+                    </div>
+
+                    {/*///////////////////////////////////////////////////////////////////////////USERNAME */}
+
+                    {/*///////////////////////////////////////////////////////////////////////////CAPTION AND TOPIC*/}
+                    <div
+                      className={
+                        darkmodeReducer
+                          ? "zuperxy"
+                          : "zuperxy"
+                      }
+                      style={{
+                        width: "79%",
+                        visibility: miniLayoutPost ? "hidden" : "visible",
+                        top: isSafari ? '-8vh' : postusernametop,
+                        position: "relative",
+                        display: "flex", //flex
+                        alignItems: "center",
+                        justifyContent: "left",
+                        zIndex: 1,
+                        paddingLeft: "2vw",
+
+                        marginLeft: postusernameleft,
+                        height: "20px",
+                      }}
+                    >
+                      <span>
+                        <span
+                          className={
+                            darkmodeReducer ? "zuperkinglightx" : "zuperkinglightx"
+                          }
+                          style={{
+                            color: "#ffffff",
+                          }}
+                        >
+                          <span
+                            onClick={() => {
+                              GoToMemberLoaderUp();
+                            }}
+
+                            style={{
+                              fontWeight: "bold",
+                              fontSize: isSafari ? '1.9vh' : postusernamefont,
+                              cursor: 'pointer',
+                              fontFamily: "Roboto Condensed",
+                              opacity: 0.88,
+
+                            }}
+                          >
+
+                            {post.username}
+
+                          </span>
+
+                          <span
+                            style={{
+                              opacity: 0,
+                              fontSize: dotspace,
+
+
+                            }}
+                          >
+                            .
+                          </span>
+                          <span
+                            style={{
+                              opacity: 0,
+                              fontSize: dotspace,
+
+
+                            }}
+                          >
+                            .
+                          </span>
+                          <span
+                            style={{
+                              opacity: 0,
+                              fontSize: dotspace,
+
+
+                            }}
+                          >
+                            .
+                          </span>
+
+                          <span
+                            style={{
+                              opacity: 0,
+                              fontSize: dotspace,
+
+
+                            }}
+                          >
+                            .
+                          </span>
+
+
+                          <span className={ShowBigPlay ? 'blinkingxx' : ''}
+                            onClick={() => {
+
+                              if (ShowBigPlay) {
+                                clearAllTimers();
+                              } else {
+                                setsliderIndexMini(sliderIndex);
+                                setzoomClickedIndex(pey + 1);
+                                setminiProfile(true);
+                              }
+
+                            }}
+
+                            onTouchStart={() => {
+                              setBigCircle(true);
+                            }}
+                            onTouchEnd={() => {
+                              setBigCircle(false);
+                            }}
+
+                            onMouseOver={() => {
+                              setBigCircle(true);
+                            }}
+                            onMouseOut={() => {
+                              setBigCircle(false);
+                            }}
+
+                            style={{
+                              opacity: 0.9,
+                              cursor: BigCircle ? "pointer" : "default",
+
+
+                            }}
+                          >
+
+
+
+                          </span>
+
+                          <span
+                            style={{
+                              opacity: 0,
+                              fontSize: dotspace,
+
+
+                            }}
+                          >
+                            .
+                          </span>
+                          <span
+                            style={{
+                              opacity: 0,
+                              fontSize: dotspace2,
+                            }}
+                          >
+                            .
+                          </span>
+
+                          <span
+                            style={{
+                              fontSize: isSafari ? '1.65vh' : posttopicfont,
+                              fontFamily: "Roboto Condensed",
+                              fontWeight: "bold",
+                              opacity: 1,
+                            }}
+                          >
+
+                            {
+                              //////////////////caption
+                            }
+
+                            <span style={{}}>
+
+
+
+                              {post.topic ? post.topic : "Clikbate"}{" "}
+
+
+                            </span>
+
+
+                            {
+                              ////////////////  caption
+                            }
+
+                            <span style={{ padding: "5px" }}>
+                              <CircleIcon
+                                onClick={() => {
+                                  setsliderIndexMini(sliderIndex);
+                                  setzoomClickedIndex(pey + 1);
+                                  setminiProfile(true);
+                                }}
+                                onMouseOver={() => {
+                                  setBigCircle(true);
+                                }}
+                                onMouseOut={() => {
+                                  setBigCircle(false);
+                                }}
+                                className="zuperkingtur"
+                                style={{
+                                  display: 'none',
+                                  fontSize: postcirclefont,
+                                  color: "#fffff",
+                                  transform: BigCircle ? "scale(2.5)" : "scale(1)",
+                                  cursor: BigCircle ? "pointer" : "default",
+                                  transition: "transform 0.5s",
+                                }}
+                              />
+                            </span>
+                          </span>
+                        </span>
+                      </span>
+                    </div>
+                    {/*///////////////////////////////////////////////////////////////////////////USERNAME AND TOPIC*/}
+                    {/*///////////////////////////////////////////////////////////////////////////CAPTION*/}
+                    <div
+                      style={{
+                        top: postcaptiontop,
+                        position: "relative",
+                        marginLeft: postcaptionleft,
+                        zIndex: 1,
+                        paddingLeft: "1.95vw",
+                        fontFamily: "Arial, Helvetica, sans-seri",
+                        height: postcaptionheight,
+                        width: postcaptionwidth,
+                        lineHeight: postcaptionline,
+                        overflow: "hidden",
+                        display: 'none'
+                      }}
+                    >
+                      <span
+                        className={textback}
+                        style={{
+                          verticalAlign: "middle",
+                          fontSize: postcaptionfont,
+                          fontWeight: "normal",
+                          margin: "0",
+                          opacity: darkmodeReducer ? 0.6 : 0.7,
+                          padding: "7px",
+                          justifyContent: "center",
+                          color: darkmodeReducer ? "#cccccc" : "#000000",
+                        }}
+                      ></span>
+                    </div>
+                    {/*///////////////////////////////////////////////////////////////////////////CAPTION*/}
+                    {/*///////////////////////////////////////////////////////////////////////////OPTIONS*/}
+
+                    <div
+                      className={
+                        darkmodeReducer
+                          ? "zuperxyinfoPostDark"
+                          : "zuperxyinfoPostLight"
+                      }
+                      style={{
+                        top: isSafari ? '-5.8vh' : postoptionstop,
+                        marginLeft: matchMobile ? '84vw' : '43vw',
+                        position: "relative",
+                        transition: "all 350ms ease",
+                        display: "flex",
+                        visibility: miniLayoutPost ? "hidden" : "visible",
+                        alignItems: "center",
+                        justifyContent: "left",
+                        zIndex: 2,
+                        height: "0px",
+                        width: "98%",
+                        paddingLeft: "2vw",
+                        textAlign: 'center',
+                        opacity: darkmodeReducer ? 1 : 0.9,
+                      }}
+                    >
+                      <span
+                        className={
+                          darkmodeReducer ? "zuperkinglightx" : "zuperkinglight"
+                        }
+                        style={{
+                          color: '#ffffff',
+                          padding: "0px",
+                          opacity: 0.8,
+                          fontSize: postusernamefontx,
+                          fontFamily: "Arial, Helvetica, sans-seri",
+                          cursor: "pointer",
+                          display: 'none'
+
+                        }}
+                      >
+                        {PostTime}
+                      </span>
+                    </div>
+                    {/*///////////////////////////////////////////////////////////////////////////OPTIONS*/}
+
+                    <Grid
+                      item
+                      className={Spincare ? "" : "changeOpacity"}
+                      xs={12}
+                      style={{
+                        padding: "0px",
+                        height: "0px",
+                        position: "fixed",
+                        width: "100%",
+                        top: ZoomBigEmo3 ? "14%" : "-20%",
+                        zIndex: 0,
+                      }}
+                    >
+                      {ZoomBigEmo3 ? (
+                        <img
+                          className={emotionClass}
+                          src={ooim}
                           alt="a superstarz post "
                           style={{
                             cursor: "pointer",
@@ -2494,19 +2468,59 @@ function Postx({
                             objectFit: "contain",
                             borderRadius: "50%",
                             transition: "transform 2s",
-                            display: ZoomBigEmo4 ? "block" : "none",
+                            display: ZoomBigEmo3 ? "block" : "none",
                           }}
                         />
-                      </>
-                    ) : null}
-                  </Grid>
+                      ) : null}{" "}
+                    </Grid>
 
-                  <Grid item xs={12} style={{ padding: "0px", height: "0px" }}>
-                    {" "}
-                  </Grid>
-                </div>{" "}
-              </>
-            )}
+                    <Grid
+                      item
+                      className={Spinfun ? "" : "changeOpacity"}
+                      xs={12}
+                      style={{
+                        padding: "0px",
+                        height: "0px",
+                        position: "fixed",
+                        width: "100%",
+                        top: ZoomBigEmo4 ? "14%" : "-20%",
+                        zIndex: 0,
+                      }}
+                    >
+                      {" "}
+                      {ZoomBigEmo4 ? (
+                        <>
+                          {" "}
+                          <img
+                            className={emotionClass}
+                            src={laughim}
+                            alt="a superstarz post "
+                            style={{
+                              cursor: "pointer",
+                              boxShadow: darkmodeReducer
+                                ? "0 0 1px #555555"
+                                : "0 0 0.1px #222222",
+                              width: matchPc ? "20%" : "26%",
+                              marginLeft: "38%",
+                              opacity: Hideonload ? 0 : 0.7,
+                              height: "auto",
+                              padding: "0px",
+                              objectFit: "contain",
+                              borderRadius: "50%",
+                              transition: "transform 2s",
+                              display: ZoomBigEmo4 ? "block" : "none",
+                            }}
+                          />
+                        </>
+                      ) : null}
+                    </Grid>
+
+                    <Grid item xs={12} style={{ padding: "0px", height: "0px" }}>
+                      {" "}
+                    </Grid>
+                  </animated.div >
+                </>
+              ) : null}
           </div>
         </div>
       </animated.div >

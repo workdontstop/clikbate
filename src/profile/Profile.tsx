@@ -80,7 +80,10 @@ function Profilex({
   openmodalhistory,
   historyScrollonload,
   setkeypost,
-  PWAInstall
+  WebsiteMode,
+  setlatestInview,
+  postDivRefx,
+
 }: any) {
   const [countAutoplay, setcountAutoplay] = useState<number>(0);
 
@@ -118,7 +121,6 @@ function Profilex({
   );
 
 
-  const [activeAudio, setactiveAudio] = useState(1000000000000000000);
 
   const lastItemElement = useRef<any>();
 
@@ -270,7 +272,7 @@ function Profilex({
 
   const [ActiveAutoPost, setActiveAutoPost] = useState<Array<number>>([]);
 
-  var heightplus = matchPc ? 0.38 : matchTablet ? 0.3 : 0.265;
+  var heightplus = matchPc ? 0.18 : matchTablet ? 0.1 : 0.065;
   var postbackheighthold = document.documentElement.clientHeight * heightplus;
 
   const [postbackheight] = useState<number>(postbackheighthold);
@@ -408,6 +410,7 @@ function Profilex({
       setitemOriginalPostHeight(initialitemOriginalPostHeight);
 
       const initialitemCLICKED = postData.map((obj: any) => obj.itemCLICKED);
+
       setitemCLICKED(initialitemCLICKED);
 
       const initialsetonLoadDataOnce = postData.map(
@@ -596,6 +599,11 @@ function Profilex({
           }
 
 
+          setAllowAllHdImagesShow(true)
+          if (StopMini) {
+          } else { navvScroll(); }
+
+
           if (postData.length - 1 === index) {
 
 
@@ -614,6 +622,8 @@ function Profilex({
 
             dispatch(UpdateLoader(true));
 
+
+
             if (postTimer1.current) {
               clearTimeout(postTimer1.current);
             }
@@ -628,8 +638,7 @@ function Profilex({
                   setStopMini(false)
                 }, 2000);
               } else {
-                if (memeberPageidReducer === 0) {
-                } else { setminiProfile(true); }
+                setminiProfile(true);
               }
               ///////////
             }, 1000);
@@ -655,6 +664,7 @@ function Profilex({
 
 
               if (StopMini) {
+
                 if (postTimer5.current) {
                   clearTimeout(postTimer5.current);
                 }
@@ -663,13 +673,6 @@ function Profilex({
                   dispatch(UpdateLoader(false));
                 }, 1000);
 
-                if (postTimer6.current) {
-                  clearTimeout(postTimer6.current);
-                }
-                postTimer6.current = setTimeout(() => {
-                  setAllowAllHdImagesShow(true)
-
-                }, 2000)
 
               } else {
 
@@ -684,21 +687,12 @@ function Profilex({
                 postTimer7.current = setTimeout(() => {
 
 
-                  if (idReducer === GuestReducer || memeberPageidReducer === 0) { } else {
-                    scrollToRef();
-                  }
 
                   ////
-                  navvScroll();
-                  ///
-                  ///
-                  if (postTimer8.current) {
-                    clearTimeout(postTimer8.current);
-                  }
-                  postTimer8.current = setTimeout(() => {
-                    setAllowAllHdImagesShow(true)
 
-                  }, 1200)
+                  ///
+                  ///
+
 
 
                 }, 2900)
@@ -807,11 +801,11 @@ function Profilex({
 
 
 
-  const InitializingInteraction = (index: number) => {
+  const InitializingAutoPlayIndex = (index: number) => {
 
     setindexRoll(index);
 
-    clearAllTimers();
+    ///clearAllTimers();
 
   }
 
@@ -821,7 +815,7 @@ function Profilex({
 
 
 
-    InitializingInteraction(index);
+    InitializingAutoPlayIndex(index);
 
 
     if (itemCLICKED[index]) {
@@ -829,21 +823,6 @@ function Profilex({
 
 
 
-      ///dispatch(SnapToggleAction(true));
-
-
-      if (snapTimer.current) {
-        clearTimeout(snapTimer.current);
-      }
-      snapTimer.current = setTimeout(function () { }, 3000);
-
-
-
-      const newclickArray = [...itemCLICKED];
-      newclickArray[index] = false;
-      setitemCLICKED(newclickArray);
-      postitemSHOWFULLHEIGHT(index, 1);
-      if (type == 0) { setTimeout(() => { scrollToPost(index); }, 500) }
 
     } else {
 
@@ -1039,22 +1018,27 @@ function Profilex({
   }
 
 
-  const postDivRefx = useRef<any>([]);
-
-
 
   const scrollToRef = useCallback(() => {
 
+
+
     if (StopMini) { } else {
+
+
 
       setShowBigPlay(true);
       var Limit: number = postData.length;
 
       var Time = 0;
 
+      var indd = indexRoll;
+      if (miniProfile) { indd = 0; }
+
+
       for (let i = 0; i <= Limit; i++) {  // <= 20 to include the reset to the first post
-        if (i > indexRoll) {
-          Time = Time + 8000;
+        if (i > indd) {
+          Time = Time + 5000;
           setShowBigPlay(true);
 
           tyTimer.current[i] = setTimeout(() => {
@@ -1092,10 +1076,11 @@ function Profilex({
 
     }
 
-  }, [AllowRoll, indexRoll, postData, StopMini]);
+  }, [AllowRoll, indexRoll, postData, StopMini, miniProfile]);
 
 
   /////////////////////////////////////////////////////////////
+
 
 
 
@@ -1131,6 +1116,7 @@ function Profilex({
           }}
         >
           <ActualMenu
+            WebsiteMode={WebsiteMode}
             scrollToRef={scrollToRef}
             setsuperSettings={setsuperSettings}
             postData={postData}
@@ -1181,10 +1167,11 @@ function Profilex({
                     }}
                   >
                     <MiniPost
+                      InitializingAutoPlayIndex={InitializingAutoPlayIndex}
+
                       AllowAllHdImagesShow={AllowAllHdImagesShow}
                       clearAllTimers={clearAllTimers}
-                      setactiveAudio={setactiveAudio}
-                      activeAudio={activeAudio}
+
                       ShowBigPlay={ShowBigPlay}
                       setAdded={setAdded}
                       Added={Added}
@@ -1247,18 +1234,18 @@ function Profilex({
 
                   <div key={i} style={{ display: miniProfile ? "none" : "block", }}>
                     <Post
-                      PWAInstall={PWAInstall}
+                      setlatestInview={setlatestInview}
+                      WebsiteMode={WebsiteMode}
                       setkeypost={setkeypost}
                       currentClicked={currentClicked}
-                      InitializingInteraction={InitializingInteraction}
+                      InitializingAutoPlayIndex={InitializingAutoPlayIndex}
                       ActiveAutoPost={ActiveAutoPost}
                       setActiveAutoPost={setActiveAutoPost}
 
-                      setitemCLICKED={setitemCLICKED}
+
                       AllowAllHdImagesShow={AllowAllHdImagesShow}
                       clearAllTimers={clearAllTimers}
-                      setactiveAudio={setactiveAudio}
-                      activeAudio={activeAudio}
+
                       ShowBigPlay={ShowBigPlay}
                       setAdded={setAdded}
                       Added={Added}
@@ -1391,23 +1378,6 @@ function Profilex({
 
 
 
-            <PlayCircleFilledIcon
-              className={
-
-                darkmodeReducer
-                  ? " dontallowhighlighting zuperkingIcon  zuperkingIconPostDark"
-                  : "  dontallowhighlighting zuperkingIcon  zuperkingIconPostLight"
-              }
-
-              style={{
-                fontSize: matchMobile ? '9.5vh' : '6vw',
-                color: colorReducer,
-                top: matchMobile ? '74vh' : '80vh',
-                position: 'relative',
-
-
-              }}
-            />
 
 
           </Grid>

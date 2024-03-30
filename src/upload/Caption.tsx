@@ -386,12 +386,14 @@ function Captionx({
         // Step 2: Convert size from bytes to megabytes
         const sizeInMegabytesxx = Math.ceil(sizeInBytesxx / (1024 * 1024));
 
-        setloadmode(`Processing Audio ( ${sizeInMegabytesxx}MB ) ! Thank you for your patience.`);
+        setloadmode(`Uploading Audio ( ${sizeInMegabytesxx}MB ) ! Thank you for your patience.`);
 
         Axios.put(urlxx, xx)
           .then((response) => {
             setsupeFilterLoadFadex(false);
             if (response.status === 200) {
+
+              setloadmode(`Processing Audio ( ${sizeInMegabytesxx}MB ) ! Thank you for your patience.`);
               setsupeFilterLoadFadex(true);
               let imagelinkx = urlxx.split("?")[0];
               let imagelinkl = imagelinkx.split("/").pop();
@@ -510,13 +512,18 @@ function Captionx({
           // Step 2: Convert size from bytes to megabytes
           const sizeInMegabytes2 = Math.ceil(sizeInBytes2 / (1024 * 1024));
 
-          setloadmode(`Processing Video ( ${sizeInMegabytes2}MB ) ! Thank you for your patience.`);
+          setloadmode(`Uploading Video ( ${sizeInMegabytes2}MB ) ! Thank you for your patience.`);
 
           Axios.put(urlxx, xx)
             .then((response) => {
 
               setsupeFilterLoadFadex(false);
               if (response.status === 200) {
+
+
+                setloadmode(`Processing Video ( ${sizeInMegabytes2}MB ) ! Thank you for your patience.`);
+
+
                 setsupeFilterLoadFadex(true);
                 let imagelinkx = urlxx.split("?")[0];
                 let imagelinkjjka = imagelinkx.split("/").pop();
@@ -572,13 +579,16 @@ function Captionx({
         // Step 2: Convert size from bytes to megabytes
         const sizeInMegabytes = Math.ceil(sizeInBytes / (1024 * 1024));
 
-        setloadmode(`Processing Video ( ${sizeInMegabytes}MB ) ! Thank you for your patience.`);
+        setloadmode(`Uploading Video ( ${sizeInMegabytes}MB ) ! Thank you for your patience.`);
 
         Axios.put(urlx, x)
           .then((response) => {
 
             setsupeFilterLoadFadex(false);
             if (response.status === 200) {
+
+              setloadmode(`Processing Video ( ${sizeInMegabytes}MB ) ! Thank you for your patience.`);
+
               setsupeFilterLoadFadex(true);
               let imagelink = urlx.split("?")[0];
               let imagelinkka = imagelink.split("/").pop();

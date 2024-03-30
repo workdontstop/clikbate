@@ -19,6 +19,7 @@ import FaceIcon from '@material-ui/icons/Face';
 import PermContactCalendarIcon from '@material-ui/icons/PermContactCalendar';
 import SubjectIcon from '@material-ui/icons/Subject';
 import { UpdateNavFilterReducer, UpdateSign } from "../GlobalActions";
+import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
 
 
 function MenuInnerx({
@@ -41,7 +42,8 @@ function MenuInnerx({
   OpenUploadModal,
   setselectedImage,
   setcropimage,
-  postData
+  postData,
+  setUploadGPT
 }: any): JSX.Element {
   ///
   ///
@@ -149,6 +151,7 @@ function MenuInnerx({
     }));
 
   const imageReducer = image;
+  const imageReducerT = imageThumb;
   const idReducer = id;
   const usernameReducer = username;
   const memeberPageidReducer = memeberPageid;
@@ -160,6 +163,17 @@ function MenuInnerx({
 
   const [image1, setimage1] = useState("");
   const [image2, setimage2] = useState("");
+
+  const [opacitybox, setopacityBox] = useState(false);
+
+
+  useEffect(() => {
+    setopacityBox(true);
+    setTimeout(() => {
+      setopacityBox(false);
+    }, 120)
+
+  }, [ActiveSlide]);
 
   useEffect(() => {
 
@@ -193,37 +207,7 @@ function MenuInnerx({
   }, [MemberProfileData, colorReducer, imageThumb, image, memeberPageid]);
 
 
-  const imageHandleChange = (e: any) => {
-    if (e.target.files && e.target.files.length > 0) {
 
-      const FileArray = Array.from(e.target.files).map((file: any, index: any) =>
-        URL.createObjectURL(file)
-      );
-
-      const ray: any[] = [];
-
-      var lim = FileArray.length
-      if (lim > 1) {
-        lim = 0
-      } else { lim = lim - 1 }
-
-
-
-      for (let i = 0; i <= lim; i++) {
-        ray[i] = FileArray[i];
-      }
-
-      dispatch(UpdateUploadData(ray, FileArray[0]));
-      console.log(FileArray);
-
-      OpenUploadModal(1);
-      ///window.history.pushState(null, "", "Crop");
-      /// dispatch(UpdateNavCropReducer(true));
-
-
-      e.target.value = null;
-    }
-  };
 
 
 
@@ -304,6 +288,25 @@ function MenuInnerx({
   return (
     <>
       <>
+
+        <p style={{
+          fontWeight: 'bolder',
+          marginTop: '1vh', textAlign: 'center',
+          fontFamily: "Arial, Helvetica, sans-serif",
+          opacity: opacitybox ? '0.2' : '0.9', color: darkmodeReducer ? 'white' : 'black'
+        }}>
+          <CheckBoxOutlineBlankIcon
+            style={{
+              margin: "auto",
+              fontSize:
+                matchTablet || matchMobile ? "1.8vh" : "2vh",
+
+            }}
+          />
+
+        </p>
+
+
         {optinstopshowingReducer ? (
           typeTop ? null : (
             <>
@@ -376,6 +379,7 @@ function MenuInnerx({
               >
                 <CircleIcon
                   onClick={() => {
+
                     nextSlidePc();
 
                   }}
@@ -488,15 +492,7 @@ function MenuInnerx({
 
 
 
-                            <input
-                              onChange={imageHandleChange}
-                              type="file"
-                              name="superImages"
-                              accept="image/*"
-                              multiple
-                              id="fileoo"
-                              style={{ visibility: "hidden", display: 'none' }}
-                            />
+
 
                             {matchMobile ?
                               <div
@@ -557,6 +553,8 @@ function MenuInnerx({
 
                                   dispatch(UpdateSign(true));
 
+
+
                                 }}
                                 style={{
                                   cursor: ActiveSlide === i ? "pointer" : "copy",
@@ -602,58 +600,58 @@ function MenuInnerx({
 
                               </div> :
                                 <>
-                                  <label htmlFor="fileoo">
-                                    <div
-                                      onClick={() => {
 
+                                  <div
+                                    onClick={() => {
 
-                                        clickOptions(i, optionsClickType, "upload");
+                                      setUploadGPT(true);
+                                      clickOptions(i, optionsClickType, "upload");
 
-                                      }}
+                                    }}
+                                    style={{
+                                      cursor: ActiveSlide === i ? "pointer" : "copy",
+                                      width: `${getSliderWidthNew}px`,
+                                      height: `${getSliderWidthNew}px`,
+                                      backgroundColor: darkmodeReducer
+                                        ? "rgba(010,010,010, 0.68)"
+                                        : "rgba(210,210,210, 0.3)",
+                                      borderRadius: "50%",
+                                      marginTop: "2.15vh",
+                                      textAlign: "center",
+                                      alignItems: "center",
+                                      display: "grid",
+                                      justifyContent: "center",
+                                      boxShadow: darkmodeReducer
+                                        ? ActiveSlide === i
+                                          ? `0 0 3.4px ${ColorMemberReducer}`
+                                          : typeTop
+                                            ? "0 0 5.5px#aaaaaa"
+                                            : ""
+                                        : ActiveSlide === i
+                                          ? `0 0 3.4px ${ColorMemberReducer}`
+                                          : typeTop
+                                            ? "0 0 5.45px#222222"
+                                            : ``,
+                                    }}
+                                  >
+                                    {" "}
+                                    <CircleIcon
                                       style={{
-                                        cursor: ActiveSlide === i ? "pointer" : "copy",
-                                        width: `${getSliderWidthNew}px`,
-                                        height: `${getSliderWidthNew}px`,
-                                        backgroundColor: darkmodeReducer
-                                          ? "rgba(010,010,010, 0.68)"
-                                          : "rgba(210,210,210, 0.3)",
-                                        borderRadius: "50%",
-                                        marginTop: "2.15vh",
-                                        textAlign: "center",
-                                        alignItems: "center",
-                                        display: "grid",
-                                        justifyContent: "center",
-                                        boxShadow: darkmodeReducer
+                                        fontSize: matchPc ? "1.65vw" : "4.5vh",
+                                        opacity: ActiveSlide === i ? 0.5 : 1,
+                                        color: darkmodeReducer
                                           ? ActiveSlide === i
-                                            ? `0 0 3.4px ${ColorMemberReducer}`
-                                            : typeTop
-                                              ? "0 0 5.5px#aaaaaa"
-                                              : ""
+                                            ? "red"
+                                            : "#eeeeee"
                                           : ActiveSlide === i
-                                            ? `0 0 3.4px ${ColorMemberReducer}`
-                                            : typeTop
-                                              ? "0 0 5.45px#222222"
-                                              : ``,
+                                            ? "red"
+                                            : "#222222",
                                       }}
-                                    >
-                                      {" "}
-                                      <CircleIcon
-                                        style={{
-                                          fontSize: matchPc ? "1.65vw" : "4.5vh",
-                                          opacity: ActiveSlide === i ? 0.5 : 1,
-                                          color: darkmodeReducer
-                                            ? ActiveSlide === i
-                                              ? "red"
-                                              : "#eeeeee"
-                                            : ActiveSlide === i
-                                              ? "red"
-                                              : "#222222",
-                                        }}
-                                        className="zuperkinginfo"
-                                      />
+                                      className="zuperkinginfo"
+                                    />
 
-                                    </div>
-                                  </label></>}
+                                  </div>
+                                </>}
                           </>
                           :
 
@@ -742,75 +740,124 @@ function MenuInnerx({
 
                         src={memeberPageidReducer === 0 && i === 0 ?
                           `${REACT_APP_CLOUNDFRONT}${image1}` : `${REACT_APP_CLOUNDFRONT}${image2}`}
-                      /> : <div
-                        onClick={() => {
-                          clickOptions(i, optionsClickType, " ");
-                          if (ActiveSlide === i && i === 0) {
-                            ///alert('kk');
-                            if (memeberPageidReducer === idReducer || memeberPageidReducer === 0) {
-                              GoToMemberLoaderUp();
+                      /> :
 
-                            }
+
+                        <>
+
+
+
+
+
+                          {memeberPageidReducer === 0 && i === 0 ?
+
+                            <img
+                              title={memeberPageidReducer === idReducer || memeberPageidReducer === 0 ? memeberPageidReducer === 0 && i === 0 ? 'PROFILE' : optionsNameData[i] : i === 5 ?
+                                'PROFILE' : memeberPageidReducer === 0 && i === 0 ? 'PROFILE' : optionsNameData[i]}
+                              alt={` ${optionsNameData[i]}  option`}
+                              onClick={() => {
+                                clickOptions(i, optionsClickType, " ");
+                                if (ActiveSlide === i) {
+                                  //alert('kk');
+                                  GoToMemberLoaderUp();
+
+                                }
+                              }}
+                              style={{
+                                cursor: ActiveSlide === i ? "pointer" : "copy",
+                                width: `${getSliderWidthNew}px`,
+                                height: `${getSliderWidthNew}px`,
+                                borderRadius: "50%",
+                                padding: "0px",
+                                objectFit: "cover",
+                                marginLeft: "2px",
+                                marginTop: "14px",
+                                boxShadow: darkmodeReducer
+                                  ? ActiveSlide === i
+                                    ? `0 0 3.4px ${ColorMemberReducer}`
+                                    : typeTop
+                                      ? "0 0 12.5px#aaaaaa"
+                                      : ""
+                                  : ActiveSlide === i
+                                    ? `0 0 3.4px ${ColorMemberReducer}`
+                                    : typeTop
+                                      ? `0 0 14.45px#222222`
+                                      : "",
+
+                                marginBottom: "2.2px",
+
+                              }}
+
+                              src={`${REACT_APP_CLOUNDFRONT}${imageReducerT}`}
+                            />
+
+
+                            :
+
+
+                            <div
+                              onClick={() => {
+                                clickOptions(i, optionsClickType, " ");
+                                if (ActiveSlide === i && i === 0) {
+                                  ///alert('kk');
+                                  if (memeberPageidReducer === idReducer || memeberPageidReducer === 0) {
+                                    GoToMemberLoaderUp();
+
+                                  }
+                                }
+                              }}
+                              style={{
+                                cursor: ActiveSlide === i ? "pointer" : "copy",
+                                width: `${getSliderWidthNew}px`,
+                                height: `${getSliderWidthNew}px`,
+                                backgroundColor: darkmodeReducer
+                                  ? "rgba(010,010,010, 0.68)"
+                                  : "rgba(210,210,210, 0.3)",
+                                borderRadius: "50%",
+                                marginTop: "2.15vh",
+                                textAlign: "center",
+                                alignItems: "center",
+                                display: "grid",
+                                justifyContent: "center",
+                                boxShadow: darkmodeReducer
+                                  ? ActiveSlide === i
+                                    ? `0 0 3.4px ${ColorMemberReducer}`
+                                    : typeTop
+                                      ? "0 0 5.5px#aaaaaa"
+                                      : ""
+                                  : ActiveSlide === i
+                                    ? `0 0 3.4px ${ColorMemberReducer}`
+                                    : typeTop
+                                      ? "0 0 5.45px#222222"
+                                      : ``,
+                              }}
+                            >
+                              {" "}
+
+
+
+
+                              <SubjectIcon
+                                style={{
+                                  fontSize: matchPc ? "2.5vw" : "5vh",
+                                  opacity: ActiveSlide === i ? 0.5 : 1,
+                                  color: darkmodeReducer ? "#eeeeee" : "#222222",
+                                }}
+                                className="zuperkinginfo"
+                              />
+
+
+
+
+
+                            </div>
+
+
                           }
-                        }}
-                        style={{
-                          cursor: ActiveSlide === i ? "pointer" : "copy",
-                          width: `${getSliderWidthNew}px`,
-                          height: `${getSliderWidthNew}px`,
-                          backgroundColor: darkmodeReducer
-                            ? "rgba(010,010,010, 0.68)"
-                            : "rgba(210,210,210, 0.3)",
-                          borderRadius: "50%",
-                          marginTop: "2.15vh",
-                          textAlign: "center",
-                          alignItems: "center",
-                          display: "grid",
-                          justifyContent: "center",
-                          boxShadow: darkmodeReducer
-                            ? ActiveSlide === i
-                              ? `0 0 3.4px ${ColorMemberReducer}`
-                              : typeTop
-                                ? "0 0 5.5px#aaaaaa"
-                                : ""
-                            : ActiveSlide === i
-                              ? `0 0 3.4px ${ColorMemberReducer}`
-                              : typeTop
-                                ? "0 0 5.45px#222222"
-                                : ``,
-                        }}
-                      >
-                        {" "}
-
-                        {memeberPageidReducer === 0 && i === 0 ?
 
 
-                          <FaceIcon
-                            style={{
-                              fontSize: matchPc ? "2.8vw" : "5vh",
-                              opacity: ActiveSlide === i ? 0.5 : 1,
-                              color: darkmodeReducer ? "#eeeeee" : "#222222",
-                            }}
-                            className="zuperkinginfo"
-                          />
 
-
-                          :
-
-
-                          <SubjectIcon
-                            style={{
-                              fontSize: matchPc ? "2.5vw" : "5vh",
-                              opacity: ActiveSlide === i ? 0.5 : 1,
-                              color: darkmodeReducer ? "#eeeeee" : "#222222",
-                            }}
-                            className="zuperkinginfo"
-                          />
-
-
-                        }
-
-
-                      </div> : <img
+                        </> : <img
                         title={memeberPageidReducer === idReducer || memeberPageidReducer === 0 ? memeberPageidReducer === 0 && i === 0 ? 'PROFILE' : optionsNameData[i] : i === 5 ?
                           'PROFILE' : memeberPageidReducer === 0 && i === 0 ? 'PROFILE' : optionsNameData[i]}
                         alt={` ${optionsNameData[i]}  option`}

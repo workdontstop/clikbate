@@ -18,6 +18,8 @@ const fs = require("fs");
 const sharp = require("sharp");
 const unlinkFile = util.promisify(fs.unlink);
 const https = require("https");
+const fetch = require("node-fetch");
+const axios_1 = __importDefault(require("axios"));
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
 const cookieParser = require("cookie-parser");
@@ -48,7 +50,12 @@ const region = "us-east-1"; // Replace with your desired region
 ///
 if (process.env.APP_STATE === "dev") {
     var corsOptions = {
-        origin: "http://192.168.0.39:3000",
+        ///origin: "http://192.168.0.39:3000",
+        origin: [
+            "http://192.168.0.39:3000",
+            ///"http://localhost:3000", // Add your front-end origin
+            "https://oaidalleapiprodscus.blob.core.windows.net", // Add your blob storage origin
+        ],
         credentials: true,
         optionsSuccessStatus: 200,
     };
@@ -66,8 +73,8 @@ const bill1 = "ca6138528d7da0b8cb39c957cbbfb72b";
 const bill1b = "5b40da41c067c3ec2498b0a0fea22e7d";
 const bill2 = "6a2b5a7e86fc51463969fe9ee843a8d2";
 const bill2b = "e93e1f41c6716ba2105f9d5b1bb0a69e";
-const profilepic = "fa58aa7a3ea386f840f6ad1bee4a63ba";
-const profilepicb = "71b00aa039352fb20eaa588568d08429";
+const profilepic = "f3670147c22d81db83d214d825684042";
+const profilepicb = "f2ac732d02fd6219594934e5a39d3b8d";
 // Commenting out COOP and COEP headers
 // app.use((req, res, next) => {
 //   res.set("Cross-Origin-Opener-Policy", "same-origin");
@@ -104,7 +111,9 @@ const CONNECTION_CONFIG = {
     host: process.env.HOST_DATABASEx,
     password: process.env.PASSWORD_DATABASEx,
     database: process.env.DATABASE_NAMEx,
+    charset: "utf8mb4",
 };
+const DalleKey = process.env.DALLE_KEY;
 // Node.js program to demonstrate the
 // Date.format() method
 ///
@@ -906,6 +915,30 @@ app.post("/post_upload_audio_data", (req, res, next) => __awaiter(void 0, void 0
         return res.send({ message: "audio  upload failed" });
     }
 }));
+app.get("/ProxyDalle", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { dalle } = req.query; // Extracting 'dalle' from query parameters
+    console.log(dalle);
+    try {
+        if (!dalle) {
+            // If 'dalle' parameter is missing
+            return res.status(400).send("Missing 'dalle' parameter");
+        }
+        const imageUrl = dalle.toString(); // Convert 'dalle' to string
+        const response = yield fetch(imageUrl);
+        // Check if the response is successful (status code in the range 200-299)
+        if (!response.ok) {
+            return res
+                .status(response.status)
+                .send(`Error fetching image: ${response.statusText}`);
+        }
+        const imageBuffer = yield response.buffer();
+        res.contentType("image/png").send(imageBuffer);
+    }
+    catch (error) {
+        console.error("Error fetching image:", error);
+        res.status(500).send("Internal Server Error");
+    }
+}));
 app.post("/transAudio", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { values } = req.body;
     ///console.log(values.vidxx);
@@ -1206,6 +1239,47 @@ app.post("/feeds_chronological", (req, res) => __awaiter(void 0, void 0, void 0,
         }
     }
 }));
+function generateImage(promptxx) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const API_KEY = DalleKey;
+        const url = "https://api.openai.com/v1/images/generations";
+        const headers = {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${API_KEY}`,
+        };
+        const data = {
+            model: "dall-e-3",
+            prompt: promptxx,
+            num_images: 1,
+            size: "1024x1024",
+            quality: "standard",
+            response_format: "url",
+        };
+        return axios_1.default.post(url, data, { headers });
+    });
+}
+app.post("/DalleApi", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { values } = req.body;
+    const promptx = values.prompt;
+    const nx = values.n;
+    const sizex = values.size;
+    console.log(promptx);
+    try {
+        const response = yield generateImage(promptx);
+        console.log("good");
+        return res.send({
+            message: "Done",
+            payload: response.data,
+        });
+    }
+    catch (e) {
+        ///  console.error(e);
+        if (e.response && e.response.data && e.response.data.error) {
+            console.error("OpenAI API Error:", e.response.data.error);
+        }
+        return res.status(500).send({ message: "Error in accessing Dalle Api" });
+    }
+}));
 app.post("/keepmeloggedin", validateToken, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     if (req.cookies.accesst) {
         const { values } = req.body;
@@ -1450,18 +1524,18 @@ app.post("/registration", express_validator_1.body("values.inputedEmail")
                 const payloadValue = {
                     id: signupData.insertId,
                     username: values.inputedUsername,
-                    userimage: "https://superstarz-data-tank.s3.eu-west-2.amazonaws.com/98356ee74f016f6e019ec687d3a54982",
-                    userimagethumb: "https://superstarz-data-tank.s3.eu-west-2.amazonaws.com/2c38be850a49ff355ba1e13a40ebe3f0",
+                    userimage: profilepic,
+                    userimagethumb: profilepicb,
                     usercolor1: color,
                     usercolor2: color,
                     usercolortype: 0,
                     userfirstname: "",
                     usersurname: "",
                     userquote: " ",
-                    userbillboard1: "https://superstarz-data-tank.s3.eu-west-2.amazonaws.com/fc284f4924c7405bb44ab8e2c3f05891",
-                    userbillboardthumb1: "https://superstarz-data-tank.s3.eu-west-2.amazonaws.com/94e85f77e13ff88e7deb98d65975f39a",
-                    userbillboard2: "https://superstarz-data-tank.s3.eu-west-2.amazonaws.com/27e942d28474c2e0bff656c338c563a5",
-                    userbillboardthumb2: "https://superstarz-data-tank.s3.eu-west-2.amazonaws.com/d42140d57dc052276dd51af3f461e4f9",
+                    userbillboard1: bill1,
+                    userbillboardthumb1: bill1b,
+                    userbillboard2: bill2,
+                    userbillboardthumb2: bill2b,
                     biography: "",
                 };
                 const days30inseconds = 60 * 60 * 24 * 30 * 1000;

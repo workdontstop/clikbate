@@ -27,6 +27,9 @@ import PhotoAlbumIcon from '@material-ui/icons/PhotoAlbum';
 import SettingsIcon from '@material-ui/icons/Settings';
 import SuperstarzIconLight from "../images/s.png";
 import SuperstarzIconDark from "../images/sd.png";
+
+import PlayCircleFilledIcon from '@material-ui/icons/PlayCircleFilled';
+
 import {
   UpdateLoader,
   Updatepagenum
@@ -39,12 +42,17 @@ import { UpdateSign } from ".././GlobalActions";
 
 
 
-function ActualMenux({ showModalFormMenu, setshowModalFormMenu, postData, setsuperSettings, scrollToRef }: any): JSX.Element {
+
+function ActualMenux({ showModalFormMenu, setshowModalFormMenu, postData, setsuperSettings, scrollToRef, WebsiteMode }: any): JSX.Element {
 
 
+  const [popPlay, setpopPlay] = useState(false);
 
   useEffect(() => {
-
+    setpopPlay(true);
+    setTimeout(() => {
+      setpopPlay(false);
+    }, 5000)
     setMovePlay(false);
   }, [showModalFormMenu])
 
@@ -59,7 +67,6 @@ function ActualMenux({ showModalFormMenu, setshowModalFormMenu, postData, setsup
 
 
   const { REACT_APP_SUPERSTARZ_URL, REACT_APP_CLOUNDFRONT, REACT_APP_APPX_STATE } = process.env;
-
 
 
   ///
@@ -149,7 +156,7 @@ function ActualMenux({ showModalFormMenu, setshowModalFormMenu, postData, setsup
   const Timer2 = useRef<ReturnType<typeof setTimeout> | null>(null);
   const Timervv = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  var menufont = matchMobile ? '4vh' : '1.35vw';
+  var menufont = matchMobile ? WebsiteMode ? '4vh' : '3.7vh' : '1.35vw';
 
   var colr = darkmodeReducer ? "#ffffff" : '#111111';
 
@@ -391,7 +398,7 @@ function ActualMenux({ showModalFormMenu, setshowModalFormMenu, postData, setsup
           ...styles,
           width: '100%',
           height: '100vh',
-          backgroundColor: darkmodeReducer ? 'rgb(20, 20, 20, 0.6)' : 'rgb(170, 170, 170, 0.53)',
+          backgroundColor: darkmodeReducer ? 'rgb(20, 20, 20, 0.6)' : 'rgb(140, 140, 140, 0.53)',
           position: 'fixed',
           cursor: 'pointer',
           top: 0,
@@ -514,30 +521,38 @@ function ActualMenux({ showModalFormMenu, setshowModalFormMenu, postData, setsup
               position: 'fixed',
               top: '22vh',
               marginLeft: '15.6vw',
-              height: 'auto'
+              height: 'auto',
+              cursor: 'pointer'
             }}
           >
 
-            <img
+            <PlayCircleFilledIcon
               onClick={() => {
                 setMovePlay(true);
+                setshowModalFormMenu(false);
+                scrollToRef();
 
-                setTimeout(() => {
-                  setshowModalFormMenu(false);
-                  scrollToRef();
 
-                }, 1500)
 
               }}
-              className={icon}
-              src={logoimage}
-              alt="SuperstarZ logo"
+              className={
+
+                darkmodeReducer
+                  ? " dontallowhighlighting zuperkingIcon  zuperkingIconPostDark"
+                  : "  dontallowhighlighting   zuperkingIconPostLight"
+              }
+
               style={{
-                textAlign: "center", opacity: darkmodeReducer ? 0.8 : 0.7,
-                width: '25%', height: '20%'
+                fontSize: '1.3vw',
+
+                color: darkmodeReducer
+                  ? '#ffffff' : '#000000',
+                marginLeft: '-1.8vw'
+
+
+
               }}
             />
-
           </animated.div >}
 
 
@@ -548,37 +563,55 @@ function ActualMenux({ showModalFormMenu, setshowModalFormMenu, postData, setsup
 
           {matchMobile ?
 
-            <animated.div
+
+            <div
               style={{
-                ...stylesxx,
+
                 position: 'fixed',
-                bottom: '14vh',
-                marginLeft: '42vw',
+                bottom: '9vh',
+                marginLeft: '20vw',
                 height: 'auto'
               }}
             >
-              <img
+
+
+              <PlayCircleFilledIcon
+
                 onClick={() => {
                   setMovePlay(true);
+                  setshowModalFormMenu(false);
+                  scrollToRef();
 
-                  setTimeout(() => {
-                    setshowModalFormMenu(false);
-                    scrollToRef();
 
-                  }, 1500)
 
                 }}
-                className={icon}
-                src={logoimage}
-                alt="SuperstarZ logo"
+
+                className={
+
+                  darkmodeReducer
+                    ? " dontallowhighlighting zuperkingIcon  zuperkingIconPostDark"
+                    : "  dontallowhighlighting  zuperkingIconPostLight"
+                }
+
                 style={{
-                  textAlign: "center", opacity: matchMobile ? darkmodeReducer ? 0.65 : 0.7 : darkmodeReducer ? 0.3 : 0.5,
-                  width: '30%', height: '20%'
+                  fontSize: '12.5vh',
+
+                  color: darkmodeReducer
+                    ? '#ffffff' : '#000000',
+                  position: 'relative',
+
+
                 }}
               />
 
 
-            </animated.div > : null}
+
+
+            </div >
+
+
+
+            : null}
 
 
 
@@ -803,7 +836,7 @@ function ActualMenux({ showModalFormMenu, setshowModalFormMenu, postData, setsup
                     <span
                       style={{
                         color: colr,
-                        fontSize: matchMobile ? '2.62vh' : "1.2vw",
+                        fontSize: matchMobile ? WebsiteMode ? '2.62vh' : '2.4vh' : "1.2vw",
                         marginLeft: matchMobile ? '13vw' : '5vw',
                         opacity: i === 1 || i === 2 || i === 7 ? '1' : '0.3'
                       }}>

@@ -729,7 +729,7 @@ function FormHolderx({
   /// SENDING SIGN UP  DATA TO SERVER SIDE
 
   const signmeup = useCallback(
-    (checkSignupPasswordinputed: any = " ") => {
+    (go: any = " ") => {
       if (
         cleanSignupValues.inputedEmail &&
         cleanSignupValues.inputedUsername &&
@@ -738,87 +738,80 @@ function FormHolderx({
         if (errorsSignupValues.inputedPassword === 0) {
           if (errorsSignupValues.inputedEmail === 0) {
             if (errorsSignupValues.inputedUsername === 3) {
-              if (checkSignupPasswordACTIVATE) {
-                if (
-                  checkSignupPasswordinputed ===
-                  cleanSignupValues.inputedPassword
-                ) {
-                  dispatch(ActivateLoaderAction());
+              ///////////////////SIGN UP GO
+              if (go === 'go'
+              ) {
+                dispatch(ActivateLoaderAction());
 
-                  Axios.post(`${REACT_APP_SUPERSTARZ_URL}/registration`, {
-                    values: cleanSignupValues,
+                Axios.post(`${REACT_APP_SUPERSTARZ_URL}/registration`, {
+                  values: cleanSignupValues,
+                })
+                  .then((response) => {
+                    if (response.data.message === "username not unique") {
+                      setServerErrorData("username is taken");
+                      setServerErrorDisplay(1);
+                      setserverEmojiplain(true);
+                      dispatch(HideLoaderAction());
+                    } else if (response.data.payload) {
+
+
+                      localStorage.setItem('reg', '1');
+
+                      window.location.reload();
+
+                    } else {
+                      setServerErrorData("something went wrong");
+                      setServerErrorDisplay(1);
+                      setserverEmojiplain(true);
+                      dispatch(HideLoaderAction());
+                    }
                   })
-                    .then((response) => {
-                      if (response.data.message === "username not unique") {
-                        setServerErrorData("username is taken");
-                        setServerErrorDisplay(1);
-                        setserverEmojiplain(true);
-                        dispatch(HideLoaderAction());
-                      } else if (response.data.payload) {
+                  .catch(function (error) {
+                    if (error.response) {
+                      // Request made and server responded
+                      //express typo can activate this
+                      let textFieldParam =
+                        error.response.data.error.errors[0].param;
+                      let affectedTextField = " ";
 
-
-                        localStorage.setItem('reg', '1');
-
-                        window.location.reload();
-
+                      if (textFieldParam === "values.inputedPassword") {
+                        affectedTextField =
+                          "password must be at least 8 characters";
+                      } else if (textFieldParam === "values.inputedEmail") {
+                        affectedTextField = "email address is not valid";
                       } else {
-                        setServerErrorData("something went wrong");
-                        setServerErrorDisplay(1);
-                        setserverEmojiplain(true);
-                        dispatch(HideLoaderAction());
+                        affectedTextField =
+                          "usernames use letters, numbers, underscores and periods";
                       }
-                    })
-                    .catch(function (error) {
-                      if (error.response) {
-                        // Request made and server responded
-                        //express typo can activate this
-                        let textFieldParam =
-                          error.response.data.error.errors[0].param;
-                        let affectedTextField = " ";
-
-                        if (textFieldParam === "values.inputedPassword") {
-                          affectedTextField =
-                            "password must be at least 8 characters";
-                        } else if (textFieldParam === "values.inputedEmail") {
-                          affectedTextField = "email address is not valid";
-                        } else {
-                          affectedTextField =
-                            "usernames use letters, numbers, underscores and periods";
-                        }
-                        let dynamicError = `${affectedTextField}.  ${error.response.data.error.errors[0].msg} `;
-                        setServerErrorData(dynamicError);
-                        setServerErrorDisplay(1);
-                        setserverEmojiplain(true);
-                        dispatch(HideLoaderAction());
-                      } else if (error.request) {
-                        // The request was made but no response was received Or request not made
-                        // Axios.post("http://localhost:3003/reg" can activate this error
-                        setServerErrorData(
-                          "error connecting to server, check your connection"
-                        );
-                        setServerErrorDisplay(1);
-                        setserverEmojiplain(true);
-                        dispatch(HideLoaderAction());
-                      } else {
-                        // Something happened in setting up the request that triggered an Error
-                        setServerErrorData(
-                          "request setup failed , pls try again"
-                        );
-                        setServerErrorDisplay(1);
-                        setserverEmojiplain(true);
-                        dispatch(HideLoaderAction());
-                      }
-                    });
-                } else {
-                  setresponseErrorConfirmPassword(true);
-                  setTimeout(function () {
-                    setresponseErrorConfirmPassword(false);
-                  }, 2500);
-                  ////////////////RESPONSE ERROR CONFIRM PASSWORD
-                }
+                      let dynamicError = `${affectedTextField}.  ${error.response.data.error.errors[0].msg} `;
+                      setServerErrorData(dynamicError);
+                      setServerErrorDisplay(1);
+                      setserverEmojiplain(true);
+                      dispatch(HideLoaderAction());
+                    } else if (error.request) {
+                      // The request was made but no response was received Or request not made
+                      // Axios.post("http://localhost:3003/reg" can activate this error
+                      setServerErrorData(
+                        "error connecting to server, check your connection"
+                      );
+                      setServerErrorDisplay(1);
+                      setserverEmojiplain(true);
+                      dispatch(HideLoaderAction());
+                    } else {
+                      // Something happened in setting up the request that triggered an Error
+                      setServerErrorData(
+                        "request setup failed , pls try again"
+                      );
+                      setServerErrorDisplay(1);
+                      setserverEmojiplain(true);
+                      dispatch(HideLoaderAction());
+                    }
+                  });
               } else {
-                setcheckSignupPasswordACTIVATE(true);
+
+
               }
+
             } else {
               setbopUsername(true);
               setTimeout(() => {
@@ -1178,7 +1171,7 @@ function FormHolderx({
                   WebkitBoxShadow: WebkitBoxShadowReducerSign,
                   boxShadow: boxShadowReducerSign,
                 }}
-                onClick={signmeup}
+                onClick={() => { signmeup('go'); }}
                 fullWidth={true}
                 variant="contained"
                 size="large"
@@ -1309,7 +1302,7 @@ function FormHolderx({
                   WebkitBoxShadow: WebkitBoxShadowReducerSign,
                   boxShadow: boxShadowReducerSign,
                 }}
-                onClick={signmeup}
+                onClick={() => { signmeup('go'); }}
                 fullWidth={true}
                 variant="contained"
                 size="large"
@@ -1320,7 +1313,8 @@ function FormHolderx({
             </Grid>{" "}
           </Grid>{" "}
         </>
-      )}
+      )
+      }
     </>
     /*MOBILE  MOBILE  MOBILE  MOBILE  SIGNUP MOBILE  MOBILEMOBILE  MOBILE  MOBILE  MOBILE  MOBILE  MOBILE  MOBILEMOBILE  MOBILE  MOBILE  MOBILE  MOBILE  MOBILE  MOBILEMOBILE  MOBILE  MOBILE  MOBILE  MOBILE  MOBILE  MOBILE  MOBILE*/
   );
