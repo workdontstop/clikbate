@@ -114,6 +114,7 @@ const CONNECTION_CONFIG = {
     charset: "utf8mb4",
 };
 const DalleKey = process.env.DALLE_KEY;
+const openAiLink = process.env.OPEN_X;
 // Node.js program to demonstrate the
 // Date.format() method
 ///
@@ -1242,7 +1243,7 @@ app.post("/feeds_chronological", (req, res) => __awaiter(void 0, void 0, void 0,
 function generateImage(promptxx) {
     return __awaiter(this, void 0, void 0, function* () {
         const API_KEY = DalleKey;
-        const url = "https://api.openai.com/v1/images/generations";
+        const url = openAiLink;
         const headers = {
             "Content-Type": "application/json",
             Authorization: `Bearer ${API_KEY}`,
