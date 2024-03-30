@@ -2835,7 +2835,7 @@ function ProfileOutter() {
                         textAlign: 'center',
                         paddingTop: '2vh',
 
-                        display: 'none'
+
 
                       }}
                     >
