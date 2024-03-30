@@ -19,7 +19,6 @@ const sharp = require("sharp");
 const unlinkFile = util.promisify(fs.unlink);
 const https = require("https");
 const fetch = require("node-fetch");
-const axios_1 = __importDefault(require("axios"));
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
 const cookieParser = require("cookie-parser");
@@ -114,7 +113,7 @@ const CONNECTION_CONFIG = {
     charset: "utf8mb4",
 };
 const DalleKey = process.env.DALLE_KEY;
-const openAiLink = process.env.OPEN_X;
+const openKey = process.env.OPEN_KEY;
 // Node.js program to demonstrate the
 // Date.format() method
 ///
@@ -1243,7 +1242,7 @@ app.post("/feeds_chronological", (req, res) => __awaiter(void 0, void 0, void 0,
 function generateImage(promptxx) {
     return __awaiter(this, void 0, void 0, function* () {
         const API_KEY = DalleKey;
-        const url = openAiLink;
+        const url = openKey;
         const headers = {
             "Content-Type": "application/json",
             Authorization: `Bearer ${API_KEY}`,
@@ -1256,9 +1255,20 @@ function generateImage(promptxx) {
             quality: "standard",
             response_format: "url",
         };
-        return axios_1.default.post(url, data, { headers });
+        const response = yield fetch(url, {
+            method: "POST",
+            headers: headers,
+            body: JSON.stringify(data),
+        });
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.json();
     });
 }
+////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////
+//////////////////////////////////
 app.post("/DalleApi", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { values } = req.body;
     const promptx = values.prompt;
@@ -1270,14 +1280,11 @@ app.post("/DalleApi", (req, res) => __awaiter(void 0, void 0, void 0, function* 
         console.log("good");
         return res.send({
             message: "Done",
-            payload: response.data,
+            payload: response,
         });
     }
     catch (e) {
-        ///  console.error(e);
-        if (e.response && e.response.data && e.response.data.error) {
-            console.error("OpenAI API Error:", e.response.data.error);
-        }
+        console.error("Error:", e.message);
         return res.status(500).send({ message: "Error in accessing Dalle Api" });
     }
 }));

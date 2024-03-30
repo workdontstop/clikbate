@@ -7,10 +7,6 @@ const https = require("https");
 
 const fetch = require("node-fetch");
 
-import Axios from "axios";
-
-import axios from "axios";
-
 import dotenv from "dotenv";
 
 dotenv.config();
@@ -127,8 +123,7 @@ const CONNECTION_CONFIG = {
 };
 
 const DalleKey = process.env.DALLE_KEY;
-
-const openAiLink = process.env.OPEN_X;
+const openKey = process.env.OPEN_KEY;
 
 // Node.js program to demonstrate the
 // Date.format() method
@@ -1415,7 +1410,7 @@ app.post("/feeds_chronological", async (req: Request, res: Response) => {
 
 async function generateImage(promptxx: string) {
   const API_KEY = DalleKey;
-  const url: any = openAiLink;
+  const url: any = openKey;
 
   const headers = {
     "Content-Type": "application/json",
@@ -1431,9 +1426,22 @@ async function generateImage(promptxx: string) {
     response_format: "url",
   };
 
-  return Axios.post(url, data, { headers });
+  const response = await fetch(url, {
+    method: "POST",
+    headers: headers,
+    body: JSON.stringify(data),
+  });
+
+  if (!response.ok) {
+    throw new Error(`HTTP error! Status: ${response.status}`);
+  }
+
+  return response.json();
 }
 
+////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////
+//////////////////////////////////
 app.post("/DalleApi", async (req, res) => {
   const { values } = req.body;
 
@@ -1448,13 +1456,10 @@ app.post("/DalleApi", async (req, res) => {
     console.log("good");
     return res.send({
       message: "Done",
-      payload: response.data,
+      payload: response,
     });
   } catch (e: any) {
-    ///  console.error(e);
-    if (e.response && e.response.data && e.response.data.error) {
-      console.error("OpenAI API Error:", e.response.data.error);
-    }
+    console.error("Error:", e.message);
     return res.status(500).send({ message: "Error in accessing Dalle Api" });
   }
 });
