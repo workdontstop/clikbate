@@ -12,7 +12,8 @@ function ServerErrorx({
   device,
   setServerErrorData,
   serverErrorDisplay,
-}: IServerError) {
+  WebsiteMode
+}: any) {
   /////////////////////////////////////////////
 
 
@@ -76,7 +77,7 @@ function ServerErrorx({
 
 
   if (matchMobile) {
-    severerrorData = "2.22vh";
+    severerrorData = WebsiteMode ? "2.22vh" : '2vh';
     severerrorEmoji = "2.7vh";
     severerrorEmojiLeft = "4vw";
   } else {

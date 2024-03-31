@@ -147,7 +147,7 @@ function Sliderx({
 
   const { ref, inView, entry } = useInView({
     /* Optional options */
-    threshold: 0.55,
+    threshold: matchMobile ? 0.95 : 0.55,
 
 
   });
@@ -325,7 +325,7 @@ function Sliderx({
 
       startinview();
 
-    }, 1500)
+    }, 2000)
   }, [inView]);
   /// const getWidth = () => window.innerWidth;
   ///var newGetWidth = getWidth() * slides.length;

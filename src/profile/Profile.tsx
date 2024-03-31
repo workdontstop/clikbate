@@ -1167,6 +1167,7 @@ function Profilex({
                     }}
                   >
                     <MiniPost
+                      WebsiteMode={WebsiteMode}
                       InitializingAutoPlayIndex={InitializingAutoPlayIndex}
 
                       AllowAllHdImagesShow={AllowAllHdImagesShow}

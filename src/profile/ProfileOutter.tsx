@@ -889,7 +889,7 @@ function ProfileOutter() {
           behavior: "smooth",
           block: "start",
         });
-      }, 500)
+      }, 1000)
 
     }
     else {
@@ -2586,6 +2586,7 @@ function ProfileOutter() {
                   }}
                 >
                   <ServerError
+                    WebsiteMode={WebsiteMode}
                     device="pc"
                     serverEmojiplain={serverEmojiplain}
                     setServerErrorData={setServerErrorData}

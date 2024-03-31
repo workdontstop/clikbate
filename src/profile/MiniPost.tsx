@@ -84,7 +84,8 @@ function MiniPostx({
   postDatainnerInteraction1,
   clearAllTimers,
   AllowAllHdImagesShow,
-  InitializingAutoPlayIndex
+  InitializingAutoPlayIndex,
+  WebsiteMode
 
 
 
@@ -920,7 +921,7 @@ function MiniPostx({
               style={{
                 fontWeight: "bold",
                 color: darkmodeReducer ? "#ffffff" : "#000000",
-                fontSize: matchPc ? "2.1vh" : isSafari ? '1.8vh' : "1.9vh",
+                fontSize: matchPc ? "2.1vh" : isSafari ? WebsiteMode ? '1.8vh' : '1.6vh' : "1.9vh",
                 zIndex: 5,
                 paddingLeft: matchPc ? "7vw" : matchTablet ? "2.3vw" : "17vw",
                 height: "0px",

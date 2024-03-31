@@ -10,7 +10,7 @@ const fetch = require("node-fetch");
 import dotenv from "dotenv";
 
 dotenv.config();
-
+///deleted bill
 const cookieParser = require("cookie-parser");
 import express = require("express");
 import { generateUploadURL } from "./ss3";

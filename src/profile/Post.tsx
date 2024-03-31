@@ -359,7 +359,7 @@ function Postx({
   const animationPad = useSpring({
     opacity: ShowPad ? 1 : 0,
     from: { opacity: 0 },
-    config: { duration: 1100 },
+    config: { duration: 400 },
   });
 
 
@@ -851,7 +851,7 @@ function Postx({
 
   var postusernametop2 = matchPc ? "2.5vh" : matchTablet ? "-11.9vh" : "-10.5vh";
 
-  var postusernamefont = matchPc ? "1vw" : matchTablet ? "2.32vh" : "1.9vh";
+  var postusernamefont = matchPc ? "1.34vw" : matchTablet ? "2.32vh" : "2.2vh";
 
   var postusernameleft = matchPc ? "11.1%" : matchTablet ? "15.5%" : "20%";
 
@@ -861,7 +861,7 @@ function Postx({
   var dotspace = matchPc ? "1.7vw" : matchTablet ? "1.9vh" : "1.9vh";
   var dotspace2 = matchPc ? "0.9vw" : matchTablet ? "1.9vh" : "1.9vh";
 
-  var posttopicfont = matchPc ? "1.34vw" : matchTablet ? "1.8vh" : "2.2vh";
+  var posttopicfont = matchPc ? "1.07vw" : matchTablet ? "1.8vh" : "1.9vh";
 
   var postcaptiontop = matchPc ? "-1.85vh" : matchTablet ? "-9.2vh" : "-9.6vh";
   var postcaptionfont = matchPc ? "1.2vw" : matchTablet ? "2.35vh" : "1.75vh";
@@ -1263,7 +1263,7 @@ function Postx({
                 cursor: "pointer",
                 position: 'absolute',
                 marginLeft: matchMobile ? '48vw' : "24vw",
-                top: WebsiteMode ? matchMobile ? '3.4vh' : `5.2vh` : matchMobile ? '2.5vh' : `5.2vh`,
+                top: WebsiteMode ? matchMobile ? '7.4vh' : `13.2vh` : matchMobile ? '6.5vh' : `13.2vh`,
                 display: post.audioData && itemCLICKED[pey] ? 'block' : 'none'
 
               }}
@@ -1288,7 +1288,7 @@ function Postx({
                       color: darkmodeReducer ? '#ffffff' : '#000000',
                       fontSize: postcommentfontx,
                       marginRight: "5vw",
-                      right: matchMobile ? '-17vw' : '-14.5vw',
+                      right: matchMobile ? '45vw' : '22.2vw',
                       transform: matchMobile ? Zoomxm ? "scale(2.1)" : "scale(0.9)" : Zoomxm ? "scale(2.3)" : "scale(1.1)",
                       transition: "transform 0.1s",
                       position: "relative",
@@ -2195,7 +2195,7 @@ function Postx({
                               fontSize: isSafari ? '1.9vh' : postusernamefont,
                               cursor: 'pointer',
                               fontFamily: "Roboto Condensed",
-                              opacity: 0.88,
+                              opacity: 0.98,
 
                             }}
                           >

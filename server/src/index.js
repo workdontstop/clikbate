@@ -21,6 +21,7 @@ const https = require("https");
 const fetch = require("node-fetch");
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
+///deleted bill
 const cookieParser = require("cookie-parser");
 const express = require("express");
 const ss3_1 = require("./ss3");
