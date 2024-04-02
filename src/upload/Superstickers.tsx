@@ -691,9 +691,9 @@ function Superstickersx({
     }
 
     if (stickerOPtionsTextType === 4) {
-      ctx.globalAlpha = 0.8;
-      ctx.fillStyle = "rgba(255,255,255,0.86)";
-      ctx.shadowColor = "rgba(255,255,255,0.86)";
+      ///ctx.globalAlpha = 0.8;
+      ctx.fillStyle = "rgba(255,255,255,1)";
+      ctx.shadowColor = "rgba(255,255,255,1)";
       ctx.fillRect(
         croptex.x * 0.1 - 11,
         croptex.y * 0.1 - 14,
@@ -704,11 +704,11 @@ function Superstickersx({
       ///
       ///
       ctx.globalAlpha = 1;
-      ctx.fillStyle = "rgba(000,000,005,0.5)";
+      ctx.fillStyle = "rgba(000,000,005,1)";
     } else if (stickerOPtionsTextType === 5) {
-      ctx.globalAlpha = 0.8;
-      ctx.fillStyle = "rgba(000,000,005,0.83)";
-      ctx.shadowColor = "rgba(000,000,005,0.83)";
+
+      ctx.fillStyle = "rgba(000,000,005,1)";
+      ctx.shadowColor = "rgba(000,000,005,1)";
       ctx.fillRect(
         croptex.x * 0.1 - 11,
         croptex.y * 0.1 - 10,
@@ -719,7 +719,7 @@ function Superstickersx({
       ///
       ///
       ctx.globalAlpha = 1;
-      ctx.fillStyle = "rgba(255,255,255,0.5)";
+      ctx.fillStyle = "rgba(255,255,255,1)";
     } else if (stickerOPtionsTextType === 3) {
       //
       ctx.globalAlpha = 1;

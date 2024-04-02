@@ -22,6 +22,8 @@ import { matchMobile, matchPc, matchTablet } from "../DetectDevice";
 import { UserInfoUpdateMEMBER } from "../log/actions/UserdataAction";
 import VideocamIcon from '@material-ui/icons/Videocam';
 
+import { Tutorial } from "../Tutorial";
+
 
 import AudiotrackIcon from '@material-ui/icons/Audiotrack';
 import AddIcon from "@mui/icons-material/Add";
@@ -198,6 +200,14 @@ function MiniPostx({
 
 
 
+  const minClicked = () => {
+
+    historyBoy();
+
+    setzoomClickedIndex(pey + 1);
+    setSliderIndexMini(0);
+    setminiProfile(false);
+  }
 
 
   ///
@@ -496,6 +506,9 @@ function MiniPostx({
 
           }}
         >
+
+
+
           {/*///////////////////////////////////////////////////////////////////////////POST DATA*/}
 
           {matchMobile ? <>
@@ -718,7 +731,7 @@ function MiniPostx({
 
                 cursor: "pointer",
                 width: "100%",
-                height: isWide && matchMobile ? '28vh' : 'auto',
+                height: matchMobile ? isWide ? '29vh' : '29vh' : '62vh',
                 position: AllowAllHdImagesShow ? "absolute" : 'relative',
                 padding: "0px",
                 objectFit:
@@ -738,14 +751,14 @@ function MiniPostx({
 
 
 
+            <Tutorial minClicked={minClicked} type={4} index={pey} post={post} />
+
+
+
             {AllowAllHdImagesShow ? <img
               onLoad={handleImageLoad}
               onClick={() => {
-                historyBoy();
-
-                setzoomClickedIndex(pey + 1);
-                setSliderIndexMini(0);
-                setminiProfile(false);
+                minClicked();
               }}
               className={
                 darkmodeReducer ? "turlightpostdark fadeboyinInt" : "turlightpostlight fadeboyinInt"
@@ -759,7 +772,7 @@ function MiniPostx({
 
                 cursor: "pointer",
                 width: "100%",
-                height: isWide && matchMobile ? '28vh' : 'auto',
+                height: matchMobile ? isWide ? '29vh' : '29vh' : '62vh',
                 position: "relative",
                 padding: "0px",
                 objectFit:
@@ -777,6 +790,8 @@ function MiniPostx({
               }}
 
             /> : null}
+
+
 
           </div>
 

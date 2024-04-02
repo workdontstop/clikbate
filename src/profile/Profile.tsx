@@ -1112,7 +1112,7 @@ function Profilex({
             zIndex: 500000000000,
             position: 'fixed',
             top: '0vh',
-            backgroundColor: '#00ccff'
+            backgroundColor: ''
           }}
         >
           <ActualMenu
@@ -1145,7 +1145,7 @@ function Profilex({
           {postData.length > 0 ? (
             <Masonry
               columns={matchPc ? 2 : miniProfile ? 2 : 1}
-              spacing={miniProfile && matchMobile ? 0 : miniProfile ? 16 : 0}
+              spacing={miniProfile && matchMobile ? 0.5 : miniProfile ? 16 : 0}
               style={{
                 padding: "0px",
 
@@ -1306,7 +1306,7 @@ function Profilex({
                       xs={12}
                       style={{
                         marginTop: "0px",
-                        height: "0.5vh",
+                        height: "15.5vh",
                       }}
                     ></Grid>
                   </div>

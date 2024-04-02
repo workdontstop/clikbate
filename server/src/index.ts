@@ -50,7 +50,7 @@ if (process.env.APP_STATE === "dev") {
     ///origin: "http://192.168.0.39:3000",
     origin: [
       "http://192.168.0.39:3000",
-      ///"http://localhost:3000", // Add your front-end origin
+      ////"http://localhost:3000", // Add your front-end origin
       "https://oaidalleapiprodscus.blob.core.windows.net", // Add your blob storage origin
     ],
     credentials: true, //access-control-allow-credentials:true
@@ -71,8 +71,8 @@ const bill1b = "5b40da41c067c3ec2498b0a0fea22e7d";
 const bill2 = "6a2b5a7e86fc51463969fe9ee843a8d2";
 const bill2b = "e93e1f41c6716ba2105f9d5b1bb0a69e";
 
-const profilepic = "f3670147c22d81db83d214d825684042";
-const profilepicb = "f2ac732d02fd6219594934e5a39d3b8d";
+const profilepic = "e9bc610c526ab9f75759f7102e79b331";
+const profilepicb = "66aa6a36c154417af2d13b8bb246d154";
 
 // Commenting out COOP and COEP headers
 // app.use((req, res, next) => {

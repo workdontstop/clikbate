@@ -127,6 +127,7 @@ function CaptionTextx({
                     padding: '0vh',
                     borderRadius: '4%',
                     backgroundImage: PaperStyleReducer,
+                    display: 'none'
                 }}
                 label="Share Your Thoughts"
                 type="text"
@@ -143,12 +144,12 @@ function CaptionTextx({
                 value={captionvalues.topic}
                 style={{
                     transform: transform,
-                    width: '13vw',
+                    width: '26vw',
                     paddingBottom: "0px",
                     paddingTop: "1.5vh",
                     position: "fixed",
                     bottom: "43vh",
-                    left: "40.5vw",
+                    left: "33.5vw",
                     zIndex: 26,
                     padding: '0vh',
                     borderRadius: '4%',

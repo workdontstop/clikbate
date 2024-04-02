@@ -151,7 +151,7 @@ function Postx({
   const [ShowAudioIcon, setShowAudioIcon] = useState(true);
 
 
-  const [ShowEmoIcon, setShowEmoIcon] = useState(false);
+  const [ShowEmoIcon, setShowEmoIcon] = useState(true);
 
 
   const [dateint, setdateint] = useState<any>(null);
@@ -783,8 +783,8 @@ function Postx({
     : matchTablet
       ? 20
       : itemcroptype[pey] === 3
-        ? 7
-        : 6.7;
+        ? 1.6
+        : 1.7;
 
   var emoNum3 = matchPc
     ? itemcroptype[pey] === 2
@@ -793,8 +793,8 @@ function Postx({
     : matchTablet
       ? 20
       : itemcroptype[pey] === 3
-        ? -3.3
-        : -4.7;
+        ? -9.3
+        : -9.7;
 
   var emoNum2 = matchPc
     ? itemcroptype[pey] === 2
@@ -803,7 +803,7 @@ function Postx({
     : matchTablet
       ? 20
       : itemcroptype[pey] === 1
-        ? 8
+        ? 9
         : 10;
 
   var emoNum = matchPc
@@ -823,8 +823,8 @@ function Postx({
     : matchTablet
       ? 20
       : itemcroptype[pey] === 1
-        ? 10
-        : 10;
+        ? 188
+        : 15;
 
   var emo2 = matchPc
     ? itemcroptype[pey] === 2
@@ -833,8 +833,8 @@ function Postx({
     : matchTablet
       ? 20
       : itemcroptype[pey] === 3
-        ? 14.5
-        : 16;
+        ? 20.5
+        : 21;
 
 
   var profilewidth = matchPc
@@ -1171,10 +1171,12 @@ function Postx({
 
             <Slider
               setlatestInview={setlatestInview}
+              setShowPad={setShowPad}
+              setStopShowPad={setStopShowPad}
+
               setShowEmoIcon={setShowEmoIcon}
               setShowAudioIcon={setShowAudioIcon}
-              setStopShowPad={setStopShowPad}
-              setShowPad={setShowPad}
+
               dateint={dateint}
               setinteractContent={setinteractContentx}
               interactContent={interactContentx}
@@ -1285,11 +1287,12 @@ function Postx({
                         : "make-small-icons-clickable-darkCrop dontallowhighlighting zupermenudark  "
                     }
                     style={{
-                      color: darkmodeReducer ? '#ffffff' : '#000000',
+                      color: '#ffffff',
+                      backgroundColor: post.color1,
                       fontSize: postcommentfontx,
                       marginRight: "5vw",
-                      right: matchMobile ? '45vw' : '22.2vw',
-                      transform: matchMobile ? Zoomxm ? "scale(2.1)" : "scale(0.9)" : Zoomxm ? "scale(2.3)" : "scale(1.1)",
+                      right: matchMobile ? '44vw' : '22.2vw',
+                      transform: matchMobile ? Zoomxm ? "scale(2.1)" : "scale(0.9)" : Zoomxm ? "scale(2.3)" : "scale(1.3)",
                       transition: "transform 0.1s",
                       position: "relative",
                       zIndex: 20,
@@ -1417,18 +1420,19 @@ function Postx({
 
 
             {
-
-              ShowPad ? StopShowPad ? null : (
+              (
 
                 <>
                   <animated.div
                     className='post-background-dark'
                     style={{
-                      ...animationPad,
+
                       height: '0px',
                       bottom: WebsiteMode ? isSafari ? `-${postbackheight / 1.03}px` :
-                        matchMobile ? `${postbackheight / 0.31}px` : `${postbackheight / 0.53}px` :
-                        matchMobile ? `${postbackheight / 0.33}px` : `${postbackheight / 0.08}px`,
+                        matchMobile ? `${postbackheight / 0.65}px` : `${postbackheight / 0.88}px` :
+
+
+                        matchMobile ? `${postbackheight / 0.63}px` : `${postbackheight / 0.86}px`,
                       position: "absolute",
                       backgroundColor: '#00ccff',
                       transition: "all 350ms ease",
@@ -1620,13 +1624,14 @@ function Postx({
                         height: matchPc ? "5vh" : matchTablet ? "7vh" : "5.5vh",
                         position: "relative",
                         display: "flex",
-                        visibility: miniLayoutPost ? "hidden" : "visible",
+                        visibility: miniLayoutPost ? "hidden" : StopShowPad ? 'hidden' : "visible",
                         alignItems: "center",
                         justifyContent: "center",
                         zIndex: 9,
                         left: matchPc ? "94%" : matchTablet ? "93%" : "85%",
                         backgroundColor: emocolor,
                         opacity: emoOpacity,
+
                       }}
                     >
                       <span
@@ -1722,7 +1727,7 @@ function Postx({
                         height: matchPc ? "5vh" : matchTablet ? "7vh" : "5.5vh",
                         position: "relative",
                         display: "flex",
-                        visibility: miniLayoutPost ? "hidden" : "visible",
+                        visibility: miniLayoutPost ? "hidden" : StopShowPad ? 'hidden' : "visible",
                         alignItems: "center",
                         justifyContent: "center",
                         zIndex: 9,
@@ -1884,7 +1889,7 @@ function Postx({
                     </div>
 
 
-                    {ShowEmoIcon ? <div
+                    <div
 
                       onMouseEnter={(e: any) => {
                         setZoomx1(true);
@@ -1909,16 +1914,16 @@ function Postx({
                         cursor: "pointer",
                         top: `${emoNum3}vh`,
                         position: "absolute",
-                        zIndex: 8,
+                        zIndex: 80,
                         fontFamily: "Arial, Helvetica, sans-seri",
                         width: Emo3Num === 0 ? "0px" : "6%",
                         height: Emo3Num === 0 ? "0px" : "",
-                        marginLeft: matchMobile ? '76%' : "88%",
+                        marginLeft: matchMobile ? '87.5%' : "94%",
                         fontSize: "1.2vw",
                         fontWeight: "bold",
                         textAlign: "center",
                         visibility:
-                          Ein === null || Ein === 0 ? "hidden" : "visible",
+                          Ein === null || Ein === 0 ? "hidden" : StopShowPad ? "hidden" : "visible",
                       }}
                     >
                       <span
@@ -1964,11 +1969,11 @@ function Postx({
                       >
                         {Emo3Num === 0 ? "" : Emo3Num}
                       </span>
-                    </div> : null
-                    }
+                    </div>
 
 
-                    {ShowEmoIcon ? <div
+
+                    <div
                       className={
                         darkmodeReducer ? "zuperkinglight" : "zuperkinglight"
                       }
@@ -1986,22 +1991,22 @@ function Postx({
                       style={{
                         backgroundColor: emocolor,
                         padding: Emo4Num === 0 ? "0px" : "5px",
-                        opacity: darkmodeReducer ? 0.79 : 0.74,
+                        opacity: 1,
                         transform: matchMobile ? Zoomx2 ? "scale(1.4)" : "scale(0.7)" : Zoomx2 ? "scale(2.7)" : "scale(1)",
                         transition: "transform 0.1s",
                         cursor: "pointer",
                         top: `${emoNum4}vh`,
                         position: "absolute",
-                        zIndex: 8,
+                        zIndex: 80,
                         fontFamily: "Arial, Helvetica, sans-seri",
                         width: Emo4Num === 0 ? "0px" : "6%",
                         height: Emo4Num === 0 ? "0px" : "",
-                        marginLeft: matchMobile ? '76%' : "88%",
+                        marginLeft: matchMobile ? '87.5%' : "93.9%",
                         fontSize: "1.2vw",
                         fontWeight: "bold",
                         textAlign: "center",
                         visibility:
-                          Ein === null || Ein === 0 ? "hidden" : "visible",
+                          Ein === null || Ein === 0 ? "hidden" : StopShowPad ? "hidden" : "visible",
                       }}
                     >
                       <span
@@ -2047,7 +2052,7 @@ function Postx({
                       >
                         {Emo4Num === 0 ? "" : Emo4Num}
                       </span>
-                    </div> : null}
+                    </div>
 
                     {/*///////////////////////////////////////////////////////////////////////////REACTION NUMBERS*/}
 
@@ -2178,11 +2183,9 @@ function Postx({
                     >
                       <span>
                         <span
-                          className={
-                            darkmodeReducer ? "zuperkinglightx" : "zuperkinglightx"
-                          }
+
                           style={{
-                            color: "#ffffff",
+                            color: darkmodeReducer ? "#ffffff" : "#000000",
                           }}
                         >
                           <span
@@ -2326,6 +2329,8 @@ function Postx({
 
 
                             </span>
+
+
 
 
                             {
@@ -2520,7 +2525,7 @@ function Postx({
                     </Grid>
                   </animated.div >
                 </>
-              ) : null}
+              )}
           </div>
         </div>
       </animated.div >

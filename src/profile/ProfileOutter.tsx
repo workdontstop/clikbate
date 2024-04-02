@@ -1211,6 +1211,11 @@ function ProfileOutter() {
     dispatch(Updatepagenum(postLim));
 
 
+    if (idReducer === GuestReducer) {
+      dispatch(UpdateTutorials(4, true));
+    }
+
+
     postdataRep.forEach((obj: any) => {
       obj.itemheight = "auto";
       obj.itemrealheighthold = "0";
@@ -1903,24 +1908,6 @@ function ProfileOutter() {
                 ) : null}
 
 
-                <Grid item xs={6} style={{
-                  padding: '0px',
-                  fontWeight: 'bolder',
-                  marginLeft: matchTablet || matchMobile ? '10vw' : '10vw',
-                  top: matchTablet || matchMobile ? "58vh" : '52vh',
-                  fontFamily: "Arial, Helvetica, sans-serif",
-                  fontSize:
-                    matchTablet || matchMobile ? "2.6vh" : "3.6vh",
-                  position: 'absolute',
-                  opacity: '0.9',
-                  color: darkmodeReducer ? 'white' : 'black',
-                  overflow: 'hidden',
-                  display: miniProfile ? 'none' : 'block',
-                }}>
-
-                  {memeberPageidReducer === 0 ? 'Feeds' : `${MemberProfileData.username}'s Page`}
-                </Grid>
-
 
 
 
@@ -2109,7 +2096,31 @@ function ProfileOutter() {
                     typeTop={false}
                     getSliderWidth={getSliderWidth}
                   />
+
+
+
+
                 </Grid>
+
+                <Grid item xs={12} style={{
+                  padding: '0px',
+                  fontWeight: 'bolder',
+                  marginLeft: matchTablet || matchMobile ? '15vw' : '18.5vw',
+                  top: matchTablet || matchMobile ? "8vh" : '2vh',
+                  fontFamily: "Arial, Helvetica, sans-serif",
+                  fontSize:
+                    matchTablet || matchMobile ? "2.6vh" : "3.6vh",
+                  position: 'relative',
+                  textAlign: 'left',
+                  opacity: '0.9',
+                  color: darkmodeReducer ? 'white' : 'black',
+                  overflow: 'hidden',
+                  display: miniProfile ? 'none' : 'block',
+                }}>
+
+                  {memeberPageidReducer === 0 ? 'Feeds' : `${MemberProfileData.username}'s Page`}
+                </Grid>
+
               </Grid>
 
               {ShowmaxPost ? (
@@ -2163,7 +2174,7 @@ function ProfileOutter() {
               <Grid item xs={12} style={{
                 height: "0px",
                 width: '100%', position: "fixed", zIndex: 6, padding: "0px", paddingRight: '6.3vw', textAlign: 'right', bottom: '6vh',
-                opacity: '0.6', visibility: postData ? limit === 0 ? 'hidden' : shownav ? 'visible' : 'hidden' : 'hidden'
+                opacity: '0.85', visibility: postData ? limit === 0 ? 'hidden' : shownav ? 'visible' : 'hidden' : 'hidden'
               }}>
                 <ExpandLessIcon
                   onClick={() => {
@@ -3036,7 +3047,7 @@ function ProfileOutter() {
 
 
 
-              <Grid
+              {WebsiteMode ? <Grid
                 className="dontallowhighlighting"
                 item
                 onClick={() => {
@@ -3092,7 +3103,9 @@ function ProfileOutter() {
                     }} />
                 }
 
-              </Grid>
+              </Grid> : null}
+
+
 
 
 

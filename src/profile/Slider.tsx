@@ -147,7 +147,7 @@ function Sliderx({
 
   const { ref, inView, entry } = useInView({
     /* Optional options */
-    threshold: matchMobile ? 0.95 : 0.55,
+    threshold: matchMobile ? 1 : 0.55,
 
 
   });
@@ -325,7 +325,7 @@ function Sliderx({
 
       startinview();
 
-    }, 2000)
+    }, 1500)
   }, [inView]);
   /// const getWidth = () => window.innerWidth;
   ///var newGetWidth = getWidth() * slides.length;
@@ -941,7 +941,7 @@ function Sliderx({
       //video duration
       if (interacttypeAll === 1) {
 
-        d = 18000;
+        d = 35000;
       } else { }
       //video duration
 
@@ -1825,7 +1825,6 @@ function Sliderx({
 
         <Tutorial type={3} index={pey} post={post} />
 
-        <Tutorial type={4} index={pey} post={post} />
 
 
         <div

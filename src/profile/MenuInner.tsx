@@ -291,7 +291,7 @@ function MenuInnerx({
 
         <p style={{
           fontWeight: 'bolder',
-          marginTop: '1vh', textAlign: 'center',
+          marginTop: '0.4vh', textAlign: 'center',
           fontFamily: "Arial, Helvetica, sans-serif",
           opacity: opacitybox ? '0.2' : '0.9', color: darkmodeReducer ? 'white' : 'black'
         }}>
@@ -300,6 +300,7 @@ function MenuInnerx({
               margin: "auto",
               fontSize:
                 matchTablet || matchMobile ? "1.8vh" : "2vh",
+              visibility: 'hidden'
 
             }}
           />

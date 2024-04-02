@@ -418,7 +418,8 @@ function Menux({
                               style={{
                                 margin: "auto",
                                 marginLeft: '-8vw',
-                                position: 'absolute'
+                                position: 'absolute',
+                                display: 'none'
 
 
                               }}
@@ -429,6 +430,7 @@ function Menux({
                                 top: '0.8vh',
                                 marginLeft: '-2.2vw',
                                 position: 'absolute',
+                                display: 'none'
 
                               }}
                             />}
@@ -513,7 +515,8 @@ function Menux({
                                 style={{
                                   margin: "auto",
                                   marginLeft: '-8vw',
-                                  position: 'absolute'
+                                  position: 'absolute',
+                                  display: 'none'
 
 
                                 }}
@@ -524,6 +527,7 @@ function Menux({
                                   top: '0.8vh',
                                   marginLeft: '-2.2vw',
                                   position: 'absolute',
+                                  display: 'none'
 
                                 }}
                               />}

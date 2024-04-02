@@ -290,7 +290,7 @@ function FilterModex({
   useEffect(() => {
     setTimeout(() => {
       sethidetextz(true);
-    }, 6000)
+    }, 8000)
 
 
   }, [activatefilterImageReducer])
@@ -1421,7 +1421,7 @@ function FilterModex({
               filter: darkmodeReducer
                 ? "drop-shadow(1.2px 0.1px 1.92px rgba(255, 255, 255, 0.6))"
                 : "drop-shadow(1.2px 0.1px 1.92px rgba(41, 53, 70, 8.35))",
-              marginLeft: '-1vw',
+              marginLeft: '-1.2vw',
               visibility: hidetextz ? 'hidden' : 'visible',
               color: darkmodeReducer ? '#ffffff' : '#000000'
 
@@ -1472,7 +1472,7 @@ function FilterModex({
               filter: darkmodeReducer
                 ? "drop-shadow(1.2px 0.1px 1.92px rgba(255, 255, 255, 0.6))"
                 : "drop-shadow(1.2px 0.1px 1.92px rgba(41, 53, 70, 8.35))",
-              marginLeft: '-1vw',
+              marginLeft: '-1.8vw',
               visibility: hidetextz ? 'hidden' : 'visible',
               color: darkmodeReducer ? '#ffffff' : '#000000'
 
@@ -1521,7 +1521,7 @@ function FilterModex({
               filter: darkmodeReducer
                 ? "drop-shadow(1.2px 0.1px 1.92px rgba(255, 255, 255, 0.6))"
                 : "drop-shadow(1.2px 0.1px 1.92px rgba(41, 53, 70, 8.35))",
-              marginLeft: '-1vw',
+              marginLeft: '-2.7vw',
               visibility: hidetextz ? 'hidden' : 'visible',
               color: darkmodeReducer ? '#ffffff' : '#000000'
 
@@ -1609,7 +1609,7 @@ function FilterModex({
                 filter: darkmodeReducer
                   ? "drop-shadow(1.2px 0.1px 1.92px rgba(255, 255, 255, 0.6))"
                   : "drop-shadow(1.2px 0.1px 1.92px rgba(41, 53, 70, 8.35))",
-                marginLeft: '-1vw',
+                marginLeft: '-1.4vw',
                 visibility: hidetextz ? 'hidden' : 'visible',
                 color: darkmodeReducer ? '#ffffff' : '#000000'
 
@@ -1817,7 +1817,7 @@ function FilterModex({
               backgroundColor: darkmodeReducer
                 ? "rgba(50,50,50,0.98)"
                 : "rgba(200,200,200,0.85)",
-              height: '50vh',
+              height: '35vh',
               borderRadius: '20px',
 
             }}

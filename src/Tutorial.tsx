@@ -33,7 +33,7 @@ import {
 
 import { useInView } from "react-intersection-observer";
 
-function Tutorialx({ type, index, post }: any) {
+function Tutorialx({ type, index, post, minClicked }: any) {
 
 
 
@@ -166,7 +166,7 @@ function Tutorialx({ type, index, post }: any) {
         sethide1(true);
         sethide2(true);
         sethide3(true);
-        sethide4(true);
+
       }, 100)
 
 
@@ -220,7 +220,7 @@ function Tutorialx({ type, index, post }: any) {
               position: 'absolute',
               cursor: 'pointer',
               borderRadius: '20px',
-            }}>Click On Post For Interactions
+            }}>Clik On Interactions
 
             <CancelIcon
               style={{
@@ -275,7 +275,9 @@ function Tutorialx({ type, index, post }: any) {
               position: 'absolute',
               cursor: 'pointer',
               borderRadius: '20px',
-            }}>Click On Circle Icon below To Minimise
+            }}>
+
+            Clik On Plain Image For Audio
 
 
             <CancelIcon
@@ -334,7 +336,7 @@ function Tutorialx({ type, index, post }: any) {
               cursor: 'pointer',
               fontSize: matchMobile ? `1.5vh` : `0.8vw`,
               borderRadius: '20px',
-            }}>Double Click Profile Pic To Add Favorites
+            }}>Double Clik Profile Pic To Add Favorites
 
             <CancelIcon
               style={{
@@ -357,7 +359,7 @@ function Tutorialx({ type, index, post }: any) {
 
 
     {
-      type === 4 && index === 3 && interactHintState && regReducer === 1 ?
+      type === 4 && index === 0 && interactHintState && GuestReducer === idReducer ?
 
         <Grid container
 
@@ -365,8 +367,8 @@ function Tutorialx({ type, index, post }: any) {
             height: "0px",
             width: '100%',
             position: 'fixed',
-            top: matchMobile ? '12vh' : '14vh',
-            left: matchMobile ? '16.5%' : '28%',
+            top: matchMobile ? '5vh' : '10vh',
+            left: matchMobile ? '1.5%' : '28%',
             zIndex: 50000,
             color: darkmodeReducer ? 'whitesmoke' : 'black',
             fontFamily: 'sans-serif',
@@ -381,6 +383,7 @@ function Tutorialx({ type, index, post }: any) {
             <span
 
               onClick={() => {
+                minClicked();
                 dispatch(UpdateTutorials(type, false));
               }}
 
@@ -394,7 +397,7 @@ function Tutorialx({ type, index, post }: any) {
                 cursor: 'pointer',
                 fontSize: matchMobile ? `1.5vh` : `0.8vw`,
                 borderRadius: '20px',
-              }}>Interactions Vibrate Then Become Clickable
+              }}>Clik Image For Fullview
 
               <CancelIcon
                 style={{
