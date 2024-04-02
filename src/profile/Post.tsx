@@ -1428,7 +1428,7 @@ function Postx({
                     style={{
 
                       height: '0px',
-                      bottom: WebsiteMode ? isSafari ? `-${postbackheight / 1.03}px` :
+                      bottom: WebsiteMode ? isSafari ? `10vh` :
                         matchMobile ? `${postbackheight / 0.65}px` : `${postbackheight / 0.88}px` :
 
 
