@@ -66,13 +66,13 @@ if (process.env.APP_STATE === "dev") {
   app.use(cors(corsOptionsx));
 }
 
-const bill1 = "ca6138528d7da0b8cb39c957cbbfb72b";
-const bill1b = "5b40da41c067c3ec2498b0a0fea22e7d";
-const bill2 = "6a2b5a7e86fc51463969fe9ee843a8d2";
-const bill2b = "e93e1f41c6716ba2105f9d5b1bb0a69e";
+const bill1 = "6fa9d1c902de55b9d591473f03a37d61";
+const bill1b = "c2d5294470b0e55faf40d321fd4ec3d2";
+const bill2 = "67b5e045768c766d498d92a666c718cb";
+const bill2b = "aa24089d31f5b58d213a44fd6e72ea26";
 
-const profilepic = "e9bc610c526ab9f75759f7102e79b331";
-const profilepicb = "66aa6a36c154417af2d13b8bb246d154";
+const profilepic = "b658ac536412bb3a0d62c9f3880835be";
+const profilepicb = "e91b990d37995b62a2f84032c7e61c11";
 
 // Commenting out COOP and COEP headers
 // app.use((req, res, next) => {
@@ -925,21 +925,31 @@ app.post("/get_signed_url_4upload", async (req: any, res: any) => {
 });
 
 const deleteMediaFromS3 = async (media: string) => {
-  // Delete the original video from the root folder after transcoding
-  const s3 = new aws.S3({
-    accessKeyId,
-    secretAccessKey,
-    region,
-  });
+  if (
+    media === bill1 ||
+    media === bill1b ||
+    media === bill2 ||
+    media === bill2b ||
+    media === profilepic ||
+    media === profilepicb
+  ) {
+  } else {
+    // Delete the original video from the root folder after transcoding
+    const s3 = new aws.S3({
+      accessKeyId,
+      secretAccessKey,
+      region,
+    });
 
-  await s3
-    .deleteObject({
-      Key: media,
-      Bucket: "clikbatebucket",
-    })
-    .promise();
+    await s3
+      .deleteObject({
+        Key: media,
+        Bucket: "clikbatebucket",
+      })
+      .promise();
 
-  console.log("deleted bill");
+    console.log("deleted bill");
+  }
 };
 
 app.put("/profile_upload_data", async (req: Request, res: Response) => {
