@@ -15,7 +15,7 @@ import { matchMobile, matchPc, matchTablet } from "../DetectDevice";
 import ZoomOutIcon from "@mui/icons-material/ZoomOut";
 import { Loader } from "./Loader";
 import { UpdateInteract } from "../GlobalActions";
-import { useSpring } from "react-spring";
+import { useSpring, config } from "react-spring";
 import SearchIcon from '@material-ui/icons/Search';
 import PersonIcon from '@material-ui/icons/Person';
 import FaceIcon from '@material-ui/icons/Face';
@@ -27,6 +27,7 @@ import PhotoAlbumIcon from '@material-ui/icons/PhotoAlbum';
 import SettingsIcon from '@material-ui/icons/Settings';
 import SuperstarzIconLight from "../images/s.png";
 import SuperstarzIconDark from "../images/sd.png";
+
 
 import PlayCircleFilledIcon from '@material-ui/icons/PlayCircleFilled';
 
@@ -56,13 +57,15 @@ function ActualMenux({ showModalFormMenu, setshowModalFormMenu, postData, setsup
     setMovePlay(false);
   }, [showModalFormMenu])
 
+
+
   ////
   ////
   ////
   const styles = useSpring({
-    from: { transform: "translateX(-100%)" },
-    to: { transform: showModalFormMenu ? "translateX(0%)" : "translateX(-100%)" },
-    config: { tension: 280, friction: 60 }, // You can adjust these for smoother or stiffer animations
+    from: { transform: 'translateX(-5%)' },
+    to: { transform: showModalFormMenu ? 'translateX(0%)' : 'translateX(-5%)' },
+    config: config.default,
   });
 
 
@@ -395,14 +398,14 @@ function ActualMenux({ showModalFormMenu, setshowModalFormMenu, postData, setsup
 
         }}
         style={{
-          ...styles,
           width: '100%',
           height: '100vh',
           backgroundColor: darkmodeReducer ? 'rgb(20, 20, 20, 0.6)' : 'rgb(140, 140, 140, 0.53)',
           position: 'fixed',
           cursor: 'pointer',
           top: 0,
-          left: 0
+          left: 0,
+          display: showModalFormMenu ? 'block' : 'none'
         }}
       >
 

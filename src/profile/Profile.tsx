@@ -89,7 +89,7 @@ function Profilex({
 
   const dispatch = useDispatch();
 
-  var pagenumLimit = 24;
+  var pagenumLimit = 18;
 
 
 
@@ -641,7 +641,7 @@ function Profilex({
 
 
             if (idReducer === GuestReducer && memeberPageidReducer === 0) {
-              dispatch(UpdateAlertReducer('Create Interactive Content Here, Express Yourself. Have Fun ', 3));
+              dispatch(UpdateAlertReducer('Create Interactive Content Here and Express Yourself  ', 3));
             }
 
 
@@ -1339,7 +1339,7 @@ function Profilex({
                       xs={12}
                       style={{
                         marginTop: "0px",
-                        height: matchMobile ? "15.5vh" : '15.5vh',
+                        height: matchMobile ? "18.5vh" : '18.5vh',
                       }}
                     ></Grid>
                   </div>

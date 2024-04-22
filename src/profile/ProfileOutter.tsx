@@ -106,7 +106,7 @@ function ProfileOutter() {
     setTimeout(() => {
 
       setWebsiteMode(false);
-    }, 35000)
+    }, 15000)
 
     dd();
 
@@ -2802,7 +2802,7 @@ function ProfileOutter() {
                         fontFamily: "Arial, Helvetica, sans-seri",
                         fontWeight: 'bolder',
                         padding: '0px', position: 'absolute', bottom: '14.5vh',
-                      }}>Better On App</span>
+                      }}></span>
 
                     </Grid> : <Grid
                       item
@@ -2924,7 +2924,7 @@ function ProfileOutter() {
                         fontFamily: "Arial, Helvetica, sans-seri",
                         fontWeight: 'bolder',
                         padding: '0px', position: 'absolute', bottom: '12vh',
-                      }}>Better On App</span>
+                      }}></span>
 
                     </Grid> : <Grid
                       item

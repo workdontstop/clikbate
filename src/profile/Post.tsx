@@ -848,7 +848,7 @@ function Postx({
 
   var postprofiletop = matchPc ? "6.2vh" : matchTablet ? "-9.3vh" : "-6.2vh";
 
-  var postusernametop = matchPc ? "3vh" : matchTablet ? "-11.9vh" : "-10.6vh";
+  var postusernametop = matchPc ? "2.6vh" : matchTablet ? "-11.9vh" : "-10.6vh";
 
   var postusernametop2 = matchPc ? "2.5vh" : matchTablet ? "-11.9vh" : "-10.5vh";
 
@@ -2062,55 +2062,7 @@ function Postx({
 
 
 
-                    {/*///////////////////////////////////////////////////////////////////////////TOPIC */}
 
-                    <div
-                      className='zuperxyloud3d'
-                      style={{
-                        width: "79%",
-                        visibility: StopShowPad ? 'hidden' : "visible",
-                        top: matchMobile ? '4vh' : '14.5vh',
-                        position: "absolute",
-                        display: "flex", //flex
-                        alignItems: "center",
-                        justifyContent: "left",
-                        zIndex: 1,
-                        paddingLeft: "2vw",
-                        marginLeft: postTopicLeft,
-                        height: "20px",
-                      }}
-                    >
-                      <span>
-                        <span
-
-                          style={{
-                            color: "#ffffff",
-                          }}
-                        >
-                          <span
-                            onClick={() => {
-                              GoToMemberLoaderUp();
-                            }}
-
-                            style={{
-                              fontWeight: "bold",
-                              fontSize: matchMobile ? '2.2vh' : '1.3vw',
-                              cursor: 'pointer',
-                              fontFamily: "Roboto, Arial, Helvetica, sans-serif",
-                              opacity: "0.8",
-                              display: ShowAudioIcon ? 'block' : 'none'
-                            }}
-                          >
-
-
-
-                            {post.topic}
-
-                          </span>
-                        </span>
-                      </span>
-                    </div>
-                    {/*///////////////////////////////////////////////////////////////////////////TOPIC*/}
 
 
                     {/*///////////////////////////////////////////////////////////////////////////PROFILE-PIC*/}
@@ -2173,7 +2125,7 @@ function Postx({
 
                             style={{
                               fontWeight: "normal",
-                              fontSize: matchMobile ? '1.9vh' : postusernamefont,
+                              fontSize: matchMobile ? '0.95rem' : '1.06rem',
                               cursor: 'pointer',
                               fontFamily: "Roboto, Arial, Helvetica, sans-serif",
                               opacity: darkmodeReducer ? '0.4' : '0.7',
@@ -2182,6 +2134,12 @@ function Postx({
                           >
 
                             {post.username}
+                            <span style={{ visibility: 'hidden' }}>..</span>
+
+
+
+                            <span style={{}}>     {PostTime}</span>
+
 
                           </span>
 
@@ -2238,7 +2196,7 @@ function Postx({
 
                             style={{
                               fontWeight: "bold",
-                              fontSize: matchMobile ? '2vh' : '1.1vw',
+                              fontSize: matchMobile ? '1rem' : '1.16rem',
                               cursor: 'pointer',
                               fontFamily: "Roboto, Arial, Helvetica, sans-serif",
                               opacity: darkmodeReducer ? "0.5" : "0.8",
@@ -2246,7 +2204,7 @@ function Postx({
                             }}
                           >
 
-                            {post.caption}
+                            {post.topic} <span style={{ visibility: 'hidden' }}>..</span>  {post.caption}
 
                           </span>
                         </span>
@@ -2255,57 +2213,6 @@ function Postx({
                     {/*///////////////////////////////////////////////////////////////////////////CAPTION*/}
 
 
-                    {/*///////////////////////////////////////////////////////////////////////////TIME */}
-
-                    <div
-                      className={
-                        darkmodeReducer
-                          ? "zuperxy"
-                          : "zuperxy"
-                      }
-                      style={{
-                        width: "79%",
-
-                        top: matchMobile ? '-15.7vh' : '-2vh',
-                        position: "relative",
-                        display: "flex", //flex
-                        alignItems: "center",
-                        justifyContent: "left",
-                        zIndex: 1,
-                        paddingLeft: "2vw",
-                        marginLeft: matchMobile ? '84%' : '85%',
-                        height: "20px",
-                      }}
-                    >
-                      <span>
-                        <span
-
-                          style={{
-                            color: darkmodeReducer ? "#ffffff" : "#000000",
-                          }}
-                        >
-                          <span
-                            onClick={() => {
-                              GoToMemberLoaderUp();
-                            }}
-
-                            style={{
-                              fontWeight: "normal",
-                              fontSize: matchMobile ? '1.6vh' : '0.85vw',
-                              cursor: 'pointer',
-                              fontFamily: "Roboto, Arial, Helvetica, sans-serif",
-                              opacity: darkmodeReducer ? '0.3' : '0.6',
-
-                            }}
-                          >
-
-                            {PostTime}
-
-                          </span>
-                        </span>
-                      </span>
-                    </div>
-                    {/*///////////////////////////////////////////////////////////////////////////TIME*/}
 
 
 
@@ -2409,7 +2316,7 @@ function Postx({
           width: "100%",
           zIndex: 0,
           height: '1px',
-          marginTop: matchMobile ? '40%' : '13%',
+          marginTop: matchMobile ? '16em' : '13%',
           position: 'absolute',
           scrollSnapAlign: 'end',
 

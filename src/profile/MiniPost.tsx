@@ -336,7 +336,7 @@ function MiniPostx({
   var postprofiletop = matchPc ? "0.9vh" : matchTablet ? "-9.3vh" : "3.3vh";
   var posttopicfont = matchPc ? "1.25vw" : matchTablet ? "1.8vh" : "1.6vh";
 
-  var postusernamefont = matchPc ? "0.95vw" : matchTablet ? "2.32vh" : "1.7vh";
+  var postusernamefont = matchPc ? "0.98rem" : "0.84rem";
 
   var postDateFont = matchPc ? "0.75vw" : "1.6vh";
 
@@ -539,6 +539,7 @@ function MiniPostx({
             paddingLeft: matchMobile ? "0px" : "0px",
             paddingRight: matchMobile ? "0px" : "0px",
             paddingTop: matchMobile ? "10px" : "3px",
+            scrollSnapAlign: 'start',
 
 
           }}
@@ -822,7 +823,7 @@ function MiniPostx({
                     : "50% 50",
                 borderRadius: '2vh',
                 zIndex: 1,
-                scrollSnapAlign: 'start',
+
 
 
               }}
@@ -971,7 +972,7 @@ function MiniPostx({
                 fontWeight: "bold",
                 marginTop: matchPc ? '6vh' : '4.2vh',
                 color: darkmodeReducer ? "#ffffff" : "#000000",
-                fontSize: matchPc ? "1.95vh" : "1.65vh",
+                fontSize: matchPc ? "1.1rem" : "0.83rem",
                 zIndex: 5,
                 paddingLeft: matchPc ? "7vw" : "18vw",
                 height: "0px",
