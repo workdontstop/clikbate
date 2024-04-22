@@ -408,6 +408,7 @@ function ShowCommentsx({
             <span
               onClick={() => {
                 GoToMemberLoaderUp();
+
               }}
               style={{
                 cursor: "pointer",
@@ -437,7 +438,7 @@ function ShowCommentsx({
               }}
             >
               {" "}
-              {post.com}{" "}
+              {post.com}
             </span>
           </span>{" "}
 

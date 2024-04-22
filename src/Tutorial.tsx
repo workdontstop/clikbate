@@ -218,18 +218,11 @@ function Tutorialx({ type, index, post, minClicked }: any) {
               width: 'auto',
               fontSize: matchMobile ? `1.5vh` : `0.8vw`,
               position: 'absolute',
+              fontWeight: 'bold',
               cursor: 'pointer',
               borderRadius: '20px',
             }}>Clik On Interactions
 
-            <CancelIcon
-              style={{
-                fontSize: matchMobile ? `6vh` : `3.5vw`,
-                position: 'absolute',
-                bottom: matchMobile ? '0vh' : '0vh',
-                marginLeft: matchMobile ? '0vw' : '0vw'
-              }}
-            />
 
           </span>
 
@@ -275,19 +268,12 @@ function Tutorialx({ type, index, post, minClicked }: any) {
               position: 'absolute',
               cursor: 'pointer',
               borderRadius: '20px',
+              fontWeight: 'bold',
             }}>
 
             Clik On Plain Image For Audio
 
 
-            <CancelIcon
-              style={{
-                fontSize: matchMobile ? `6vh` : `3.5vw`,
-                position: 'absolute',
-                bottom: matchMobile ? '0vh' : '0vh',
-                marginLeft: matchMobile ? '0vw' : '0vw'
-              }}
-            />
 
           </span>
 
@@ -334,18 +320,11 @@ function Tutorialx({ type, index, post, minClicked }: any) {
               width: 'auto',
               position: 'absolute',
               cursor: 'pointer',
+              fontWeight: 'bold',
               fontSize: matchMobile ? `1.5vh` : `0.8vw`,
               borderRadius: '20px',
             }}>Double Clik Profile Pic To Add Favorites
 
-            <CancelIcon
-              style={{
-                fontSize: matchMobile ? `6vh` : `3.5vw`,
-                position: 'absolute',
-                bottom: matchMobile ? '0vh' : '0vh',
-                marginLeft: matchMobile ? '0vw' : '0vw'
-              }}
-            />
 
 
           </span>
@@ -368,7 +347,7 @@ function Tutorialx({ type, index, post, minClicked }: any) {
             width: '100%',
             position: 'fixed',
             top: matchMobile ? '5vh' : '10vh',
-            left: matchMobile ? '1.5%' : '28%',
+            left: matchMobile ? '12%' : '32%',
             zIndex: 50000,
             color: darkmodeReducer ? 'whitesmoke' : 'black',
             fontFamily: 'sans-serif',
@@ -394,19 +373,13 @@ function Tutorialx({ type, index, post, minClicked }: any) {
                 paddingLeft: matchMobile ? '4vw' : '1vw',
                 width: 'auto',
                 position: 'absolute',
+                fontWeight: 'bold',
                 cursor: 'pointer',
                 fontSize: matchMobile ? `1.5vh` : `0.8vw`,
                 borderRadius: '20px',
-              }}>Clik Image For Fullview
+              }}>Click For Fullview
 
-              <CancelIcon
-                style={{
-                  fontSize: matchMobile ? `6vh` : `3.5vw`,
-                  position: 'absolute',
-                  bottom: matchMobile ? '0vh' : '0vh',
-                  marginLeft: matchMobile ? '0vw' : '0vw'
-                }}
-              />
+
 
             </span>
 
@@ -454,16 +427,10 @@ function Tutorialx({ type, index, post, minClicked }: any) {
                 position: 'absolute',
                 cursor: 'pointer',
                 borderRadius: '20px',
+                fontWeight: 'bold',
               }}>Double Click This Image To Add Media
 
-              <CancelIcon
-                style={{
-                  fontSize: matchMobile ? `6vh` : `3.5vw`,
-                  position: 'absolute',
-                  bottom: matchMobile ? '0vh' : '0vh',
-                  marginLeft: matchMobile ? '0vw' : '0vw'
-                }}
-              />
+
             </span>
 
           </Grid>
@@ -509,15 +476,9 @@ function Tutorialx({ type, index, post, minClicked }: any) {
                 position: 'absolute',
                 cursor: 'pointer',
                 borderRadius: '20px',
+                fontWeight: 'bold',
               }}> Click On This Image To Add Interaction
-              <CancelIcon
-                style={{
-                  fontSize: matchMobile ? `6vh` : `3.5vw`,
-                  position: 'absolute',
-                  bottom: matchMobile ? '0vh' : '0vh',
-                  marginLeft: matchMobile ? '0vw' : '0vw'
-                }}
-              /></span>
+            </span>
 
           </Grid>
 

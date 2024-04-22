@@ -91,7 +91,7 @@ function ProfileOutter() {
 
     } else {
       setIsPWAInstalled(false);
-      setWebsiteMode(true); // H
+      /// setWebsiteMode(true); // H
     }
 
   }
@@ -103,9 +103,14 @@ function ProfileOutter() {
 
   useEffect(() => {
 
+    setTimeout(() => {
+
+      setWebsiteMode(false);
+    }, 35000)
+
     dd();
 
-  }, [postData, media, navigatorx, andref])
+  }, [postData, media, navigatorx, andref,])
 
 
 
@@ -308,7 +313,7 @@ function ProfileOutter() {
   const [profileImagethumbTop, setprofileImagethumbTop] = useState<number>(0);
   const [profileImagethumbLeft, setprofileImagethumbLeft] = useState<number>(0);
 
-  const [miniLayoutPost, setminiLayoutPost] = useState<boolean>(false);
+
 
   const [checkIfColorChanged, setcheckIfColorChanged] =
     useState<boolean>(false);
@@ -1869,7 +1874,7 @@ function ProfileOutter() {
                   : "postscroll-lightm"
             }
             style={{
-              scrollSnapType: 'none',
+              scrollSnapType: 'y mandatory',
               backgroundImage: PaperStyleReducer,
               borderRadius: "0px",
               height: "100vh",
@@ -1880,8 +1885,6 @@ function ProfileOutter() {
                   : "auto",
               overflowX: "hidden",
               paddingBottom: "15vh",
-
-
             }}
           >
             <MuiThemeProvider theme={themeGeneralSettings}>
@@ -2106,7 +2109,7 @@ function ProfileOutter() {
                   padding: '0px',
                   fontWeight: 'bolder',
                   marginLeft: matchTablet || matchMobile ? '15vw' : '18.5vw',
-                  top: matchTablet || matchMobile ? "8vh" : '2vh',
+                  top: matchTablet || matchMobile ? "4vh" : '2vh',
                   fontFamily: "Arial, Helvetica, sans-serif",
                   fontSize:
                     matchTablet || matchMobile ? "2.6vh" : "3.6vh",
@@ -2115,10 +2118,10 @@ function ProfileOutter() {
                   opacity: '0.9',
                   color: darkmodeReducer ? 'white' : 'black',
                   overflow: 'hidden',
-                  display: miniProfile ? 'none' : 'block',
+                  display: 'none',
                 }}>
 
-                  {memeberPageidReducer === 0 ? 'Feeds' : `${MemberProfileData.username}'s Page`}
+                  {MemberProfileData.username ? memeberPageidReducer === 0 ? 'Feeds' : `${MemberProfileData.username}'s Page` : null}
                 </Grid>
 
               </Grid>
@@ -2273,7 +2276,7 @@ function ProfileOutter() {
                     zoomClickedIndex={zoomClickedIndex}
                     setzoomClickedIndex={setzoomClickedIndex}
                     setStopBodyScroll={setStopBodyScroll}
-                    miniLayoutPost={miniLayoutPost}
+
                     setCommentPostid={setCommentPostid}
                     setDiscussionImage={setDiscussionImage}
                     x={x}
@@ -2695,8 +2698,8 @@ function ProfileOutter() {
                   setminiProfile={setminiProfile}
                   setzoomClickedIndex={setzoomClickedIndex}
                   setSliderIndexMini={setSliderIndexMini}
-                  miniLayoutPost={miniLayoutPost}
-                  setminiLayoutPost={setminiLayoutPost}
+
+
                   setx={setx}
                   setsuperSettings={setsuperSettings}
                   showModalUpload={showModalUpload}
@@ -2738,30 +2741,30 @@ function ProfileOutter() {
 
                       }}
                     >
+
+                      <CancelIcon
+                        onClick={() => {
+
+                          setWebsiteMode(false);
+                        }}
+                        className={`${darkmodeReducer
+                          ? "make-small-icons-clickable-darkMenu dontallowhighlighting zuperkingIcon"
+                          : "make-small-icons-clickable-lightMenu dontallowhighlighting zuperking"
+                          } `}
+                        style={{
+                          fontSize: '8vh',
+                          color: darkmodeReducer ? '#ffffff' : '#000000',
+                          position: 'absolute',
+                          right: '1vw',
+                          top: '0px',
+                        }}
+                      />
                       <button onClick={handleInstallClick} style={{
                         borderRadius: '20px', padding: '5vh', cursor: 'pointer', backgroundColor: darkmodeReducer ? '#333333' : '#0b1728',
                         color: darkmodeReducer ? '#ffffff' : '#ffffff'
                       }}>
 
-                        <CancelIcon
-                          onClick={() => {
 
-                            setWebsiteMode(false);
-                          }}
-                          className={`${darkmodeReducer
-                            ? "make-small-icons-clickable-darkMenu dontallowhighlighting zuperkingIcon"
-                            : "make-small-icons-clickable-lightMenu dontallowhighlighting zuperking"
-                            } `}
-                          style={{
-                            fontSize: '8vh',
-                            color: darkmodeReducer ? '#ffffff' : '#000000',
-                            position: 'absolute',
-                            right: '1vw',
-                            top: '0px',
-                            display: 'none'
-
-                          }}
-                        />
                         <img
                           onClick={() => {
 
@@ -2794,7 +2797,7 @@ function ProfileOutter() {
                         }}>Install Help?</span>
 
                       <span style={{
-                        textAlign: "center", opacity: darkmodeReducer ? 0.4 : 0.4, left: '65vw',
+                        textAlign: "center", opacity: darkmodeReducer ? 0.4 : 0.4, left: '9vw',
                         color: darkmodeReducer ? '#ffffff' : '#000000',
                         fontFamily: "Arial, Helvetica, sans-seri",
                         fontWeight: 'bolder',
@@ -2852,31 +2855,34 @@ function ProfileOutter() {
                       }}
                     >
 
+
+                      <CancelIcon
+                        onClick={() => {
+
+                          setWebsiteMode(false);
+                        }}
+                        className={`${darkmodeReducer
+                          ? "make-small-icons-clickable-darkMenu dontallowhighlighting zuperkingIcon"
+                          : "make-small-icons-clickable-lightMenu dontallowhighlighting zuperking"
+                          } `}
+                        style={{
+                          fontSize: '3.8vw',
+                          color: darkmodeReducer ? '#ffffff' : '#000000',
+                          position: 'absolute',
+                          right: '1vw',
+                          top: '0px',
+
+
+                        }}
+                      />
+
+
                       <button onClick={handleInstallClick} style={{
                         borderRadius: '20px', padding: '5vh', cursor: 'pointer', backgroundColor: darkmodeReducer ? '#333333' : '#0b1728',
                         color: darkmodeReducer ? '#ffffff' : '#ffffff'
                       }}>
 
 
-                        <CancelIcon
-                          onClick={() => {
-
-                            setWebsiteMode(false);
-                          }}
-                          className={`${darkmodeReducer
-                            ? "make-small-icons-clickable-darkMenu dontallowhighlighting zuperkingIcon"
-                            : "make-small-icons-clickable-lightMenu dontallowhighlighting zuperking"
-                            } `}
-                          style={{
-                            fontSize: '3.8vw',
-                            color: darkmodeReducer ? '#ffffff' : '#000000',
-                            position: 'absolute',
-                            right: '1vw',
-                            top: '0px',
-                            display: 'none'
-
-                          }}
-                        />
 
 
                         <img
@@ -2913,7 +2919,7 @@ function ProfileOutter() {
                         }}>  </span>
 
                       <span style={{
-                        textAlign: "center", opacity: darkmodeReducer ? 0.4 : 0.4, left: '40vw',
+                        textAlign: "center", opacity: darkmodeReducer ? 0.4 : 0.4, left: '4vw',
                         color: darkmodeReducer ? '#ffffff' : '#000000',
                         fontFamily: "Arial, Helvetica, sans-seri",
                         fontWeight: 'bolder',
@@ -3086,6 +3092,7 @@ function ProfileOutter() {
                       maxWidth: '100%',
                       margin: 'auto',
                       position: 'relative',
+
                     }}
                     alt="Your Alt Text"
                   />
@@ -3099,7 +3106,8 @@ function ProfileOutter() {
 
                     style={{
                       cursor: 'pointer', margin: 'auto', height: '70vh', marginTop: '30vh',
-                      width: 'auto'
+                      width: 'auto',
+
                     }} />
                 }
 

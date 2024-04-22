@@ -49,7 +49,7 @@ function Profilex({
   x,
   setDiscussionImage,
   setCommentPostid,
-  miniLayoutPost,
+
   setStopBodyScroll,
   setSliderIndexMini,
   zoomClickedIndex,
@@ -89,9 +89,14 @@ function Profilex({
 
   const dispatch = useDispatch();
 
+  var pagenumLimit = 24;
+
+
+
   const postDivRef = useRef<any[]>([]);
 
   const postItemsRef = useRef<any>([]);
+
 
 
 
@@ -129,6 +134,9 @@ function Profilex({
 
 
   const [showMoreIndicator, setshowMoreIndicator] = useState(false);
+
+  const [showMoreIndicatorxxx, setshowMoreIndicatorxxx] = useState(false);
+
 
   const [lastIndicatorPush, setlastIndicatorPush] = useState(false);
 
@@ -181,11 +189,28 @@ function Profilex({
 
 
 
+  useEffect(() => {
+
+    if (showProfiileData) {
+      if (postData.length < pagenumLimit) {
+
+        setshowMoreIndicatorxxx(false)
+
+      } else {
+
+        setshowMoreIndicatorxxx(true)
+      }
+    }
+
+
+  }, [lastItemElement, postData, showProfiileData]); // Re-run the effect when dependencies change
+
+
 
   useEffect(() => {
 
     if (showProfiileData) {
-      if (postData.length < 20) { } else {
+      if (postData.length < pagenumLimit) { } else {
         setTimeout(() => {
 
           // Initialize the observer in the effect
@@ -210,6 +235,12 @@ function Profilex({
 
                 sTimer2.current = setTimeout(() => {
 
+                  TopRef.current.scrollIntoView({
+                    behavior: "smooth",
+                    block: "start",
+                  });
+
+
                   dispatch(UpdateLoader(true));
                   setshowThisComponenet(true);
                   setminiProfile(false);
@@ -220,7 +251,7 @@ function Profilex({
 
 
 
-                }, 1400)
+                }, 2600)
 
 
               }, 200)
@@ -610,7 +641,7 @@ function Profilex({
 
 
             if (idReducer === GuestReducer && memeberPageidReducer === 0) {
-              dispatch(UpdateAlertReducer('Imagine A Thumbnail With Multiple Videos, Express Yourself. Have Fun ', 3));
+              dispatch(UpdateAlertReducer('Create Interactive Content Here, Express Yourself. Have Fun ', 3));
             }
 
 
@@ -1135,17 +1166,17 @@ function Profilex({
           xs={12}
           style={{
             padding: "0px",
-            paddingLeft: miniProfile ? (matchPc ? "6vw" : "0vw") : "0vw",
-            paddingRight: miniProfile ? (matchPc ? "6vw" : "0vw") : "0vw",
+            paddingLeft: miniProfile ? (matchPc ? "6vw" : "0vw") : matchPc ? "0vw" : '0vw',
+            paddingRight: miniProfile ? (matchPc ? "6vw" : "0vw") : matchPc ? "0vw" : '0vw',
             height: "auto",
-            marginTop: matchMobile ? '10vh' : '5.5vh',
-            marginLeft: miniProfile && matchPc ? '5.5vw' : '0px',
+            marginTop: matchMobile ? '6vh' : '5.5vh',
+            marginLeft: miniProfile && matchPc ? '1.5vw' : '0px',
           }}
         >
           {postData.length > 0 ? (
             <Masonry
-              columns={matchPc ? 2 : miniProfile ? 2 : 1}
-              spacing={miniProfile && matchMobile ? 0.5 : miniProfile ? 16 : 0}
+              columns={matchPc ? miniProfile ? 3 : 2 : miniProfile ? 2 : 1}
+              spacing={matchMobile ? miniProfile ? 0.5 : 0 : miniProfile ? 4 : 0}
               style={{
                 padding: "0px",
 
@@ -1189,7 +1220,7 @@ function Profilex({
                       setx={setx}
                       ActiveCanvasx={ActiveCanvasx}
                       setActiveCanvasx={setActiveCanvasx}
-                      miniLayoutPost={miniLayoutPost}
+
                       setCommentPostid={setCommentPostid}
                       postData={postData}
                       setDiscussionImage={setDiscussionImage}
@@ -1228,7 +1259,7 @@ function Profilex({
                       xs={12}
                       style={{
                         marginTop: "20px",
-                        height: matchMobile ? "9vh" : ' 0vh',
+                        height: matchMobile ? "11vh" : '10vh',
                       }}
                     ></Grid>
                   </div>
@@ -1268,7 +1299,7 @@ function Profilex({
                       setminiProfile={setminiProfile}
                       setStopBodyScroll={setStopBodyScroll}
                       setx={setx}
-                      miniLayoutPost={miniLayoutPost}
+
                       setCommentPostid={setCommentPostid}
                       postData={postData}
                       setDiscussionImage={setDiscussionImage}
@@ -1301,12 +1332,14 @@ function Profilex({
                       setActiveAutoPlay={setActiveAutoPlay}
                       AUTOSlideLongImages={AUTOSlideLongImages}
                       scrollToPost={scrollToPost}
-                    /> <Grid
+                    />
+
+                    <Grid
                       item
                       xs={12}
                       style={{
                         marginTop: "0px",
-                        height: "15.5vh",
+                        height: matchMobile ? "15.5vh" : '15.5vh',
                       }}
                     ></Grid>
                   </div>
@@ -1328,20 +1361,32 @@ function Profilex({
 
           <Grid
             item
+            xs={12}
+            style={{
+              padding: '0px', textAlign: 'center', color: darkmodeReducer ? '#ffffff' : '#000000',
+              fontFamily: "Arial, Helvetica, sans-serif", opacity: '0.5',
+              marginTop: '4vh'
+            }}>
+            {showMoreIndicatorxxx ? 'Drag To Bottom For More' : "No More Post's Yet"}
+          </Grid>
+
+
+          <Grid
+            item
             xs={2}>
           </Grid>
 
 
           <Grid
             item
-            className="animateColorAndPadding"
+            className="animateColorAndPadding zuperxy"
             xs={8}
             ref={lastItemElement}
             style={{
               visibility: showMoreIndicator ? 'visible' : 'hidden',
-              marginTop: lastIndicatorPush ? `${lastIndicatorPushH}vh` : "37vh",
+              marginTop: lastIndicatorPush ? `${lastIndicatorPushH}vh` : "35vh",
               height: "7px",
-              backgroundColor: 'blue'
+              backgroundColor: colorReducer
             }}
           ></Grid>
 

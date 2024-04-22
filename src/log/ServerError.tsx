@@ -107,7 +107,7 @@ function ServerErrorx({
       if (AlertDataReducer) {
         dispatch(UpdateAlertReducer(null, 0));
       }
-    }, 8000);
+    }, 11000);
   }, [AlertDataReducer]);
 
   return (

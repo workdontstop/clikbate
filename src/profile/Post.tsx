@@ -90,7 +90,7 @@ function Postx({
   setDiscussionImage,
   postData,
   setCommentPostid,
-  miniLayoutPost,
+
   setStopBodyScroll,
   setminiProfile,
   zoomClickedIndex,
@@ -122,6 +122,9 @@ function Postx({
   const { REACT_APP_SUPERSTARZ_URL, REACT_APP_APPX_STATE } = process.env;
 
   const [Hideonload, setHideonload] = useState(true);
+
+
+
 
   const [Emo1Num, setEmo1Num] = useState(0);
   const [Emo2Num, setEmo2Num] = useState(0);
@@ -838,30 +841,30 @@ function Postx({
 
 
   var profilewidth = matchPc
-    ? miniLayoutPost
-      ? "12%"
-      : "9.5%"
+    ? "9.5%"
     : matchTablet
       ? "12.5%"
       : "15%";
 
   var postprofiletop = matchPc ? "6.2vh" : matchTablet ? "-9.3vh" : "-6.2vh";
 
-  var postusernametop = matchPc ? "5vh" : matchTablet ? "-11.9vh" : "-7.5vh";
+  var postusernametop = matchPc ? "3vh" : matchTablet ? "-11.9vh" : "-10.6vh";
 
   var postusernametop2 = matchPc ? "2.5vh" : matchTablet ? "-11.9vh" : "-10.5vh";
 
-  var postusernamefont = matchPc ? "1.34vw" : matchTablet ? "2.32vh" : "2.2vh";
+  var postusernamefont = matchPc ? "1vw" : matchTablet ? "2.32vh" : "2.2vh";
 
   var postusernameleft = matchPc ? "11.1%" : matchTablet ? "15.5%" : "20%";
 
-  var postusernamefontx = matchPc ? "0.8vw" : matchTablet ? "0.9vh" : "1.5vh";
+  var postTopicLeft = matchPc ? "-1%" : matchTablet ? "15.5%" : "1%";
+
+  var postusernamefontx = matchPc ? "0.8vw" : matchTablet ? "0.9vh" : "1.4vh";
 
   var postcirclefont = matchPc ? "0.95vw" : matchTablet ? "1.2vw" : "2.1vh";
   var dotspace = matchPc ? "1.7vw" : matchTablet ? "1.9vh" : "1.9vh";
   var dotspace2 = matchPc ? "0.9vw" : matchTablet ? "1.9vh" : "1.9vh";
 
-  var posttopicfont = matchPc ? "1.07vw" : matchTablet ? "1.8vh" : "1.9vh";
+  var posttopicfont = matchPc ? "0.9vw" : matchTablet ? "1.8vh" : "1.9vh";
 
   var postcaptiontop = matchPc ? "-1.85vh" : matchTablet ? "-9.2vh" : "-9.6vh";
   var postcaptionfont = matchPc ? "1.2vw" : matchTablet ? "2.35vh" : "1.75vh";
@@ -1155,12 +1158,12 @@ function Postx({
             style={{
               padding: "0px",
               width: "100%",
-              marginTop: pey === 0 || pey === 1 ? "-0.5px" : "-1.1px",
+              marginTop: "0px",
               zIndex: length - 1 - pey,
               paddingLeft: matchMobile ? "0px" : "0.5px",
               paddingRight: matchMobile ? "0px" : "0.5px",
               paddingTop: "0px",
-              scrollSnapAlign: snapStartReducer ? "start" : 'none'
+              scrollSnapAlign: 'start',
 
             }}
           >
@@ -1273,32 +1276,34 @@ function Postx({
 
 
 
+
               {
 
-                ShowAudioIcon ?
 
-                  <AudiotrackIcon
-                    onClick={() => {
-                      ///pauseAudio(true);
-                    }}
-                    className={
-                      darkmodeReducer
-                        ? "make-small-icons-clickable-lightCrop dontallowhighlighting zupermenulight "
-                        : "make-small-icons-clickable-darkCrop dontallowhighlighting zupermenudark  "
-                    }
-                    style={{
-                      color: '#ffffff',
-                      backgroundColor: post.color1,
-                      fontSize: postcommentfontx,
-                      marginRight: "5vw",
-                      right: matchMobile ? '44vw' : '22.2vw',
-                      transform: matchMobile ? Zoomxm ? "scale(2.1)" : "scale(0.9)" : Zoomxm ? "scale(2.3)" : "scale(1.3)",
-                      transition: "transform 0.1s",
-                      position: "relative",
-                      zIndex: 20,
-                      opacity: 1,
-                    }}
-                  /> : null
+
+                <AudiotrackIcon
+                  onClick={() => {
+                    ///pauseAudio(true);
+                  }}
+                  className={
+                    darkmodeReducer
+                      ? "make-small-icons-clickable-lightCrop dontallowhighlighting zupermenulight "
+                      : "make-small-icons-clickable-darkCrop dontallowhighlighting zupermenudark  "
+                  }
+                  style={{
+                    color: '#ffffff',
+                    backgroundColor: post.color1,
+                    fontSize: postcommentfontx,
+                    marginRight: "5vw",
+                    right: matchMobile ? '44vw' : '22.2vw',
+                    transform: matchMobile ? Zoomxm ? "scale(2.1)" : "scale(0.9)" : Zoomxm ? "scale(2.3)" : "scale(1.3)",
+                    transition: "transform 0.1s",
+                    position: "relative",
+                    zIndex: 20,
+                    opacity: 1,
+                    display: ShowAudioIcon ? 'block' : 'none'
+                  }}
+                />
 
               }
 
@@ -1428,11 +1433,10 @@ function Postx({
                     style={{
 
                       height: '0px',
-                      bottom: WebsiteMode ? isSafari ? `10vh` :
-                        matchMobile ? `${postbackheight / 0.65}px` : `${postbackheight / 0.88}px` :
+                      bottom: matchMobile ? `10.2vh` : `${postbackheight / 0.89}px`,
 
 
-                        matchMobile ? `${postbackheight / 0.63}px` : `${postbackheight / 0.86}px`,
+
                       position: "absolute",
                       backgroundColor: '#00ccff',
                       transition: "all 350ms ease",
@@ -1455,7 +1459,7 @@ function Postx({
                         height: matchPc ? "5vh" : matchTablet ? "7vh" : "5.5vh",
                         position: "relative",
                         display: "flex",
-                        visibility: miniLayoutPost ? "hidden" : "visible",
+
                         alignItems: "center",
                         justifyContent: "center",
                         zIndex: 9,
@@ -1520,7 +1524,7 @@ function Postx({
                         height: matchPc ? "5vh" : matchTablet ? "7vh" : "5.5vh",
                         position: "relative",
                         display: "flex",
-                        visibility: miniLayoutPost ? "hidden" : "visible",
+
                         alignItems: "center",
                         justifyContent: "center",
                         zIndex: 9,
@@ -1624,7 +1628,7 @@ function Postx({
                         height: matchPc ? "5vh" : matchTablet ? "7vh" : "5.5vh",
                         position: "relative",
                         display: "flex",
-                        visibility: miniLayoutPost ? "hidden" : StopShowPad ? 'hidden' : "visible",
+                        visibility: StopShowPad ? 'hidden' : "visible",
                         alignItems: "center",
                         justifyContent: "center",
                         zIndex: 9,
@@ -1727,7 +1731,7 @@ function Postx({
                         height: matchPc ? "5vh" : matchTablet ? "7vh" : "5.5vh",
                         position: "relative",
                         display: "flex",
-                        visibility: miniLayoutPost ? "hidden" : StopShowPad ? 'hidden' : "visible",
+                        visibility: StopShowPad ? 'hidden' : "visible",
                         alignItems: "center",
                         justifyContent: "center",
                         zIndex: 9,
@@ -2058,6 +2062,55 @@ function Postx({
 
 
 
+                    {/*///////////////////////////////////////////////////////////////////////////TOPIC */}
+
+                    <div
+                      className='zuperxyloud3d'
+                      style={{
+                        width: "79%",
+                        visibility: StopShowPad ? 'hidden' : "visible",
+                        top: matchMobile ? '4vh' : '14.5vh',
+                        position: "absolute",
+                        display: "flex", //flex
+                        alignItems: "center",
+                        justifyContent: "left",
+                        zIndex: 1,
+                        paddingLeft: "2vw",
+                        marginLeft: postTopicLeft,
+                        height: "20px",
+                      }}
+                    >
+                      <span>
+                        <span
+
+                          style={{
+                            color: "#ffffff",
+                          }}
+                        >
+                          <span
+                            onClick={() => {
+                              GoToMemberLoaderUp();
+                            }}
+
+                            style={{
+                              fontWeight: "bold",
+                              fontSize: matchMobile ? '2.2vh' : '1.3vw',
+                              cursor: 'pointer',
+                              fontFamily: "Roboto, Arial, Helvetica, sans-serif",
+                              opacity: "0.8",
+                              display: ShowAudioIcon ? 'block' : 'none'
+                            }}
+                          >
+
+
+
+                            {post.topic}
+
+                          </span>
+                        </span>
+                      </span>
+                    </div>
+                    {/*///////////////////////////////////////////////////////////////////////////TOPIC*/}
 
 
                     {/*///////////////////////////////////////////////////////////////////////////PROFILE-PIC*/}
@@ -2082,19 +2135,21 @@ function Postx({
                     />
                     {/*///////////////////////////////////////////////////////////////////////////PROFILE-PIC*/}
 
-                    {/*///////////////////////////////////////////////////////////////////////////USERNAME */}
+
+
+
                     <div
                       className={
                         darkmodeReducer
-                          ? "zuperxyinfoPostDark"
-                          : "zuperxyinfoPostDark "
+                          ? "zuperxy"
+                          : "zuperxy"
                       }
                       style={{
                         width: "79%",
-                        visibility: miniLayoutPost ? "hidden" : "visible",
-                        top: isSafari ? '-10.5vh' : postusernametop2,
+
+                        top: postusernametop,
                         position: "relative",
-                        display: "none", //flex
+                        display: "flex", //flex
                         alignItems: "center",
                         justifyContent: "left",
                         zIndex: 1,
@@ -2106,11 +2161,9 @@ function Postx({
                     >
                       <span>
                         <span
-                          className={
-                            darkmodeReducer ? "zuperkinglightx" : "zuperkinglightx"
-                          }
+
                           style={{
-                            color: "#ffffff",
+                            color: darkmodeReducer ? "#ffffff" : "#000000",
                           }}
                         >
                           <span
@@ -2119,47 +2172,37 @@ function Postx({
                             }}
 
                             style={{
-                              fontWeight: "bold",
-                              fontSize: isSafari ? '1.6vh' : postusernamefont,
+                              fontWeight: "normal",
+                              fontSize: matchMobile ? '1.9vh' : postusernamefont,
                               cursor: 'pointer',
-                              fontFamily: "Roboto Condensed",
-                              opacity: 0.88,
-
+                              fontFamily: "Roboto, Arial, Helvetica, sans-serif",
+                              opacity: darkmodeReducer ? '0.4' : '0.7',
 
                             }}
                           >
 
-
-                            {post.audioData ? <AudiotrackIcon
-                              onClick={() => {
-
-
-                              }}
-                              className={
-                                darkmodeReducer
-                                  ? "make-small-icons-clickable-lightCrop dontallowhighlighting zupermenulight "
-                                  : "make-small-icons-clickable-darkCrop dontallowhighlighting zupermenudark  "}
-
-                              style={{
-                                color: darkmodeReducer ? '#ffffff' : '#ffffff',
-                                fontSize: matchMobile ? '1.6vh' : '0.9vw',
-                                backgroundColor: post.color1,
-                                marginLeft: matchMobile ? '5vw' : '1.2vw',
-                                fontFamily: "Arial, Helvetica, sans-serif",
-                                fontWeight: "bolder",
-                                opacity: 0.5,
-                                padding: "2px",
-                              }}
-                            /> : null}
+                            {post.username}
 
                           </span>
+
+
+
+
                         </span>
                       </span>
                     </div>
+                    {/*///////////////////////////////////////////////////////////////////////////USERNAME*/}
 
-                    {/*///////////////////////////////////////////////////////////////////////////USERNAME */}
 
-                    {/*///////////////////////////////////////////////////////////////////////////CAPTION AND TOPIC*/}
+
+
+
+
+
+
+
+                    {/*///////////////////////////////////////////////////////////////////////////CAPTION */}
+
                     <div
                       className={
                         darkmodeReducer
@@ -2168,8 +2211,8 @@ function Postx({
                       }
                       style={{
                         width: "79%",
-                        visibility: miniLayoutPost ? "hidden" : "visible",
-                        top: isSafari ? '-8vh' : postusernametop,
+
+                        top: matchMobile ? '-8.5vh' : '5vh',
                         position: "relative",
                         display: "flex", //flex
                         alignItems: "center",
@@ -2195,252 +2238,77 @@ function Postx({
 
                             style={{
                               fontWeight: "bold",
-                              fontSize: isSafari ? '1.9vh' : postusernamefont,
+                              fontSize: matchMobile ? '2vh' : '1.1vw',
                               cursor: 'pointer',
-                              fontFamily: "Roboto Condensed",
-                              opacity: 0.98,
+                              fontFamily: "Roboto, Arial, Helvetica, sans-serif",
+                              opacity: darkmodeReducer ? "0.5" : "0.8",
 
                             }}
                           >
 
-                            {post.username}
+                            {post.caption}
 
-                          </span>
-
-                          <span
-                            style={{
-                              opacity: 0,
-                              fontSize: dotspace,
-
-
-                            }}
-                          >
-                            .
-                          </span>
-                          <span
-                            style={{
-                              opacity: 0,
-                              fontSize: dotspace,
-
-
-                            }}
-                          >
-                            .
-                          </span>
-                          <span
-                            style={{
-                              opacity: 0,
-                              fontSize: dotspace,
-
-
-                            }}
-                          >
-                            .
-                          </span>
-
-                          <span
-                            style={{
-                              opacity: 0,
-                              fontSize: dotspace,
-
-
-                            }}
-                          >
-                            .
-                          </span>
-
-
-                          <span className={ShowBigPlay ? 'blinkingxx' : ''}
-                            onClick={() => {
-
-                              if (ShowBigPlay) {
-                                clearAllTimers();
-                              } else {
-                                setsliderIndexMini(sliderIndex);
-                                setzoomClickedIndex(pey + 1);
-                                setminiProfile(true);
-                              }
-
-                            }}
-
-                            onTouchStart={() => {
-                              setBigCircle(true);
-                            }}
-                            onTouchEnd={() => {
-                              setBigCircle(false);
-                            }}
-
-                            onMouseOver={() => {
-                              setBigCircle(true);
-                            }}
-                            onMouseOut={() => {
-                              setBigCircle(false);
-                            }}
-
-                            style={{
-                              opacity: 0.9,
-                              cursor: BigCircle ? "pointer" : "default",
-
-
-                            }}
-                          >
-
-
-
-                          </span>
-
-                          <span
-                            style={{
-                              opacity: 0,
-                              fontSize: dotspace,
-
-
-                            }}
-                          >
-                            .
-                          </span>
-                          <span
-                            style={{
-                              opacity: 0,
-                              fontSize: dotspace2,
-                            }}
-                          >
-                            .
-                          </span>
-
-                          <span
-                            style={{
-                              fontSize: isSafari ? '1.65vh' : posttopicfont,
-                              fontFamily: "Roboto Condensed",
-                              fontWeight: "bold",
-                              opacity: 1,
-                            }}
-                          >
-
-                            {
-                              //////////////////caption
-                            }
-
-                            <span style={{}}>
-
-
-
-                              {post.topic ? post.topic : "Clikbate"}{" "}
-
-
-                            </span>
-
-
-
-
-                            {
-                              ////////////////  caption
-                            }
-
-                            <span style={{ padding: "5px" }}>
-                              <CircleIcon
-                                onClick={() => {
-                                  setsliderIndexMini(sliderIndex);
-                                  setzoomClickedIndex(pey + 1);
-                                  setminiProfile(true);
-                                }}
-                                onMouseOver={() => {
-                                  setBigCircle(true);
-                                }}
-                                onMouseOut={() => {
-                                  setBigCircle(false);
-                                }}
-                                className="zuperkingtur"
-                                style={{
-                                  display: 'none',
-                                  fontSize: postcirclefont,
-                                  color: "#fffff",
-                                  transform: BigCircle ? "scale(2.5)" : "scale(1)",
-                                  cursor: BigCircle ? "pointer" : "default",
-                                  transition: "transform 0.5s",
-                                }}
-                              />
-                            </span>
                           </span>
                         </span>
                       </span>
                     </div>
-                    {/*///////////////////////////////////////////////////////////////////////////USERNAME AND TOPIC*/}
                     {/*///////////////////////////////////////////////////////////////////////////CAPTION*/}
-                    <div
-                      style={{
-                        top: postcaptiontop,
-                        position: "relative",
-                        marginLeft: postcaptionleft,
-                        zIndex: 1,
-                        paddingLeft: "1.95vw",
-                        fontFamily: "Arial, Helvetica, sans-seri",
-                        height: postcaptionheight,
-                        width: postcaptionwidth,
-                        lineHeight: postcaptionline,
-                        overflow: "hidden",
-                        display: 'none'
-                      }}
-                    >
-                      <span
-                        className={textback}
-                        style={{
-                          verticalAlign: "middle",
-                          fontSize: postcaptionfont,
-                          fontWeight: "normal",
-                          margin: "0",
-                          opacity: darkmodeReducer ? 0.6 : 0.7,
-                          padding: "7px",
-                          justifyContent: "center",
-                          color: darkmodeReducer ? "#cccccc" : "#000000",
-                        }}
-                      ></span>
-                    </div>
-                    {/*///////////////////////////////////////////////////////////////////////////CAPTION*/}
-                    {/*///////////////////////////////////////////////////////////////////////////OPTIONS*/}
+
+
+                    {/*///////////////////////////////////////////////////////////////////////////TIME */}
 
                     <div
                       className={
                         darkmodeReducer
-                          ? "zuperxyinfoPostDark"
-                          : "zuperxyinfoPostLight"
+                          ? "zuperxy"
+                          : "zuperxy"
                       }
                       style={{
-                        top: isSafari ? '-5.8vh' : postoptionstop,
-                        marginLeft: matchMobile ? '84vw' : '43vw',
+                        width: "79%",
+
+                        top: matchMobile ? '-15.7vh' : '-2vh',
                         position: "relative",
-                        transition: "all 350ms ease",
-                        display: "flex",
-                        visibility: miniLayoutPost ? "hidden" : "visible",
+                        display: "flex", //flex
                         alignItems: "center",
                         justifyContent: "left",
-                        zIndex: 2,
-                        height: "0px",
-                        width: "98%",
+                        zIndex: 1,
                         paddingLeft: "2vw",
-                        textAlign: 'center',
-                        opacity: darkmodeReducer ? 1 : 0.9,
+                        marginLeft: matchMobile ? '84%' : '85%',
+                        height: "20px",
                       }}
                     >
-                      <span
-                        className={
-                          darkmodeReducer ? "zuperkinglightx" : "zuperkinglight"
-                        }
-                        style={{
-                          color: '#ffffff',
-                          padding: "0px",
-                          opacity: 0.8,
-                          fontSize: postusernamefontx,
-                          fontFamily: "Arial, Helvetica, sans-seri",
-                          cursor: "pointer",
-                          display: 'none'
+                      <span>
+                        <span
 
-                        }}
-                      >
-                        {PostTime}
+                          style={{
+                            color: darkmodeReducer ? "#ffffff" : "#000000",
+                          }}
+                        >
+                          <span
+                            onClick={() => {
+                              GoToMemberLoaderUp();
+                            }}
+
+                            style={{
+                              fontWeight: "normal",
+                              fontSize: matchMobile ? '1.6vh' : '0.85vw',
+                              cursor: 'pointer',
+                              fontFamily: "Roboto, Arial, Helvetica, sans-serif",
+                              opacity: darkmodeReducer ? '0.3' : '0.6',
+
+                            }}
+                          >
+
+                            {PostTime}
+
+                          </span>
+                        </span>
                       </span>
                     </div>
-                    {/*///////////////////////////////////////////////////////////////////////////OPTIONS*/}
+                    {/*///////////////////////////////////////////////////////////////////////////TIME*/}
+
+
+
 
                     <Grid
                       item
@@ -2526,9 +2394,29 @@ function Postx({
                   </animated.div >
                 </>
               )}
+
+
+
           </div>
         </div>
+
       </animated.div >
+
+      <div
+
+        style={{
+          padding: "0px",
+          width: "100%",
+          zIndex: 0,
+          height: '1px',
+          marginTop: matchMobile ? '40%' : '13%',
+          position: 'absolute',
+          scrollSnapAlign: 'end',
+
+
+        }}
+      >
+      </div>
     </>
   );
 }

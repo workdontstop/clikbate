@@ -147,7 +147,7 @@ function Sliderx({
 
   const { ref, inView, entry } = useInView({
     /* Optional options */
-    threshold: matchMobile ? 1 : 0.55,
+    threshold: matchMobile ? 0.93 : 0.55,
 
 
   });
@@ -941,7 +941,7 @@ function Sliderx({
       //video duration
       if (interacttypeAll === 1) {
 
-        d = 35000;
+        d = 50000;
       } else { }
       //video duration
 

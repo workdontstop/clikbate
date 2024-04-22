@@ -98,7 +98,7 @@ function VideoEditorx({ VideoUrl, VideoUrl2, ShowVideo2, ShowVideo, setShowVideo
 
       setprocessing(true);
 
-      startRecording(VideoUrl, x - 1, 35);
+      startRecording(VideoUrl, x - 1, 50);
     }
   };
 

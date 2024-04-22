@@ -78,7 +78,7 @@ function AudioEditorx({
       // Set a timer to stop recording after 15 seconds
       recordingTimerRef.current = setTimeout(() => {
         stopRecording();
-      }, 17000); // 15 seconds
+      }, 25000); // 15 seconds
     }
   };
 

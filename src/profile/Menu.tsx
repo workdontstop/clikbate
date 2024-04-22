@@ -28,8 +28,6 @@ function Menux({
   setsuperSettings,
   setx,
   x,
-  setminiLayoutPost,
-  miniLayoutPost,
   setSliderIndexMini,
   setzoomClickedIndex,
   setminiProfile,
@@ -355,7 +353,7 @@ function Menux({
                 ShowBigPlay ? null : <Grid
                   container
                   style={{
-                    bottom: "7.4vh",
+                    top: "3vh",
                     position: "fixed",
                     width: "100%",
                     height: "0px",
@@ -374,7 +372,7 @@ function Menux({
                     style={{
                       height: "0px",
 
-                      marginTop: matchPc ? "-90vh" : WebsiteMode ? isSafariaa ? '-78vh' : "-89vh" : "-89vh"
+
 
 
 

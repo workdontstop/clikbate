@@ -333,13 +333,16 @@ function MiniPostx({
   }, [post]);
 
 
-  var postprofiletop = matchPc ? "-5.8vh" : matchTablet ? "-9.3vh" : "-2.4vh";
+  var postprofiletop = matchPc ? "0.9vh" : matchTablet ? "-9.3vh" : "3.3vh";
   var posttopicfont = matchPc ? "1.25vw" : matchTablet ? "1.8vh" : "1.6vh";
 
-  var postusernamefont = matchPc ? "1.1vw" : matchTablet ? "2.32vh" : "1.7vh";
+  var postusernamefont = matchPc ? "0.95vw" : matchTablet ? "2.32vh" : "1.7vh";
+
+  var postDateFont = matchPc ? "0.75vw" : "1.6vh";
+
   var postusernameleft = matchPc ? "41.1%" : matchTablet ? "15.5%" : "20%";
 
-  var postusernameleftx = matchPc ? "14.5%" : matchTablet ? "15.5%" : "20%";
+  var postusernameleftx = matchPc ? "15.5%" : matchTablet ? "15.5%" : "20%";
 
   var postcirclefont = matchPc ? ShowBigPlay ? '1.4vw' : "0.7vw" : matchTablet ? "1.2vw" : ShowBigPlay ? '3vh' : "1.1vh";
   var postcirclefontx = matchPc ? ShowBigPlay ? '2.2vw' : "1.4vw" : matchTablet ? "1.2vw" : ShowBigPlay ? '4.1vh' : "2.2vh";
@@ -348,7 +351,10 @@ function MiniPostx({
   var dotspace2 = matchPc ? "0.9vw" : matchTablet ? "1.9vh" : "1.9vh";
 
   var postusernametop = matchPc ? "-6vh" : matchTablet ? "-11.9vh" : "-3.5vh";
-  var postusernametopx = matchPc ? "-3vh" : matchTablet ? "-11.9vh" : "-2.5vh";
+  var postusernametopx = matchPc ? "3.1vh" : matchTablet ? "-11.9vh" : "1.8vh";
+
+
+  var postusernametopxTI = matchPc ? "3.1vh" : "-2.3vh";
 
   var profilewidth = matchPc
     ? miniLayoutPost
@@ -465,6 +471,37 @@ function MiniPostx({
 
   }, [post, itemCLICKED]);
 
+
+
+
+
+  function formatClikBateTime(dateTime: any) {
+    const now: any = new Date();
+    const timestamp: any = new Date(dateTime);
+    const timeDiff = Math.abs(now - timestamp) / 1000;
+
+    if (timeDiff < 60) {
+      return 'just now';
+    } else if (timeDiff < 3600) {
+      const minutes = Math.floor(timeDiff / 60);
+      return `${minutes}m ago`;
+    } else if (timeDiff < 86400) {
+      const hours = Math.floor(timeDiff / 3600);
+      return `${hours}h ago`;
+    } else if (timeDiff < 2592000) {
+      const days = Math.floor(timeDiff / 86400);
+      return `${days}d ago`;
+    } else if (timeDiff < 31536000) {
+      const months = Math.floor(timeDiff / 2592000);
+      return `${months}mo ago`;
+    } else {
+      const years = Math.floor(timeDiff / 31536000);
+      return `${years}y ago`;
+    }
+  }
+
+
+  var PostTime = formatClikBateTime(post.time);
 
 
 
@@ -593,7 +630,7 @@ function MiniPostx({
                 position: "absolute",
                 zIndex: 30,
                 backgroundColor: post.color1,
-                left: matchMobile ? '40vw' : '30vw',
+                left: '40vw',
                 cursor: "pointer",
                 top: matchMobile ? '1.5vh' : "5vh",
                 fontFamily: "Arial, Helvetica, sans-serif",
@@ -687,7 +724,7 @@ function MiniPostx({
                 position: "absolute",
                 zIndex: 30,
                 backgroundColor: post.color1,
-                left: '30vw',
+                left: '23vw',
                 cursor: "pointer",
                 top: "5vh",
                 fontFamily: "Arial, Helvetica, sans-serif",
@@ -731,7 +768,7 @@ function MiniPostx({
 
                 cursor: "pointer",
                 width: "100%",
-                height: matchMobile ? isWide ? '29vh' : '29vh' : '62vh',
+                height: matchMobile ? isWide ? '29vh' : '29vh' : '58vh',
                 position: AllowAllHdImagesShow ? "absolute" : 'relative',
                 padding: "0px",
                 objectFit:
@@ -772,7 +809,7 @@ function MiniPostx({
 
                 cursor: "pointer",
                 width: "100%",
-                height: matchMobile ? isWide ? '29vh' : '29vh' : '62vh',
+                height: matchMobile ? isWide ? '29vh' : '29vh' : '58vh',
                 position: "relative",
                 padding: "0px",
                 objectFit:
@@ -785,6 +822,7 @@ function MiniPostx({
                     : "50% 50",
                 borderRadius: '2vh',
                 zIndex: 1,
+                scrollSnapAlign: 'start',
 
 
               }}
@@ -797,42 +835,83 @@ function MiniPostx({
 
           <div
             className={
-              darkmodeReducer ? "zuperxyinfoPostDark" : "zuperxyinfoPostLight"
+              darkmodeReducer ? "" : ""
             }
             style={{
-              visibility: miniLayoutPost ? "hidden" : "visible",
+
               top: postusernametopx,
               position: "relative",
               display: "flex", //flex
               alignItems: "center",
               justifyContent: "left",
               zIndex: 50,
-              color: "#ffffffff",
+              opacity: darkmodeReducer ? '0.4' : '0.6',
               paddingLeft: "2vw",
-              fontFamily: "Arial, Helvetica, sans-seri",
+              fontFamily: "Roboto, Arial, Helvetica, sans-serif",
               marginLeft: postusernameleftx,
               textAlign: matchMobile ? "center" : 'left',
-              left: matchMobile ? '6vw' : '0px',
+              left: matchMobile ? '6vw' : '12px',
               height: "0px",
             }}
           >
             <span>
               <span
                 className={
-                  darkmodeReducer ? "zuperkinglight" : "zuperkinglight"
+                  darkmodeReducer ? "" : ""
                 }
                 style={{
-                  color: darkmodeReducer ? "#ffffff" : "#ffffff",
+                  color: darkmodeReducer ? "#ffffff" : "#000000",
                 }}
               >
                 <span
                   style={{
-                    fontWeight: "bold",
+                    fontWeight: "normal",
                     fontSize: postusernamefont,
                     display: 'block'
                   }}
                 >
                   {post.username}
+                </span>  </span>  </span></div>
+
+
+          <div
+            className={
+              matchMobile ? 'zuperxyloud3d' : ''
+            }
+            style={{
+
+              top: postusernametopxTI,
+              position: "relative",
+              display: "flex", //flex
+              alignItems: "center",
+              justifyContent: "left",
+              zIndex: 50,
+              opacity: matchMobile ? '0.8' : darkmodeReducer ? '0.3' : '0.5',
+              paddingLeft: "2vw",
+              fontFamily: "Roboto, Arial, Helvetica, sans-serif",
+
+              textAlign: matchMobile ? "center" : 'left',
+              left: matchMobile ? '33vw' : '20.5vw',
+              height: "0px",
+            }}
+          >
+            <span>
+              <span
+                className={
+                  darkmodeReducer ? "" : ""
+                }
+                style={{
+                  color: matchMobile ? '#ffffff' : darkmodeReducer ? "#ffffff" : "#000000",
+                }}
+              >
+                <span
+                  style={{
+                    fontWeight: "normal",
+                    fontSize: postDateFont,
+                    display: 'block'
+                  }}
+                >
+                  {PostTime}
                 </span>  </span>  </span></div>
 
           {/*///////////////////////////////////////////////////////////////////////////USERNAME AND TOPIC*/}
@@ -859,52 +938,7 @@ function MiniPostx({
 
             }}
           >
-            <span>
-              <span
-                className={
-                  darkmodeReducer ? "zuperkinglight" : "zuperkinglight"
-                }
-                style={{
-                  color: darkmodeReducer ? "#ffffff" : "#ffffff",
 
-                }}
-              >
-                <span
-                  style={{
-                    fontWeight: "bold",
-                    fontSize: postusernamefont,
-                    fontFamily: "Roboto Condensed",
-                    display: 'none'
-
-                  }}
-                >
-                  {post.topic}
-                </span>
-
-                <span
-                  style={{
-                    opacity: 0,
-                    fontSize: dotspace,
-                  }}
-                >
-                  .
-                </span>
-
-
-
-
-
-
-                <span
-                  style={{
-                    opacity: 0,
-                    fontSize: dotspace2,
-                  }}
-                >
-                  .
-                </span>
-              </span>
-            </span>
           </div>
           {/*///////////////////////////////////////////////////////////////////////////USERNAME AND TOPIC*/}
           {/*///////////////////////////////////////////////////////////////////////////PROFILE-PIC*/}
@@ -935,13 +969,14 @@ function MiniPostx({
             <div
               style={{
                 fontWeight: "bold",
+                marginTop: matchPc ? '6vh' : '4.2vh',
                 color: darkmodeReducer ? "#ffffff" : "#000000",
-                fontSize: matchPc ? "2.1vh" : isSafari ? WebsiteMode ? '1.8vh' : '1.6vh' : "1.9vh",
+                fontSize: matchPc ? "1.95vh" : "1.65vh",
                 zIndex: 5,
-                paddingLeft: matchPc ? "7vw" : matchTablet ? "2.3vw" : "17vw",
+                paddingLeft: matchPc ? "7vw" : "18vw",
                 height: "0px",
                 fontFamily: "Arial, Helvetica, sans-serif",
-                opacity: darkmodeReducer ? "0.6" : "0.8",
+                opacity: darkmodeReducer ? "0.5" : "0.8",
                 display: 'block'
               }}
             >   <p>

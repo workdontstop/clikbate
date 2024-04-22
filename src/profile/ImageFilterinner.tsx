@@ -467,17 +467,17 @@ function ImageFilterinnerx({
       /////////////////////////////////////////adjust resolution canvas filter mode//////////////////////////////////////////////
       var dynamicDimensions = matchMobile
         ? window.innerHeight * 4.5
-        : window.innerHeight * 2;
+        : window.innerHeight * 1.45;
       var dynamicDimensionsx = matchMobile
         ? window.innerWidth * 4.5
-        : window.innerWidth * 1.8;
+        : window.innerWidth * 1;
       ////////
       /////////////////////////////////////////adjust resolution canvas filter mode//////////////////////////////////////////////
 
 
       previewFileReadimage.onload = function () {
         const ctx = canvasRef.current.getContext("2d");
-        const qualityValue = 0.98;
+        const qualityValue = 0.8;
 
         if (
           previewFileReadimage.naturalWidth > previewFileReadimage.naturalHeight

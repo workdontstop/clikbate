@@ -50,7 +50,7 @@ if (process.env.APP_STATE === "dev") {
     ///origin: "http://192.168.0.39:3000",
     origin: [
       "http://192.168.0.39:3000",
-      ////"http://localhost:3000", // Add your front-end origin
+      //// "http://localhost:3000", // Add your front-end origin
       "https://oaidalleapiprodscus.blob.core.windows.net", // Add your blob storage origin
     ],
     credentials: true, //access-control-allow-credentials:true
@@ -198,7 +198,7 @@ SELECT
 FROM posts
 INNER JOIN members ON posts.sender = members.id
 ORDER BY posts.id DESC
-LIMIT 20
+LIMIT 24
 `;
 
 const posts_more = `SELECT
@@ -242,7 +242,7 @@ WHERE post = posts.id and user = ?)EmoIn,
       interacttype1,interacttype2,rad1,rad2, members.profile_image,members.username,color1,posts.id,sender,post_count,topic,
 caption,item1,thumb1,itemtype1,interact1a,interact1ax,interact1ay,interact1b,interact1bx,interact1by,item2,vid1backup,vid2backup,time
   FROM posts inner join members on
- posts.sender = members.id AND posts.id < ?    ORDER BY posts.id DESC LIMIT 20`;
+ posts.sender = members.id AND posts.id < ?    ORDER BY posts.id DESC LIMIT 24`;
 
 const updateColor = `UPDATE members SET  color1 = ? WHERE (id = ?)`;
 
@@ -395,7 +395,7 @@ WHERE post = posts.id and user = ?)EmoIn,
          interacttype1,interacttype2,rad1,rad2,members.profile_image,members.username,color1,posts.id,sender,post_count,topic,
 caption,item1,thumb1,itemtype1,interact1a,interact1ax,interact1ay,interact1b,interact1bx,interact1by,item2,vid1backup,vid2backup,
 time  FROM posts inner join members on
- posts.sender = members.id    where posts.sender = ?  ORDER BY posts.id DESC LIMIT 20`;
+ posts.sender = members.id    where posts.sender = ?  ORDER BY posts.id DESC LIMIT 24`;
 
 const profile_more = `SELECT
 
@@ -438,7 +438,7 @@ WHERE post = posts.id and user = ?)EmoIn,
         interacttype1,interacttype2,rad1,rad2,members.profile_image,members.username,color1,posts.id,sender,post_count,topic,
 caption,item1,thumb1,itemtype1,interact1a,interact1ax,interact1ay,interact1b,interact1bx,interact1by,item2,vid1backup,vid2backup
 ,time  FROM posts inner join members on
- posts.sender = members.id where posts.sender = ? AND posts.id < ?  ORDER BY posts.id DESC LIMIT 20 `;
+ posts.sender = members.id where posts.sender = ? AND posts.id < ?  ORDER BY posts.id DESC LIMIT 24`;
 
 const optionsval = `(SELECT thumb1 FROM posts WHERE sender = ? ORDER BY id DESC LIMIT 1)
 UNION ALL
