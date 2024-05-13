@@ -1,4 +1,10 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, {
+  useState,
+  useRef,
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+} from "react";
 import { useSelector, useDispatch } from "react-redux";
 
 import { Grid, Box } from "@material-ui/core";
@@ -112,44 +118,54 @@ function Billboardx({
     useState(billboardImagesnn);
 
 
+  const Timervv = useRef<ReturnType<typeof setTimeout> | null>(null);
+
 
 
   const ChangeProfile = useCallback(() => {
 
-    var billboardImagesxx = [billboard1, billboard2];
-    var billboardImagesxxT = [billboardthumb1, billboardthumb2];
-
-    var billboardImageszz = [
-      MemberProfileData.userbillboard1,
-      MemberProfileData.userbillboard2,
-    ];
-    var billboardImageszzT = [
-      MemberProfileData.userbillboardthumb1,
-      MemberProfileData.userbillboardthumb2,
-    ];
-
-
-    if (memeberPageid === 0 || idReducer === memeberPageid) {
-
-      setbillboardthumbImages(billboardImagesxxT);
-      setbillboardImages(billboardImagesxx);
-      setusernameReducer(username);
-      setquoteReducer(quote);
-      setfavoritesReducer(favorites);
-    } else {
-      setbillboardthumbImages(billboardImageszzT);
-      setbillboardImages(billboardImageszz);
-      setusernameReducer(MemberProfileData.username);
-      setquoteReducer(MemberProfileData.userquote);
-      setfavoritesReducer(MemberProfileData.favorites);
+    if (Timervv.current) {
+      clearTimeout(Timervv.current);
     }
+
+    Timervv.current = setTimeout(() => {
+      var billboardImagesxx = [billboard1, billboard2];
+      var billboardImagesxxT = [billboardthumb1, billboardthumb2];
+
+      var billboardImageszz = [
+        MemberProfileData.userbillboard1,
+        MemberProfileData.userbillboard2,
+      ];
+
+
+      var billboardImageszzT = [
+        MemberProfileData.userbillboardthumb1,
+        MemberProfileData.userbillboardthumb2,
+      ];
+
+
+      if (memeberPageid === 0 || idReducer === memeberPageid) {
+
+        setbillboardthumbImages(billboardImagesxxT);
+        setbillboardImages(billboardImagesxx);
+        setusernameReducer(username);
+        setquoteReducer(quote);
+        setfavoritesReducer(favorites);
+      } else {
+        setbillboardthumbImages(billboardImageszzT);
+        setbillboardImages(billboardImageszz);
+        setusernameReducer(MemberProfileData.username);
+        setquoteReducer(MemberProfileData.userquote);
+        setfavoritesReducer(MemberProfileData.favorites);
+      }
+
+    }, 1500)
   }, [idReducer, memeberPageid, billboardstateReducer, billboard1, billboard2, username,
-    quote, favorites, billboardthumb1, billboardthumb2,
-    MemberProfileData.userbillboardthumb1, MemberProfileData.userbillboardthumb2,
-    MemberProfileData.userbillboard1, MemberProfileData.userbillboard2,
-    MemberProfileData.username, MemberProfileData.userquote, MemberProfileData.favorites]);
+    quote, favorites, billboardthumb1, billboardthumb2, MemberProfileData]);
 
   useEffect(() => {
+
+    ///alert(MemberProfileData.userbillboardthumb1)
     ChangeProfile();
 
   }, [MemberProfileData, idReducer, memeberPageid]);
@@ -256,7 +272,7 @@ function Billboardx({
 
   //////////////////////////////////BILLBOARD VARIABLES FOR DEVICE TYPES
   var widthh = matchPc ? "65vw" : "98.5vw";
-  var topp = matchPc ? "50.9vh" : matchTablet ? "5.5vh" : "23.5vh";
+  var topp = matchPc ? "50.9vh" : matchTablet ? "5.5vh" : "23vh";
   var usernameClass = matchPc
     ? "usernamePc"
     : matchTablet
@@ -364,7 +380,7 @@ function Billboardx({
               position: "relative",
               top: "0em",
               width: "100%",
-              scrollSnapAlign: snapStartReducer ? "start" : 'none'
+              scrollSnapAlign: "start",
 
             }}
           >
@@ -443,7 +459,7 @@ function Billboardx({
                   height: "0px",
                   top: bottomConnect,
                   display: showModalFormMenu ? 'none' : "flex",
-                  justifyContent: "flex-end",
+                  justifyContent: "flex-start",
                   zIndex: 4,
                 }}
               >
@@ -462,6 +478,7 @@ function Billboardx({
                       cursor: "pointer",
                       fontWeight: "bolder",
                       fontSize: fontConnectText,
+                      marginLeft: matchPc ? "0.45vw" : "2.5vw",
                       backgroundColor: darkmodeReducer
                         ? "rgba(005, 005, 005, 0)"
                         : "rgba(255, 255, 255, 0)",
@@ -492,7 +509,7 @@ function Billboardx({
                       cursor: "pointer",
                       fontWeight: "bolder",
                       fontSize: fontConnectnum,
-                      marginRight: matchPc ? "0.45vw" : "0.5vw",
+                      marginLeft: matchPc ? "1.45vw" : "1.5vw",
                       backgroundColor: darkmodeReducer
                         ? "rgba(005, 005, 005, 0)"
                         : "rgba(255, 255, 255, 0)",
@@ -525,6 +542,7 @@ function Billboardx({
                       padding: "1px  ",
                       opacity: darkmodeReducer
                         ? 0.7 : 0.73,
+                      marginLeft: matchPc ? "10.1vw" : "12.5vw",
                     }}
                     className={
                       darkmodeReducer
@@ -553,7 +571,7 @@ function Billboardx({
                       fontWeight: "bolder",
                       fontSize: fontConnectnum,
 
-                      marginRight: matchPc ? "0.1vw" : "0.5vw",
+                      marginLeft: matchPc ? "10.1vw" : "11.5vw",
                       marginTop: "9.2px",
                     }}
                     className={`fontfamilyArial zuperxyinfo  ${favclass}`}
@@ -577,7 +595,7 @@ function Billboardx({
                   textAlign: "right",
                   zIndex: 0,
                   height: "0px",
-                  scrollSnapAlign: snapStartReducer ? "start" : 'none'
+                  /// scrollSnapAlign: snapStartReducer ? "start" : 'none'
 
                 }}
               >

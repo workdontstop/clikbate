@@ -77,6 +77,7 @@ function Sliderx({
   setShowAudioIcon,
   setShowEmoIcon,
   setlatestInview,
+  setShowReactionsIcon
 
 
 
@@ -88,6 +89,8 @@ function Sliderx({
   const dispatch = useDispatch();
 
   var allow4dev = "";
+
+
 
 
   const [showSpinx, setshowSpinx] = useState(false);
@@ -163,6 +166,8 @@ function Sliderx({
   const sTimerccxx = useRef<ReturnType<typeof setTimeout> | null>(null);
   const sTimerccxxhh = useRef<ReturnType<typeof setTimeout> | null>(null);
 
+  const sTimerccxxtt = useRef<ReturnType<typeof setTimeout> | null>(null);
+
   const SlideimageRef = useRef<HTMLImageElement>(null);
 
   const SlideimageRefthumb = useRef<HTMLImageElement>(null);
@@ -237,20 +242,36 @@ function Sliderx({
 
     if (inView) {
 
+
       setlatestInview(pey);
 
       setShowPad(true);
 
 
       setShowAudioIcon(true);
+      setShowReactionsIcon(true);
+
+
       setShowEmoIcon(true);
+
+
+      if (sTimerccxxtt.current) {
+        clearTimeout(sTimerccxxtt.current);
+      }
+      sTimerccxxtt.current = setTimeout(() => {
+        setShowReactionsIcon(false);
+
+      }, 5000)
+
+
+
       if (sTimerccxxhh.current) {
         clearTimeout(sTimerccxxhh.current);
       }
       sTimerccxxhh.current = setTimeout(() => {
         setShowAudioIcon(false);
         setShowEmoIcon(false);
-      }, 5000)
+      }, 7000)
 
 
       if (interactContent && interact && ActiveCanvas === pey) {
@@ -280,22 +301,16 @@ function Sliderx({
 
     } else {
 
-      if (sTimerccxx.current) {
-        clearTimeout(sTimerccxx.current);
-      }
-
-      sTimerccxx.current = setTimeout(() => {
-
-        setShowAudioIcon(true);
-        setShowPad(false);
-
-        dispatch(MuteIndexAudio(1000));
-
-        setActiveCanvas(-1);
-        stopInteraction();
 
 
-      }, 40)
+      setShowAudioIcon(true);
+      setShowReactionsIcon(false);
+      setShowPad(false);
+
+      dispatch(MuteIndexAudio(1000));
+
+      setActiveCanvas(-1);
+      stopInteraction();
 
 
 
@@ -311,7 +326,7 @@ function Sliderx({
 
   useEffect(() => {
 
-
+    ///setShowReactionsIcon(true);
 
     if (sTimerccxx.current) {
       clearTimeout(sTimerccxx.current);
@@ -792,15 +807,10 @@ function Sliderx({
 
 
     if (audioPlayerRef.current) {
-      if (audioPlayerRef.current.volume > 0 || audioPlayerRef.current.volume < 1) {
-        audioPlayerRef.current.volume = 1;
+      if (audioPlayerRef.current.paused) {
+        audioPlayerRef.current.play();
       } else {
-        if (audioPlayerRef.current.volume === 0) {
-          audioPlayerRef.current.volume = 1;
-
-        } else {
-          audioPlayerRef.current.volume = 0;
-        }
+        audioPlayerRef.current.pause();
       }
     }
 
@@ -1875,34 +1885,7 @@ function Sliderx({
 
 
 
-        {" "}
-        {" "}
-        {" "}
-        {" "}
-        {" "}
-        {showSpin ? (
-          <Grid
-            item
-            xs={12}
 
-            style={{
-              backgroundColor: post ? post.color1 : colorReducer,
-              height: "0.9vh",
-              position: "absolute",
-              display: autoSlideDisplay,
-              zIndex: 100000,
-              top: "0em",
-              width: '100%',
-              visibility: 'hidden'
-            }}
-          ></Grid>
-        ) : null}
-        {" "}
-        {" "}
-        {" "}
-        {" "}
-        {" "}
-        {" "}
 
 
         {slides.length > 0 ? (
@@ -1913,6 +1896,7 @@ function Sliderx({
 
 
               showSpin={showSpinx}
+
               setshowSpin={setshowSpinx}
               ActiveCanvas={ActiveCanvas}
               post={post}
@@ -2057,7 +2041,7 @@ function Sliderx({
 
 
 
-            {post.audioData && itemCLICKED[pey] && ActiveAudioIndexReducer === pey ?
+            {post.audioData && itemCLICKED[pey] && ActiveAudioIndexReducer === pey && inView ?
               <audio
                 ref={audioPlayerRef}
                 src={`${REACT_APP_CLOUNDFRONT}audio/${post.audioData}`}
@@ -2345,6 +2329,8 @@ function Sliderx({
         ) : null}
 
       </Grid>
+
+
     </>
   );
 }

@@ -72,7 +72,9 @@ function OptionsSliderx({
   setcropimage,
   postData,
   AllowCaption,
-  setUploadGPT
+  setUploadGPT,
+  RandomColor,
+  postDatax
 
 }: any) {
   ///
@@ -326,6 +328,8 @@ function OptionsSliderx({
           source === "upload" &&
           i === circleIdentify
         ) {
+
+
           setsuperSettings(true);
         }
       }
@@ -556,6 +560,8 @@ function OptionsSliderx({
         </>
       ) : typeUpload === 0 ? (
         <MenuInner
+          postDatax={postDatax}
+          RandomColor={RandomColor}
           setUploadGPT={setUploadGPT}
           postData={postData}
           selectedImage={selectedImage}

@@ -185,6 +185,7 @@ function ShowReactionsx({
 
   const GoToMember = useCallback(() => {
 
+
     dispatch(Updatepagenum(0));
 
     if (memeberPageidReducer === post.reactId) {
@@ -210,6 +211,8 @@ function ShowReactionsx({
           comOriginalData: CommentDataReducer,
           comScroll: tt,
           reactType: reactionTypeReducer,
+          dataPageNumberState: 0,
+          dataAll: postData,
         };
       } else {
         n = MemberProfileDataReducer.username;
@@ -226,6 +229,8 @@ function ShowReactionsx({
           comOriginalData: CommentDataReducer,
           comScroll: tt,
           reactType: reactionTypeReducer,
+          dataPageNumberState: 0,
+          dataAll: postData,
         };
       }
 

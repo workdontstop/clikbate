@@ -44,7 +44,9 @@ function MenuInnerx({
   setselectedImage,
   setcropimage,
   postData,
-  setUploadGPT
+  setUploadGPT,
+  RandomColor,
+  postDatax
 }: any): JSX.Element {
   ///
   ///
@@ -194,12 +196,22 @@ function MenuInnerx({
 
   }, [idReducer, REACT_APP_SUPERSTARZ_URL])
 
+
+
+  const Timerkk = useRef<ReturnType<typeof setTimeout> | null>(null);
+
   const circleColor = () => {
-    if (memeberPageid === 0) {
-      setColorMemberReducer(colorReducer);
-    } else {
-      setColorMemberReducer(MemberProfileData.usercolor1);
+    if (Timerkk.current) {
+      clearTimeout(Timerkk.current);
     }
+
+    Timerkk.current = setTimeout(() => {
+      if (memeberPageid === 0) {
+        setColorMemberReducer(colorReducer);
+      } else {
+        setColorMemberReducer(MemberProfileData.usercolor1);
+      }
+    }, 1500)
   };
 
   useEffect(() => {
@@ -242,6 +254,8 @@ function MenuInnerx({
       data: postData,
       innerid: 0,
       pagenumReducer: pagenumReducer,
+      dataPageNumberState: 0,
+      dataAll: postDatax,
     };
 
 
@@ -249,11 +263,15 @@ function MenuInnerx({
 
     let modalName = `${usernameReducer}`;
 
+
+
+
     var dd = {
       type: 1,
       id: idReducer,
       innerid: 0,
       pagenumReducer: pagenumReducer,
+
     };
 
 
@@ -460,17 +478,10 @@ function MenuInnerx({
                               alignItems: "center",
                               display: "grid",
                               justifyContent: "center",
-                              boxShadow: darkmodeReducer
-                                ? ActiveSlide === i
-                                  ? `0 0 3.4px ${ColorMemberReducer}`
-                                  : typeTop
-                                    ? "0 0 5.5px#aaaaaa"
-                                    : ""
-                                : ActiveSlide === i
-                                  ? `0 0 3.4px ${ColorMemberReducer}`
-                                  : typeTop
-                                    ? "0 0 5.45px#222222"
-                                    : ``,
+                              boxShadow: ActiveSlide === i
+                                ? `0 0 3.4px ${ColorMemberReducer}, 0 0 5px ${RandomColor}`
+
+                                : ""
                             }}
                           >
                             {" "}
@@ -518,17 +529,8 @@ function MenuInnerx({
                                   alignItems: "center",
                                   display: "grid",
                                   justifyContent: "center",
-                                  boxShadow: darkmodeReducer
-                                    ? ActiveSlide === i
-                                      ? `0 0 3.4px ${ColorMemberReducer}`
-                                      : typeTop
-                                        ? "0 0 5.5px#aaaaaa"
-                                        : ""
-                                    : ActiveSlide === i
-                                      ? `0 0 3.4px ${ColorMemberReducer}`
-                                      : typeTop
-                                        ? "0 0 5.45px#222222"
-                                        : ``,
+                                  boxShadow: ActiveSlide === i
+                                    ? `0 0 3.4px ${ColorMemberReducer}, 0 0 5px ${RandomColor}` : ''
                                 }}
                               >
                                 {" "}
@@ -571,17 +573,8 @@ function MenuInnerx({
                                   alignItems: "center",
                                   display: "grid",
                                   justifyContent: "center",
-                                  boxShadow: darkmodeReducer
-                                    ? ActiveSlide === i
-                                      ? `0 0 3.4px ${ColorMemberReducer}`
-                                      : typeTop
-                                        ? "0 0 5.5px#aaaaaa"
-                                        : ""
-                                    : ActiveSlide === i
-                                      ? `0 0 3.4px ${ColorMemberReducer}`
-                                      : typeTop
-                                        ? "0 0 5.45px#222222"
-                                        : ``,
+                                  boxShadow: ActiveSlide === i
+                                    ? `0 0 3.4px ${ColorMemberReducer}, 0 0 5px ${RandomColor}` : ''
                                 }}
                               >
                                 {" "}
@@ -623,17 +616,8 @@ function MenuInnerx({
                                       alignItems: "center",
                                       display: "grid",
                                       justifyContent: "center",
-                                      boxShadow: darkmodeReducer
-                                        ? ActiveSlide === i
-                                          ? `0 0 3.4px ${ColorMemberReducer}`
-                                          : typeTop
-                                            ? "0 0 5.5px#aaaaaa"
-                                            : ""
-                                        : ActiveSlide === i
-                                          ? `0 0 3.4px ${ColorMemberReducer}`
-                                          : typeTop
-                                            ? "0 0 5.45px#222222"
-                                            : ``,
+                                      boxShadow: ActiveSlide === i
+                                        ? `0 0 3.4px ${ColorMemberReducer}, 0 0 5px ${RandomColor}` : ''
                                     }}
                                   >
                                     {" "}
@@ -680,17 +664,8 @@ function MenuInnerx({
                               objectFit: "cover",
                               marginLeft: "2px",
                               marginTop: "14px",
-                              boxShadow: darkmodeReducer
-                                ? ActiveSlide === i
-                                  ? `0 0 3.4px ${ColorMemberReducer}`
-                                  : typeTop
-                                    ? "0 0 12.5px#aaaaaa"
-                                    : ""
-                                : ActiveSlide === i
-                                  ? `0 0 3.4px ${ColorMemberReducer}`
-                                  : typeTop
-                                    ? `0 0 14.45px#222222`
-                                    : "",
+                              boxShadow: ActiveSlide === i
+                                ? `0 0 3.4px ${ColorMemberReducer}, 0 0 5px ${RandomColor}` : '',
 
                               marginBottom: "2.2px",
 
@@ -725,17 +700,8 @@ function MenuInnerx({
                           objectFit: "cover",
                           marginLeft: "2px",
                           marginTop: "14px",
-                          boxShadow: darkmodeReducer
-                            ? ActiveSlide === i
-                              ? `0 0 3.4px ${ColorMemberReducer}`
-                              : typeTop
-                                ? "0 0 12.5px#aaaaaa"
-                                : ""
-                            : ActiveSlide === i
-                              ? `0 0 3.4px ${ColorMemberReducer}`
-                              : typeTop
-                                ? `0 0 14.45px#222222`
-                                : "",
+                          boxShadow: ActiveSlide === i
+                            ? `0 0 3.4px ${ColorMemberReducer}, 0 0 5px ${RandomColor}` : '',
 
                           marginBottom: "2.2px",
                         }}
@@ -774,17 +740,8 @@ function MenuInnerx({
                                 objectFit: "cover",
                                 marginLeft: "2px",
                                 marginTop: "14px",
-                                boxShadow: darkmodeReducer
-                                  ? ActiveSlide === i
-                                    ? `0 0 3.4px ${ColorMemberReducer}`
-                                    : typeTop
-                                      ? "0 0 12.5px#aaaaaa"
-                                      : ""
-                                  : ActiveSlide === i
-                                    ? `0 0 3.4px ${ColorMemberReducer}`
-                                    : typeTop
-                                      ? `0 0 14.45px#222222`
-                                      : "",
+                                boxShadow: ActiveSlide === i
+                                  ? `0 0 3.4px ${ColorMemberReducer}, 0 0 5px ${RandomColor}` : '',
 
                                 marginBottom: "2.2px",
 
@@ -821,17 +778,8 @@ function MenuInnerx({
                                 alignItems: "center",
                                 display: "grid",
                                 justifyContent: "center",
-                                boxShadow: darkmodeReducer
-                                  ? ActiveSlide === i
-                                    ? `0 0 3.4px ${ColorMemberReducer}`
-                                    : typeTop
-                                      ? "0 0 5.5px#aaaaaa"
-                                      : ""
-                                  : ActiveSlide === i
-                                    ? `0 0 3.4px ${ColorMemberReducer}`
-                                    : typeTop
-                                      ? "0 0 5.45px#222222"
-                                      : ``,
+                                boxShadow: ActiveSlide === i
+                                  ? `0 0 3.4px ${ColorMemberReducer}, 0 0 5px ${RandomColor}` : '',
                               }}
                             >
                               {" "}
@@ -877,17 +825,8 @@ function MenuInnerx({
                           objectFit: "cover",
                           marginLeft: "2px",
                           marginTop: "14px",
-                          boxShadow: darkmodeReducer
-                            ? ActiveSlide === i
-                              ? `0 0 3.4px ${ColorMemberReducer}`
-                              : typeTop
-                                ? "0 0 12.5px#aaaaaa"
-                                : ""
-                            : ActiveSlide === i
-                              ? `0 0 3.4px ${ColorMemberReducer}`
-                              : typeTop
-                                ? `0 0 14.45px#222222`
-                                : "",
+                          boxShadow: ActiveSlide === i
+                            ? `0 0 3.4px ${ColorMemberReducer}, 0 0 5px ${RandomColor}` : '',
 
                           marginBottom: "2.2px",
                         }}

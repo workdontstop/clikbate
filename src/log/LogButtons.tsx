@@ -134,14 +134,14 @@ function LoginButtonsx({ OpenModalForm, type }: any) {
             position: 'absolute',
             right: '1vw',
             top: matchMobile ? '0vh' : '0px',
-            display: type === 20 ? 'none' : 'block'
+            display: 'none',
           }}
         />
 
 
-        {matchMobile ? null : <Grid item xs={false} sm={1}></Grid>}
+        {matchMobile ? null : <Grid item xs={false} sm={3}></Grid>}
 
-        <Grid item className="buttonpad buttonshake" xs={6} sm={4}>
+        <Grid item className="buttonpad buttonshake" xs={6} sm={2}>
           <Button
             onClick={() => {
 
@@ -181,7 +181,7 @@ function LoginButtonsx({ OpenModalForm, type }: any) {
 
 
 
-        <Grid item className="buttonpad buttonshake" xs={6} sm={4}>
+        <Grid item className="buttonpad buttonshake" xs={6} sm={2}>
           <Button
             onClick={() => {
               if (type === 0) { OpenModalForm(0) } else {

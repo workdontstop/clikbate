@@ -5,8 +5,10 @@ import { Menu } from "./Menu";
 import { Billboard } from "./Billboard";
 import "./profile.css";
 import { Connect } from "./Connect";
-import { Profile } from "./Profile";
+import { ProfileSetup } from "./ProfileSetup";
 import { GenerateAndUpload } from "./GenerateAndUpload";
+import { ActualMenu } from "./ActualMenu";
+
 
 import CancelIcon from '@material-ui/icons/Cancel';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
@@ -21,6 +23,9 @@ import { OptionsSlider } from "./OptionsSlider";
 import { UpdateNavFilterReducer, UpdateSign } from "../GlobalActions";
 import { UpdateNavCropReducer } from "../GlobalActions";
 import LogoutIcon from "@mui/icons-material/Logout";
+import PublicIcon from '@material-ui/icons/Public';
+
+import LanguageIcon from '@material-ui/icons/Language';
 import HelpIcon from '@material-ui/icons/Help';
 import { DarkmodeToggleAction } from ".././GlobalActions";
 import PanoramaFishEyeIcon from "@mui/icons-material/PanoramaFishEye";
@@ -34,9 +39,14 @@ import { Taskbar } from "./Taskbar";
 import { UpdateInteract, UpdateAlertReducer } from ".././GlobalActions";
 import SlowMotionVideoIcon from '@material-ui/icons/SlowMotionVideo';
 import { UserdataReg } from "../log/actions/UserdataAction";
+
 import { UpdateTutorials } from "../GlobalActions";
 import SuperstarzIconLight from "../images/s.png";
 import SuperstarzIconDark from "../images/sd.png";
+
+import M1 from "../images/m1.jpg";
+import M2 from "../images/m2.jpg";
+import M3 from "../images/m3.jpg";
 
 import { LoginButtons } from "../log/LogButtons";
 
@@ -72,6 +82,53 @@ function ProfileOutter() {
 
   const [postData, setPostData] = useState<Array<any>>([]);
 
+
+  const [ActualpostDataAll, setActualPostDataAll] = useState<Array<any>>([]);
+
+
+  const [postDataBackToTop, setPostDataBackToTop] = useState<Array<any>>([]);
+
+  const [postData1, setPostData1] = useState<Array<any>>([]);
+  const [postData2, setPostData2] = useState<Array<any>>([]);
+  const [postData3, setPostData3] = useState<Array<any>>([]);
+
+
+
+
+
+
+  const [callResponseTop, setcallResponseTop] = useState<boolean>(false);
+
+  const [callResponse1, setcallResponse1] = useState<boolean>(false);
+  const [callResponse2, setcallResponse2] = useState<boolean>(false);
+  const [callResponse3, setcallResponse3] = useState<boolean>(false);
+
+
+
+  const [ActualPagenum, setActualPagenum] = useState<any>(0);
+
+
+  const [ActualDataTop, setActualDataTop] = useState<Array<any>>([]);
+  const [showDataTop, setshowDataTop] = useState<boolean>(false);
+
+
+
+  const [ActualData, setActualData] = useState<Array<any>>([]);
+  const [showData1, setshowData1] = useState<boolean>(false);
+
+
+  const [ActualData2, setActualData2] = useState<Array<any>>([]);
+  const [showData2, setshowData2] = useState<boolean>(false);
+
+
+
+
+  const [ActualData3, setActualData3] = useState<Array<any>>([]);
+  const [showData3, setshowData3] = useState<boolean>(false);
+
+
+
+
   const [deferredPrompt, setDeferredPrompt] = useState<Event | null>(null);
   const [isPWAInstalled, setIsPWAInstalled] = useState<boolean>(false);
   const [WebsiteMode, setWebsiteMode] = useState<boolean>(true);
@@ -81,8 +138,12 @@ function ProfileOutter() {
 
   const [ShowInstallHelp, setShowInstallHelp] = useState(false);
 
+  const setupTop = useRef<any>();
 
-  const dd = () => {
+
+
+
+  const isApp = () => {
 
     if ((navigator as any).standalone || window.matchMedia('(display-mode: standalone)').matches) {
       setIsPWAInstalled(true);
@@ -105,10 +166,13 @@ function ProfileOutter() {
 
     setTimeout(() => {
 
-      setWebsiteMode(false);
-    }, 15000)
+      dispatch(UpdateSign(false));
 
-    dd();
+      setWebsiteMode(false);
+
+    }, 9000)
+
+    isApp();
 
   }, [postData, media, navigatorx, andref,])
 
@@ -143,30 +207,7 @@ function ProfileOutter() {
   }, []);
 
 
-  const handleInstallClick = () => {
 
-    setShowInstallHelp(true);
-    //alert('kk');
-    // Check if the deferredPrompt is available
-    if (deferredPrompt) {
-      // Show the installation prompt
-      (deferredPrompt as any).prompt();
-
-      // Wait for the user to respond to the prompt
-      (deferredPrompt as any).userChoice
-        .then((choiceResult: { outcome: string }) => {
-          if (choiceResult.outcome === 'accepted') {
-            console.log('User accepted the installation prompt');
-            setIsPWAInstalled(true);
-            setWebsiteMode(false);
-          } else {
-            console.log('User dismissed the installation prompt');
-          }
-          // Reset the deferredPrompt variable
-          setDeferredPrompt(null);
-        });
-    }
-  };
 
 
   useEffect(() => {
@@ -253,14 +294,10 @@ function ProfileOutter() {
 
   const [keypost, setkeypost] = useState(0);
 
-  const [postDatainner, setpostDatainner] = useState<Array<any>>([[]]);
-  const [postDatainnerThumb, setpostDatainnerThumb] = useState<Array<any>>([
-    [],
-  ]);
-  const [postDatainnerInteraction1, setpostDatainnerInteraction1] = useState<Array<any>>([[]]);
-  const [postDatainnerInteraction2, setpostDatainnerInteraction2] = useState<Array<any>>([[]]);
 
   const getSliderWidthRef = useRef<HTMLDivElement>(null);
+
+
 
 
   const [showModalForm, setShowModalForm] = useState<boolean>(false);
@@ -320,13 +357,16 @@ function ProfileOutter() {
 
   const [sliderIndexMini, setSliderIndexMini] = useState<number>(0);
   const [zoomClickedIndex, setzoomClickedIndex] = useState(0);
+
   const [miniProfile, setminiProfile] = useState<boolean>(false);
+
+
 
   const [serverErrorData, setServerErrorData] = useState<string | null>(null);
   const [serverErrorDisplay, setServerErrorDisplay] = useState<number>(4);
   const [serverEmojiplain, setserverEmojiplain] = useState<boolean>(true);
 
-  const [showThisComponenet, setshowThisComponenet] = useState<boolean>(true);
+  const [showThisComponenet, setshowThisComponenet] = useState<boolean>(false);
 
   const [scrollLocation, setscrollLocation] = useState<number>(0);
 
@@ -345,7 +385,7 @@ function ProfileOutter() {
 
   const [Loaderx, setLoaderx] = useState(false);
 
-
+  const [haltDownload, sethaltDownload] = useState(false);
 
   ///
   ///
@@ -409,22 +449,59 @@ function ProfileOutter() {
     logoimage = SuperstarzIconLight;
   }
 
+  const [RandomColor, setRandomColor] = useState('');
+
+  useEffect(() => {
+    const genRandom = () => {
+      // Generate random color code
+      const letters = '0123456789ABCDEF';
+      let color = '#';
+      for (let i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 16)];
+      }
+      return color;
+    };
+
+    // Generate a random color
+    const rand = genRandom();
+
+    // Set the random color in the state
+    setRandomColor(rand);
+
+  }, [postData]); // Assuming postData is a dependency for your useEffect
 
 
+
+
+  const Timervv = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const ChangeProfile = () => {
-    if (memeberPageid === 0) {
-      setimageReducer(image);
-      setimageReducerThumb(imageThumb);
-      setColorMemberReducer(colorReducer);
-    } else {
-      setimageReducer(MemberProfileData.userimage);
-      setimageReducerThumb(MemberProfileData.userimagethumb);
-      setColorMemberReducer(MemberProfileData.usercolor1);
+
+
+    if (Timervv.current) {
+      clearTimeout(Timervv.current);
     }
+
+    Timervv.current = setTimeout(() => {
+      if (memeberPageid === 0) {
+        setimageReducer(image);
+        setimageReducerThumb(imageThumb);
+        setColorMemberReducer(colorReducer);
+      } else {
+        setimageReducer(MemberProfileData.userimage);
+        setimageReducerThumb(MemberProfileData.userimagethumb);
+        setColorMemberReducer(MemberProfileData.usercolor1);
+      }
+    }, 1500)
   };
 
+
+
+
   const [postPageLimit, setPostPageLimit] = useState<number | null>(0);
+
+
+
 
   // Assuming temp is of type any (replace with your specific type)
   const [newPostData, setNewPostData] = useState<any | null>(null);
@@ -452,7 +529,7 @@ function ProfileOutter() {
   }, [memeberPageid]);
 
   useEffect(() => {
-    setshowThisComponenet(true);
+    // setshowThisComponenet(true);
   }, [memeberPageid]);
 
   useEffect(() => {
@@ -494,6 +571,9 @@ function ProfileOutter() {
 
 
 
+  const paperPostScrollRef = useRef<any>(null);
+
+
   useEffect(() => {
     setminiProfile(false);
 
@@ -526,15 +606,26 @@ function ProfileOutter() {
         .then((response) => {
           if (response.data.message === "logged in") {
 
+
+
+
+            paperPostScrollRef.current.scrollTop = 0;
+
+
+
             dispatch(UserInfoUpdateMEMBERDATA(response.data.payload));
+
+
             setshowProfiileData(false);
-            setScrollTo(0);
+
             setShowLoader2(false);
-            ////  alert('kk');
+
+            ///alert(pagenumReducer);
+
             if (memeberPageidReducer === 0) {
-              callfeeds(0, pagenumReducer);
+              callfeeds(0, pagenumReducer, 0);
             } else {
-              callfeeds(response.data.payload.id, pagenumReducer);
+              callfeeds(response.data.payload.id, pagenumReducer, 0);
             }
 
           } else if (response.data.message === "logged out") {
@@ -546,7 +637,7 @@ function ProfileOutter() {
         });
       ///console.log(MemberProfileData.[0]);
     } else { setallowCallMemberFeeds(true); }
-  }, [REACT_APP_SUPERSTARZ_URL, dispatch, memeberPageidReducer, allowCallMemberFeeds]);
+  }, [REACT_APP_SUPERSTARZ_URL, dispatch, memeberPageidReducer, allowCallMemberFeeds, paperPostScrollRef]);
 
   ///
   ///
@@ -611,6 +702,58 @@ function ProfileOutter() {
   ///CLOSE LOG MODAL
   const [OpenModalFormOnce, setOpenModalFormOnce] = useState<boolean>(false);
 
+  const [RandomFromPostData, setRandomFromPostData] = useState('');
+
+
+  useEffect(() => {
+    // Check if there's any data in postData
+
+
+    if (postData1.length > 0) {
+      // Generate a random index within the range of the postData array
+      const randomIndex = Math.floor(Math.random() * postData1.length);
+      // Get the random post data
+      var randomPostDatax = postData1[randomIndex];
+      // Set the random image from the post data to state
+      setRandomFromPostData(randomPostDatax.item2);
+    } else {
+      if (postData2.length > 0) {
+        // Generate a random index within the range of the postData array
+        const randomIndex = Math.floor(Math.random() * postData2.length);
+        // Get the random post data
+        var randomPostDatas = postData2[randomIndex];
+        // Set the random image from the post data to state
+        setRandomFromPostData(randomPostDatas.item2);
+      } else {
+        if (postData3.length > 0) {
+          // Generate a random index within the range of the postData array
+          const randomIndex = Math.floor(Math.random() * postData3.length);
+          // Get the random post data
+          var randomPostDataw = postData3[randomIndex];
+          // Set the random image from the post data to state
+          setRandomFromPostData(randomPostDataw.item2);
+        } else {
+          if (postDataBackToTop.length > 0) {
+            // Generate a random index within the range of the postData array
+            const randomIndex = Math.floor(Math.random() * postDataBackToTop.length);
+            // Get the random post data
+
+            var randomPostDataq = postDataBackToTop[randomIndex];
+            // Set the random image from the post data to state
+            setRandomFromPostData(randomPostDataq.item2);
+          }
+        }
+      }
+
+    }
+
+
+
+
+
+
+  }, [memeberPageidReducer, postData1, postDataBackToTop, postData2, postData3]);
+
 
 
   const CloseModalForm = useCallback(
@@ -663,6 +806,7 @@ function ProfileOutter() {
 
 
   const [formtype, setFormtype] = useState<number>(1);
+
 
 
   const [dontallowspring, setdontallowspring] = useState<boolean>(false);
@@ -775,8 +919,20 @@ function ProfileOutter() {
 
 
 
+
+  useEffect(() => {
+
+    if (idReducer === GuestReducer && memeberPageidReducer === 0) {
+      dispatch(UpdateAlertReducer('Create Interactive Content Here and Express Yourself  ', 3));
+    }
+
+  }, [idReducer, GuestReducer, memeberPageidReducer]);
+  ///
+
   useEffect(() => {
     var n, d;
+
+
     if (memeberPageidReducer === 0) {
       n = usernameReducer;
       d = {
@@ -861,13 +1017,38 @@ function ProfileOutter() {
   }
 
 
+
+
+  const Timergg = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [latestInview, setlatestInview] = useState(0);
 
   const postDivRefx = useRef<any[]>([]);
+
+
+
+  const Timg = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const HistoryPostCall = useCallback((bool: any, arr: any, lim: any, PostPageNumberState: any) => {
+
+
+
+
+  }, [])
+
+
+
+  const [historyDataPost, sethistoryDataPost] = useState<Array<any>>([]);
+
+
+
   ///
   ///
-  ///
+  /////
+  //////
+  /////
+  /////
   window.onpopstate = (e: any) => {
+
 
 
 
@@ -877,17 +1058,37 @@ function ProfileOutter() {
     var historyId = JSON.stringify(window.history.state.id);
     let historyIdInt = parseInt(historyId);
 
+
     var historyIndex = JSON.stringify(window.history.state.index);
     let historyIndexInt = 0;
     if (parseInt(historyIndex)) historyIndexInt = parseInt(historyIndex);
     ///alert(parseInt(historyIndex));
     setScrollTo(historyIndexInt);
 
+    var historyDataAllStates = window.history.state.dataAll;
+    var PostPageNumberState = window.history.state.dataPageNumberState;
+
+
+
+
+
+
 
     if (historyIndexInt === 400) {
 
 
       setminiProfile(true);
+      setshowThisComponenet(true);
+      if (Timergg.current) {
+        clearTimeout(Timergg.current);
+      }
+
+      Timergg.current = setTimeout(() => {
+
+        setshowThisComponenet(false);
+      }, 500)
+
+
 
       setTimeout(() => {
         postDivRefx.current[latestInview].scrollIntoView({
@@ -898,6 +1099,10 @@ function ProfileOutter() {
 
     }
     else {
+
+      sethistoryDataPost(historyDataAllStates);
+
+      console.log(historyDataAllStates);
 
       setStopMini(true);
 
@@ -931,7 +1136,8 @@ function ProfileOutter() {
 
 
       ///var limValue = 0;
-      //// alert(limValue)
+      //alert(limValue)
+      ///jam
       ////////
 
       var comidhistoryData = window.history.state.comid;
@@ -949,7 +1155,7 @@ function ProfileOutter() {
 
       } else {
 
-        setshowThisComponenet(true);
+        //setshowThisComponenet(true);
       }
 
 
@@ -965,14 +1171,15 @@ function ProfileOutter() {
 
         /// alert('jj');
         callpopstatewithoutdata(
-          historyData,
+          historyDataAllStates,
           historyDataTypeInt,
           comidhistoryData,
           DiscussionImagehistoryData,
           historycomOriginalData,
           historycomScroll,
           historyreactTypeHis,
-          limValue
+          limValue,
+          PostPageNumberState
         );
       } else if (
         historyDataTypeInt === 1 ||
@@ -992,8 +1199,8 @@ function ProfileOutter() {
           CloseModalxx();
         } else {
           /////IF DATA IN CACHE(history data) DONT CALL FEEDS FROM SERVER
-          if (historyData) {
-            const arr = historyData;
+          if (historyDataAllStates) {
+            const arr = historyDataAllStates;
             setHistoryDataMan(arr);
 
             setallowCallMemberFeeds(false);
@@ -1004,7 +1211,16 @@ function ProfileOutter() {
 
             setshowProfiileData(false);
 
-            responsex(arr, limValue);
+
+            ////////////////
+
+
+            HistoryPostCall(true, arr, limValue, PostPageNumberState);
+
+            /////responsex(arr, limValue);
+            /////////////////
+
+
 
 
 
@@ -1083,14 +1299,15 @@ function ProfileOutter() {
 
 
   const callpopstatewithoutdata = (
-    historyData: any,
+    historyDataAllStates: any,
     ty: any,
     i: any,
     d: any,
     dd: any,
     sr: any,
     reactTy: any,
-    limValue: any
+    limValue: any,
+    PostPageNumberState: any
   ) => {
     if (
       showModalUploadProfile ||
@@ -1105,17 +1322,24 @@ function ProfileOutter() {
       setShowModalUpload(false);
       dispatch(UserInfoUpdateMEMBER(0));
 
-      if (historyData) {
+      if (historyDataAllStates) {
         // alert("h");
-        const arr = historyData;
+        const arr = historyDataAllStates;
         setHistoryDataMan(arr);
         setshowProfiileData(false);
 
-        responsex(arr, limValue);
+
+        ////////////////
+
+        HistoryPostCall(true, arr, limValue, PostPageNumberState);
+        /////responsex(arr, limValue);
+        /////////////////
+
+
       } else {
         // alert("s");
         setshowProfiileData(false);
-        callfeeds(0, limValue);
+        callfeeds(0, limValue, 0);
       }
 
       if (ty == 5) {
@@ -1158,7 +1382,7 @@ function ProfileOutter() {
       ///Replace modal history state with previous history state
       window.history.back();
       setshowProfiileData(false);
-      callfeeds(0, 0);
+      callfeeds(0, 0, 0);
     } else if (DeviceBackButtonClicked === 3) {
       window.history.back();
       setbillboardserverswitch(true);
@@ -1206,107 +1430,179 @@ function ProfileOutter() {
 
   ////////////////////////////////////////////////////////////////////
 
-  ///
-  ///
-  ///
-  ///DOT ENV DATA'
-
-  const responsex = (postdataRep: any, postLim: any) => {
-
-    dispatch(Updatepagenum(postLim));
 
 
-    if (idReducer === GuestReducer) {
-      dispatch(UpdateTutorials(4, true));
+  const CallMorePages = useCallback((t: number) => {
+
+    ///setminiProfile(false);
+
+    if (t === 2) {
+
+      setcallResponse2(true);
+      setshowData2(true);
+      setActualPagenum(postPageLimit);
+
+
+
+      //setPostData3([]);
+
+    }
+    else if (t === 3) {
+
+      setcallResponse3(true);
+      setshowData3(true);
+      setActualPagenum(postPageLimit);
+    }
+    else if (t === 4) {
+
+
+      if (miniProfile) {
+        historyBoy();
+      }
+      setminiProfile(false);
+
+
+      setActualDataTop([]);
+      setPostDataBackToTop([]);
+      setActualDataTop(ActualData3);
+
+      setcallResponseTop(true);
+      setshowDataTop(true);
+      setActualPagenum(postPageLimit);
+
+      setshowData3(false);
+      setshowData2(false);
+      setshowData1(false);
+    }
+    else {
+
+
+    }
+
+  }, [ActualPagenum, ActualData3, miniProfile])
+
+
+
+  const historyBoy = useCallback(() => {
+    if (StopMini) {
+
+    } else {
+      if (memeberPageidReducer === 0) {
+        var tt = 0;
+
+        var n, d;
+
+        n = '';
+        d = {
+          type: 1,
+          id: 0,
+          index: 400,
+          data: postData1,
+          innerid: 0,
+          pagenumReducer: pagenumReducer,
+        };
+        window.history.replaceState(d, "", `${n}`);
+
+        let modalName = ``;
+
+        var dd = {
+          type: 1,
+          id: 0,
+          innerid: 0,
+          pagenumReducer: pagenumReducer,
+        };
+        window.history.pushState(dd, "", modalName);
+      }
+    }
+
+  }, [postData1, pagenumReducer, memeberPageidReducer, StopMini])
+
+
+
+
+  var dividedData: Array<Array<any>> = [];
+
+
+
+  const CallFirstFeed = (Datat: any, postPageLimitx: any) => {
+
+
+    var postLim = postPageLimitx;
+
+    if (postPageLimitx === 0) {
+      setlimit(0);
+    } else {
+      setlimit(postLim);
     }
 
 
-    postdataRep.forEach((obj: any) => {
-      obj.itemheight = "auto";
-      obj.itemrealheighthold = "0";
-      obj.itemcroptype = "0";
-      obj.itemFinalPostHeight = "0";
-      obj.itemOriginalPostHeight = "0";
-      obj.itemCLICKED = true;
-      obj.onLoadDataOnce = false;
-      obj.ActiveAutoPlay = true;
-      obj.ActiveAutoPost = 0;
-      obj.itemInteractGo = false;
-      obj.lim = postLim;
-    });
+    //setshowProfiileData(false);
+    setActualData([]);
+    setActualData2([]);
+    setActualData3([]);
+
+    setPostData1([]);
+    setPostData2([]);
+    setPostData3([]);
 
 
 
-    const newArrxt: any = [[...postDatainner]];
-    const newArrxt1: any = [[...postDatainnerInteraction1]];
-    const newArrxt2: any = [[...postDatainnerInteraction2]];
-    const newArrxtThumb: any = [[...postDatainnerThumb]];
-    postdataRep.map((obj: any, index: any) => {
-      const newArrxtq: any = [];
-      const newArrxtqThumb: any = [];
-      const newArrxtq1: any = [];
-      const newArrxtq2: any = [];
-      for (let i = 0; i < postdataRep[index].post_count; i++) {
-        ///////////////////////////////
 
-        if (i === 0) {
-          newArrxtq[i] = `${postdataRep[index].item1}`;
-          newArrxtqThumb[i] = `${postdataRep[index].thumb1}`;
-          newArrxtq1[i] = `${postdataRep[index].interact1a}`;
-          newArrxtq2[i] = `${postdataRep[index].interact1b}`;
-        } else if (i === 1) {
-          newArrxtq[i] = `${postdataRep[index].item2}`;
-          newArrxtqThumb[i] = `${postdataRep[index].thumb2}`;
-          newArrxtq1[i] = `${postdataRep[index].interact2a}`;
-          newArrxtq2[i] = `${postdataRep[index].interact2b}`;
-        } else if (i === 2) {
-          newArrxtq[i] = `${postdataRep[index].item3}`;
-          newArrxtqThumb[i] = `${postdataRep[index].thumb3}`;
-          newArrxtq1[i] = `${postdataRep[index].interact3a}`;
-          newArrxtq2[i] = `${postdataRep[index].interact3b}`;
-        } else if (i === 3) {
-          newArrxtq[i] = `${postdataRep[index].item4}`;
-          newArrxtqThumb[i] = `${postdataRep[index].thumb4}`;
-        } else if (i === 4) {
-          newArrxtq[i] = `${postdataRep[index].item5}`;
-          newArrxtqThumb[i] = `${postdataRep[index].thumb5}`;
-        } else {
-        }
+
+    dividedData = [];
+    setActualPostDataAll(Datat);
+
+
+    //alert(postLim)
 
 
 
-        setPostPageLimit(postdataRep[postdataRep.length - 1].id);
+    // Divide postdataRep into arrays of length 6
+
+    for (let i = 0; i < Datat.length; i += 6) {
+      dividedData.push(Datat.slice(i, i + 6));
+    }
+
+    // Ensure there are exactly 3 arrays
+    while (dividedData.length < 3) {
+      dividedData.push([]);
+    }
 
 
 
-        if (i + 1 === postdataRep[index].post_count) {
-          newArrxt[index] = newArrxtq;
-          newArrxtThumb[index] = newArrxtqThumb;
+    if (postPageLimitx === 0) {
+      //alert('kkkinuj');
+      historyBoy();
 
-          newArrxt1[index] = newArrxtq1;
-          newArrxt2[index] = newArrxtq2;
-
-          setpostDatainner(newArrxt);
-          setpostDatainnerThumb(newArrxtThumb);
-
-          setpostDatainnerInteraction1(newArrxt1);
-          setpostDatainnerInteraction2(newArrxt2);
-
-        }
-        document.body.focus();
-        /////
-        ///////////////////////////////
-      }
-    });
-    setPostData(postdataRep);
-
-    setshowProfiileData(true);
-  };
+    }
 
 
+    ///var xx = Datat[Datat.length - 1].id;
+    //  setPostPageLimit(xx);
+
+
+    // Update ActualData state variables
+    setActualData(dividedData[0]);
+    setActualData2(dividedData[1]);
+    setActualData3(dividedData[2]);
+    ///setActualDataTop(dividedData[2]);
+
+
+    /// alert('alert');
+    ////////////////
+    setcallResponse1(true);
+    setshowData1(true);
+    setActualPagenum(postPageLimit);
+
+    /////responsex(postdataRep, postLim)
+    /////////////////
+
+
+    sethistoryDataPost([]);
+  }
 
   const callfeeds = useCallback(
-    (aa: number, postPageLimitx: any) => {
+    (aa: number, postPageLimitx: any, fromPagination: number) => {
       var cboy = {
         id: idReducer,
         id2: idReducer,
@@ -1334,52 +1630,55 @@ function ProfileOutter() {
         ////POST LOAD CONTROL POINT
 
         setTimeout(() => {
-          paperPostScrollRef.current.scrollTop = 0;
+          /// paperPostScrollRef.current.scrollTop = 0;
         }, 1000);
       }
 
-      Axios.post(
-        `${REACT_APP_SUPERSTARZ_URL}/${tt}`,
-        {
-          values: cboy,
-        },
-        {
-          withCredentials: true,
-        }
-      )
-        .then((response) => {
-          if (response.data.message === "feeds fetched") {
-
-            if (postPageLimitx === 0) {
-              setlimit(0);
-            } else {
-              setlimit(postLim);
-            }
 
 
-            setshowProfiileData(false);
-            setPostData([]);
+      if (historyDataPost.length > 0 && fromPagination === 0) {
 
-            var postdataRep = response.data.payload;
+        ///alert('local data');
+        CallFirstFeed(historyDataPost, postPageLimitx);
 
+      } else {
 
+        setScrollTo(0);
 
-            var postLim = response.data.postPageLimit;
-
-            //alert(postLim)
-
-            responsex(postdataRep, postLim);
-
-          } else if (response.data.message === "error in fetching feeds") {
-            alert("Ongoing Security Updates, Pls Try Again Later");
+        Axios.post(
+          `${REACT_APP_SUPERSTARZ_URL}/${tt}`,
+          {
+            values: cboy,
+          },
+          {
+            withCredentials: true,
           }
-        })
-        .catch(function (error) {
-          console.log("Connection malfunction profile outter 2");
-        });
+        )
+          .then((response) => {
+            if (response.data.message === "feeds fetched") {
+
+
+              var postdataRep = response.data.payload;
+
+
+              CallFirstFeed(postdataRep, postPageLimitx);
+
+
+            } else if (response.data.message === "error in fetching feeds") {
+              alert("Ongoing Security Updates, Pls Try Again Later");
+            }
+          })
+          .catch(function (error) {
+            console.log("Connection malfunction profile outter 2");
+          });
+
+      }
     },
-    [idReducer, REACT_APP_SUPERSTARZ_URL, memeberPageidReducer]
+    [idReducer, REACT_APP_SUPERSTARZ_URL, memeberPageidReducer, postPageLimit, historyDataPost]
   );
+
+
+  const Timercc = useRef<ReturnType<typeof setTimeout> | null>(null);
 
 
 
@@ -1387,27 +1686,33 @@ function ProfileOutter() {
   ///
   ///
   useEffect(() => {
-    var dataxx = '';
-    dispatch(UpdateMenuData(dataxx));
-
-
-    var data = '';
-    if (memeberPageidReducer === 0) {
-      data = 'Feeds'
-    } else if (memeberPageidReducer === idReducer) {
-      data = 'Profile'
-    }
-    else {
-      data = MemberProfileDataReducer.username
+    if (Timercc.current) {
+      clearTimeout(Timercc.current);
     }
 
 
-    setTimeout(() => {
+    Timercc.current = setTimeout(() => {
+      var dataxx = '';
+      dispatch(UpdateMenuData(dataxx));
 
-      dispatch(UpdateMenuData(data));
-    }, 14000)
+
+      var data = '';
+      if (memeberPageidReducer === 0) {
+        data = 'Feeds'
+      } else if (memeberPageidReducer === idReducer) {
+        data = 'Profile'
+      }
+      else {
+        data = MemberProfileDataReducer.username
+      }
 
 
+      setTimeout(() => {
+
+        dispatch(UpdateMenuData(data));
+      }, 10000)
+
+    }, 1500)
 
   }, [memeberPageidReducer, MemberProfileDataReducer, idReducer]);
 
@@ -1415,21 +1720,35 @@ function ProfileOutter() {
 
   const callPagination = useCallback(() => {
     var time = 100;
+
+    sethistoryDataPost([]);
+
+    var xx = ActualData3[ActualData3.length - 1].id;
+
+    /////only update
+
+    ///alert(xx);
+    setPostPageLimit(xx);
+
+    /// setminiProfile(false);
+    /// alert(postPageLimit);
     if (memeberPageidReducer === 0) {
 
       setTimeout(() => {
-        callfeeds(0, postPageLimit);
+
+        /// alert('lkkk');
+        callfeeds(0, xx, 1);
       }, time);
     } else {
       setTimeout(() => {
-        callfeeds(memeberPageidReducer, postPageLimit);
+        callfeeds(memeberPageidReducer, xx, 1);
       }, time);
 
     }
 
 
 
-  }, [postPageLimit, memeberPageidReducer])
+  }, [postPageLimit, memeberPageidReducer, ActualData3])
 
 
 
@@ -1438,11 +1757,11 @@ function ProfileOutter() {
     if (memeberPageidReducer === 0) {
 
       setTimeout(() => {
-        callfeeds(0, 0);
+        callfeeds(0, 0, 1);
       }, time);
     } else {
       setTimeout(() => {
-        callfeeds(memeberPageidReducer, 0);
+        callfeeds(memeberPageidReducer, 0, 1);
       }, time);
 
     }
@@ -1459,7 +1778,7 @@ function ProfileOutter() {
     if (idReducer === 0) {
     } else {
       setTimeout(() => {
-        callfeeds(0, 0);
+        callfeeds(0, 0, 0);
       }, 600);
 
 
@@ -1490,7 +1809,7 @@ function ProfileOutter() {
   }));
   const loggedInReducer = loggedIn;
 
-  const paperPostScrollRef = useRef<any>(null);
+
 
   ///
   ///
@@ -1847,9 +2166,102 @@ function ProfileOutter() {
   const isFirefox = /Firefox/i.test(navigator.userAgent);
 
 
+  const [ClikHeader, setClikHeader] = useState('');
+
+
+  const Timerll = useRef<ReturnType<typeof setTimeout> | null>(null);
 
 
 
+  useEffect(() => {
+
+    if (Timerll.current) {
+      clearTimeout(Timerll.current);
+    }
+
+
+    Timerll.current = setTimeout(() => {
+      if (memeberPageidReducer === 0) {
+        setClikHeader('Discover')
+      } else {
+        setClikHeader(`${MemberProfileData.username}'s Page`)
+      }
+
+    }, 1500);
+
+  }, [MemberProfileData, memeberPageidReducer])
+
+
+  const postDivRef = useRef<any[]>([]);
+  const postDivRefRoll = useRef<any[]>([]);
+  const tyTimer = useRef<ReturnType<typeof setTimeout>[]>([]);
+
+  const [indexRoll, setindexRoll] = useState(0);
+  const [AllowRoll, setAllowRoll] = useState(false);
+
+
+
+
+
+
+  const scrollToRef = useCallback(() => {
+
+
+
+    if (StopMini) { } else {
+
+
+
+      setShowBigPlay(true);
+      var Limit: number = postData.length;
+
+      var Time = 0;
+
+      var indd = indexRoll;
+      if (miniProfile) { indd = 0; }
+
+
+      for (let i = 0; i <= Limit; i++) {  // <= 20 to include the reset to the first post
+        if (i > indd) {
+          Time = Time + 5000;
+          setShowBigPlay(true);
+
+          tyTimer.current[i] = setTimeout(() => {
+
+            if (i === Limit) {
+              // Reset to the first post after reaching the last post
+              postDivRefx.current[Limit < 3 ? Limit - 1 : Limit - 3].scrollIntoView({
+                behavior: "smooth",
+                block: "start",
+              });
+              //
+              postDivRefRoll.current[Limit < 3 ? Limit - 1 : Limit - 3].scrollIntoView({
+                behavior: "smooth",
+                block: "start",
+              });
+              setShowBigPlay(false);
+            } else {
+
+
+              postDivRefx.current[i].scrollIntoView({
+                behavior: "smooth",
+                block: "start",
+              });
+              //
+              postDivRefRoll.current[i].scrollIntoView({
+                behavior: "smooth",
+                block: "start",
+              });
+            }
+
+
+          }, Time - 8000);
+        }
+      }
+
+    }
+
+  }, [AllowRoll, indexRoll, postData, StopMini, miniProfile]);
 
 
 
@@ -1858,7 +2270,7 @@ function ProfileOutter() {
 
 
 
-      <Loader autoSlideDisplay={autoSlideDisplay} sliderLoader={sliderLoader} />
+      <Loader RandomColor={RandomColor} autoSlideDisplay={autoSlideDisplay} sliderLoader={sliderLoader} />
 
       {loggedInReducer ? (
         <>
@@ -1981,7 +2393,10 @@ function ProfileOutter() {
                       className={ShowBigPlay ? `blinkingxx    ${optionsClass}   ` : `   ${optionsClass}   `}
                       style={{
                         zIndex: 2,
-                        backgroundColor: idReducer === memeberPageidReducer ? colorReducer : ColorMemberReducer,
+
+
+                        backgroundImage: idReducer === memeberPageidReducer ? `linear-gradient(45deg, ${RandomColor}, ${colorReducer})` :
+                          `linear-gradient(45deg, ${RandomColor}, ${ColorMemberReducer})`,
                         left: `${profileImagethumbLeft}px`,
                         top: `${profileImagethumbTop}px`,
                         opacity: 0.7,
@@ -2088,6 +2503,8 @@ function ProfileOutter() {
 
 
                   <OptionsSlider
+                    postDatax={ActualpostDataAll}
+                    RandomColor={RandomColor}
                     setUploadGPT={setUploadGPT}
                     selectedImage={selectedImage}
                     setselectedImage={setselectedImage}
@@ -2105,26 +2522,73 @@ function ProfileOutter() {
 
                 </Grid>
 
-                <Grid item xs={12} style={{
-                  padding: '0px',
-                  fontWeight: 'bolder',
-                  marginLeft: matchTablet || matchMobile ? '15vw' : '18.5vw',
-                  top: matchTablet || matchMobile ? "4vh" : '2vh',
-                  fontFamily: "Arial, Helvetica, sans-serif",
-                  fontSize:
-                    matchTablet || matchMobile ? "2.6vh" : "3.6vh",
-                  position: 'relative',
-                  textAlign: 'left',
-                  opacity: '0.9',
-                  color: darkmodeReducer ? 'white' : 'black',
-                  overflow: 'hidden',
-                  display: 'none',
-                }}>
 
-                  {MemberProfileData.username ? memeberPageidReducer === 0 ? 'Feeds' : `${MemberProfileData.username}'s Page` : null}
-                </Grid>
 
               </Grid>
+
+
+
+
+
+              <Grid item className="zuperxyinfotext" xs={12} style={{
+                padding: '0px',
+                top: matchTablet || matchMobile ? "1vh" : '2vh',
+                position: 'relative',
+                paddingBottom: matchMobile ? '1vh' : '5vh',
+                textAlign: 'left',
+                color: '#ffffff'
+              }}>
+
+
+
+
+                <Grid item className="zuperxyinfotext" xs={12} style={{
+                  padding: '0px',
+                  top: matchMobile ? "10vh" : '17vh',
+                  fontFamily: "Arial, Helvetica, sans-serif",
+                  fontWeight: 'bold',
+                  position: 'relative',
+                  zIndex: 1,
+                  fontSize: matchMobile ? "3.6vh" : "4vh",
+
+                  color: '#ffffff'
+                }}>
+
+
+                  <span style={{ padding: '0px', marginLeft: matchMobile ? "10vw" : '20vw' }}>
+                    <LanguageIcon />
+                    {ClikHeader}
+                  </span>
+
+
+                </Grid>
+
+                <img
+
+                  src={`${REACT_APP_CLOUNDFRONT}${RandomFromPostData}`}
+                  alt="Discover"
+                  style={{
+                    cursor: "pointer",
+                    boxShadow: darkmodeReducer
+                      ? "0 0 1px #555555"
+                      : "0 0 0.1px #222222",
+                    width: "100%",
+                    scrollSnapAlign: "start",
+                    height: matchMobile ? '18vh' : "30vh",
+                    padding: "0px",
+                    objectFit: "cover",
+                    borderRadius: "0px",
+                    filter: 'brightness(91%)',
+                    opacity: 1,
+                    transition: "transform 0.1s",
+                  }}
+                />
+
+              </Grid>
+
+
+
+
 
               {ShowmaxPost ? (
                 <Grid
@@ -2184,7 +2648,7 @@ function ProfileOutter() {
 
                     setminiProfile(false);
                     dispatch(UpdateLoader(true));
-                    setshowThisComponenet(true);
+                    //setshowThisComponenet(true);
 
 
                     callPaginationx();
@@ -2199,6 +2663,7 @@ function ProfileOutter() {
                     fontSize:
                       matchTablet || matchMobile ? "4.8vh" : "2.9vw",
                     marginTop: '-6vh', padding: "0px",
+                    display: 'none'
                   }}
                 />
 
@@ -2208,7 +2673,7 @@ function ProfileOutter() {
               {matchMobile ? null :
                 showESC ?
                   <>
-                    <Grid item xs={12} style={{
+                    <Grid item ref={setupTop} xs={12} style={{
                       height: "0px",
                       width: '12.5%', position: "fixed", zIndex: 6, padding: "0px", paddingRight: '6.3vw', textAlign: 'right', top: '12vh',
                       opacity: '0.7',
@@ -2233,14 +2698,39 @@ function ProfileOutter() {
 
                   </> : null}
 
+              <Grid item ref={setupTop} xs={12} style={{
+                position: "relative", zIndex: 1, padding: "0px", display: 'none'
+              }}>
+              </Grid>
 
 
-
-              {showProfiileData ? (
+              {/*/////////////////////////////////////////////////////////////////////////////////TO TOP*/}
+              {showDataTop ? (
                 <Grid item xs={12} style={{
-                  position: "relative", zIndex: 1, padding: "0px"
+                  position: "relative", zIndex: 1, padding: "0px",
                 }}>
-                  <Profile
+                  <ProfileSetup
+
+
+                    sethistoryScrollonload={sethistoryScrollonload}
+                    RandomColor={RandomColor}
+                    ActualpostDataAll={ActualpostDataAll}
+                    PostPageLimit={postPageLimit}
+                    setupTop={setupTop}
+                    CallMorePages={CallMorePages}
+                    showData1={showData1}
+                    setuptype={4}
+
+                    setcallResponse={setcallResponseTop}
+                    callResponse={callResponseTop}
+                    ActualData={ActualDataTop}
+                    ActualPagenum={ActualPagenum}
+                    setPostPageLimit={setPostPageLimit}
+                    setPostData={setPostDataBackToTop}
+                    setshowProfiileData={setshowProfiileData}
+                    showProfiileData={showProfiileData}
+                    setindexRoll={setindexRoll}
+                    postDivRefRoll={postDivRefRoll}
                     postDivRefx={postDivRefx}
                     setlatestInview={setlatestInview}
                     WebsiteMode={WebsiteMode}
@@ -2251,14 +2741,7 @@ function ProfileOutter() {
                     clikplay={clikplay}
                     ShowBigPlay={ShowBigPlay}
                     setShowBigPlay={setShowBigPlay}
-                    setsuperSettings={setsuperSettings}
-
-                    showModalFormMenu={showModalFormMenu}
-                    setshowModalFormMenu={setShowModalFormMenu}
                     callPagination={callPagination}
-
-                    postDatainnerInteraction1={postDatainnerInteraction1}
-                    postDatainnerInteraction2={postDatainnerInteraction2}
                     StopMini={StopMini}
                     setStopMini={setStopMini}
                     ShowLoader2={ShowLoader2}
@@ -2270,29 +2753,210 @@ function ProfileOutter() {
                     settypeEmo={settypeEmo}
                     setconnectTemplateGo={setconnectTemplateGo}
                     setminiProfile={setminiProfile}
-                    miniProfile={miniProfile}
+                    miniProfilexx={miniProfile}
                     sliderIndexMini={sliderIndexMini}
                     setSliderIndexMini={setSliderIndexMini}
                     zoomClickedIndex={zoomClickedIndex}
                     setzoomClickedIndex={setzoomClickedIndex}
                     setStopBodyScroll={setStopBodyScroll}
-
                     setCommentPostid={setCommentPostid}
                     setDiscussionImage={setDiscussionImage}
-                    x={x}
                     setx={setx}
-                    showProfiileData={showProfiileData}
-                    getSliderWidthRef={getSliderWidthRef}
                     OpenModalForm={OpenModalForm}
-                    getSliderWidth={getSliderWidth}
-                    postData={postData}
-                    formtype={formtype}
-                    showModalForm={showModalForm}
-                    CloseModalForm={CloseModalForm}
-                    aboutTemplateGo={aboutTemplateGo}
-                    commentTemplateGo={commentTemplateGo}
-                    postDatainner={postDatainner}
-                    postDatainnerThumb={postDatainnerThumb}
+                    postData={postDataBackToTop}
+                    paperPostScrollRef={paperPostScrollRef}
+                  /></Grid>
+              ) : null}
+
+
+
+
+              {/*///////////////////////////////////////////////////////////////////////////////// FEEDS   1*/}
+              {showData1 ? (
+                <Grid item xs={12} style={{
+                  position: "relative", zIndex: 1, padding: "0px"
+                }}>
+                  <ProfileSetup
+                    sethistoryScrollonload={sethistoryScrollonload}
+                    RandomColor={RandomColor}
+                    ActualpostDataAll={ActualpostDataAll}
+                    PostPageLimit={postPageLimit}
+                    setupTop={setupTop}
+                    CallMorePages={CallMorePages}
+                    showData2={showData2}
+                    setuptype={1}
+                    setcallResponse={setcallResponse1}
+                    callResponse={callResponse1}
+                    ActualData={ActualData}
+                    ActualPagenum={ActualPagenum}
+                    setPostPageLimit={setPostPageLimit}
+                    setPostData={setPostData1}
+                    setshowProfiileData={setshowProfiileData}
+                    showProfiileData={showProfiileData}
+                    setindexRoll={setindexRoll}
+                    postDivRefRoll={postDivRefRoll}
+                    postDivRefx={postDivRefx}
+                    setlatestInview={setlatestInview}
+                    WebsiteMode={WebsiteMode}
+                    setkeypost={setkeypost}
+                    historyScrollonload={historyScrollonload}
+                    callhistoryModal={callhistoryModal}
+                    openmodalhistory={openmodalhistory}
+                    clikplay={clikplay}
+                    ShowBigPlay={ShowBigPlay}
+                    setShowBigPlay={setShowBigPlay}
+                    callPagination={callPagination}
+                    StopMini={StopMini}
+                    setStopMini={setStopMini}
+                    ShowLoader2={ShowLoader2}
+                    setShowLoader2={setShowLoader2}
+                    setscrollLocation={setscrollLocation}
+                    showThisComponenet={showThisComponenet}
+                    setshowThisComponenet={setshowThisComponenet}
+                    ScrollTo={ScrollTo}
+                    settypeEmo={settypeEmo}
+                    setconnectTemplateGo={setconnectTemplateGo}
+                    setminiProfile={setminiProfile}
+                    miniProfilexx={miniProfile}
+                    sliderIndexMini={sliderIndexMini}
+                    setSliderIndexMini={setSliderIndexMini}
+                    zoomClickedIndex={zoomClickedIndex}
+                    setzoomClickedIndex={setzoomClickedIndex}
+                    setStopBodyScroll={setStopBodyScroll}
+                    setCommentPostid={setCommentPostid}
+                    setDiscussionImage={setDiscussionImage}
+                    setx={setx}
+                    OpenModalForm={OpenModalForm}
+                    postData={postData1}
+                    paperPostScrollRef={paperPostScrollRef}
+                  /></Grid>
+              ) : null}
+
+
+
+
+
+              {/*///////////////////////////////////////////////////////////////////////////////// FEEDS  2*/}
+              {showData2 ? (
+                <Grid item xs={12} style={{
+                  position: "relative", zIndex: 1, padding: "0px"
+                }}>
+                  <ProfileSetup
+                    sethistoryScrollonload={sethistoryScrollonload}
+                    RandomColor={RandomColor}
+                    ActualpostDataAll={ActualpostDataAll}
+                    PostPageLimit={postPageLimit}
+                    setupTop={setupTop}
+                    CallMorePages={CallMorePages}
+                    showData3={showData3}
+                    setuptype={2}
+                    setcallResponse={setcallResponse2}
+                    callResponse={callResponse2}
+                    ActualData={ActualData2}
+                    ActualPagenum={ActualPagenum}
+                    setPostPageLimit={setPostPageLimit}
+                    setPostData={setPostData2}
+                    setshowProfiileData={setshowProfiileData}
+                    showProfiileData={showProfiileData}
+                    setindexRoll={setindexRoll}
+                    postDivRefRoll={postDivRefRoll}
+                    postDivRefx={postDivRefx}
+                    setlatestInview={setlatestInview}
+                    WebsiteMode={WebsiteMode}
+                    setkeypost={setkeypost}
+                    historyScrollonload={historyScrollonload}
+                    callhistoryModal={callhistoryModal}
+                    openmodalhistory={openmodalhistory}
+                    clikplay={clikplay}
+                    ShowBigPlay={ShowBigPlay}
+                    setShowBigPlay={setShowBigPlay}
+                    callPagination={callPagination}
+                    StopMini={StopMini}
+                    setStopMini={setStopMini}
+                    ShowLoader2={ShowLoader2}
+                    setShowLoader2={setShowLoader2}
+                    setscrollLocation={setscrollLocation}
+                    showThisComponenet={showThisComponenet}
+                    setshowThisComponenet={setshowThisComponenet}
+                    ScrollTo={ScrollTo}
+                    settypeEmo={settypeEmo}
+                    setconnectTemplateGo={setconnectTemplateGo}
+                    setminiProfile={setminiProfile}
+                    miniProfilexx={miniProfile}
+                    sliderIndexMini={sliderIndexMini}
+                    setSliderIndexMini={setSliderIndexMini}
+                    zoomClickedIndex={zoomClickedIndex}
+                    setzoomClickedIndex={setzoomClickedIndex}
+                    setStopBodyScroll={setStopBodyScroll}
+                    setCommentPostid={setCommentPostid}
+                    setDiscussionImage={setDiscussionImage}
+                    setx={setx}
+                    OpenModalForm={OpenModalForm}
+                    postData={postData2}
+                    paperPostScrollRef={paperPostScrollRef}
+                  /></Grid>
+              ) : null}
+
+
+
+
+              {/*///////////////////////////////////////////////////////////////////////////////// FEEDS  3*/}
+              {showData3 ? (
+                <Grid item xs={12} style={{
+                  position: "relative", zIndex: 1, padding: "0px"
+                }}>
+                  <ProfileSetup
+                    sethistoryScrollonload={sethistoryScrollonload}
+                    RandomColor={RandomColor}
+                    ActualpostDataAll={ActualpostDataAll}
+                    PostPageLimit={postPageLimit}
+                    setupTop={setupTop}
+                    CallMorePages={CallMorePages}
+                    showDataTop={showDataTop}
+                    setuptype={3}
+                    setcallResponse={setcallResponse3}
+                    callResponse={callResponse3}
+                    ActualData={ActualData3}
+                    ActualPagenum={ActualPagenum}
+                    setPostPageLimit={setPostPageLimit}
+                    setPostData={setPostData3}
+                    setshowProfiileData={setshowProfiileData}
+                    showProfiileData={showProfiileData}
+                    setindexRoll={setindexRoll}
+                    postDivRefRoll={postDivRefRoll}
+                    postDivRefx={postDivRefx}
+                    setlatestInview={setlatestInview}
+                    WebsiteMode={WebsiteMode}
+                    setkeypost={setkeypost}
+                    historyScrollonload={historyScrollonload}
+                    callhistoryModal={callhistoryModal}
+                    openmodalhistory={openmodalhistory}
+                    clikplay={clikplay}
+                    ShowBigPlay={ShowBigPlay}
+                    setShowBigPlay={setShowBigPlay}
+                    callPagination={callPagination}
+                    StopMini={StopMini}
+                    setStopMini={setStopMini}
+                    ShowLoader2={ShowLoader2}
+                    setShowLoader2={setShowLoader2}
+                    setscrollLocation={setscrollLocation}
+                    showThisComponenet={showThisComponenet}
+                    setshowThisComponenet={setshowThisComponenet}
+                    ScrollTo={ScrollTo}
+                    settypeEmo={settypeEmo}
+                    setconnectTemplateGo={setconnectTemplateGo}
+                    setminiProfile={setminiProfile}
+                    miniProfilexx={miniProfile}
+                    sliderIndexMini={sliderIndexMini}
+                    setSliderIndexMini={setSliderIndexMini}
+                    zoomClickedIndex={zoomClickedIndex}
+                    setzoomClickedIndex={setzoomClickedIndex}
+                    setStopBodyScroll={setStopBodyScroll}
+                    setCommentPostid={setCommentPostid}
+                    setDiscussionImage={setDiscussionImage}
+                    setx={setx}
+                    OpenModalForm={OpenModalForm}
+                    postData={postData3}
                     paperPostScrollRef={paperPostScrollRef}
                   /></Grid>
               ) : null}
@@ -2614,7 +3278,7 @@ function ProfileOutter() {
                   setCommentHistoryData={setCommentHistoryData}
                   commentHistoryScroll={commentHistoryScroll}
                   CommentHistoryData={CommentHistoryData}
-                  postData={postData}
+                  postData={ActualpostDataAll}
                   keypost={keypost}
                   scrollLocation={scrollLocation}
                   typeEmo={typeEmo}
@@ -2683,6 +3347,7 @@ function ProfileOutter() {
 
 
                 <Menu
+
                   WebsiteMode={WebsiteMode}
                   showModalForm={showModalForm}
                   shownav={shownav}
@@ -2716,238 +3381,61 @@ function ProfileOutter() {
 
               {
                 matchMobile ?
-                  WebsiteMode ?
-                    <Grid
-                      item
-                      style={{
-                        height: "18vh",
-                        width: '100%',
-                        marginLeft: '0px',
-                        zIndex: 5,
-                        position: 'fixed',
-                        transition: 'ease-in',
+                  <Grid
+                    item
+                    onClick={() => {
+                      dispatch(UpdateSign(false));
 
-                        paddingTop: '4.5vh',
-                        bottom: '0vh',
-                        backgroundColor: darkmodeReducer
-                          ? "rgba(50,50,50,0.85)"
-                          : "rgba(200,200,200,0.75)",
-
-                        borderTopRightRadius: '5vh',
-                        borderTopLeftRadius: '5vh',
-                        display: 'block',
-                        textAlign: 'center',
+                    }}
+                    style={{
+                      height: "23vh",
+                      width: '100%',
+                      marginLeft: '0px',
+                      zIndex: 600,
+                      position: 'fixed',
+                      transition: 'ease-in',
+                      cursor: 'pointer',
+                      paddingTop: '4.5vh',
+                      bottom: '0vh',
+                      backgroundColor: darkmodeReducer
+                        ? "rgba(50,50,50,0.85)"
+                        : "rgba(200,200,200,0.75)",
 
 
-                      }}
-                    >
+                      display: idReducer === GuestReducer ? SignInReducer ? 'block' : 'none' : 'none',
 
-                      <CancelIcon
-                        onClick={() => {
-
-                          setWebsiteMode(false);
-                        }}
-                        className={`${darkmodeReducer
-                          ? "make-small-icons-clickable-darkMenu dontallowhighlighting zuperkingIcon"
-                          : "make-small-icons-clickable-lightMenu dontallowhighlighting zuperking"
-                          } `}
-                        style={{
-                          fontSize: '8vh',
-                          color: darkmodeReducer ? '#ffffff' : '#000000',
-                          position: 'absolute',
-                          right: '1vw',
-                          top: '0px',
-                        }}
-                      />
-                      <button onClick={handleInstallClick} style={{
-                        borderRadius: '20px', padding: '5vh', cursor: 'pointer', backgroundColor: darkmodeReducer ? '#333333' : '#0b1728',
-                        color: darkmodeReducer ? '#ffffff' : '#ffffff'
-                      }}>
-
-
-                        <img
-                          onClick={() => {
-
-
-                          }}
-
-                          src={logoimage}
-                          alt="SuperstarZ logo"
-                          style={{
-                            textAlign: "center", opacity: darkmodeReducer ? 0.8 : 0.7,
-                            width: '14%', height: 'auto', padding: '0px', position: 'absolute', left: '1vw', top: '0.6vh',
-                            display: 'none'
-
-                          }}
-                        />
-                        INSTALL WEB APP
-                      </button>
-
-                      <span
-                        onClick={() => {
-                          alert('coming soon');
-                        }} style={{
-                          textAlign: "center", opacity: darkmodeReducer ? 0.5 : 0.5, left: '80vw',
-                          color: 'red',
-                          fontFamily: "Arial, Helvetica, sans-seri",
-                          fontWeight: 'bolder',
-                          fontSize: '1.6vh',
-                          padding: '0px', position: 'absolute', bottom: '28vh',
-                          display: 'none'
-                        }}>Install Help?</span>
-
-                      <span style={{
-                        textAlign: "center", opacity: darkmodeReducer ? 0.4 : 0.4, left: '9vw',
-                        color: darkmodeReducer ? '#ffffff' : '#000000',
-                        fontFamily: "Arial, Helvetica, sans-seri",
-                        fontWeight: 'bolder',
-                        padding: '0px', position: 'absolute', bottom: '14.5vh',
-                      }}></span>
-
-                    </Grid> : <Grid
-                      item
-                      style={{
-                        height: "23vh",
-                        width: '100%',
-                        marginLeft: '0px',
-                        zIndex: 5,
-                        position: 'fixed',
-                        transition: 'ease-in',
-
-                        paddingTop: '4.5vh',
-                        bottom: '0vh',
-                        backgroundColor: darkmodeReducer
-                          ? "rgba(50,50,50,0.85)"
-                          : "rgba(200,200,200,0.75)",
-
-                        borderTopRightRadius: '5vh',
-                        borderTopLeftRadius: '5vh',
-                        display: idReducer === GuestReducer ? SignInReducer ? 'block' : 'none' : 'none',
-
-                      }}
-                    >
-                      <LoginButtons OpenModalForm={OpenModalForm} type={1} />
-                    </Grid>
+                    }}
+                  >
+                    <LoginButtons OpenModalForm={OpenModalForm} type={1} />
+                  </Grid>
                   :
 
-                  WebsiteMode ?
-                    <Grid
-                      item
-                      style={{
-                        height: "15.8vh",
-                        width: '50%',
-                        marginLeft: '25vw',
-                        zIndex: 5,
-                        position: 'fixed',
-                        bottom: '0vh',
-                        backgroundColor: darkmodeReducer
-                          ? "rgba(50,50,50,0.85)"
-                          : "rgba(220,220,220,0.75)",
+                  <Grid
+                    item
+                    onClick={() => {
+                      dispatch(UpdateSign(false));
 
-                        borderTopRightRadius: '5vh',
-                        borderTopLeftRadius: '5vh',
-
-                        textAlign: 'center',
-                        paddingTop: '2vh',
+                    }}
+                    style={{
+                      height: "20vh",
+                      width: '100%',
+                      marginLeft: '0vw',
+                      zIndex: 600,
+                      position: 'fixed',
+                      cursor: 'pointer',
+                      bottom: '0vh',
+                      backgroundColor: darkmodeReducer
+                        ? "rgba(50,50,50,0.85)"
+                        : "rgba(220,220,220,0.75)",
 
 
+                      display: idReducer === GuestReducer ? SignInReducer ? 'block' : 'none' : 'none',
 
-                      }}
-                    >
+                    }}
+                  >
 
-
-                      <CancelIcon
-                        onClick={() => {
-
-                          setWebsiteMode(false);
-                        }}
-                        className={`${darkmodeReducer
-                          ? "make-small-icons-clickable-darkMenu dontallowhighlighting zuperkingIcon"
-                          : "make-small-icons-clickable-lightMenu dontallowhighlighting zuperking"
-                          } `}
-                        style={{
-                          fontSize: '3.8vw',
-                          color: darkmodeReducer ? '#ffffff' : '#000000',
-                          position: 'absolute',
-                          right: '1vw',
-                          top: '0px',
-
-
-                        }}
-                      />
-
-
-                      <button onClick={handleInstallClick} style={{
-                        borderRadius: '20px', padding: '5vh', cursor: 'pointer', backgroundColor: darkmodeReducer ? '#333333' : '#0b1728',
-                        color: darkmodeReducer ? '#ffffff' : '#ffffff'
-                      }}>
-
-
-
-
-                        <img
-                          onClick={() => {
-
-
-                          }}
-
-                          src={logoimage}
-                          alt="SuperstarZ logo"
-                          style={{
-                            textAlign: "center", opacity: darkmodeReducer ? 0.8 : 0.7,
-                            width: '7%', height: 'auto', padding: '0px', position: 'absolute', left: '0.4vw', top: '1vh',
-                            display: 'none'
-
-                          }}
-                        />
-                        INSTALL WEB APP
-                      </button>
-
-                      <span
-
-                        onClick={() => {
-                          alert('coming soon');
-                        }}
-                        style={{
-                          textAlign: "center", opacity: darkmodeReducer ? 0.5 : 0.5, left: '40vw',
-                          color: 'red',
-                          fontFamily: "Arial, Helvetica, sans-seri",
-                          cursor: 'pointer',
-                          fontWeight: 'bolder',
-                          padding: '0px', position: 'absolute', bottom: '21vh',
-                          display: 'none'
-                        }}>  </span>
-
-                      <span style={{
-                        textAlign: "center", opacity: darkmodeReducer ? 0.4 : 0.4, left: '4vw',
-                        color: darkmodeReducer ? '#ffffff' : '#000000',
-                        fontFamily: "Arial, Helvetica, sans-seri",
-                        fontWeight: 'bolder',
-                        padding: '0px', position: 'absolute', bottom: '12vh',
-                      }}></span>
-
-                    </Grid> : <Grid
-                      item
-                      style={{
-                        height: "20vh",
-                        width: '50%',
-                        marginLeft: '25vw',
-                        zIndex: 5,
-                        position: 'fixed',
-                        bottom: '0vh',
-                        backgroundColor: darkmodeReducer
-                          ? "rgba(50,50,50,0.85)"
-                          : "rgba(220,220,220,0.75)",
-
-                        borderTopRightRadius: '5vh',
-                        borderTopLeftRadius: '5vh',
-                        display: idReducer === GuestReducer ? SignInReducer ? 'block' : 'none' : 'none',
-
-                      }}
-                    >
-
-                      <LoginButtons OpenModalForm={OpenModalForm} />
-                    </Grid>
+                    <LoginButtons OpenModalForm={OpenModalForm} />
+                  </Grid>
               }
 
 
@@ -3114,7 +3602,35 @@ function ProfileOutter() {
               </Grid> : null}
 
 
+              {showModalFormMenu ? <Grid
+                item
+                style={{
+                  height: "0px",
+                  zIndex: 500,
+                  position: 'fixed',
+                  top: '0vh',
+                  backgroundColor: ''
+                }}
+              >
+                <ActualMenu
+                  setUploadGPT={setUploadGPT}
+                  paperPostScrollRef={paperPostScrollRef}
+                  setuptype={1}
+                  ActualpostDataAll={ActualpostDataAll}
+                  setShowInstallHelp={setShowInstallHelp}
+                  setDeferredPrompt={setDeferredPrompt}
+                  deferredPrompt={deferredPrompt}
+                  haltDownload={haltDownload}
+                  sethaltDownload={sethaltDownload}
+                  RandomColor={RandomColor}
+                  WebsiteMode={WebsiteMode}
+                  scrollToRef={scrollToRef}
+                  setsuperSettings={setsuperSettings}
+                  postData={postData}
+                  showModalFormMenu={showModalFormMenu}
+                  setshowModalFormMenu={setShowModalFormMenu} />
 
+              </Grid> : null}
 
 
 

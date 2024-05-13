@@ -86,6 +86,31 @@ function Connectx({
   const AlertDataReducer = AlertData;
   const AlertEmojiTypeReducer = AlertEmojiType;
 
+
+
+  ///
+  ///
+  /// GET COLOR FROM REDUX STORE
+  interface RootStateReducerColor {
+    GlobalReducerColor: {
+      color: string;
+      colordark: string;
+      colortype: number;
+    };
+  }
+  const { color, colordark, colortype } = useSelector(
+    (state: RootStateReducerColor) => ({
+      ...state.GlobalReducerColor,
+    })
+  );
+  const colorReducer = color;
+  const colorReducerdark = colordark;
+  const colortypeReducer = colortype;
+
+
+
+
+
   ///
   ///
   ///
@@ -344,7 +369,7 @@ function Connectx({
           <Grid
             className={`${optionsClass}`}
             style={{
-              backgroundColor: `${post.color1}`,
+              backgroundImage: `linear-gradient(45deg, ${colorReducer},${post.color1})`,
               zIndex: 2,
               left: matchMobile ? '-3px' : `${profileImagethumbLeft}px`,
               top: matchMobile ? `${profileImagethumbTop - 22}px` : `${profileImagethumbTop}px`,
@@ -434,7 +459,8 @@ function Connectx({
           <Grid
             className={`${optionsClass}`}
             style={{
-              backgroundColor: `${post.color1}`,
+
+              backgroundImage: `linear-gradient(45deg, ${colorReducer},${post.color1})`,
               zIndex: 2,
               left: matchMobile ? '-2.8vw' : `${profileImagethumbLeft + 18}px`,
               top: matchMobile ? `${profileImagethumbTop - 45}px` : `${profileImagethumbTop}px`,
@@ -511,7 +537,11 @@ function Connectx({
           <Grid
             className={`${optionsClass}`}
             style={{
-              backgroundColor: `${zoomedModal ? " " : `${post.color1}`}`,
+              ///backgroundColor: `${zoomedModal ? " " : `${post.color1}`}`,
+
+
+              backgroundImage: zoomedModal ? ''
+                : `linear-gradient(45deg, ${colorReducer},${post.color1})`,
               zIndex: 2,
               left:
                 `${zoomedModal
@@ -592,7 +622,8 @@ function Connectx({
           <Grid
             className={`  ${optionsClass}   `}
             style={{
-              backgroundColor: `${post.color1}`,
+              ///backgroundColor: `${post.color1}`,
+              backgroundImage: `linear-gradient(45deg, ${colorReducer},${post.color1})`,
               zIndex: 7,
               left: matchMobile ? '6vw' : wideImage
                 ? zoomedModal

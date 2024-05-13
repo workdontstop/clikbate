@@ -29,6 +29,8 @@ import SuperstarzIconLight from "../images/s.png";
 import SuperstarzIconDark from "../images/sd.png";
 
 
+import CircleIcon from "@mui/icons-material/Circle";
+
 import PlayCircleFilledIcon from '@material-ui/icons/PlayCircleFilled';
 
 import {
@@ -44,7 +46,17 @@ import { UpdateSign } from ".././GlobalActions";
 
 
 
-function ActualMenux({ showModalFormMenu, setshowModalFormMenu, postData, setsuperSettings, scrollToRef, WebsiteMode }: any): JSX.Element {
+function ActualMenux({ showModalFormMenu,
+  RandomColor, setshowModalFormMenu, postData, setsuperSettings, scrollToRef,
+  WebsiteMode, haltDownload, sethaltDownload,
+  setDeferredPrompt,
+  deferredPrompt,
+  setShowInstallHelp,
+  setuptype,
+  ActualpostDataAll,
+  paperPostScrollRef,
+  setUploadGPT
+}: any): JSX.Element {
 
 
   const [popPlay, setpopPlay] = useState(false);
@@ -55,6 +67,7 @@ function ActualMenux({ showModalFormMenu, setshowModalFormMenu, postData, setsup
       setpopPlay(false);
     }, 5000)
     setMovePlay(false);
+    setPadIndex(-1);
   }, [showModalFormMenu])
 
 
@@ -71,6 +84,7 @@ function ActualMenux({ showModalFormMenu, setshowModalFormMenu, postData, setsup
 
   const { REACT_APP_SUPERSTARZ_URL, REACT_APP_CLOUNDFRONT, REACT_APP_APPX_STATE } = process.env;
 
+  const [PadIndex, setPadIndex] = useState(-1);
 
   ///
   ///
@@ -151,7 +165,7 @@ function ActualMenux({ showModalFormMenu, setshowModalFormMenu, postData, setsup
 
 
 
-  var MenuOptions = ["Search", "My Profile", "My Feeds", "Notification", "Showroom", "Playlist", "Gallery", "Setting"];
+  var MenuOptions = ["Search", 'Upload', "My Profile", "My Feeds", "Notification", "Setting", "Playlist", "Gallery", "Showroom"];
 
 
 
@@ -165,7 +179,7 @@ function ActualMenux({ showModalFormMenu, setshowModalFormMenu, postData, setsup
 
   var pushh = '1vw';
 
-  var pixmyprofile = matchMobile ? '1.8px' : '3.8px';
+  var pixmyprofile = matchMobile ? '6px' : '8.8px';
 
 
 
@@ -175,7 +189,7 @@ function ActualMenux({ showModalFormMenu, setshowModalFormMenu, postData, setsup
     dispatch(UserInfoUpdateMEMBER(-1));
     dispatch(UserInfoUpdateMEMBER(0));
 
-    var tt = 20;
+    var tt = paperPostScrollRef.current.scrollTop;
 
     var n, d;
 
@@ -189,6 +203,8 @@ function ActualMenux({ showModalFormMenu, setshowModalFormMenu, postData, setsup
       data: postData,
       innerid: 0,
       pagenumReducer: pagenumReducer,
+      dataPageNumberState: setuptype,
+      dataAll: ActualpostDataAll,
     };
 
 
@@ -212,7 +228,7 @@ function ActualMenux({ showModalFormMenu, setshowModalFormMenu, postData, setsup
     //
 
 
-  }, [pagenumReducer, memeberPageidReducer, idReducer, MemberProfileDataReducer, usernameReducer]);
+  }, [pagenumReducer, memeberPageidReducer, idReducer, MemberProfileDataReducer, usernameReducer, setuptype, ActualpostDataAll]);
 
 
 
@@ -222,7 +238,7 @@ function ActualMenux({ showModalFormMenu, setshowModalFormMenu, postData, setsup
 
     dispatch(UserInfoUpdateMEMBER(idReducer));
 
-    var tt = 20;
+    var tt = paperPostScrollRef.current.scrollTop;
 
     var n, d;
 
@@ -236,6 +252,8 @@ function ActualMenux({ showModalFormMenu, setshowModalFormMenu, postData, setsup
       data: postData,
       innerid: 0,
       pagenumReducer: pagenumReducer,
+      dataPageNumberState: setuptype,
+      dataAll: ActualpostDataAll,
     };
 
 
@@ -259,7 +277,7 @@ function ActualMenux({ showModalFormMenu, setshowModalFormMenu, postData, setsup
     //
 
 
-  }, [pagenumReducer, memeberPageidReducer, idReducer, MemberProfileDataReducer, usernameReducer]);
+  }, [pagenumReducer, memeberPageidReducer, idReducer, MemberProfileDataReducer, usernameReducer, setuptype, ActualpostDataAll]);
 
 
   const GoToMemberLoaderUpP = () => {
@@ -384,6 +402,67 @@ function ActualMenux({ showModalFormMenu, setshowModalFormMenu, postData, setsup
     PaperStyleReducer = PaperStyleLight;
     logoimage = SuperstarzIconLight;
   }
+
+
+
+  const media = window.matchMedia('(display-mode: standalone)').matches;
+  const navigatorx = (navigator as any).standalone;
+  const andref = document.referrer.includes('android-app://');
+
+  const [showDownloadButton, setshowDownloadButton] = useState(false);
+
+
+
+
+  const handleInstallClick = () => {
+
+    setShowInstallHelp(true);
+    //alert('kk');
+    // Check if the deferredPrompt is available
+    if (deferredPrompt) {
+      // Show the installation prompt
+      (deferredPrompt as any).prompt();
+
+      // Wait for the user to respond to the prompt
+      (deferredPrompt as any).userChoice
+        .then((choiceResult: { outcome: string }) => {
+          if (choiceResult.outcome === 'accepted') {
+            console.log('User accepted the installation prompt');
+            /// setIsPWAInstalled(true);
+            /// setWebsiteMode(false);
+          } else {
+            console.log('User dismissed the installation prompt');
+          }
+          // Reset the deferredPrompt variable
+          setDeferredPrompt(null);
+        });
+    }
+  };
+
+  useEffect(() => {
+    if (showModalFormMenu) {
+
+      if ((navigator as any).standalone || window.matchMedia('(display-mode: standalone)').matches) {
+        ///setIsPWAInstalled(true);
+        /// setWebsiteMode(false); // Hide download button if PWA is already installed
+
+
+      } else {
+
+        if (haltDownload) { } else {
+          setshowDownloadButton(true);
+
+          sethaltDownload(true)
+          setTimeout(() => {
+            setshowDownloadButton(false);
+          }, 6000)
+        }
+      }
+
+    }
+
+  }, [showModalFormMenu, media, navigatorx, andref, haltDownload]);
+
 
 
   return (
@@ -522,40 +601,59 @@ function ActualMenux({ showModalFormMenu, setshowModalFormMenu, postData, setsup
             style={{
               ...stylesxx,
               position: 'fixed',
-              top: '22vh',
+              top: '21vh',
               marginLeft: '15.6vw',
               height: 'auto',
               cursor: 'pointer'
             }}
           >
 
-            <PlayCircleFilledIcon
-              onClick={() => {
-                setMovePlay(true);
-                setshowModalFormMenu(false);
-                scrollToRef();
+            {showDownloadButton ?
+              <button onClick={() => {
+                handleInstallClick();
+              }} style={{
+                borderRadius: '20px',
+                marginLeft: '-2.35vw',
+                top: '-0.45vw',
+                position: 'relative',
+                fontSize: '0.18rem',
+                padding: '0.7vh', cursor: 'pointer', backgroundColor: darkmodeReducer ? '#333333' : '#0b1728',
+                color: darkmodeReducer ? '#ffffff' : '#ffffff'
+              }}>
 
 
 
-              }}
-              className={
 
-                darkmodeReducer
-                  ? " dontallowhighlighting zuperkingIcon  zuperkingIconPostDark"
-                  : "  dontallowhighlighting   zuperkingIconPostLight"
-              }
-
-              style={{
-                fontSize: '1.3vw',
-
-                color: darkmodeReducer
-                  ? '#ffffff' : '#000000',
-                marginLeft: '-1.8vw'
+                INSTALL WEB APP
+              </button>
+              :
+              <PlayCircleFilledIcon
+                onClick={() => {
+                  setMovePlay(true);
+                  setshowModalFormMenu(false);
+                  scrollToRef();
 
 
 
-              }}
-            />
+                }}
+                className={
+
+                  darkmodeReducer
+                    ? " dontallowhighlighting zuperkingIcon  zuperkingIconPostDark"
+                    : "  dontallowhighlighting   zuperkingIconPostLight"
+                }
+
+                style={{
+                  fontSize: '1.3vw',
+
+                  color: darkmodeReducer
+                    ? '#ffffff' : '#000000',
+                  marginLeft: '-1.8vw'
+
+
+
+                }}
+              />}
           </animated.div >}
 
 
@@ -571,8 +669,8 @@ function ActualMenux({ showModalFormMenu, setshowModalFormMenu, postData, setsup
               style={{
 
                 position: 'fixed',
-                bottom: '9vh',
-                marginLeft: '20vw',
+                bottom: '11vh',
+                marginLeft: '18vw',
                 height: 'auto'
               }}
             >
@@ -627,44 +725,64 @@ function ActualMenux({ showModalFormMenu, setshowModalFormMenu, postData, setsup
 
 
           <Grid
-            xs={12} style={{ position: 'fixed', top: matchMobile ? '17.5vh' : '39vh', zIndex: 20, right: '0px', width: '100%' }}>
+            xs={12} style={{
+              position: 'fixed', top: matchMobile ? '13vh' : '36vh', zIndex: 20, right: '0px',
+              width: '100%', height: matchMobile ? '58.2%' : '59%', overflow: 'auto',
+            }}>
 
             <Grid
-              xs={12} style={{ width: '100%', alignContent: 'center', display: 'grid', opacity: '0.59', }}>
+              xs={12} style={{ width: '100%', alignContent: 'center', display: 'grid', opacity: '0.59', padding: '5px' }}>
 
 
               {
                 MenuOptions.map((Title: string, i: number) => (
 
                   <span onClick={() => {
-                    if (i === 1) {
+
+                    setPadIndex(i);
+
+
+
+                    if (i === 2) {
 
                       GoToMemberLoaderUpP();
 
                     }
 
-                    if (i === 2) {
+                    if (i === 3) {
 
                       GoToMemberLoaderUpF();
 
                     }
 
 
-                    if (i === 7) {
+                    if (i === 5) {
                       setsuperSettings(true);
                       setshowModalFormMenu(false);
 
                     }
 
+                    if (i === 1) {
+
+                      if (matchMobile) {
+
+                        alert('coming soon to Mobile ');
+                      } else {
+                        setUploadGPT(true);
+                        setshowModalFormMenu(false);
+                      }
+                    }
+
                   }} key={i}
-                    className={i === 6 || i === 5 || i === 4 || i === 3 || i === 0 ? "dontallowhighlighting " : "click-effect dontallowhighlighting "}
+                    className={i === 7 || i === 6 || i === 8 || i === 4 || i === 0 ? "dontallowhighlighting " : "click-effect dontallowhighlighting "}
                     style={{
-                      border: memeberPageidReducer === 0 && i === 2 ? darkmodeReducer ? `${pixmyprofile} solid #333333` : `${pixmyprofile} solid #aaaaaa` :
-                        memeberPageidReducer !== 0 && i === 1 ? darkmodeReducer ? `${pixmyprofile} solid #333333` : `${pixmyprofile} solid #aaaaaa` : '',
+
+
                       borderRadius: '0%',
-                      padding: '0.8vh',
-                      cursor: i === 6 || i === 5 || i === 4 || i === 3 || i === 0 ? 'default' : 'pointer'
+                      padding: '1vh',
+                      cursor: i === 6 || i === 8 || i === 4 || i === 0 ? 'default' : 'pointer'
                     }}>
+
 
 
 
@@ -688,8 +806,28 @@ function ActualMenux({ showModalFormMenu, setshowModalFormMenu, postData, setsup
                     </span> : null}
 
 
-
                     {i === 1 ? <span>
+                      <CircleIcon
+                        className={
+                          darkmodeReducer
+                            ? "make-small-icons-clickable-darkab dontallowhighlighting zuperkingIcon "
+                            : "make-small-icons-clickable-lightab  dontallowhighlighting zuperking"
+                        }
+                        style={{
+                          color: 'red',
+                          opacity: 1,
+                          fontSize: menufont,
+                          marginLeft: pushh,
+                          paddingTop: matchMobile ? '11px' : '',
+                          transform: 'scale(1.9)',
+
+                        }}
+                      />
+                    </span> : null}
+
+
+
+                    {i === 2 ? <span>
                       <FaceIcon
                         className={
                           darkmodeReducer
@@ -709,7 +847,7 @@ function ActualMenux({ showModalFormMenu, setshowModalFormMenu, postData, setsup
 
 
 
-                    {i === 2 ?
+                    {i === 3 ?
                       <span>
                         <SubjectIcon
                           className={
@@ -732,7 +870,7 @@ function ActualMenux({ showModalFormMenu, setshowModalFormMenu, postData, setsup
 
 
 
-                    {i === 3 ? <span>
+                    {i === 4 ? <span>
                       <NotificationsIcon
                         className={
                           darkmodeReducer
@@ -753,7 +891,7 @@ function ActualMenux({ showModalFormMenu, setshowModalFormMenu, postData, setsup
 
 
 
-                    {i === 4 ? <span>
+                    {i === 8 ? <span>
                       <TheatersIcon
                         className={
                           darkmodeReducer
@@ -772,7 +910,7 @@ function ActualMenux({ showModalFormMenu, setshowModalFormMenu, postData, setsup
 
 
 
-                    {i === 5 ? <span>
+                    {i === 6 ? <span>
                       <QueueMusicIcon
                         className={
                           darkmodeReducer
@@ -792,7 +930,7 @@ function ActualMenux({ showModalFormMenu, setshowModalFormMenu, postData, setsup
 
 
 
-                    {i === 6 ? <span>
+                    {i === 7 ? <span>
                       <PhotoAlbumIcon
                         className={
                           darkmodeReducer
@@ -812,7 +950,7 @@ function ActualMenux({ showModalFormMenu, setshowModalFormMenu, postData, setsup
 
 
 
-                    {i === 7 ? <span>
+                    {i === 5 ? <span>
                       <SettingsIcon
                         className={
                           darkmodeReducer
@@ -841,10 +979,21 @@ function ActualMenux({ showModalFormMenu, setshowModalFormMenu, postData, setsup
                         color: colr,
                         fontSize: matchMobile ? WebsiteMode ? '2.62vh' : '2.4vh' : "1.2vw",
                         marginLeft: matchMobile ? '13vw' : '5vw',
-                        opacity: i === 1 || i === 2 || i === 7 ? '1' : '0.3'
+                        opacity: i === 1 || i === 2 || i === 3 || i === 5 ? '1' : '0.3'
                       }}>
                       {Title}
                     </span>
+                    <Grid item xs={12} style={{
+                      height: '5px',
+                      padding: '0px',
+                      backgroundImage: PadIndex === i ? `linear-gradient(45deg, ${RandomColor}, ${colorReducer})` :
+                        PadIndex !== -1 ? '' :
+                          memeberPageidReducer === 0 && i === 3 ? darkmodeReducer ? `linear-gradient(45deg, ${RandomColor}, ${colorReducer})` :
+                            `linear-gradient(45deg, ${RandomColor}, ${colorReducer})` :
+                            memeberPageidReducer !== 0 && i === 2 && idReducer === memeberPageidReducer ? darkmodeReducer ? `linear-gradient(45deg, ${RandomColor}, ${colorReducer})` :
+                              `linear-gradient(45deg, ${RandomColor}, ${colorReducer})` : 'none',
+
+                    }}></Grid>
                   </span>
                 ))
               }

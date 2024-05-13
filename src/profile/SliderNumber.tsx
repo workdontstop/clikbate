@@ -78,7 +78,7 @@ function SliderNumberx({
 
 
 
-
+  var RandomColor = '#00ccff';
 
 
   return (
@@ -90,6 +90,7 @@ function SliderNumberx({
 
       {showSpin && sliderLoader ?
         <Loader
+          RandomColor={RandomColor}
           post={post}
           autoSlideDisplay={autoSlideDisplay}
           sliderLoader={sliderLoader}
@@ -119,11 +120,14 @@ function SliderNumberx({
                     : "make-small-icons-clickable-darkCrop dontallowhighlighting zupermenudark  "}
 
                 style={{
-                  color: darkmodeReducer ? '#ffffff' : '#ffffff',
+                  color: darkmodeReducer
+                    ? "#ffffff" : '#000000',
                   transform: matchMobile ? 'scale(0.4)' : 'scale(0.75)',
                   position: "absolute",
                   zIndex: 30,
-                  backgroundColor: post.color1,
+                  backgroundColor: darkmodeReducer
+                    ? "rgba(41,41,41,0.86)"
+                    : "rgba(205,205,205,0.9) ",
                   left: matchMobile ? '1vh' : 30,
                   cursor: "pointer",
                   top: matchMobile ? '1vh' : "5vh",

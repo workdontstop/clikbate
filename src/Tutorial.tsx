@@ -351,39 +351,9 @@ function Tutorialx({ type, index, post, minClicked }: any) {
             zIndex: 50000,
             color: darkmodeReducer ? 'whitesmoke' : 'black',
             fontFamily: 'sans-serif',
-            display: hide4 ? 'none' : 'block'
+            display: 'none',
           }}>
-          <Grid
-            xs={12}
-            item
 
-          >
-
-            <span
-
-              onClick={() => {
-                minClicked();
-                dispatch(UpdateTutorials(type, false));
-              }}
-
-              style={{
-                backgroundImage: PaperStyleReducer,
-                padding: matchMobile ? '2vh' : '2.5vh',
-                paddingRight: matchMobile ? '10vw' : '3vw',
-                paddingLeft: matchMobile ? '4vw' : '1vw',
-                width: 'auto',
-                position: 'absolute',
-                fontWeight: 'bold',
-                cursor: 'pointer',
-                fontSize: matchMobile ? `1.5vh` : `0.8vw`,
-                borderRadius: '20px',
-              }}>Click For Fullview
-
-
-
-            </span>
-
-          </Grid>
 
         </Grid> : null
 

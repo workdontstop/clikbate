@@ -196,6 +196,8 @@ function ShowCommentsx({
           DiscussionImage: DiscussionImageReducer,
           comOriginalData: CommentDataReducer,
           comScroll: tt,
+          dataPageNumberState: 0,
+          dataAll: postData,
         };
       } else {
         n = MemberProfileDataReducer.username;
@@ -211,6 +213,8 @@ function ShowCommentsx({
           DiscussionImage: DiscussionImageReducer,
           comOriginalData: CommentDataReducer,
           comScroll: tt,
+          dataPageNumberState: 0,
+          dataAll: postData,
         };
       }
 
@@ -240,7 +244,7 @@ function ShowCommentsx({
     DiscussionImageReducer,
     PostDataFromCommentReducer,
     CommentDataReducer,
-    pagenumReducer
+    pagenumReducer,
   ]);
 
   const GoToMemberLoaderUp = () => {

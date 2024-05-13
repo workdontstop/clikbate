@@ -22,6 +22,7 @@ import { matchMobile, matchPc, matchTablet } from "../DetectDevice";
 import { UserInfoUpdateMEMBER } from "../log/actions/UserdataAction";
 import VideocamIcon from '@material-ui/icons/Videocam';
 
+
 import { Tutorial } from "../Tutorial";
 
 
@@ -87,7 +88,9 @@ function MiniPostx({
   clearAllTimers,
   AllowAllHdImagesShow,
   InitializingAutoPlayIndex,
-  WebsiteMode
+  WebsiteMode,
+
+
 
 
 
@@ -207,6 +210,8 @@ function MiniPostx({
     setzoomClickedIndex(pey + 1);
     setSliderIndexMini(0);
     setminiProfile(false);
+
+    ///dispatch(UpdateTutorials(4, false));
   }
 
 
@@ -565,11 +570,14 @@ function MiniPostx({
                     : "make-small-icons-clickable-darkCrop dontallowhighlighting zupermenudark  "}
 
                 style={{
-                  color: darkmodeReducer ? '#ffffff' : '#ffffff',
+                  color: darkmodeReducer
+                    ? "#ffffff" : '#000000',
                   transform: matchMobile ? 'scale(0.4)' : 'scale(0.58)',
                   position: "absolute",
                   zIndex: 30,
-                  backgroundColor: post.color1,
+                  backgroundColor: darkmodeReducer
+                    ? "rgba(41,41,41,0.86)"
+                    : "rgba(205,205,205,0.9) ",
                   left: matchMobile ? '1vh' : 30,
                   cursor: "pointer",
                   top: matchMobile ? '1vh' : "5vh",
@@ -659,11 +667,14 @@ function MiniPostx({
                     : "make-small-icons-clickable-darkCrop dontallowhighlighting zupermenudark  "}
 
                 style={{
-                  color: darkmodeReducer ? '#ffffff' : '#ffffff',
+                  color: darkmodeReducer
+                    ? "#ffffff" : '#000000',
                   transform: matchMobile ? 'scale(0.4)' : 'scale(0.58)',
                   position: "absolute",
                   zIndex: 30,
-                  backgroundColor: post.color1,
+                  backgroundColor: darkmodeReducer
+                    ? "rgba(41,41,41,0.86)"
+                    : "rgba(205,205,205,0.9)",
                   left: matchMobile ? '1vh' : 30,
                   cursor: "pointer",
                   top: matchMobile ? '1vh' : "5vh",
@@ -769,7 +780,7 @@ function MiniPostx({
 
                 cursor: "pointer",
                 width: "100%",
-                height: matchMobile ? isWide ? '29vh' : '29vh' : '58vh',
+                height: matchMobile ? isWide ? '19.5vh' : '19.5vh' : '58vh',
                 position: AllowAllHdImagesShow ? "absolute" : 'relative',
                 padding: "0px",
                 objectFit:
@@ -780,7 +791,7 @@ function MiniPostx({
                   itemcroptype[pey] === 1 || itemcroptype[pey] === 2
                     ? "50% top"
                     : "50% 50",
-                borderRadius: '2vh',
+                borderRadius: '0vh',
                 zIndex: 0,
 
               }}
@@ -789,7 +800,31 @@ function MiniPostx({
 
 
 
-            <Tutorial minClicked={minClicked} type={4} index={pey} post={post} />
+            <Grid container style={{
+              height: matchMobile ? '40vh' : '40vh',
+              marginTop: matchMobile ? '50%' : '77%',
+              width: '100%',
+              zIndex: '0',
+              position: 'absolute',
+              scrollSnapAlign: 'end',
+              opacity: 0,
+
+
+            }}>
+
+
+              <Grid item xs={12} style={{
+                padding: "0px",
+                width: "100%",
+
+              }}>
+
+
+              </Grid>
+
+            </Grid>
+
+
 
 
 
@@ -810,7 +845,7 @@ function MiniPostx({
 
                 cursor: "pointer",
                 width: "100%",
-                height: matchMobile ? isWide ? '29vh' : '29vh' : '58vh',
+                height: matchMobile ? isWide ? '19.5vh' : '19.5vh' : '58vh',
                 position: "relative",
                 padding: "0px",
                 objectFit:
@@ -821,7 +856,7 @@ function MiniPostx({
                   itemcroptype[pey] === 1 || itemcroptype[pey] === 2
                     ? "50% top"
                     : "50% 50",
-                borderRadius: '2vh',
+                borderRadius: '0vh',
                 zIndex: 1,
 
 
@@ -832,163 +867,10 @@ function MiniPostx({
 
 
 
-          </div>
-
-          <div
-            className={
-              darkmodeReducer ? "" : ""
-            }
-            style={{
-
-              top: postusernametopx,
-              position: "relative",
-              display: "flex", //flex
-              alignItems: "center",
-              justifyContent: "left",
-              zIndex: 50,
-              opacity: darkmodeReducer ? '0.4' : '0.6',
-              paddingLeft: "2vw",
-              fontFamily: "Roboto, Arial, Helvetica, sans-serif",
-              marginLeft: postusernameleftx,
-              textAlign: matchMobile ? "center" : 'left',
-              left: matchMobile ? '6vw' : '12px',
-              height: "0px",
-            }}
-          >
-            <span>
-              <span
-                className={
-                  darkmodeReducer ? "" : ""
-                }
-                style={{
-                  color: darkmodeReducer ? "#ffffff" : "#000000",
-                }}
-              >
-                <span
-                  style={{
-                    fontWeight: "normal",
-                    fontSize: postusernamefont,
-                    display: 'block'
-                  }}
-                >
-                  {post.username}
-                </span>  </span>  </span></div>
-
-
-          <div
-            className={
-              matchMobile ? 'zuperxyloud3d' : ''
-            }
-            style={{
-
-              top: postusernametopxTI,
-              position: "relative",
-              display: "flex", //flex
-              alignItems: "center",
-              justifyContent: "left",
-              zIndex: 50,
-              opacity: matchMobile ? '0.8' : darkmodeReducer ? '0.3' : '0.5',
-              paddingLeft: "2vw",
-              fontFamily: "Roboto, Arial, Helvetica, sans-serif",
-
-              textAlign: matchMobile ? "center" : 'left',
-              left: matchMobile ? '33vw' : '20.5vw',
-              height: "0px",
-            }}
-          >
-            <span>
-              <span
-                className={
-                  darkmodeReducer ? "" : ""
-                }
-                style={{
-                  color: matchMobile ? '#ffffff' : darkmodeReducer ? "#ffffff" : "#000000",
-                }}
-              >
-                <span
-                  style={{
-                    fontWeight: "normal",
-                    fontSize: postDateFont,
-                    display: 'block'
-                  }}
-                >
-                  {PostTime}
-                </span>  </span>  </span></div>
-
-          {/*///////////////////////////////////////////////////////////////////////////USERNAME AND TOPIC*/}
-          <div
-            className={
-              darkmodeReducer ? "zuperxyinfoPostDark" : "zuperxyinfoPostLight"
-            }
-            style={{
-              visibility: miniLayoutPost ? "hidden" : "visible",
-              top: postusernametop,
-              position: "relative",
-              display: "flex", //flex
-              alignItems: "center",
-              justifyContent: "left",
-              zIndex: 50,
-              color: "#ffffffff",
-              paddingLeft: "2vw",
-              fontFamily: "Arial, Helvetica, sans-seri",
-              marginLeft: postusernameleft,
-              textAlign: "center",
-              left: matchMobile ? '5vw' : '0px',
-              height: "0px",
-
-
-            }}
-          >
 
           </div>
-          {/*///////////////////////////////////////////////////////////////////////////USERNAME AND TOPIC*/}
-          {/*///////////////////////////////////////////////////////////////////////////PROFILE-PIC*/}
-
-          <Connect
-            GoToMember={GoToMember}
-            Added={Added}
-            setAdded={setAdded}
-            PostCon={2}
-            Comment={0}
-            Reaction={0}
-            Profile={0}
-            Mini={0}
-            profileImageref={profileImageref}
-            calculateconnectPosition={calculateconnectPosition}
-            profilewidth={profilewidth}
-            postprofiletop={postprofiletop}
-            optionsClass={optionsClass}
-            post={post}
-            profileImagethumbLeft={profileImagethumbLeft}
-            profileImagethumbTop={profileImagethumbTop}
-          />
-          {/*///////////////////////////////////////////////////////////////////////////PROFILE-PIC*/}
-
-          <div>
 
 
-            <div
-              style={{
-                fontWeight: "bold",
-                marginTop: matchPc ? '6vh' : '4.2vh',
-                color: darkmodeReducer ? "#ffffff" : "#000000",
-                fontSize: matchPc ? "1.1rem" : "0.83rem",
-                zIndex: 5,
-                paddingLeft: matchPc ? "7vw" : "18vw",
-                height: "0px",
-                fontFamily: "Arial, Helvetica, sans-serif",
-                opacity: darkmodeReducer ? "0.5" : "0.8",
-                display: 'block'
-              }}
-            >   <p>
-                {post.topic}
-              </p>
-
-            </div>
-          </div>
-
-
-          {/*///////////////////////////////////////////////////////////////////////////PROFILE-PIC*/}
         </div>
       </animated.div >
     </>

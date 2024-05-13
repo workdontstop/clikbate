@@ -183,7 +183,9 @@ FROM posts
 INNER JOIN members ON posts.sender = members.id
 ORDER BY posts.id DESC
 LIMIT 18
+
 `;
+///18
 const posts_more = `SELECT
 (SELECT COUNT(*)   
   FROM fan

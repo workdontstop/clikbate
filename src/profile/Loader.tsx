@@ -8,7 +8,7 @@ import { RootStateOrAny, useSelector } from "react-redux";
 import { matchMobile, matchPc, matchTablet } from "../DetectDevice";
 import ZoomOutIcon from "@mui/icons-material/ZoomOut";
 
-function Loaderx({ sliderLoader, autoSlideDisplay, post }: any): JSX.Element {
+function Loaderx({ sliderLoader, autoSlideDisplay, post, RandomColor }: any): JSX.Element {
   ///
   ///
   ///
@@ -22,6 +22,36 @@ function Loaderx({ sliderLoader, autoSlideDisplay, post }: any): JSX.Element {
     ...state.GlobalReducer,
   }));
   const darkmodeReducer = darkmode;
+
+
+
+
+  ///
+  ///
+  ///
+  /// GET LOGGED USER DATA FROM REDUX STORE
+  interface RootStateReducerImage {
+    UserdataReducer: {
+
+      id: number;
+
+      memeberPageid: number;
+
+
+    };
+  }
+  const { id, memeberPageid, } =
+    useSelector((state: RootStateReducerImage) => ({
+      ...state.UserdataReducer,
+    }));
+
+
+
+  const idReducer = id;
+  const memeberPageidReducer = memeberPageid;
+
+
+
 
   ///
   ///
@@ -53,7 +83,13 @@ function Loaderx({ sliderLoader, autoSlideDisplay, post }: any): JSX.Element {
             : `${sliderLoader} turlight`
         }
         style={{
-          backgroundColor: post ? post.color1 : colorReducer,
+
+
+          backgroundImage: post ?
+            idReducer === memeberPageidReducer ? `linear-gradient(45deg, ${RandomColor}, ${colorReducer})` :
+
+              `linear-gradient(45deg, ${colorReducer}, ${post.color1})` :
+            `linear-gradient(45deg, ${RandomColor}, ${colorReducer})`,
           height: "0.8vh",
           position: "absolute",
           display: autoSlideDisplay,

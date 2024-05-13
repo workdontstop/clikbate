@@ -149,15 +149,11 @@ function Menux({
     if (menuTimer3.current) {
       clearTimeout(menuTimer3.current);
     }
-
     if (shownav) {
       setshownav2(true);
     } else {
 
-
-
-      menuTimer3.current = setTimeout(() => { setshownav2(false); }, 2000)
-
+      menuTimer3.current = setTimeout(() => { setshownav2(false); }, 1700)
     }
   }, [shownav])
 
@@ -172,37 +168,56 @@ function Menux({
   });
 
 
-
+  const [allow, setallow] = useState(true);
 
 
   const jayme = useCallback((e: any) => {
 
+
     if (shownav) {
-      setShownav(false);
+
+
+      if (allow) {
+
+      } else {
+
+
+        menuTimer2.current = setTimeout(function () {
+          setShownav(false);
+
+
+        }, 2000);
+      }
+
+
+    } else {
+      if (allow) {
+        setShownav(true);
+        setallow(false);
+      } else {
+
+      }
+
+
     }
 
 
     if (menuTimer5.current) {
+
       clearTimeout(menuTimer5.current);
     }
 
 
-    if (menuTimer2.current) {
-      clearTimeout(menuTimer2.current);
-    }
 
     menuTimer5.current = setTimeout(function () {
 
       if (ShowBigPlay) { } else {
         ///dispatch(UpdateMenuNav(true));
-        setShownav(true);
+        setShownav(false);
+        setallow(true);
         /// dispatch(SnapToggleAction(false))
       }
-      menuTimer2.current = setTimeout(function () {
-        setShownav(false);
-        /// dispatch(SnapToggleAction(true));
 
-      }, 2400);
     }, 1000);
 
 
@@ -211,7 +226,7 @@ function Menux({
 
 
 
-  }, [ShowBigPlay, shownav]);
+  }, [ShowBigPlay, shownav, allow]);
 
 
 
@@ -371,10 +386,10 @@ function Menux({
                     md={8}
                     style={{
                       height: "0px",
-
-
-
-
+                      display: 'flex',
+                      alignItems: "center",
+                      justifyContent: "center",
+                      textAlign: "center",
 
 
 
@@ -395,43 +410,24 @@ function Menux({
                           }
                           style={{
                             marginLeft: matchPc
-                              ? "10px"
+                              ? "1%"
                               : matchTablet
                                 ? "30px"
-                                : "10px",
+                                : "35%",
                             paddingTop: "11px",
                             paddingBottom: "13px",
                             paddingLeft: matchPc ? "1.5vw" : "5vw",
                             paddingRight: matchPc ? "1.5vw" : "5vw",
-                            borderRadius: "10px",
+                            borderRadius: "0px",
                             alignItems: "center",
                             justifyContent: "center",
                             textAlign: "center",
                             cursor: "pointer",
                             height: "0px",
+
                           }}
                         >
-                          {matchMobile ?
-                            <CheckBoxOutlineBlankIcon
-                              style={{
-                                margin: "auto",
-                                marginLeft: '-8vw',
-                                position: 'absolute',
-                                display: 'none'
 
-
-                              }}
-                            />
-                            : <CheckBoxOutlineBlankIcon
-                              style={{
-                                margin: "auto",
-                                top: '0.8vh',
-                                marginLeft: '-2.2vw',
-                                position: 'absolute',
-                                display: 'none'
-
-                              }}
-                            />}
                           <>     < span
                             className={
                               darkmodeReducer
@@ -439,16 +435,25 @@ function Menux({
                                 : "text-superstarz-light  text-superstarz-light-colorA  "
                             }
                             style={{
-                              color: darkmodeReducer ? "#eeeeee" : "#444444",
+                              color: darkmodeReducer ? "#eeeeee" : "#444444", display: 'inline'
                             }}
                           >
                             Clik
                           </span>
-                            {' '}
+
+                            < span
+
+                              style={{
+                                visibility: 'hidden'
+                              }}
+                            >
+                              .
+                            </span>
+
                             <span
                               style={{
                                 color: darkmodeReducer ? "#ffe680" : "#ffcc00",
-                                opacity: darkmodeReducer ? "1" : "1",
+                                opacity: darkmodeReducer ? "1" : "1", display: 'inline'
 
                               }}
                               className={
@@ -479,18 +484,15 @@ function Menux({
                           }
                           style={{
                             marginLeft: matchPc
-                              ? "10px"
+                              ? "0%"
                               : matchTablet
                                 ? "30px"
-                                : "10px",
+                                : "35%",
                             paddingTop: "11px",
                             paddingBottom: "13px",
                             paddingLeft: matchPc ? "1.5vw" : "5vw",
                             paddingRight: matchPc ? "1.5vw" : "5vw",
-                            borderRadius: "10px",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            textAlign: "center",
+                            borderRadius: "0px",
                             cursor: "pointer",
                             height: "0px",
                           }}
@@ -508,27 +510,7 @@ function Menux({
                               color: darkmodeReducer ? "#eeeeee" : "#444444",
                             }}
                           >
-                            {matchMobile ?
-                              <CheckBoxOutlineBlankIcon
-                                style={{
-                                  margin: "auto",
-                                  marginLeft: '-8vw',
-                                  position: 'absolute',
-                                  display: 'none'
 
-
-                                }}
-                              />
-                              : <CheckBoxOutlineBlankIcon
-                                style={{
-                                  margin: "auto",
-                                  top: '0.8vh',
-                                  marginLeft: '-2.2vw',
-                                  position: 'absolute',
-                                  display: 'none'
-
-                                }}
-                              />}
 
                             {HideClickOnce && GuestReducer === idReducer ? 'Click Me' : Signup ? 'Sign In' : MenuDataReducer}
                           </span>

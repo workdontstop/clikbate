@@ -12,7 +12,7 @@ import PlayCircleFilledWhiteIcon from '@material-ui/icons/PlayCircleFilledWhite'
 
 import { UpdateInteract, UpdateAlertReducer } from ".././GlobalActions";
 
-import { ActualMenu } from "./ActualMenu";
+
 import {
   Paper,
   Grid,
@@ -33,20 +33,15 @@ import { UpdateLoader } from ".././GlobalActions";
 
 function Profilex({
   OpenModalForm,
-  getSliderWidthRef,
-  getSliderWidth,
+
   postData,
-  formtype,
-  showModalForm,
-  CloseModalForm,
-  aboutTemplateGo,
-  commentTemplateGo,
+
   postDatainner,
   postDatainnerThumb,
   showProfiileData,
   paperPostScrollRef,
   setx,
-  x,
+
   setDiscussionImage,
   setCommentPostid,
 
@@ -72,9 +67,7 @@ function Profilex({
   clikplay,
   callPagination,
   setShowBigPlay,
-  setsuperSettings,
-  showModalFormMenu,
-  setshowModalFormMenu,
+
   ShowBigPlay,
   callhistoryModal,
   openmodalhistory,
@@ -84,7 +77,28 @@ function Profilex({
   setlatestInview,
   postDivRefx,
 
+
+  setindexRoll,
+  postDivRefRoll,
+
+
+  showData2,
+  setuptype,
+  showData3,
+  showDataTop,
+  showData1,
+
+  CallMorePages,
+  setupTop,
+  setPostPageLimit,
+  PostPageLimit,
+  ActualpostDataAll,
+  RandomColor,
+
+  sethistoryScrollonload,
+
 }: any) {
+
   const [countAutoplay, setcountAutoplay] = useState<number>(0);
 
   const dispatch = useDispatch();
@@ -109,6 +123,10 @@ function Profilex({
   ///
 
   const [second, setsecond] = useState<any>(0);
+
+  const [ShowBar, setShowBar] = useState(false);
+
+
   const [secondgo, setsecondgo] = useState<boolean>(false);
 
 
@@ -158,11 +176,17 @@ function Profilex({
 
   useEffect(() => {
 
-    setshowThisComponenet(true);
+    ////setshowThisComponenet(true);
 
   }, [])
 
 
+  useEffect(() => {
+
+
+    setCloudPost(true);
+
+  }, [postData])
 
   ///
   ///
@@ -206,65 +230,171 @@ function Profilex({
   }, [lastItemElement, postData, showProfiileData]); // Re-run the effect when dependencies change
 
 
+  const [AllowMore, setAllowMore] = useState(false);
+
+  useEffect(() => {
+
+    if (postData) {
+
+      setAllowMore(true);
+
+      if (sTimern.current) {
+        clearTimeout(sTimern.current);
+      }
+
+      sTimern.current = setTimeout(() => {
+
+
+        setAllowMore(false);
+      }, 500)
+    }
+
+  }, [])
+
+
+
 
   useEffect(() => {
 
     if (showProfiileData) {
-      if (postData.length < pagenumLimit) { } else {
+
+      if (postData) {
         setTimeout(() => {
 
           // Initialize the observer in the effect
           const observer = new IntersectionObserver((entries: any) => {
+
+
             const ent = entries[0];
             if (ent.isIntersecting) {
+
 
               if (sTimer.current) {
                 clearTimeout(sTimer.current);
               }
 
-              if (sTimer2.current) {
-                clearTimeout(sTimer2.current);
-              }
 
-              if (sTimer3.current) {
-                clearTimeout(sTimer3.current);
-              }
 
               sTimer.current = setTimeout(() => {
-                setshowMoreIndicator(true)
 
-                sTimer2.current = setTimeout(() => {
-
-                  TopRef.current.scrollIntoView({
-                    behavior: "smooth",
-                    block: "start",
-                  });
-
-
-                  dispatch(UpdateLoader(true));
-                  setshowThisComponenet(true);
-                  setminiProfile(false);
-                  callPagination();
-
+                if (setuptype === 1) {
+                  if (showData2) {
+                  } else {
+                    CallMorePages(2);
+                  }
+                } else if (setuptype === 2) {
+                  if (showData3) {
+                  } else {
+                    CallMorePages(3);
+                  }
+                }
+                else if (setuptype === 38) {
 
 
+                  ////alert(postData[0];)
+
+                  if (sTimer3.current) {
+                    clearTimeout(sTimer3.current);
+                  }
+
+                  if (sTimer2.current) {
+                    clearTimeout(sTimer2.current);
+                  }
+
+                  if (sTimer4.current) {
+                    clearTimeout(sTimer4.current);
+                  }
 
 
 
-                }, 2600)
+
+
+                  sTimer4.current = setTimeout(() => {
+                    CallMorePages(4);
+                  }, 2000)
+
+
+
+
+
+
+
+                  sTimer2.current = setTimeout(() => {
+                    ////callPagination();
+                  }, 5000)
+
+
+
+
+                }
+                else if (setuptype === 3) {
+
+
+
+
+                  setShowBar(true);
+
+
+
+
+                  if (sTimer6.current) {
+                    clearTimeout(sTimer6.current);
+                  }
+
+
+                  sTimer6.current = setTimeout(() => {
+
+                    setminiProfile(false);
+                    setShowBar(false);
+
+
+                    callPagination();
+
+                    if (sTimer3.current) {
+                      clearTimeout(sTimer3.current);
+                    }
+
+                    paperPostScrollRef.current.scrollTop = 0;
+
+
+                  }, 2500)
+
+
+                }
+                else if (setuptype === 4) {
+
+                  if (showData1) { } else {
+                    /// dispatch(UpdateLoader(true));
+                    ///setshowThisComponenet(true);
+                    /// setminiProfile(false);
+
+                  }
+
+
+                } else { }
+
+
+
 
 
               }, 200)
 
 
             } else {
+
+
+              setShowBar(false);
+
+              if (sTimer6.current) {
+                clearTimeout(sTimer6.current);
+              }
+
+
+
               if (sTimer.current) {
                 clearTimeout(sTimer.current);
               }
 
-              if (sTimer2.current) {
-                clearTimeout(sTimer2.current);
-              }
 
 
               setshowMoreIndicator(false)
@@ -273,6 +403,8 @@ function Profilex({
           });
 
           if (lastItemElement.current) {
+
+
             observer.observe(lastItemElement.current);
           }
 
@@ -280,12 +412,13 @@ function Profilex({
           return () => {
             observer.disconnect();
           };
-        }, 4500)
+        }, 500)
       }
     }
 
 
-  }, [lastItemElement, postData, showProfiileData]); // Re-run the effect when dependencies change
+  }, [lastItemElement, postData, showProfiileData, setuptype,
+    showData2, showData3, showDataTop, showData1]); // Re-run the effect when dependencies change
 
 
 
@@ -310,9 +443,16 @@ function Profilex({
 
   const sTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const sTimer2 = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const sTimern = useRef<ReturnType<typeof setTimeout> | null>(null);
 
+  const sTimer4 = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const sTimer2 = useRef<ReturnType<typeof setTimeout> | null>(null);
   const sTimer3 = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+
+  const sTimer6 = useRef<ReturnType<typeof setTimeout> | null>(null);
+
 
 
   const scrollTypeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -325,7 +465,7 @@ function Profilex({
   const postTimer5 = useRef<ReturnType<typeof setTimeout> | null>(null);
   const postTimer6 = useRef<ReturnType<typeof setTimeout> | null>(null);
   const postTimer7 = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const postTimer8 = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const cloudTimer2 = useRef<ReturnType<typeof setTimeout> | null>(null);
 
 
 
@@ -485,7 +625,7 @@ function Profilex({
     if (StopMini) {
       if (ScrollTo === 0) {
       } else {
-        ///alert(ScrollTo);
+        //alert('kjjhg');
         setTimeout(() => {
           paperPostScrollRef.current.scrollTop = ScrollTo;
         }, 30);
@@ -494,7 +634,18 @@ function Profilex({
 
     }
 
-  }, [StopMini, ScrollTo])
+  }, [StopMini, ScrollTo]);
+
+
+
+  const [CloudPost, setCloudPost] = useState(true);
+
+
+
+
+
+
+
 
   const onPostsItemload = useCallback(
     (e: any, index: number, itemnum: number) => {
@@ -608,41 +759,42 @@ function Profilex({
           setonLoadDataOnce(newArrxy);
           ///////////////////////////////
 
+          /// 
+
 
 
           if (StopMini || pagenumReducer === 0) { } else {
             if (postData[0].lim > 0 && index === 0) {
-              setTimeout(function () {
-                postDivRef.current[0].scrollIntoView({
-                  behavior: "smooth",
-                  block: "start",
-                });
-                postDivRefx.current[0].scrollIntoView({
-                  behavior: "smooth",
-                  block: "start",
-                });
-
-
-
-                ///////////
-              }, 1100);
+              ///// setTimeout(function () {
+              /////postDivRef.current[0].scrollIntoView({
+              /////behavior: "smooth",
+              /////block: "start",
+              /////////});
+              /////////postDivRefx.current[0].scrollIntoView({
+              ////////behavior: "smooth",
+              ///////// block: "start",
+              /////// })
+              ///////////
+              //////// }, 1100);
             }
           }
 
 
-          setAllowAllHdImagesShow(true)
+          setAllowAllHdImagesShow(true);
+          if (memeberPageidReducer === 0) { setCloudPost(false); }
+
+
           if (StopMini) {
-          } else { navvScroll(); }
+          } else {
+            navvScroll();
+
+          }
 
 
           if (postData.length - 1 === index) {
 
 
 
-
-            if (idReducer === GuestReducer && memeberPageidReducer === 0) {
-              dispatch(UpdateAlertReducer('Create Interactive Content Here and Express Yourself  ', 3));
-            }
 
 
             /**  if (activateLoaderReducer) {
@@ -660,7 +812,17 @@ function Profilex({
             }
             postTimer1.current = setTimeout(function () {
 
+              if (cloudTimer2.current) {
+                clearTimeout(cloudTimer2.current);
+              }
+
               if (StopMini) {
+
+
+
+                cloudTimer2.current = setTimeout(function () {
+                  setCloudPost(false);
+                }, 2000);
 
                 if (postTimer2.current) {
                   clearTimeout(postTimer2.current);
@@ -669,7 +831,30 @@ function Profilex({
                   setStopMini(false)
                 }, 2000);
               } else {
-                setminiProfile(true);
+
+                if (memeberPageidReducer === 0) {
+
+                  // historyBoy();
+
+                } else {
+
+
+
+                  setminiProfile(true);
+
+                  cloudTimer2.current = setTimeout(function () {
+                    setCloudPost(false);
+                  }, 2000);
+
+
+
+
+                }
+
+
+
+
+
               }
               ///////////
             }, 1000);
@@ -689,7 +874,11 @@ function Profilex({
                   clearTimeout(postTimer4.current);
                 }
                 postTimer4.current = setTimeout(() => {
+                  /// alert('zzzzzz');
+
                   paperPostScrollRef.current.scrollTop = historyScrollonload;
+
+                  sethistoryScrollonload(0);
                 }, 1000);
               }
 
@@ -726,11 +915,11 @@ function Profilex({
 
 
 
-                }, 2900)
+                }, 1000)
 
               }
               ///////////
-            }, 2700);
+            }, 1000);
 
 
 
@@ -753,9 +942,15 @@ function Profilex({
       activateLoaderReducer,
       postItemsRef,
       postData,
-      pagenumReducer
+      pagenumReducer,
+      setuptype,
+      historyScrollonload
+
     ]
   );
+
+
+  //historyBoy
 
   const scrollToPost = (index: any) => {
     postDivRef.current[index].scrollIntoView({
@@ -873,7 +1068,10 @@ function Profilex({
       newclickArray[index] = true;
       setitemCLICKED(newclickArray);
       postitemSHOWFULLHEIGHT(index, 0);
-      setTimeout(() => { scrollToPost(index); }, 500)
+
+      setTimeout(() => {
+        //// scrollToPost(index); 
+      }, 500)
 
     }
 
@@ -1028,15 +1226,10 @@ function Profilex({
 
 
 
-  const [indexRoll, setindexRoll] = useState(0);
-
-  const postDivRefRoll = useRef<any[]>([]);
-
-
 
   const tyTimer = useRef<ReturnType<typeof setTimeout>[]>([]);
 
-  const [AllowRoll, setAllowRoll] = useState(false);
+
 
   const clearAllTimers = () => {
     tyTimer.current.forEach(timer => {
@@ -1050,64 +1243,7 @@ function Profilex({
 
 
 
-  const scrollToRef = useCallback(() => {
 
-
-
-    if (StopMini) { } else {
-
-
-
-      setShowBigPlay(true);
-      var Limit: number = postData.length;
-
-      var Time = 0;
-
-      var indd = indexRoll;
-      if (miniProfile) { indd = 0; }
-
-
-      for (let i = 0; i <= Limit; i++) {  // <= 20 to include the reset to the first post
-        if (i > indd) {
-          Time = Time + 5000;
-          setShowBigPlay(true);
-
-          tyTimer.current[i] = setTimeout(() => {
-
-            if (i === Limit) {
-              // Reset to the first post after reaching the last post
-              postDivRefx.current[Limit < 3 ? Limit - 1 : Limit - 3].scrollIntoView({
-                behavior: "smooth",
-                block: "start",
-              });
-              //
-              postDivRefRoll.current[Limit < 3 ? Limit - 1 : Limit - 3].scrollIntoView({
-                behavior: "smooth",
-                block: "start",
-              });
-              setShowBigPlay(false);
-            } else {
-
-
-              postDivRefx.current[i].scrollIntoView({
-                behavior: "smooth",
-                block: "start",
-              });
-              //
-              postDivRefRoll.current[i].scrollIntoView({
-                behavior: "smooth",
-                block: "start",
-              });
-            }
-
-
-          }, Time - 8000);
-        }
-      }
-
-    }
-
-  }, [AllowRoll, indexRoll, postData, StopMini, miniProfile]);
 
 
   /////////////////////////////////////////////////////////////
@@ -1116,6 +1252,8 @@ function Profilex({
 
 
   const [Added, setAdded] = useState(100);
+
+  const [TempMini, setTempMini] = useState(true);
 
 
   return (
@@ -1136,26 +1274,6 @@ function Profilex({
         ></Grid>
 
 
-        {showModalFormMenu ? <Grid
-          item
-          style={{
-            height: "0px",
-            zIndex: 500000000000,
-            position: 'fixed',
-            top: '0vh',
-            backgroundColor: ''
-          }}
-        >
-          <ActualMenu
-            WebsiteMode={WebsiteMode}
-            scrollToRef={scrollToRef}
-            setsuperSettings={setsuperSettings}
-            postData={postData}
-            showModalFormMenu={showModalFormMenu}
-            setshowModalFormMenu={setshowModalFormMenu} />
-
-        </Grid> : null}
-
 
 
 
@@ -1169,19 +1287,35 @@ function Profilex({
             paddingLeft: miniProfile ? (matchPc ? "6vw" : "0vw") : matchPc ? "0vw" : '0vw',
             paddingRight: miniProfile ? (matchPc ? "6vw" : "0vw") : matchPc ? "0vw" : '0vw',
             height: "auto",
-            marginTop: matchMobile ? '6vh' : '5.5vh',
+            marginTop: matchMobile ? miniProfile ? '-0.8vh' : '18vh' : miniProfile ? '5.5vh' : '18vh',
             marginLeft: miniProfile && matchPc ? '1.5vw' : '0px',
           }}
         >
+          <Grid
+            item
+            className={darkmodeReducer ? 'post-background-darkx' : 'post-background-lightx'}
+            xs={12}
+            style={{
+
+              height: '100%',
+              width: '100%',
+              position: 'absolute',
+              top: '0vh',
+              zIndex: 10,
+
+              display: CloudPost ? miniProfile ? 'none' : 'block' : 'none'
+            }}
+          ></Grid>
           {postData.length > 0 ? (
             <Masonry
-              columns={matchPc ? miniProfile ? 3 : 2 : miniProfile ? 2 : 1}
+              columns={matchPc ? miniProfile ? 3 : 2 : miniProfile ? 3 : 1}
               spacing={matchMobile ? miniProfile ? 0.5 : 0 : miniProfile ? 4 : 0}
               style={{
                 padding: "0px",
 
               }}
             >
+
               {postData.map((post: any, i: any) => (
                 <div
                   key={i}
@@ -1190,7 +1324,26 @@ function Profilex({
 
                   }}
                 >
+
+
+                  <div ref={
+                    setuptype === 1 || setuptype === 2 ?
+                      postData.length - 2 === i ? lastItemElement : null :
+                      null
+                  }
+
+                    style={{
+                      position: "relative",
+                      display: AllowMore ? 'none' : 'block',
+                      backgroundColor: '#00ccff',
+                      height: '0vh'
+                    }}
+                  >  </div>
+
+
+
                   <div
+
                     style={{
                       display: miniProfile ? "block" : "none",
                       marginTop: "-5px",
@@ -1198,6 +1351,7 @@ function Profilex({
                     }}
                   >
                     <MiniPost
+
                       WebsiteMode={WebsiteMode}
                       InitializingAutoPlayIndex={InitializingAutoPlayIndex}
 
@@ -1258,14 +1412,20 @@ function Profilex({
                       item
                       xs={12}
                       style={{
-                        marginTop: "20px",
-                        height: matchMobile ? "11vh" : '10vh',
+                        marginTop: matchMobile ? "-9px" : "1px",
+                        height: '-2vh',
                       }}
                     ></Grid>
                   </div>
 
-                  <div key={i} style={{ display: miniProfile ? "none" : "block", }}>
+                  <div
+
+                    key={i} style={{ display: miniProfile ? "none" : "block", }}>
+
+
                     <Post
+                      setuptype={setuptype}
+                      ActualpostDataAll={ActualpostDataAll}
                       setlatestInview={setlatestInview}
                       WebsiteMode={WebsiteMode}
                       setkeypost={setkeypost}
@@ -1339,10 +1499,59 @@ function Profilex({
                       xs={12}
                       style={{
                         marginTop: "0px",
-                        height: matchMobile ? "18.5vh" : '18.5vh',
+                        height: matchMobile ? postData.length - 1 === i ? '1vh' : "27.5vh" :
+                          postData.length - 1 === i ? '0vh' : '27vh',
                       }}
                     ></Grid>
+
+
                   </div>
+
+
+
+                  <div ref={
+                    setuptype === 3 ?
+                      postData.length - 1 === i ? lastItemElement : null : null
+
+                  }
+
+                    style={{
+                      position: setuptype === 3 ?
+                        postData.length - 1 === i ?
+                          'relative' : "absolute" : "absolute",
+
+                      backgroundColor: 'red',
+                      height: '0vh',
+                      marginTop: matchMobile ? '25vh' : '15vh',
+                      display:
+                        setuptype === 3 ?
+                          postData.length - 1 === i ?
+                            'block' : 'none' : 'none',
+                    }}
+                  >  </div>
+
+
+                  <div
+                    className="blinken"
+                    style={{
+                      position: setuptype === 3 ?
+                        postData.length - 1 === i ?
+                          'relative' : "absolute" : "absolute",
+                      height: '1vh',
+                      opacity: '0.8',
+                      marginTop: matchMobile ? '-2vh' : '-2vh',
+                      margin: 'auto',
+                      width: '80%',
+                      display:
+                        setuptype === 3 ?
+                          postData.length - 1 === i ?
+                            ShowBar ? 'block' : 'none' : 'none' : 'none',
+
+                      backgroundImage: `linear-gradient(45deg, ${RandomColor}, ${colorReducer})`,
+                    }}
+                  >  </div>
+
+
 
                 </div>
               ))}
@@ -1353,45 +1562,6 @@ function Profilex({
 
 
 
-        <Grid
-          container
-          xs={12}
-
-        >
-
-          <Grid
-            item
-            xs={12}
-            style={{
-              padding: '0px', textAlign: 'center', color: darkmodeReducer ? '#ffffff' : '#000000',
-              fontFamily: "Arial, Helvetica, sans-serif", opacity: '0.5',
-              marginTop: '4vh'
-            }}>
-            {showMoreIndicatorxxx ? 'Drag To Bottom For More' : "No More Post's Yet"}
-          </Grid>
-
-
-          <Grid
-            item
-            xs={2}>
-          </Grid>
-
-
-          <Grid
-            item
-            className="animateColorAndPadding zuperxy"
-            xs={8}
-            ref={lastItemElement}
-            style={{
-              visibility: showMoreIndicator ? 'visible' : 'hidden',
-              marginTop: lastIndicatorPush ? `${lastIndicatorPushH}vh` : "35vh",
-              height: "7px",
-              backgroundColor: colorReducer
-            }}
-          ></Grid>
-
-
-        </Grid>
 
 
 

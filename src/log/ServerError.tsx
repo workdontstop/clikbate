@@ -1,6 +1,6 @@
 import React, { useRef, useState, useCallback, useEffect } from "react";
 import { animated, useSpring } from "react-spring";
-import { Grid, DialogContent } from "@material-ui/core";
+import { Grid, DialogContent, Box } from "@material-ui/core";
 import { IServerError } from "./log-Interfaces";
 import { useSelector, useDispatch } from "react-redux";
 import { UpdateAlertReducer } from ".././GlobalActions";
@@ -107,7 +107,7 @@ function ServerErrorx({
       if (AlertDataReducer) {
         dispatch(UpdateAlertReducer(null, 0));
       }
-    }, 11000);
+    }, 8000);
   }, [AlertDataReducer]);
 
   return (
@@ -119,7 +119,7 @@ function ServerErrorx({
             onClick={() => {
               dispatch(UpdateAlertReducer(null, 0));
             }}
-            style={{ height: "20%", padding: "0px", cursor: 'pointer' }}
+            style={{ height: "20%", padding: "0px", cursor: 'pointer', }}
             className={
               AlertDataReducer
                 ? ` dontallowhighlighting ${Backtype} server-error`
@@ -140,6 +140,20 @@ function ServerErrorx({
                   className="server-error-inner"
                   style={{ paddingTop: "30px" }}
                 >
+
+                  <Grid
+
+                    xs={false}
+                    sm={false}
+
+                    style={{
+                      fontSize: severerrorData,
+                      height: '0px',
+                      padding: "0px",
+                    }}
+                  >
+
+                  </Grid>
                   <Grid
                     item
                     className="sever-error-data"
@@ -149,7 +163,7 @@ function ServerErrorx({
                       paddingLeft: "3vw",
                     }}
                     xs={11}
-                    sm={10}
+                    sm={11}
                   >
                     <span
                       style={{
@@ -244,7 +258,8 @@ function ServerErrorx({
             </animated.div>
           </DialogContent>
         </>
-      ) : null}
+      ) : null
+      }
     </>
   );
 }
