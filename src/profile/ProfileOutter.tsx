@@ -2275,6 +2275,13 @@ function ProfileOutter() {
       {loggedInReducer ? (
         <>
           <Paper
+
+            onClick={() => {
+              if (showModalFormMenu) {
+                setShowModalFormMenu(false);
+              }
+
+            }}
             ref={paperPostScrollRef}
             className={
               matchPc
@@ -2534,7 +2541,8 @@ function ProfileOutter() {
                 padding: '0px',
                 top: matchTablet || matchMobile ? "1vh" : '2vh',
                 position: 'relative',
-                paddingBottom: matchMobile ? '1vh' : '5vh',
+                paddingBottom: miniProfile ? matchMobile ? '1vh' : '5vh'
+                  : matchMobile ? '5vh' : '15vh',
                 textAlign: 'left',
                 color: '#ffffff'
               }}>
@@ -2706,11 +2714,12 @@ function ProfileOutter() {
 
               {/*/////////////////////////////////////////////////////////////////////////////////TO TOP*/}
               {showDataTop ? (
-                <Grid item xs={12} style={{
-                  position: "relative", zIndex: 1, padding: "0px",
-                }}>
-                  <ProfileSetup
+                <Grid item xs={12}
 
+                  style={{
+                    position: "relative", zIndex: 1, padding: "0px",
+                  }}>
+                  <ProfileSetup
 
                     sethistoryScrollonload={sethistoryScrollonload}
                     RandomColor={RandomColor}
@@ -2720,7 +2729,6 @@ function ProfileOutter() {
                     CallMorePages={CallMorePages}
                     showData1={showData1}
                     setuptype={4}
-
                     setcallResponse={setcallResponseTop}
                     callResponse={callResponseTop}
                     ActualData={ActualDataTop}
@@ -2765,7 +2773,9 @@ function ProfileOutter() {
                     OpenModalForm={OpenModalForm}
                     postData={postDataBackToTop}
                     paperPostScrollRef={paperPostScrollRef}
-                  /></Grid>
+                  />
+                </Grid>
+
               ) : null}
 
 
@@ -2774,7 +2784,7 @@ function ProfileOutter() {
               {/*///////////////////////////////////////////////////////////////////////////////// FEEDS   1*/}
               {showData1 ? (
                 <Grid item xs={12} style={{
-                  position: "relative", zIndex: 1, padding: "0px"
+                  position: "relative", zIndex: 1, padding: "0px",
                 }}>
                   <ProfileSetup
                     sethistoryScrollonload={sethistoryScrollonload}
@@ -2829,8 +2839,11 @@ function ProfileOutter() {
                     OpenModalForm={OpenModalForm}
                     postData={postData1}
                     paperPostScrollRef={paperPostScrollRef}
-                  /></Grid>
+                  />
+
+                </Grid>
               ) : null}
+
 
 
 
@@ -2839,7 +2852,7 @@ function ProfileOutter() {
               {/*///////////////////////////////////////////////////////////////////////////////// FEEDS  2*/}
               {showData2 ? (
                 <Grid item xs={12} style={{
-                  position: "relative", zIndex: 1, padding: "0px"
+                  position: "relative", zIndex: 1, padding: "0px", marginTop: matchMobile ? "11vh" : '1.5vh',
                 }}>
                   <ProfileSetup
                     sethistoryScrollonload={sethistoryScrollonload}
@@ -2894,7 +2907,10 @@ function ProfileOutter() {
                     OpenModalForm={OpenModalForm}
                     postData={postData2}
                     paperPostScrollRef={paperPostScrollRef}
-                  /></Grid>
+                  />
+
+
+                </Grid>
               ) : null}
 
 
@@ -2903,7 +2919,7 @@ function ProfileOutter() {
               {/*///////////////////////////////////////////////////////////////////////////////// FEEDS  3*/}
               {showData3 ? (
                 <Grid item xs={12} style={{
-                  position: "relative", zIndex: 1, padding: "0px"
+                  position: "relative", zIndex: 1, padding: "0px", marginTop: matchMobile ? "12vh" : '13vh',
                 }}>
                   <ProfileSetup
                     sethistoryScrollonload={sethistoryScrollonload}
@@ -2958,7 +2974,8 @@ function ProfileOutter() {
                     OpenModalForm={OpenModalForm}
                     postData={postData3}
                     paperPostScrollRef={paperPostScrollRef}
-                  /></Grid>
+                  />
+                </Grid>
               ) : null}
 
 

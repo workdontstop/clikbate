@@ -16,6 +16,7 @@ import SuperstarzIconLight from "../images/s.png";
 import SuperstarzIconDark from "../images/sd.png";
 import { UpdateOptionsTop, SnapToggleAction } from ".././GlobalActions";
 import ZoomOutIcon from "@mui/icons-material/ZoomOut";
+import BlurCircularIcon from '@material-ui/icons/BlurCircular';
 
 import { UpdateMenuNav } from "../GlobalActions";
 
@@ -163,7 +164,7 @@ function Menux({
       duration: 500,
     },
     opacity: shownav ? 1 : 0,
-    marginTop: shownav2 ? `0vh` : `-60vh`,
+    marginTop: shownav2 ? `0vh` : `15vh`,
 
   });
 
@@ -186,7 +187,7 @@ function Menux({
           setShownav(false);
 
 
-        }, 2000);
+        }, 3000);
       }
 
 
@@ -218,7 +219,7 @@ function Menux({
         /// dispatch(SnapToggleAction(false))
       }
 
-    }, 1000);
+    }, 2000);
 
 
 
@@ -315,218 +316,93 @@ function Menux({
     <>
       {shownavTop ? (
         <>
-          {optinstopshowingReducer ? (
-            <>
-              {" "}
-              <Grid
+
+          <>
+            {showModalFormMenu ? null :
+              ShowBigPlay ? null : <Grid
                 container
                 style={{
+                  bottom: "44vh",
                   position: "fixed",
                   width: "100%",
                   height: "0px",
-                  zIndex: 11,
+                  zIndex: 10,
+                  opacity: "1",
                 }}
               >
-                <Grid xs={12} item style={{ padding: "0px", height: "0px", }}>
-                  <Grid
-                    item
-                    component={Box}
-                    display={{ xs: "none", md: "block" }}
-                    md={2}
-                    style={{ padding: "0px", height: "0px", }}
-                  ></Grid>
-                  <Grid
-                    item
-                    xs={12}
-                    md={12}
-                    style={{
-                      padding: "0px",
-                      height: "0px",
-                      paddingRight: matchPc ? "0.8vw" : "0px",
-                    }}
-                  >
-                    <OptionsSlider
-                      callfeeds={callfeeds}
-                      postData={postData}
-                      selectedImage={selectedImage}
-                      setselectedImage={setselectedImage}
-                      setsuperSettings={setsuperSettings}
-                      typeUpload={0}
-                      showModalUpload={showModalUpload}
-                      OpenUploadModal={OpenUploadModal}
-                      sethaltedTop={sethaltedTop}
-                      typeTop={true}
-                      getSliderWidth={getSliderWidth}
-                    />
-                  </Grid>
-                </Grid>{" "}
-              </Grid>
-            </>
-          ) : (
-            <>
-              {showModalFormMenu ? null :
-                ShowBigPlay ? null : <Grid
-                  container
+                {" "}
+
+
+
+                <Grid
+                  item
+                  xs={8}
+                  md={8}
                   style={{
-                    top: "3vh",
-                    position: "fixed",
-                    width: "100%",
                     height: "0px",
-                    zIndex: 10,
-                    opacity: "1",
+                    display: 'flex',
+                    alignItems: "center",
+                    justifyContent: "left",
+                    textAlign: "left",
+
+
+
                   }}
                 >
-                  {" "}
-                  <Grid item xs={1} md={2} style={{ height: "0px" }}></Grid>
+                  <animated.div style={{ ...animationmenu, height: '0px', marginLeft: matchMobile ? '11vw' : '2.6vw' }}>
+                    <span
+                      onClick={(e: any) => {
+                        ////dispatch(UpdateOptionsTop(true));
+                        setShowModalFormMenu(true);
+                      }}
+                      className={
+                        darkmodeReducer
+                          ? `menutopdark ${superFont} turdark zupermenudark  dontallowhighlighting zuperkingIconPostLight `
+                          : `menutoplight ${superFont} turlight zupermenulight  dontallowhighlighting zuperkingIconPostLightx`
+                      }
+                      style={{
 
-
-                  <Grid
-                    item
-                    xs={8}
-                    md={8}
-                    style={{
-                      height: "0px",
-                      display: 'flex',
-                      alignItems: "center",
-                      justifyContent: "center",
-                      textAlign: "center",
-
-
-
-                    }}
-                  >
-                    {MenuDataReducer === '' ? <>
-
-                      <animated.div style={{ ...animationmenu, height: '0px', }}>
-                        <span
-                          onClick={(e: any) => {
-                            ////dispatch(UpdateOptionsTop(true));
-                            setShowModalFormMenu(true);
-                          }}
-                          className={
-                            darkmodeReducer
-                              ? `menutopdark ${superFont} turdark zupermenudark  dontallowhighlighting zuperkingIconPostLight `
-                              : `menutoplight ${superFont} turlight zupermenulight  dontallowhighlighting zuperkingIconPostLightx`
-                          }
-                          style={{
-                            marginLeft: matchPc
-                              ? "1%"
-                              : matchTablet
-                                ? "30px"
-                                : "35%",
-                            paddingTop: "11px",
-                            paddingBottom: "13px",
-                            paddingLeft: matchPc ? "1.5vw" : "5vw",
-                            paddingRight: matchPc ? "1.5vw" : "5vw",
-                            borderRadius: "0px",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            textAlign: "center",
-                            cursor: "pointer",
-                            height: "0px",
-
-                          }}
-                        >
-
-                          <>     < span
-                            className={
-                              darkmodeReducer
-                                ? "text-superstarz-dark   text-superstarz-dark-colorA  "
-                                : "text-superstarz-light  text-superstarz-light-colorA  "
-                            }
-                            style={{
-                              color: darkmodeReducer ? "#eeeeee" : "#444444", display: 'inline'
-                            }}
-                          >
-                            Clik
-                          </span>
-
-                            < span
-
-                              style={{
-                                visibility: 'hidden'
-                              }}
-                            >
-                              .
-                            </span>
-
-                            <span
-                              style={{
-                                color: darkmodeReducer ? "#ffe680" : "#ffcc00",
-                                opacity: darkmodeReducer ? "1" : "1", display: 'inline'
-
-                              }}
-                              className={
-                                darkmodeReducer
-                                  ? "text-superstarz-dark     text-superstarz-dark-colorB  "
-                                  : "text-superstarz-light   text-superstarz-light-colorB   "
-                              }
-                            >
-                              Bate
-                            </span></>
-
-
-                        </span>
-                      </animated.div>  </> :
-
-
-                      MenuDataReducer ? <> <animated.div style={{ ...animationmenu, height: '0px' }}>
-                        <span
-                          onClick={(e: any) => {
-                            ////dispatch(UpdateOptionsTop(true));
-                            setShowModalFormMenu(true);
-                            setHideClickOnce(false);
-                          }}
-                          className={
-                            darkmodeReducer
-                              ? `menutopdark ${superFont} turdark zupermenudark  dontallowhighlighting zuperkingIconPostLight `
-                              : `menutoplight ${superFont} turlight zupermenulight   dontallowhighlighting  zuperkingIconPostLightx`
-                          }
-                          style={{
-                            marginLeft: matchPc
-                              ? "0%"
-                              : matchTablet
-                                ? "30px"
-                                : "35%",
-                            paddingTop: "11px",
-                            paddingBottom: "13px",
-                            paddingLeft: matchPc ? "1.5vw" : "5vw",
-                            paddingRight: matchPc ? "1.5vw" : "5vw",
-                            borderRadius: "0px",
-                            cursor: "pointer",
-                            height: "0px",
-                          }}
-                        >
+                      }}
+                    >
 
 
 
-                          <span
-                            className={
-                              darkmodeReducer
-                                ? "text-superstarz-dark   text-superstarz-dark-colorA  "
-                                : "text-superstarz-light  text-superstarz-light-colorA  "
-                            }
-                            style={{
-                              color: darkmodeReducer ? "#eeeeee" : "#444444",
-                            }}
-                          >
 
+                      <BlurCircularIcon
+                        className={
+                          darkmodeReducer
+                            ? "make-small-icons-clickable-lightCrop dontallowhighlighting zupermenulight "
+                            : "make-small-icons-clickable-darkCrop dontallowhighlighting zupermenudark  "
+                        }
 
-                            {HideClickOnce && GuestReducer === idReducer ? 'Click Me' : Signup ? 'Sign In' : MenuDataReducer}
-                          </span>
+                        style={{
+                          color: darkmodeReducer
+                            ? "#ffffff"
+                            : "#000000",
+                          transform: matchMobile ? 'scale(3.4)' : 'scale(4)',
+                          transition: "transform 0.1s",
+                          zIndex: 30,
+                          backgroundColor: darkmodeReducer
+                            ? "rgba(41,41,41,0.86)"
+                            : "rgba(205,205,205,0.9) ",
+                          cursor: "pointer",
+                          fontFamily: "Arial, Helvetica, sans-serif",
+                          fontWeight: "bolder",
+                          opacity: 1,
+                          padding: "4px",
 
+                        }}
+                      />
 
-                        </span>
+                    </span>
+                  </animated.div>
 
-                      </animated.div></> : null
-                    }
+                </Grid>{" "}
+              </Grid>
+            }
 
-                  </Grid>{" "}
-                </Grid>
-              }
+          </>
 
-            </>
-          )}
         </>
       ) : null
       }

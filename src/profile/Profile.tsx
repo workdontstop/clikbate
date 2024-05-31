@@ -357,7 +357,7 @@ function Profilex({
                     paperPostScrollRef.current.scrollTop = 0;
 
 
-                  }, 2500)
+                  }, 3000)
 
 
                 }
@@ -1419,8 +1419,8 @@ function Profilex({
                   </div>
 
                   <div
-
                     key={i} style={{ display: miniProfile ? "none" : "block", }}>
+
 
 
                     <Post
@@ -1494,13 +1494,15 @@ function Profilex({
                       scrollToPost={scrollToPost}
                     />
 
+
+
                     <Grid
                       item
                       xs={12}
                       style={{
                         marginTop: "0px",
-                        height: matchMobile ? postData.length - 1 === i ? '1vh' : "27.5vh" :
-                          postData.length - 1 === i ? '0vh' : '27vh',
+                        height: matchMobile ? postData.length - 1 === i ? '1vh' : "30vh" :
+                          postData.length - 1 === i ? '0vh' : '30vh',
                       }}
                     ></Grid>
 
@@ -1509,47 +1511,6 @@ function Profilex({
 
 
 
-                  <div ref={
-                    setuptype === 3 ?
-                      postData.length - 1 === i ? lastItemElement : null : null
-
-                  }
-
-                    style={{
-                      position: setuptype === 3 ?
-                        postData.length - 1 === i ?
-                          'relative' : "absolute" : "absolute",
-
-                      backgroundColor: 'red',
-                      height: '0vh',
-                      marginTop: matchMobile ? '25vh' : '15vh',
-                      display:
-                        setuptype === 3 ?
-                          postData.length - 1 === i ?
-                            'block' : 'none' : 'none',
-                    }}
-                  >  </div>
-
-
-                  <div
-                    className="blinken"
-                    style={{
-                      position: setuptype === 3 ?
-                        postData.length - 1 === i ?
-                          'relative' : "absolute" : "absolute",
-                      height: '1vh',
-                      opacity: '0.8',
-                      marginTop: matchMobile ? '-2vh' : '-2vh',
-                      margin: 'auto',
-                      width: '80%',
-                      display:
-                        setuptype === 3 ?
-                          postData.length - 1 === i ?
-                            ShowBar ? 'block' : 'none' : 'none' : 'none',
-
-                      backgroundImage: `linear-gradient(45deg, ${RandomColor}, ${colorReducer})`,
-                    }}
-                  >  </div>
 
 
 
@@ -1557,6 +1518,65 @@ function Profilex({
               ))}
             </Masonry>
           ) : null}
+
+
+
+
+
+
+
+
+
+
+
+          <div ref={
+            setuptype === 3 ? lastItemElement : null
+
+          }
+
+            style={{
+              position: setuptype === 3 ? 'relative' : 'absolute',
+              backgroundColor: 'red',
+              height: '0vh',
+              marginTop: matchMobile ? '22vh' : '22vh',
+              visibility:
+                setuptype === 3 ?
+                  'visible' : 'hidden',
+            }}
+          >  </div>
+
+
+          <div
+            className="blinken"
+            style={{
+
+              position: setuptype === 3 ? 'relative' : "absolute",
+              height: '1vh',
+              opacity: '0.8',
+              marginTop: matchMobile ? '-1vh' : '-25vh',
+              margin: 'auto',
+              width: matchMobile ? '60%' : '40%',
+              visibility:
+                setuptype === 3 ?
+                  ShowBar ? 'visible' : 'hidden' : 'hidden',
+
+              backgroundImage: `linear-gradient(45deg, ${RandomColor}, ${colorReducer})`,
+            }}
+          >  </div>
+
+
+          <div
+
+            style={{
+              position: setuptype === 3 ? 'relative' : 'absolute',
+              scrollSnapAlign: 'end',
+              backgroundColor: 'pink',
+              height: '0vh',
+              marginTop: matchMobile ? '20vh' : '1vh',
+
+            }}
+          >  </div>
+
         </Grid>
 
 

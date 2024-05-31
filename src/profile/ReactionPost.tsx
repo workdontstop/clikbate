@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef, useState, useEffect, useCallback } from "react";
 import { Grid } from "@material-ui/core";
 import { Slider } from "./Slider";
 import { RootStateOrAny, useSelector, useDispatch } from "react-redux";
@@ -26,6 +26,28 @@ function ReactionPostx({ Ein,
     Emo4Num,
     setShowAudioIcon
 }: any) {
+
+
+
+    const [Zoom, setZoom] = useState(false);
+
+
+
+    useEffect(() => {
+        if (Zoom) {
+            setTimeout(() => { setZoom(false) }, 2000)
+        }
+
+        if (Zoom3) {
+            setTimeout(() => { setZoom3(false) }, 2000)
+        }
+
+        if (Zoom4) {
+            setTimeout(() => { setZoom4(false) }, 2000)
+        }
+
+
+    }, [Zoom3, Zoom4, Zoom])
 
 
 
@@ -74,9 +96,11 @@ function ReactionPostx({ Ein,
     const muteaudioReducer = muteaudio;
 
 
-    var mobileemoTop = '13vh';
+    var mobileemoTop = '16vh';
 
-    var mobileTop = '5vh';
+    var mobileTop = '8vh';
+
+
 
 
     return (
@@ -107,8 +131,8 @@ function ReactionPostx({ Ein,
 
                     style={{
                         transform: Zoom3 ? "scale(2)" : "scale(1)",
-                        color: darkmodeReducer
-                            ? "#ffffff" : '#000000',
+                        transition: "transform 0.1s",
+                        color: '#000000',
                         position: "absolute",
                         zIndex: 30,
                         left: matchMobile ? '87vw' : '45.6vw',
@@ -121,22 +145,11 @@ function ReactionPostx({ Ein,
                         fontWeight: "bolder",
                         opacity: 1,
                         padding: "2px",
-                        display: ShowAudioIcon ? 'block' : 'none',
+                        display: ShowAudioIcon ? 'block' : 'block',
 
                     }}
                 />
                 : <span
-
-                    onMouseEnter={(e: any) => {
-                        setZoom3(true);
-                        setZoomBigEmo3(true);
-                    }}
-                    onMouseLeave={(e: any) => {
-                        setZoom3(false);
-                        setZoomBigEmo3(false);
-                    }}
-
-
                     onClick={() => {
                         ClickLove();
                     }}
@@ -145,11 +158,11 @@ function ReactionPostx({ Ein,
                     }
                     style={{
                         color: darkmodeReducer ? "#ffffff" : "#000000",
-                        transform: matchMobile ? Zoom3 ? "scale(1)" : "scale(0.95)" :
-                            Zoom3 ? "scale(2)" : "scale(1)",
+                        transform: Zoom3 ? "scale(2)" : "scale(1.25)",
+                        transition: "transform 0.1s",
                         position: "absolute",
                         zIndex: 30,
-                        left: matchMobile ? '87vw' : '45.6vw',
+                        left: matchMobile ? '89vw' : '46.5vw',
                         cursor: "pointer",
                         bottom: matchMobile ? mobileemoTop : "0px",
                         top: matchMobile ? '' : "50vh",
@@ -160,22 +173,71 @@ function ReactionPostx({ Ein,
                         opacity: 1,
                         padding: "0px",
                         height: '0px',
-                        display: ShowAudioIcon ? "inline" : "none",
+                        display: ShowAudioIcon ? "inline" : "inline",
                     }}
                 >
-                    <span className={Spincare === 0 ? '' : 'spinnerEmott'}>
+                    <FavoriteIcon
+                        onMouseEnter={(e: any) => {
+                            setZoom3(true);
+                            setZoomBigEmo3(true);
+                        }}
+                        onMouseLeave={(e: any) => {
+                            setZoom3(false);
+                            setZoomBigEmo3(false);
+                        }}
 
-                        ❤️</span>
-                    <span
+
+                        onClick={() => {
+                            ClickLove();
+
+                        }}
+                        className={
+                            "make-small-icons-clickable-lightCrop dontallowhighlighting zupermenulight"
+                        }
+
                         style={{
-                            textAlign: 'center',
-                            right: matchMobile ? '2.3vw' : "1.1vw",
+                            color: '#000000',
+                            backgroundColor: 'red',
+                            fontFamily: "Arial, Helvetica, sans-serif",
+                            opacity: 1,
+                            padding: "2px",
+
+                        }}
+                    />
+
+
+
+                    <span
+                        onMouseEnter={(e: any) => {
+                            setZoom3(true);
+                            setZoomBigEmo3(true);
+                        }}
+                        onMouseLeave={(e: any) => {
+                            setZoom3(false);
+                            setZoomBigEmo3(false);
+                        }}
+
+
+                        onClick={() => {
+                            ClickLove();
+                        }}
+
+                        style={{
+                            right: matchMobile ? '-7.2vw' : "-1.65vw",
                             fontSize: matchMobile ? '2.4rem' : " ",
                             position: 'absolute',
                             transform: "scale(0.4)",
-                            top: '0.86vh',
-                            color: '#ffffff'
-
+                            transition: "transform 0.1s",
+                            top: matchMobile ? '-1.3vh' : '-1.3vh',
+                            color: '#ffffff',
+                            backgroundColor: 'rgb(5,5,5,0.4)',
+                            width: '80px',
+                            height: '80px',
+                            borderRadius: '50%',
+                            justifyContent: 'center',
+                            display: 'flex',
+                            alignItems: 'center',
+                            textAlign: 'center'
                         }}
                     >
                         {Emo3Num === 0 ? "" : Emo3Num}
@@ -207,14 +269,14 @@ function ReactionPostx({ Ein,
                     }
 
                     style={{
-                        color: darkmodeReducer
-                            ? "#ffffff" : '#000000',
+                        color: '#000000',
                         transform: Zoom4 ? "scale(2)" : "scale(1)",
+                        transition: "transform 0.1s",
                         position: "absolute",
                         zIndex: 30,
                         left: matchMobile ? '87vw' : '45.6vw',
                         cursor: "pointer",
-                        bottom: matchMobile ? '19vh' : "0px",
+                        bottom: matchMobile ? '21vh' : "0px",
                         top: matchMobile ? '' : "38vh",
                         backgroundColor: 'orange',
                         fontFamily: "Arial, Helvetica, sans-serif",
@@ -222,24 +284,13 @@ function ReactionPostx({ Ein,
                         fontWeight: "bolder",
                         opacity: 1,
                         padding: "2px",
-                        display: ShowAudioIcon ? 'block' : 'none'
+                        display: ShowAudioIcon ? 'block' : 'block'
                     }}
                 />
 
                 :
 
                 <span
-                    onMouseEnter={(e: any) => {
-                        setZoom4(true);
-                        setZoomBigEmo4(true);
-                    }}
-                    onMouseLeave={(e: any) => {
-                        setZoom4(false);
-                        setZoomBigEmo4(false);
-                    }}
-
-
-
 
                     onClick={() => {
                         ClickLike();
@@ -248,14 +299,14 @@ function ReactionPostx({ Ein,
                         "make-small-icons-clickable-lightCrop dontallowhighlighting zupermenulight"
                     }
                     style={{
-                        transform: matchMobile ? Zoom4 ? "scale(1)" : "scale(0.95)" :
-                            Zoom4 ? "scale(2)" : "scale(1)",
+                        transform: Zoom4 ? "scale(2)" : "scale(1.25)",
+                        transition: "transform 0.1s",
                         color: darkmodeReducer ? "#ffffff" : "#000000",
                         position: "absolute",
                         zIndex: 30,
-                        left: matchMobile ? '87vw' : '45.6vw',
+                        left: matchMobile ? '89vw' : '46.5vw',
                         cursor: "pointer",
-                        bottom: matchMobile ? '27vh' : "0px",
+                        bottom: matchMobile ? '29vh' : "0px",
                         top: matchMobile ? '' : "35vh",
                         backgroundColor: "red",
                         fontFamily: "Arial, Helvetica, sans-serif",
@@ -264,21 +315,73 @@ function ReactionPostx({ Ein,
                         opacity: 1,
                         padding: "0px",
                         height: "0px",
-                        display: ShowAudioIcon ? "inline" : "none",
+                        display: ShowAudioIcon ? "inline" : "inline",
                     }}
                 >
-                    <span className={Spinfun === 0 ? '' : 'spinnerEmott'}>
 
-                        👍</span>
-                    <span
+                    <ThumbUpAltIcon
+                        onMouseEnter={(e: any) => {
+                            setZoom4(true);
+                            setZoomBigEmo4(true);
+                        }}
+                        onMouseLeave={(e: any) => {
+                            setZoom4(false);
+                            setZoomBigEmo4(false);
+                        }}
+
+
+                        onClick={() => {
+                            ClickLike();
+
+                        }}
+                        className={
+                            "make-small-icons-clickable-lightCrop dontallowhighlighting zupermenulight"
+                        }
+
                         style={{
-                            textAlign: 'center',
-                            right: matchMobile ? '2.3vw' : "1.1vw",
+                            color: '#000000',
+                            backgroundColor: 'orange',
+                            fontFamily: "Arial, Helvetica, sans-serif",
+                            opacity: 1,
+                            padding: "2px",
+
+                        }}
+                    />
+
+                    <span
+
+                        onMouseEnter={(e: any) => {
+                            setZoom4(true);
+                            setZoomBigEmo4(true);
+                        }}
+                        onMouseLeave={(e: any) => {
+                            setZoom4(false);
+                            setZoomBigEmo4(false);
+                        }}
+
+
+                        onClick={() => {
+                            ClickLike();
+
+                        }}
+
+                        className="zuperxyinfo"
+                        style={{
+                            right: matchMobile ? '-7.2vw' : "-1.65vw",
                             fontSize: matchMobile ? '2.4rem' : " ",
                             position: 'absolute',
                             transform: "scale(0.4)",
-                            top: '1.5vh',
-                            color: '#ffffff'
+                            transition: "transform 0.1s",
+                            top: matchMobile ? '-1.3vh' : '-1.3vh',
+                            color: '#ffffff',
+                            backgroundColor: 'rgb(5,5,5,0.4)',
+                            width: '80px',
+                            height: '80px',
+                            borderRadius: '50%',
+                            justifyContent: 'center',
+                            display: 'flex',
+                            alignItems: 'center',
+                            textAlign: 'center'
                         }}
                     >
                         {Emo4Num === 0 ? "" : Emo4Num}
@@ -290,11 +393,11 @@ function ReactionPostx({ Ein,
             <MoodIcon
 
                 onMouseEnter={(e: any) => {
-                    setZoom3(true);
+                    setZoom(true);
 
                 }}
                 onMouseLeave={(e: any) => {
-                    setZoom3(false);
+                    setZoom(false);
 
                 }}
 
@@ -307,23 +410,22 @@ function ReactionPostx({ Ein,
                 }
 
                 style={{
-                    transform: Zoom3 ? "scale(1.6)" : "scale(0.8)",
-                    color: darkmodeReducer
-                        ? "#ffffff" : '#000000',
+                    transform: Zoom ? "scale(1.6)" : "scale(0.8)",
+                    transition: "transform 0.1s",
+                    color: "#ffffff",
                     position: "absolute",
                     zIndex: 30,
                     left: matchMobile ? '87vw' : '45.6vw',
                     cursor: "pointer",
                     bottom: matchMobile ? '2vh' : "0px",
                     top: matchMobile ? '' : "62vh",
-                    backgroundColor: darkmodeReducer
-                        ? "#000000" : '#ffffff',
+
                     fontFamily: "Arial, Helvetica, sans-serif",
                     fontSize: '2.8rem',
                     fontWeight: "bolder",
                     opacity: 1,
                     padding: "2px",
-                    display: ShowAudioIcon ? 'none' : 'block',
+                    display: ShowAudioIcon ? 'none' : 'none',
 
                 }}
             />

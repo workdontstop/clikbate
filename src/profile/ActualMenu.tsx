@@ -22,7 +22,10 @@ import FaceIcon from '@material-ui/icons/Face';
 import SubjectIcon from '@material-ui/icons/Subject';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import TheatersIcon from '@material-ui/icons/Theaters';
+
 import QueueMusicIcon from '@material-ui/icons/QueueMusic';
+
+
 import PhotoAlbumIcon from '@material-ui/icons/PhotoAlbum';
 import SettingsIcon from '@material-ui/icons/Settings';
 import SuperstarzIconLight from "../images/s.png";
@@ -30,6 +33,7 @@ import SuperstarzIconDark from "../images/sd.png";
 
 
 import CircleIcon from "@mui/icons-material/Circle";
+
 
 import PlayCircleFilledIcon from '@material-ui/icons/PlayCircleFilled';
 
@@ -173,7 +177,7 @@ function ActualMenux({ showModalFormMenu,
   const Timer2 = useRef<ReturnType<typeof setTimeout> | null>(null);
   const Timervv = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  var menufont = matchMobile ? WebsiteMode ? '4vh' : '3.7vh' : '1.35vw';
+  var menufont = matchMobile ? '3.5vh' : '1.35vw';
 
   var colr = darkmodeReducer ? "#ffffff" : '#111111';
 
@@ -484,7 +488,7 @@ function ActualMenux({ showModalFormMenu,
           cursor: 'pointer',
           top: 0,
           left: 0,
-          display: showModalFormMenu ? 'block' : 'none'
+          display: showModalFormMenu ? 'none' : 'none'
         }}
       >
 
@@ -627,13 +631,13 @@ function ActualMenux({ showModalFormMenu,
                 INSTALL WEB APP
               </button>
               :
-              <PlayCircleFilledIcon
+              <QueueMusicIcon
                 onClick={() => {
-                  setMovePlay(true);
-                  setshowModalFormMenu(false);
-                  scrollToRef();
+                  /// setMovePlay(true);
+                  ///setshowModalFormMenu(false);
+                  ///scrollToRef();
 
-
+                  alert('Audio Player , Coming Soon');
 
                 }}
                 className={
@@ -644,11 +648,11 @@ function ActualMenux({ showModalFormMenu,
                 }
 
                 style={{
-                  fontSize: '1.3vw',
+                  fontSize: '0.7vw',
 
                   color: darkmodeReducer
                     ? '#ffffff' : '#000000',
-                  marginLeft: '-1.8vw'
+                  marginLeft: '-1.47vw'
 
 
 
@@ -669,19 +673,17 @@ function ActualMenux({ showModalFormMenu,
               style={{
 
                 position: 'fixed',
-                bottom: '11vh',
-                marginLeft: '18vw',
+                bottom: '15.5%',
+                marginLeft: '22vw',
                 height: 'auto'
               }}
             >
 
 
-              <PlayCircleFilledIcon
+              <QueueMusicIcon
 
                 onClick={() => {
-                  setMovePlay(true);
-                  setshowModalFormMenu(false);
-                  scrollToRef();
+                  alert('Audio Player , Coming Soon');
 
 
 
@@ -695,7 +697,7 @@ function ActualMenux({ showModalFormMenu,
                 }
 
                 style={{
-                  fontSize: '12.5vh',
+                  fontSize: '6vh',
 
                   color: darkmodeReducer
                     ? '#ffffff' : '#000000',

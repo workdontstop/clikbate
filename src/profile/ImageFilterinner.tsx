@@ -911,7 +911,8 @@ function ImageFilterinnerx({
 
               if (method === "imageHDall") {
 
-                var data = canvasRef.current.toDataURL("image/png");
+                //var data = canvasRef.current.toDataURL("image/png");
+                var data = canvasRef.current.toDataURL("image/jpeg", 0.95);
                 var datathumb = canvasRef.current.toDataURL("image/jpeg", 0.05);
 
                 const res = await fetch(data);

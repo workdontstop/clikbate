@@ -65,8 +65,8 @@ function PreviewCanvasx({
               ? "0px"
               : "-5px"
             : index === 0 || index === 1
-            ? "0px"
-            : "-5px",
+              ? "0px"
+              : "-5px",
         }}
       />
     </>

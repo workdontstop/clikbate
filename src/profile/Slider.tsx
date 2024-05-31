@@ -77,7 +77,13 @@ function Sliderx({
   setShowAudioIcon,
   setShowEmoIcon,
   setlatestInview,
-  setShowReactionsIcon
+  setShowReactionsIcon,
+  ClickAudio,
+
+  ShowPost,
+  setShowPost,
+
+  setPlayAudio
 
 
 
@@ -243,25 +249,24 @@ function Sliderx({
     if (inView) {
 
 
+
       setlatestInview(pey);
 
       setShowPad(true);
 
 
-      setShowAudioIcon(true);
-      setShowReactionsIcon(true);
-
-
-      setShowEmoIcon(true);
+      ///setShowAudioIcon(true);
+      //setShowReactionsIcon(true);
+      //setShowEmoIcon(true);
 
 
       if (sTimerccxxtt.current) {
         clearTimeout(sTimerccxxtt.current);
       }
       sTimerccxxtt.current = setTimeout(() => {
-        setShowReactionsIcon(false);
+        //setShowReactionsIcon(false);
 
-      }, 5000)
+      }, 7000)
 
 
 
@@ -269,8 +274,8 @@ function Sliderx({
         clearTimeout(sTimerccxxhh.current);
       }
       sTimerccxxhh.current = setTimeout(() => {
-        setShowAudioIcon(false);
-        setShowEmoIcon(false);
+        ///setShowAudioIcon(false);
+        //setShowEmoIcon(false);
       }, 7000)
 
 
@@ -303,8 +308,12 @@ function Sliderx({
 
 
 
-      setShowAudioIcon(true);
-      setShowReactionsIcon(false);
+      setPlayAudio(false);
+
+      setShowPost(false);
+
+      //setShowAudioIcon(true);
+      ///setShowReactionsIcon(true);
       setShowPad(false);
 
       dispatch(MuteIndexAudio(1000));
@@ -335,6 +344,12 @@ function Sliderx({
     if (showcaptionwaitTimer.current) {
       clearTimeout(showcaptionwaitTimer.current);
     }
+
+
+    if (inView) {
+      setShowPost(true);
+    }
+
     showcaptionwaitTimer.current = setTimeout(function () {
 
 
@@ -648,17 +663,17 @@ function Sliderx({
 
 
 
-  const [interactHeightResolution, setinteractHeightResolution] = useState(window.innerHeight * 1.2);
+  const [interactHeightResolution, setinteractHeightResolution] = useState(window.innerHeight * 0.1);
 
   useEffect(() => {
-    setinteractHeightResolution(window.innerHeight * 1.6);
+    setinteractHeightResolution(window.innerHeight * 1);
   }, [matchPc])
 
 
   useEffect(() => {
 
     if (matchMobile) {
-      setinteractHeightResolution(window.innerHeight * 2);
+      setinteractHeightResolution(window.innerHeight * 1);
     }
 
   }, [matchMobile])
@@ -796,30 +811,6 @@ function Sliderx({
     ////check for interaction and display canvas image flip
   }, [itemCLICKED[pey], HasInteractivity, showIntImage, postDivRef, AllowAllHdImagesShow])
 
-
-  const ClickAudio = useCallback(() => {
-
-
-
-    dispatch(MuteIndexAudio(pey));
-
-
-
-
-    if (audioPlayerRef.current) {
-      if (audioPlayerRef.current.paused) {
-        audioPlayerRef.current.play();
-      } else {
-        audioPlayerRef.current.pause();
-      }
-    }
-
-
-
-
-
-
-  }, [audioPlayerRef])
 
 
 
@@ -1786,6 +1777,12 @@ function Sliderx({
           zIndex: "200",
         }}
       >
+
+
+
+
+
+
         {Tutorialx ? (
           <Grid
             item
@@ -1822,6 +1819,8 @@ function Sliderx({
               ? `${itemOriginalPostHeight[pey]}px`
               : `${itemFinalPostHeight[pey]}px`,
           padding: "0px",
+
+
         }}
       >
 
@@ -1953,6 +1952,9 @@ function Sliderx({
               }}
             />
 
+
+
+
             {AllowAllHdImagesShow ? <>
 
               <img
@@ -1980,9 +1982,11 @@ function Sliderx({
                       : "50% 50",
                   zIndex: 1,
 
+
                 }}
 
               />
+
 
 
 

@@ -16,9 +16,14 @@ import BentoIcon from "@mui/icons-material/Bento";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import CommentIcon from "@mui/icons-material/Comment";
 import ChatBubbleOutlineIcon from '@material-ui/icons/ChatBubbleOutline';
+import VisibilityIcon from '@material-ui/icons/Visibility';
 import AudiotrackIcon from '@material-ui/icons/Audiotrack';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import ThumbUpAltIcon from "@material-ui/icons/ThumbUpAlt";
+
+
+import { IconButton, InputAdornment, TextField } from "@material-ui/core";
+
 
 import MusicOffIcon from '@material-ui/icons/MusicOff';
 import CircleIcon from "@mui/icons-material/Circle";
@@ -31,6 +36,8 @@ import { Connect } from "./Connect";
 
 import laughim from "../images/emotions/laugh.png";
 import ooim from "../images/emotions/oo.png";
+
+import { MuteIndexAudio } from ".././GlobalActions";
 
 
 
@@ -128,7 +135,9 @@ function Postx({
 
 
 }: any) {
-  const { REACT_APP_SUPERSTARZ_URL, REACT_APP_APPX_STATE } = process.env;
+  const { REACT_APP_SUPERSTARZ_URL, REACT_APP_APPX_STATE, REACT_APP_CLOUNDFRONT } = process.env;
+
+
 
   const [Hideonload, setHideonload] = useState(true);
 
@@ -205,6 +214,9 @@ function Postx({
 
 
   const [ActiveCanvas, setActiveCanvas] = useState(-1);
+
+
+  const truncatedName = post.audioDataName ? post.audioDataName.slice(0, 30) : '';
 
 
 
@@ -357,6 +369,8 @@ function Postx({
   const [profileImagethumbTop, setprofileImagethumbTop] = useState<number>(0);
   const [profileImagethumbLeft, setprofileImagethumbLeft] = useState<number>(0);
 
+  const [ShowPost, setShowPost] = useState(false);
+
   ///
   ///
   ///
@@ -371,6 +385,7 @@ function Postx({
       : StopSpring
         ? `translateY(0%)`
         : `translateY(150%)`,
+    filter: ShowPost ? 'brightness(1)' : matchMobile ? 'brightness(0.45)' : 'brightness(0.55)'
   });
 
 
@@ -439,6 +454,14 @@ function Postx({
   const memeberPageidReducer = memeberPageid;
   const MemberProfileDataReducer = MemberProfileData;
   const usernameReducer = username;
+
+
+
+  const ComProfile = post.commentorProfileImage ? post.commentorProfileImage : imageReducer;
+  const ComColor = post.commentorColor ? post.commentorColor : colorReducer;
+  const ComUsername = post.commentorUsername ? post.commentorUsername : usernameReducer;
+
+
 
 
   const ClickLike = useCallback(() => {
@@ -647,6 +670,9 @@ function Postx({
 
 
   const [Zoomx, setZoomx] = useState(false);
+
+  const [Zoomxaudio, setZoomxaudio] = useState(false);
+
   const [Zoomxm, setZoomxm] = useState(false);
   const [Zoomx1, setZoomx1] = useState(false);
   const [Zoomx2, setZoomx2] = useState(false);
@@ -831,6 +857,29 @@ function Postx({
   ///
   ///
   /// CLICK BILLBOARD OPEN ON DOUBLE CLICK
+
+
+
+  const [PlayAudio, setPlayAudio] = useState(false);
+
+
+  const ClickAudio = useCallback(() => {
+
+    dispatch(MuteIndexAudio(pey));
+
+
+    if (audioPlayerRef.current) {
+      if (audioPlayerRef.current.paused) {
+        audioPlayerRef.current.play();
+        setPlayAudio(true);
+      } else {
+        audioPlayerRef.current.pause();
+        setPlayAudio(false);
+      }
+    }
+  }, [audioPlayerRef])
+
+
 
 
 
@@ -1272,6 +1321,11 @@ function Postx({
         >
 
 
+
+
+
+
+
           <div
             ref={addpostDivRef}
             style={{
@@ -1293,6 +1347,14 @@ function Postx({
             {/*///////////////////////////////////////////////////////////////////////////POST DATA*/}
 
             <Slider
+
+              setPlayAudio={setPlayAudio}
+
+
+              ShowPost={ShowPost}
+              setShowPost={setShowPost}
+
+              ClickAudio={ClickAudio}
 
               setlatestInview={setlatestInview}
               setShowPad={setShowPad}
@@ -1363,7 +1425,8 @@ function Postx({
               length={length}
             />
 
-            <ReactionPost
+
+            {StopShowPad ? null : <ReactionPost
               setShowAudioIcon={setShowReactionsIcon}
               Ein={Ein}
               setZoom3={setZoom3}
@@ -1379,7 +1442,8 @@ function Postx({
               Zoom4={Zoom4}
               Spinfun={Spinfun}
               Emo4Num={Emo4Num}
-            />
+            />}
+
 
 
 
@@ -1391,17 +1455,10 @@ function Postx({
 
 
             <span
-              onMouseEnter={(e: any) => {
-                setZoomxm(true);
 
-              }}
-              onMouseLeave={(e: any) => {
-                setZoomxm(false);
-
-              }}
               onClick={() => {
 
-                /// MuteAudio(true)
+                ClickAudio();
               }}
 
               style={{
@@ -1412,7 +1469,7 @@ function Postx({
                 position: 'absolute',
                 marginLeft: matchMobile ? '48vw' : "24vw",
                 top: matchMobile ? '9.5vh' : `18.2vh`,
-                display: post.audioData && itemCLICKED[pey] ? 'block' : 'none'
+                display: post.audioData && itemCLICKED[pey] ? 'none' : 'none'
 
               }}
             >
@@ -1425,8 +1482,18 @@ function Postx({
 
 
                 <AudiotrackIcon
+
+                  onMouseEnter={(e: any) => {
+                    setZoomxaudio(true);
+
+                  }}
+                  onMouseLeave={(e: any) => {
+                    setZoomxaudio(false);
+
+                  }}
                   onClick={() => {
 
+                    ///ClickAudio();
 
                   }}
                   className={
@@ -1435,13 +1502,14 @@ function Postx({
 
                   style={{
                     color: darkmodeReducer
-                      ? "#ffffff" : '#000000',
-                    transform: matchMobile ? 'scale(0.55)' : 'scale(1.5)',
+                      ? "#ffffff"
+                      : "#000000",
+                    transform: matchMobile ? Zoomxaudio ? "scale(2.4)" : 'scale(1.6)'
+                      : Zoomxaudio ? "scale(2.8)" : 'scale(1.8)',
+                    transition: "transform 0.1s",
                     position: "absolute",
                     zIndex: 30,
-                    backgroundColor: darkmodeReducer
-                      ? "rgba(41,41,41,0.86)"
-                      : "rgba(205,205,205,0.9) ",
+                    backgroundColor: post.color1,
                     right: matchMobile ? '36.5vw' : '20.05vw',
                     cursor: "pointer",
                     top: matchMobile ? '1vh' : "5vh",
@@ -1579,12 +1647,9 @@ function Postx({
                     style={{
 
                       height: '0px',
-                      top: matchMobile ? `0vh` : `-13vh`,
-
-
-
+                      top: matchMobile ? `-2vh` : `-13vh`,
                       position: "absolute",
-                      backgroundColor: '#00ccff',
+                      backgroundColor: '',
                       transition: "all 350ms ease",
                       zIndex: 12,
                       borderBottomLeftRadius: "0px",
@@ -1609,7 +1674,7 @@ function Postx({
                         width: "100%",
                         zIndex: 0,
                         height: '1px',
-                        marginTop: matchMobile ? '-37%' : '-5%',
+                        marginTop: matchMobile ? '-27%' : '-4%',
                         position: 'absolute',
                         scrollSnapAlign: 'start',
                         backgroundColor: ''
@@ -1659,7 +1724,6 @@ function Postx({
                         justifyContent: "left",
                         zIndex: 1,
                         paddingLeft: "2vw",
-
                         marginLeft: postusernameleft,
                         height: "20px",
                       }}
@@ -1674,11 +1738,12 @@ function Postx({
                           <span
 
                             style={{
-                              fontWeight: "normal",
+
                               fontSize: matchMobile ? '0.95rem' : '1.06rem',
                               cursor: 'pointer',
                               fontFamily: "Roboto, Arial, Helvetica, sans-serif",
-                              opacity: darkmodeReducer ? '0.4' : '0.7',
+                              opacity: darkmodeReducer ? '0.4' : '1',
+                              fontWeight: "bold",
 
                             }}
                           >
@@ -1691,7 +1756,14 @@ function Postx({
                             <span style={{ visibility: 'hidden' }}>..............</span>
 
                             <span
-                              style={{ padding: '0px' }}>
+                              style={{
+                                padding: '0px',
+                                position: 'absolute',
+                                width: '100%',
+                                textAlign: 'right',
+                                paddingRight: '23%',
+                                right: '0px'
+                              }}>
                               {post.topic}</span>
 
 
@@ -1714,6 +1786,7 @@ function Postx({
 
 
                     {/*///////////////////////////////////////////////////////////////////////////USERNAME  TOPIC */}
+
 
 
 
@@ -1755,7 +1828,7 @@ function Postx({
                             }}
 
                             style={{
-                              fontWeight: "bold",
+
                               fontSize: matchMobile ? '0.9rem' : '1.16rem',
                               cursor: 'pointer',
                               fontFamily: "Roboto, Arial, Helvetica, sans-serif",
@@ -1774,6 +1847,78 @@ function Postx({
                       </span>
                     </div>
                     {/*///////////////////////////////////////////////////////////////////////////CAPTION*/}
+
+
+
+                    {/*///////////////////////////////////////////////////////////////////////////AUDIO */}
+
+                    <div
+                      className={
+                        darkmodeReducer
+                          ? "zuperxy"
+                          : "zuperxy"
+                      }
+                      style={{
+                        width: "79%",
+                        top: matchMobile ? '-6vh' : '5.6vh',
+                        position: "relative",
+                        // display: "flex", //flex
+                        alignItems: "center",
+                        justifyContent: "left",
+                        zIndex: 1,
+                        paddingLeft: "2vw",
+                        marginLeft: matchMobile ? '18%' : '10.5%',
+                        height: "20px",
+                        display: post.audioData ? 'flex' : 'none'
+                      }}
+                    >
+                      <span>
+                        <span
+
+                          style={{
+                            color: darkmodeReducer ? "#ffffff" : "#000000",
+                          }}
+                        >
+                          <span
+                            onClick={() => {
+                              ClickAudio();
+                            }}
+
+                            style={{
+                              fontWeight: "normal",
+                              fontSize: matchMobile ? '0.8rem' : '1rem',
+                              cursor: 'pointer',
+                              fontFamily: "Roboto, Arial, Helvetica, sans-serif",
+                              color: darkmodeReducer ? "#ffffff" : "#000000",
+
+                            }}
+                          >
+
+                            <AudiotrackIcon
+                              style={{
+                                transform: matchMobile ? 'scale(0.5)' : 'scale(0.6)',
+                                transition: "transform 0.1s",
+                                zIndex: 30,
+                                cursor: "pointer",
+                                fontFamily: "Arial, Helvetica, sans-serif",
+                                fontWeight: "bolder",
+                                opacity: 1,
+                                padding: "0px",
+                                position: 'absolute',
+                                marginTop: '-2px',
+
+
+                              }}
+                            />
+
+                            <span style={{ paddingLeft: matchMobile ? '7vw' : "1.6vw", opacity: 0.6 }}>
+                              {truncatedName}  </span>
+
+                          </span>
+                        </span>
+                      </span>
+                    </div>
+                    {/*///////////////////////////////////////////////////////////////////////////AUDIO*/}
 
 
 
@@ -1802,11 +1947,9 @@ function Postx({
 
                           style={{
                             cursor: "pointer",
-                            boxShadow: darkmodeReducer
-                              ? "0 0 1px #555555"
-                              : "0 0 0.1px #222222",
+
                             fontSize: matchMobile ? '9vh' : '10vw',
-                            marginLeft: "42%",
+                            marginLeft: matchMobile ? '43%' : "38%",
                             opacity: Hideonload ? 0 : 0.7,
                             height: "auto",
                             padding: "0px",
@@ -1843,11 +1986,8 @@ function Postx({
 
                             style={{
                               cursor: "pointer",
-                              boxShadow: darkmodeReducer
-                                ? "0 0 1px #555555"
-                                : "0 0 0.1px #222222",
                               fontSize: matchMobile ? '9vh' : '10vw',
-                              marginLeft: "42%",
+                              marginLeft: matchMobile ? '42%' : "37%",
                               opacity: Hideonload ? 0 : 0.7,
                               height: "auto",
                               padding: "0px",
@@ -1874,6 +2014,251 @@ function Postx({
 
 
                   </animated.div >
+
+
+
+                  {/*///////////////////////////////////////////////////////////////////////////COMMENT */}
+
+                  <div
+                    className={
+                      darkmodeReducer
+                        ? "zuperxy"
+                        : "zuperxy"
+                    }
+                    style={{
+                      width: "100%",
+                      top: matchMobile ? '2.5vh' : `1.8vh`,
+                      position: "relative",
+                      display: "flex", //flex
+                      alignItems: "center",
+                      justifyContent: "left",
+                      zIndex: 1,
+                      paddingLeft: "0px",
+                      marginLeft: matchMobile ? '3vw' : '2vw',
+                      height: "auto",
+                      color: darkmodeReducer
+                        ? "#ffffff"
+                        : "#000000",
+                    }}
+                  >
+
+
+                    <img
+                      onClick={() => {
+
+                      }}
+                      ref={profileImageref}
+                      onLoad={calculateconnectPosition}
+                      className={darkmodeReducer ? "turpostDarkmini" : "turpostDarkmini"}
+
+                      src={`${REACT_APP_CLOUNDFRONT}${ComProfile}`}
+                      alt="a superstarz post "
+                      style={{
+                        cursor: "pointer",
+                        boxShadow: darkmodeReducer
+                          ? "0 0 1px #555555"
+                          : "0 0 3.5px #aaaaaa",
+                        width: matchMobile ? '10vw' : '3vw',
+                        height: "auto",
+                        padding: "0px",
+                        objectFit: "contain",
+                        borderRadius: "50%",
+                        position: "relative",
+                        zIndex: 1,
+                      }}
+                    />
+
+
+                    <span style={{
+                      fontWeight: "normal",
+                      fontSize: matchMobile ? '0.85rem' : '1.06rem',
+                      /// cursor: 'pointer',
+                      fontFamily: "Roboto, Arial, Helvetica, sans-serif",
+                      opacity: darkmodeReducer ? '0.4' : '0.7',
+                      marginLeft: matchMobile ? '2.5vw' : '1vw'
+                    }}> {ComUsername}</span>
+
+                    <span style={{ marginLeft: "0.8vw" }}>
+                      {" "}
+                      <CircleIcon
+                        style={{
+                          fontSize: matchMobile ? '1vh' : "0.5vw",
+                          color: ComColor,
+                        }}
+                      />{" "}
+                    </span>
+
+
+                    <span
+                      onClick={() => {
+                        if (idReducer === GuestReducer) {
+                          dispatch(UpdateSign(true));
+                        } else {
+                          commentClicked();
+
+                        }
+
+                      }}
+                      style={{
+                        fontWeight: "normal",
+                        fontSize: matchMobile ? '0.8rem' : '1rem',
+                        /// cursor: 'pointer',
+                        width: matchMobile ? '48%' : "64%",
+                        fontFamily: "Roboto, Arial, Helvetica, sans-serif",
+                        opacity: darkmodeReducer ? '0.5' : '0.8',
+                        marginLeft: '1vw',
+                        backgroundColor: ''
+
+                      }}>
+
+                      {post.commentPost ? post.commentPost :
+
+                        <TextField
+                          multiline
+                          size="medium"
+
+                          inputProps={{ style: { fontSize: "20px" } }}
+                          InputLabelProps={{ style: { fontSize: matchMobile ? "11.2px" : '15px' } }}
+                          style={{
+                            width: matchMobile ? '90%' : "90%",
+                            marginLeft: '2vw',
+                            marginTop: '-2vh',
+                            zIndex: 100,
+                            opacity: 8,
+                            textAlign: "center",
+                          }}
+                          label="Start a Discussion"
+                          margin="normal"
+                          name="findcomment"
+                          type="text"
+
+                        />
+                      }  </span>
+
+
+
+
+                    <span
+                      style={{
+                        position: 'absolute',
+                        right: matchMobile ? '17vw' : '6.3vw',
+                      }}>
+
+
+                      {post.audioData ?
+
+                        <VisibilityIcon
+
+                          className={
+                            darkmodeReducer
+                              ? "make-small-icons-clickable-lightCrop dontallowhighlighting zupermenulight "
+                              : "make-small-icons-clickable-darkCrop dontallowhighlighting zupermenudark  "
+                          }
+
+                          style={{
+                            color: darkmodeReducer
+                              ? "#ffffff"
+                              : "#000000",
+                            transform: matchMobile ? 'scale(1.4)' : 'scale(1.8)',
+                            transition: "transform 0.1s",
+                            zIndex: 30,
+                            backgroundColor: darkmodeReducer
+                              ? "rgba(41,41,41,0.86)"
+                              : "rgba(205,205,205,0.9) ",
+                            cursor: "pointer",
+                            fontFamily: "Arial, Helvetica, sans-serif",
+                            fontWeight: "bolder",
+                            opacity: 1,
+                            padding: "4px",
+
+                          }}
+                        />
+                        :
+                        null
+
+                      }
+
+                    </span>
+
+
+
+                    <span
+
+                      style={{
+                        position: 'absolute',
+                        right: matchMobile ? '7vw' : '3.3vw',
+                      }}>
+
+
+                      {post.audioData ? <AudiotrackIcon
+
+                        onClick={() => {
+
+                          ClickAudio();
+                        }}
+                        className={
+
+                          PlayAudio ? 'blinken  make-small-icons-clickable-lightCrop dontallowhighlighting zupermenulight ' :
+                            "make-small-icons-clickable-lightCrop dontallowhighlighting zupermenulight "
+                        }
+
+                        style={{
+                          color: darkmodeReducer
+                            ? "#ffffff"
+                            : "#000000",
+                          transform: matchMobile ? 'scale(1.4)' : 'scale(1.8)',
+                          transition: "transform 0.1s",
+                          zIndex: 30,
+                          backgroundColor: darkmodeReducer
+                            ? "rgba(41,41,41,0.86)"
+                            : "rgba(205,205,205,0.9) ",
+
+                          cursor: "pointer",
+                          fontFamily: "Arial, Helvetica, sans-serif",
+                          fontWeight: "bolder",
+
+                          padding: "2px",
+                        }}
+                      />
+                        :
+                        <VisibilityIcon
+
+                          className={
+                            darkmodeReducer
+                              ? "make-small-icons-clickable-lightCrop dontallowhighlighting zupermenulight "
+                              : "make-small-icons-clickable-darkCrop dontallowhighlighting zupermenudark  "
+                          }
+
+                          style={{
+                            color: darkmodeReducer
+                              ? "#ffffff"
+                              : "#000000",
+                            transform: matchMobile ? 'scale(1.4)' : 'scale(1.8)',
+                            transition: "transform 0.1s",
+                            zIndex: 30,
+                            backgroundColor: darkmodeReducer
+                              ? "rgba(41,41,41,0.86)"
+                              : "rgba(205,205,205,0.9) ",
+                            cursor: "pointer",
+                            fontFamily: "Arial, Helvetica, sans-serif",
+                            fontWeight: "bolder",
+                            opacity: 1,
+                            padding: "4px",
+
+                          }}
+                        />
+
+                      }
+
+                    </span>
+
+
+
+                  </div>
+
+
+                  {/*///////////////////////////////////////////////////////////////////////////COMMENT */}
+
                 </>
               )}
 
@@ -1893,7 +2278,7 @@ function Postx({
           width: "100%",
           zIndex: 0,
           height: '1px',
-          marginTop: matchMobile ? '18.7%' : '0px',
+          marginTop: matchMobile ? '20vh' : '6%',
           position: 'absolute',
           scrollSnapAlign: 'end',
           backgroundColor: ''

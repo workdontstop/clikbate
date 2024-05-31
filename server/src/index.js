@@ -168,25 +168,72 @@ SELECT
   (SELECT type FROM emotions WHERE post = posts.id AND user = ?) AS EmoIn,
   (SELECT COUNT(*) FROM comments WHERE post = posts.id) AS commentCount,
 
+  (SELECT com FROM comments WHERE post = posts.id ORDER BY date DESC LIMIT 1) AS commentPost,
+  (SELECT commented_by FROM comments WHERE post = posts.id ORDER BY date DESC LIMIT 1) AS commentPostUser,
+  
+  m.profile_image AS commentorProfileImage,
+  m.username AS commentorUsername,
+  m.color1 AS commentorColor,
+  
   (SELECT COUNT(*) FROM emotions WHERE post = posts.id AND type = 1) AS lovely,
   (SELECT COUNT(*) FROM emotions WHERE post = posts.id AND type = 2) AS cool,
   (SELECT COUNT(*) FROM emotions WHERE post = posts.id AND type = 3) AS care,
   (SELECT COUNT(*) FROM emotions WHERE post = posts.id AND type = 4) AS funny,
 
   (SELECT file FROM audio WHERE post = posts.id) AS audioData,
+   (SELECT name FROM audio WHERE post = posts.id) AS audioDataName,
   (SELECT backgroudaudio FROM audio WHERE post = posts.id) AS backgroudaudio,
 
-
-  interacttype1, interacttype2, rad1, rad2, members.profile_image, members.username, color1, posts.id, sender, post_count, topic,
-  caption, item1, thumb1, itemtype1, interact1a, interact1ax, interact1ay, interact1b, interact1bx, interact1by, item2,vid1backup,vid2backup,time
+  interacttype1, interacttype2, rad1, rad2, members.profile_image, members.username, members.color1, 
+  posts.id, sender, post_count, topic, caption, item1, thumb1, itemtype1, interact1a, 
+  interact1ax, interact1ay, interact1b, interact1bx, interact1by, item2, vid1backup, vid2backup, time
 FROM posts
-INNER JOIN members ON posts.sender = members.id
+
+INNER JOIN members ON posts.sender = members.id 
+
+LEFT JOIN members AS m ON m.id = (SELECT commented_by FROM comments WHERE post = posts.id ORDER BY date DESC LIMIT 1)
+
+
 ORDER BY posts.id DESC
-LIMIT 18
+LIMIT 18;
+
+
 
 `;
-///18
 const posts_more = `SELECT
+  (SELECT COUNT(*) FROM fan WHERE favid = posts.sender AND userid = ?) AS favCount,
+  (SELECT type FROM emotions WHERE post = posts.id AND user = ?) AS EmoIn,
+  (SELECT COUNT(*) FROM comments WHERE post = posts.id) AS commentCount,
+
+  (SELECT com FROM comments WHERE post = posts.id ORDER BY date DESC LIMIT 1) AS commentPost,
+  (SELECT commented_by FROM comments WHERE post = posts.id ORDER BY date DESC LIMIT 1) AS commentPostUser,
+  
+  m.profile_image AS commentorProfileImage,
+  m.username AS commentorUsername,
+  m.color1 AS commentorColor,
+  
+  (SELECT COUNT(*) FROM emotions WHERE post = posts.id AND type = 1) AS lovely,
+  (SELECT COUNT(*) FROM emotions WHERE post = posts.id AND type = 2) AS cool,
+  (SELECT COUNT(*) FROM emotions WHERE post = posts.id AND type = 3) AS care,
+  (SELECT COUNT(*) FROM emotions WHERE post = posts.id AND type = 4) AS funny,
+
+  (SELECT file FROM audio WHERE post = posts.id) AS audioData,
+   (SELECT name FROM audio WHERE post = posts.id) AS audioDataName,
+  (SELECT backgroudaudio FROM audio WHERE post = posts.id) AS backgroudaudio,
+
+  interacttype1, interacttype2, rad1, rad2, members.profile_image, members.username, members.color1, 
+  posts.id, sender, post_count, topic, caption, item1, thumb1, itemtype1, interact1a, 
+  interact1ax, interact1ay, interact1b, interact1bx, interact1by, item2, vid1backup, vid2backup, time
+FROM posts
+
+INNER JOIN members ON posts.sender = members.id AND posts.id < ?  
+
+LEFT JOIN members AS m ON m.id = (SELECT commented_by FROM comments WHERE post = posts.id ORDER BY date DESC LIMIT 1)
+
+
+ORDER BY posts.id DESC
+LIMIT 18`;
+const posts_moreOld = `SELECT
 (SELECT COUNT(*)   
   FROM fan
  WHERE favid = posts.sender and userid = ?)favCount,
@@ -223,7 +270,6 @@ WHERE post = posts.id and user = ?)EmoIn,
          
          
         
-         
       interacttype1,interacttype2,rad1,rad2, members.profile_image,members.username,color1,posts.id,sender,post_count,topic,
 caption,item1,thumb1,itemtype1,interact1a,interact1ax,interact1ay,interact1b,interact1bx,interact1by,item2,vid1backup,vid2backup,time
   FROM posts inner join members on
@@ -314,90 +360,83 @@ WHERE favid = members.id and userid = ?)favCount,
  
  fan.id,members.id AS reactId,members.profile_image,members.username,color1,members.quote  FROM fan inner join members on
  fan.userid = members.id WHERE  fan.favid = ?  AND fan.id < ? ORDER BY fan.id DESC  LIMIT 90  `;
-const profile = `SELECT
+const profile = `
 
+SELECT
+  (SELECT COUNT(*) FROM fan WHERE favid = posts.sender AND userid = ?) AS favCount,
+  (SELECT type FROM emotions WHERE post = posts.id AND user = ?) AS EmoIn,
+  (SELECT COUNT(*) FROM comments WHERE post = posts.id) AS commentCount,
 
-(SELECT COUNT(*)   
-  FROM fan
- WHERE favid = posts.sender and userid = ?)favCount,
+  (SELECT com FROM comments WHERE post = posts.id ORDER BY date DESC LIMIT 1) AS commentPost,
+  (SELECT commented_by FROM comments WHERE post = posts.id ORDER BY date DESC LIMIT 1) AS commentPostUser,
+  
+  m.profile_image AS commentorProfileImage,
+  m.username AS commentorUsername,
+  m.color1 AS commentorColor,
+  
+  (SELECT COUNT(*) FROM emotions WHERE post = posts.id AND type = 1) AS lovely,
+  (SELECT COUNT(*) FROM emotions WHERE post = posts.id AND type = 2) AS cool,
+  (SELECT COUNT(*) FROM emotions WHERE post = posts.id AND type = 3) AS care,
+  (SELECT COUNT(*) FROM emotions WHERE post = posts.id AND type = 4) AS funny,
 
-
-(SELECT type
-FROM emotions 
-WHERE post = posts.id and user = ?)EmoIn,
-
-
-(SELECT COUNT(*) 
-          FROM comments 
-         WHERE post = posts.id)commentCount,
-
-
-      (SELECT COUNT(*) 
-          FROM emotions
-         WHERE post = posts.id and type=1)lovely, 
-         
-      (SELECT COUNT(*) 
-          FROM emotions
-         WHERE post = posts.id and type=2)cool, 
-
-            (SELECT COUNT(*) 
-          FROM emotions
-         WHERE post = posts.id and type=3)care, 
-
-            (SELECT COUNT(*) 
-          FROM emotions
-         WHERE post = posts.id and type=4)funny,
-         
-          (SELECT file FROM audio WHERE post = posts.id) AS audioData,
+  (SELECT file FROM audio WHERE post = posts.id) AS audioData,
+   (SELECT name FROM audio WHERE post = posts.id) AS audioDataName,
   (SELECT backgroudaudio FROM audio WHERE post = posts.id) AS backgroudaudio,
-         
-         
-         interacttype1,interacttype2,rad1,rad2,members.profile_image,members.username,color1,posts.id,sender,post_count,topic,
-caption,item1,thumb1,itemtype1,interact1a,interact1ax,interact1ay,interact1b,interact1bx,interact1by,item2,vid1backup,vid2backup,
-time  FROM posts inner join members on
- posts.sender = members.id    where posts.sender = ?  ORDER BY posts.id DESC LIMIT 18`;
+
+  interacttype1, interacttype2, rad1, rad2, members.profile_image, members.username, members.color1, 
+  posts.id, sender, post_count, topic, caption, item1, thumb1, itemtype1, interact1a, 
+  interact1ax, interact1ay, interact1b, interact1bx, interact1by, item2, vid1backup, vid2backup, time
+FROM posts
+
+INNER JOIN members ON posts.sender = members.id 
+
+LEFT JOIN members AS m ON m.id = (SELECT commented_by FROM comments WHERE post = posts.id ORDER BY date DESC LIMIT 1)
+
+WHERE posts.sender = ?
+
+ORDER BY posts.id DESC
+LIMIT 18;
+
+
+`;
 const profile_more = `SELECT
+  (SELECT COUNT(*) FROM fan WHERE favid = posts.sender AND userid = ?) AS favCount,
+  (SELECT type FROM emotions WHERE post = posts.id AND user = ?) AS EmoIn,
+  (SELECT COUNT(*) FROM comments WHERE post = posts.id) AS commentCount,
 
+  (SELECT com FROM comments WHERE post = posts.id ORDER BY date DESC LIMIT 1) AS commentPost,
+  (SELECT commented_by FROM comments WHERE post = posts.id ORDER BY date DESC LIMIT 1) AS commentPostUser,
+  
+  m.profile_image AS commentorProfileImage,
+  m.username AS commentorUsername,
+  m.color1 AS commentorColor,
+  
+  (SELECT COUNT(*) FROM emotions WHERE post = posts.id AND type = 1) AS lovely,
+  (SELECT COUNT(*) FROM emotions WHERE post = posts.id AND type = 2) AS cool,
+  (SELECT COUNT(*) FROM emotions WHERE post = posts.id AND type = 3) AS care,
+  (SELECT COUNT(*) FROM emotions WHERE post = posts.id AND type = 4) AS funny,
 
-(SELECT COUNT(*)   
-  FROM fan
- WHERE favid = posts.sender and userid = ?)favCount,
-
-
-(SELECT type
-FROM emotions 
-WHERE post = posts.id and user = ?)EmoIn,
-
-
-(SELECT COUNT(*) 
-          FROM comments 
-         WHERE post = posts.id)commentCount,
-
-
-      (SELECT COUNT(*) 
-          FROM emotions
-         WHERE post = posts.id and type=1)lovely, 
-         
-      (SELECT COUNT(*) 
-          FROM emotions
-         WHERE post = posts.id and type=2)cool, 
-
-            (SELECT COUNT(*) 
-          FROM emotions
-         WHERE post = posts.id and type=3)care, 
-
-            (SELECT COUNT(*) 
-          FROM emotions
-         WHERE post = posts.id and type=4)funny, 
-
-          (SELECT file FROM audio WHERE post = posts.id) AS audioData,
+  (SELECT file FROM audio WHERE post = posts.id) AS audioData,
+   (SELECT name FROM audio WHERE post = posts.id) AS audioDataName,
   (SELECT backgroudaudio FROM audio WHERE post = posts.id) AS backgroudaudio,
-         
-         
-        interacttype1,interacttype2,rad1,rad2,members.profile_image,members.username,color1,posts.id,sender,post_count,topic,
-caption,item1,thumb1,itemtype1,interact1a,interact1ax,interact1ay,interact1b,interact1bx,interact1by,item2,vid1backup,vid2backup
-,time  FROM posts inner join members on
- posts.sender = members.id where posts.sender = ? AND posts.id < ?  ORDER BY posts.id DESC LIMIT 18`;
+
+  interacttype1, interacttype2, rad1, rad2, members.profile_image, members.username, members.color1, 
+  posts.id, sender, post_count, topic, caption, item1, thumb1, itemtype1, interact1a, 
+  interact1ax, interact1ay, interact1b, interact1bx, interact1by, item2, vid1backup, vid2backup, time
+FROM posts
+
+INNER JOIN members ON posts.sender = members.id 
+
+LEFT JOIN members AS m ON m.id = (SELECT commented_by FROM comments WHERE post = posts.id ORDER BY date DESC LIMIT 1)
+
+WHERE posts.sender = ? AND posts.id < ? 
+
+ORDER BY posts.id DESC
+LIMIT 18;
+
+
+
+`;
 const optionsval = `(SELECT thumb1 FROM posts WHERE sender = ? ORDER BY id DESC LIMIT 1)
 UNION ALL
 (SELECT thumb1 FROM posts ORDER BY id DESC LIMIT 1);
