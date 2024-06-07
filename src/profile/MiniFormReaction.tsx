@@ -30,7 +30,8 @@ function MiniFormReactionx({
   originalData,
   paperPostScrollRefxx,
   connectTemplateGo,
-  mobileZoom
+  mobileZoom,
+  profileDataHold
 }: any): JSX.Element {
   const { REACT_APP_APPX_STATE } = process.env;
 
@@ -108,6 +109,7 @@ function MiniFormReactionx({
           ? commentDatax.map((post: any, i: any) => (
             <>
               <ShowReactions
+                profileDataHold={profileDataHold}
                 connectTemplateGo={connectTemplateGo}
                 paperPostScrollRefxx={paperPostScrollRefxx}
                 originalData={originalData}

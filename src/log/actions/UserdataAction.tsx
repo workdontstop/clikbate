@@ -8,6 +8,7 @@ import {
   REQUEST_MEMBER,
   REQUEST_MEMBERDATA,
   REQUEST_USER_REG_UPDATE,
+  NEXT_FEED_DATA
 } from "../log_ActionTypes";
 
 export function UserdataAction(ServerPayload: any) {
@@ -49,6 +50,14 @@ export function UserInfoUpdateMEMBER(data: number) {
   return {
     type: REQUEST_MEMBER,
     payload: data,
+  };
+}
+
+export function UpdateNextFeeds(data: any, data2: number) {
+  return {
+    type: NEXT_FEED_DATA,
+    payload: data,
+    payload2: data2
   };
 }
 

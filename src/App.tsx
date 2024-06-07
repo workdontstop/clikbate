@@ -110,6 +110,10 @@ function App(): JSX.Element {
 
         if (response.data.payload) {
           dispatch(HideLoaderAction());
+
+          dispatch(IsLoggedAction());
+          dispatch(IsLoggedProfileAction());
+
           dispatch(UserdataAction(response.data.payload));
 
           var colorboy = {

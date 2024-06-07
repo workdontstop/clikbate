@@ -195,7 +195,7 @@ LEFT JOIN members AS m ON m.id = (SELECT commented_by FROM comments WHERE post =
 
 
 ORDER BY posts.id DESC
-LIMIT 18;
+LIMIT 40;
 
 
 
@@ -232,7 +232,7 @@ LEFT JOIN members AS m ON m.id = (SELECT commented_by FROM comments WHERE post =
 
 
 ORDER BY posts.id DESC
-LIMIT 18`;
+LIMIT 40`;
 const posts_moreOld = `SELECT
 (SELECT COUNT(*)   
   FROM fan
@@ -395,7 +395,7 @@ LEFT JOIN members AS m ON m.id = (SELECT commented_by FROM comments WHERE post =
 WHERE posts.sender = ?
 
 ORDER BY posts.id DESC
-LIMIT 18;
+LIMIT 40;
 
 
 `;
@@ -432,7 +432,7 @@ LEFT JOIN members AS m ON m.id = (SELECT commented_by FROM comments WHERE post =
 WHERE posts.sender = ? AND posts.id < ? 
 
 ORDER BY posts.id DESC
-LIMIT 18;
+LIMIT 40;
 
 
 

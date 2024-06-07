@@ -181,6 +181,13 @@ function Home(): JSX.Element {
       id: 0,
       index: 0,
       innerid: 0,
+
+      data: postDataxx,
+      dataPageNumberState: 0,
+      dataAll: postDataxx,
+      profileDataAll: postDataxx,
+      ProfileLocal: 0,
+      PostLocal: 0
     };
 
     window.history.replaceState(d, "", "Home");
@@ -198,6 +205,11 @@ function Home(): JSX.Element {
     };
     dispatch(UpdateColorAction(colorboy, 1));
   }, [calculateScreenHeight, darkmodeReducer, dispatch]);
+
+
+
+  const [postDataxx, setPostDataxx] = useState<Array<any>>([]);
+
 
   ///
   ///
@@ -223,6 +235,13 @@ function Home(): JSX.Element {
       id: 0,
       index: 0,
       innerid: 0,
+
+      data: postDataxx,
+      dataPageNumberState: 0,
+      dataAll: postDataxx,
+      profileDataAll: postDataxx,
+      ProfileLocal: 0,
+      PostLocal: 0
     };
 
     window.history.replaceState(d, "", "Home");
@@ -251,6 +270,13 @@ function Home(): JSX.Element {
         id: 0,
         index: 0,
         innerid: 0,
+
+        data: postDataxx,
+        dataPageNumberState: 0,
+        dataAll: postDataxx,
+        profileDataAll: postDataxx,
+        ProfileLocal: 0,
+        PostLocal: 0
       };
 
       if (!OpenModalFormOnce) {

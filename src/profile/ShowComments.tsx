@@ -54,6 +54,7 @@ function ShowCommentsx({
   CommentPostid,
   originalData,
   paperPostScrollRefxx,
+  profileDataHold
 }: any) {
   const { REACT_APP_SUPERSTARZ_URL, REACT_APP_APPX_STATE } = process.env;
 
@@ -171,11 +172,18 @@ function ShowCommentsx({
 
   const GoToMember = useCallback(() => {
 
-    dispatch(Updatepagenum(0));
 
 
-    if (memeberPageidReducer === post.comUserId) {
+
+
+
+    if (MemberProfileDataReducer.id === post.comUserId) {
+      dispatch(UpdateLoader(false));
     } else {
+
+      dispatch(Updatepagenum(0));
+
+
       var n, d;
 
       ///console.log(CommentDataReducer);
@@ -198,6 +206,10 @@ function ShowCommentsx({
           comScroll: tt,
           dataPageNumberState: 0,
           dataAll: postData,
+          profileDataAll: profileDataHold,
+
+          ProfileLocal: 1,
+          PostLocal: 1
         };
       } else {
         n = MemberProfileDataReducer.username;
@@ -215,6 +227,10 @@ function ShowCommentsx({
           comScroll: tt,
           dataPageNumberState: 0,
           dataAll: postData,
+          profileDataAll: profileDataHold,
+
+          ProfileLocal: 1,
+          PostLocal: 1
         };
       }
 
@@ -225,6 +241,21 @@ function ShowCommentsx({
         id: post.comUserId,
         innerid: 0,
         pagenumReducer: pagenumReducer,
+
+
+        index: historyscrollReducer,
+        data: PostDataFromCommentReducer,
+        AllMemberData: MemberProfileDataReducer,
+        comid: comIdReducer,
+        DiscussionImage: DiscussionImageReducer,
+        comOriginalData: CommentDataReducer,
+        comScroll: tt,
+        dataPageNumberState: 0,
+        dataAll: postData,
+        profileDataAll: profileDataHold,
+
+        ProfileLocal: 0,
+        PostLocal: 0
       };
       window.history.pushState(dd, "", `${post.username}`);
       dispatch(UserInfoUpdateMEMBER(post.comUserId));
@@ -245,13 +276,15 @@ function ShowCommentsx({
     PostDataFromCommentReducer,
     CommentDataReducer,
     pagenumReducer,
+    profileDataHold
   ]);
 
   const GoToMemberLoaderUp = () => {
     if (Timervv.current) {
       clearTimeout(Timervv.current);
     }
-    if (memeberPageidReducer === post.comUserId) {
+    if (MemberProfileDataReducer.id === post.comUserId) {
+      dispatch(UpdateLoader(false));
     } else {
       dispatch(UpdateLoader(true));
     }

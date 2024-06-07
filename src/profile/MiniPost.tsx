@@ -205,7 +205,7 @@ function MiniPostx({
 
   const minClicked = () => {
 
-    historyBoy();
+    ///historyBoy();
 
     setzoomClickedIndex(pey + 1);
     setSliderIndexMini(0);
@@ -760,7 +760,7 @@ function MiniPostx({
               onLoad={handleImageLoad}
               onClick={() => {
 
-                historyBoy();
+                /// historyBoy();
                 setzoomClickedIndex(pey + 1);
                 setSliderIndexMini(0);
                 setminiProfile(false);

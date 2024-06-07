@@ -8,6 +8,7 @@ import {
   REQUEST_MEMBER,
   REQUEST_MEMBERDATA,
   REQUEST_USER_REG_UPDATE,
+  NEXT_FEED_DATA
 } from "../log_ActionTypes";
 
 ///
@@ -16,6 +17,8 @@ import {
 //////GLOBAL DARKMODE HEIGHT  DATA
 const initialState = {
   MemberProfileData: [],
+  NextFeedsHoldData: [],
+  NextFeedsPagenum: 0,
   memeberPageid: 0,
   id: 0,
   username: "",
@@ -71,6 +74,16 @@ export const UserdataReducer = (
         ...state,
         MemberProfileData: action.payload,
       };
+
+
+    case NEXT_FEED_DATA:
+      return {
+        ...state,
+        NextFeedsHoldData: action.payload,
+        NextFeedsPagenum: action.payload2,
+      };
+
+
     case REQUEST_USER_INFO_UPDATE:
       return {
         ...state,

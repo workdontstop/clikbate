@@ -9,6 +9,8 @@ import {
 } from ".././GlobalActions";
 
 import Axios from "axios";
+
+import AdjustIcon from '@material-ui/icons/Adjust';
 import CircleIcon from "@mui/icons-material/Circle";
 import SettingsIcon from "@mui/icons-material/Settings";
 import { UpdateUploadData, Updatepagenum } from "../GlobalActions";
@@ -534,7 +536,7 @@ function MenuInnerx({
                                 }}
                               >
                                 {" "}
-                                <CircleIcon
+                                <AdjustIcon
                                   style={{
                                     fontSize: matchPc ? "1.65vw" : "4.5vh",
                                     opacity: ActiveSlide === i ? 0.5 : 1,
@@ -578,7 +580,7 @@ function MenuInnerx({
                                 }}
                               >
                                 {" "}
-                                <CircleIcon
+                                <AdjustIcon
                                   style={{
                                     fontSize: matchPc ? "1.65vw" : "4.5vh",
                                     opacity: ActiveSlide === i ? 0.5 : 1,
@@ -621,7 +623,7 @@ function MenuInnerx({
                                     }}
                                   >
                                     {" "}
-                                    <CircleIcon
+                                    <AdjustIcon
                                       style={{
                                         fontSize: matchPc ? "1.65vw" : "4.5vh",
                                         opacity: ActiveSlide === i ? 0.5 : 1,

@@ -29,7 +29,8 @@ function MiniFormCommentx({
   postData,
   originalData,
   paperPostScrollRefxx,
-  mobileZoom
+  mobileZoom,
+  profileDataHold
 }: any): JSX.Element {
   const { REACT_APP_APPX_STATE } = process.env;
 
@@ -93,6 +94,7 @@ function MiniFormCommentx({
       >
         {" "}
         <ShowComments
+          profileDataHold={profileDataHold}
           paperPostScrollRefxx={paperPostScrollRefxx}
           originalData={originalData}
           CommentPostid={CommentPostid}

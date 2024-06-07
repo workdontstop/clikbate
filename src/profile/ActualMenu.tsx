@@ -18,6 +18,9 @@ import { UpdateInteract } from "../GlobalActions";
 import { useSpring, config } from "react-spring";
 import SearchIcon from '@material-ui/icons/Search';
 import PersonIcon from '@material-ui/icons/Person';
+
+import AdjustIcon from '@material-ui/icons/Adjust';
+
 import FaceIcon from '@material-ui/icons/Face';
 import SubjectIcon from '@material-ui/icons/Subject';
 import NotificationsIcon from '@material-ui/icons/Notifications';
@@ -59,7 +62,8 @@ function ActualMenux({ showModalFormMenu,
   setuptype,
   ActualpostDataAll,
   paperPostScrollRef,
-  setUploadGPT
+  setUploadGPT,
+  profileDataHold
 }: any): JSX.Element {
 
 
@@ -191,7 +195,7 @@ function ActualMenux({ showModalFormMenu,
   const GoToMemberF = useCallback(() => {
     dispatch(Updatepagenum(0));
     dispatch(UserInfoUpdateMEMBER(-1));
-    dispatch(UserInfoUpdateMEMBER(0));
+
 
     var tt = paperPostScrollRef.current.scrollTop;
 
@@ -206,9 +210,13 @@ function ActualMenux({ showModalFormMenu,
       index: tt,
       data: postData,
       innerid: 0,
-      pagenumReducer: pagenumReducer,
-      dataPageNumberState: setuptype,
+      pagenumReducer: 0,
+      dataPageNumberState: 0,
       dataAll: ActualpostDataAll,
+      profileDataAll: profileDataHold,
+
+      ProfileLocal: 1,
+      PostLocal: 1
     };
 
 
@@ -218,9 +226,17 @@ function ActualMenux({ showModalFormMenu,
 
     var dd = {
       type: 1,
-      id: idReducer,
+      id: 0,
       innerid: 0,
-      pagenumReducer: pagenumReducer,
+      pagenumReducer: 0,
+
+      data: postData,
+      dataPageNumberState: 0,
+      dataAll: ActualpostDataAll,
+      profileDataAll: profileDataHold,
+
+      ProfileLocal: 0,
+      PostLocal: 0
     };
 
 
@@ -228,11 +244,11 @@ function ActualMenux({ showModalFormMenu,
 
 
     window.history.pushState(dd, "", modalName);
-
+    dispatch(UserInfoUpdateMEMBER(0));
     //
 
 
-  }, [pagenumReducer, memeberPageidReducer, idReducer, MemberProfileDataReducer, usernameReducer, setuptype, ActualpostDataAll]);
+  }, [pagenumReducer, memeberPageidReducer, idReducer, MemberProfileDataReducer, usernameReducer, setuptype, ActualpostDataAll, profileDataHold,]);
 
 
 
@@ -240,7 +256,7 @@ function ActualMenux({ showModalFormMenu,
     dispatch(Updatepagenum(0));
     dispatch(UserInfoUpdateMEMBER(-1));
 
-    dispatch(UserInfoUpdateMEMBER(idReducer));
+
 
     var tt = paperPostScrollRef.current.scrollTop;
 
@@ -258,6 +274,10 @@ function ActualMenux({ showModalFormMenu,
       pagenumReducer: pagenumReducer,
       dataPageNumberState: setuptype,
       dataAll: ActualpostDataAll,
+      profileDataAll: profileDataHold,
+
+      ProfileLocal: 1,
+      PostLocal: 1
     };
 
 
@@ -270,6 +290,15 @@ function ActualMenux({ showModalFormMenu,
       id: idReducer,
       innerid: 0,
       pagenumReducer: pagenumReducer,
+
+      data: postData,
+
+      dataPageNumberState: setuptype,
+      dataAll: ActualpostDataAll,
+      profileDataAll: profileDataHold,
+
+      ProfileLocal: 0,
+      PostLocal: 0
     };
 
 
@@ -277,11 +306,12 @@ function ActualMenux({ showModalFormMenu,
 
 
     window.history.pushState(dd, "", modalName);
+    dispatch(UserInfoUpdateMEMBER(idReducer));
 
     //
 
 
-  }, [pagenumReducer, memeberPageidReducer, idReducer, MemberProfileDataReducer, usernameReducer, setuptype, ActualpostDataAll]);
+  }, [pagenumReducer, memeberPageidReducer, idReducer, MemberProfileDataReducer, usernameReducer, setuptype, ActualpostDataAll, profileDataHold]);
 
 
   const GoToMemberLoaderUpP = () => {
@@ -809,7 +839,7 @@ function ActualMenux({ showModalFormMenu,
 
 
                     {i === 1 ? <span>
-                      <CircleIcon
+                      <AdjustIcon
                         className={
                           darkmodeReducer
                             ? "make-small-icons-clickable-darkab dontallowhighlighting zuperkingIcon "
@@ -987,6 +1017,7 @@ function ActualMenux({ showModalFormMenu,
                     </span>
                     <Grid item xs={12} style={{
                       height: '5px',
+
                       padding: '0px',
                       backgroundImage: PadIndex === i ? `linear-gradient(45deg, ${RandomColor}, ${colorReducer})` :
                         PadIndex !== -1 ? '' :

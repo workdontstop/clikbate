@@ -124,6 +124,8 @@ function ReactionPostx({ Ein,
                     onClick={() => {
                         ClickLove();
 
+                        // alert(Ein)
+
                     }}
                     className={
                         "make-small-icons-clickable-lightCrop dontallowhighlighting zupermenulight"

@@ -77,7 +77,7 @@ function Profilex({
   setlatestInview,
   postDivRefx,
 
-
+  pagePostScroll,
   setindexRoll,
   postDivRefRoll,
 
@@ -96,6 +96,7 @@ function Profilex({
   RandomColor,
 
   sethistoryScrollonload,
+  profileDataHold
 
 }: any) {
 
@@ -103,7 +104,14 @@ function Profilex({
 
   const dispatch = useDispatch();
 
+
+
+
+
   var pagenumLimit = 18;
+
+  const sqlQUERYlIMIT = 40;
+
 
 
 
@@ -213,21 +221,7 @@ function Profilex({
 
 
 
-  useEffect(() => {
 
-    if (showProfiileData) {
-      if (postData.length < pagenumLimit) {
-
-        setshowMoreIndicatorxxx(false)
-
-      } else {
-
-        setshowMoreIndicatorxxx(true)
-      }
-    }
-
-
-  }, [lastItemElement, postData, showProfiileData]); // Re-run the effect when dependencies change
 
 
   const [AllowMore, setAllowMore] = useState(false);
@@ -278,101 +272,36 @@ function Profilex({
               sTimer.current = setTimeout(() => {
 
                 if (setuptype === 1) {
-                  if (showData2) {
-                  } else {
-                    CallMorePages(2);
-                  }
-                } else if (setuptype === 2) {
-                  if (showData3) {
-                  } else {
-                    CallMorePages(3);
-                  }
-                }
-                else if (setuptype === 38) {
 
 
-                  ////alert(postData[0];)
-
-                  if (sTimer3.current) {
-                    clearTimeout(sTimer3.current);
-                  }
-
-                  if (sTimer2.current) {
-                    clearTimeout(sTimer2.current);
-                  }
-
-                  if (sTimer4.current) {
-                    clearTimeout(sTimer4.current);
-                  }
+                  if (postData.length === sqlQUERYlIMIT) {
+                    setShowBar(true);
 
 
-
-
-
-                  sTimer4.current = setTimeout(() => {
-                    CallMorePages(4);
-                  }, 2000)
-
-
-
-
-
-
-
-                  sTimer2.current = setTimeout(() => {
-                    ////callPagination();
-                  }, 5000)
-
-
-
-
-                }
-                else if (setuptype === 3) {
-
-
-
-
-                  setShowBar(true);
-
-
-
-
-                  if (sTimer6.current) {
-                    clearTimeout(sTimer6.current);
-                  }
-
-
-                  sTimer6.current = setTimeout(() => {
-
-                    setminiProfile(false);
-                    setShowBar(false);
-
-
-                    callPagination();
-
-                    if (sTimer3.current) {
-                      clearTimeout(sTimer3.current);
+                    if (sTimer6.current) {
+                      clearTimeout(sTimer6.current);
                     }
 
-                    paperPostScrollRef.current.scrollTop = 0;
+
+                    sTimer6.current = setTimeout(() => {
+
+                      setminiProfile(false);
+                      setShowBar(false);
 
 
-                  }, 3000)
+                      callPagination();
+
+                      if (sTimer3.current) {
+                        clearTimeout(sTimer3.current);
+                      }
+
+                      ///paperPostScrollRef.current.scrollTop = 20;
 
 
-                }
-                else if (setuptype === 4) {
-
-                  if (showData1) { } else {
-                    /// dispatch(UpdateLoader(true));
-                    ///setshowThisComponenet(true);
-                    /// setminiProfile(false);
-
+                    }, 4000)
                   }
 
-
                 } else { }
-
 
 
 
@@ -822,14 +751,14 @@ function Profilex({
 
                 cloudTimer2.current = setTimeout(function () {
                   setCloudPost(false);
-                }, 2000);
+                }, 1000);
 
                 if (postTimer2.current) {
                   clearTimeout(postTimer2.current);
                 }
                 postTimer2.current = setTimeout(function () {
                   setStopMini(false)
-                }, 2000);
+                }, 1000);
               } else {
 
                 if (memeberPageidReducer === 0) {
@@ -840,11 +769,11 @@ function Profilex({
 
 
 
-                  setminiProfile(true);
+                  /// setminiProfile(true);
 
                   cloudTimer2.current = setTimeout(function () {
                     setCloudPost(false);
-                  }, 2000);
+                  }, 1000);
 
 
 
@@ -857,7 +786,7 @@ function Profilex({
 
               }
               ///////////
-            }, 1000);
+            }, 500);
 
             if (postTimer3.current) {
               clearTimeout(postTimer3.current);
@@ -879,7 +808,7 @@ function Profilex({
                   paperPostScrollRef.current.scrollTop = historyScrollonload;
 
                   sethistoryScrollonload(0);
-                }, 1000);
+                }, 500);
               }
 
 
@@ -891,7 +820,7 @@ function Profilex({
                 postTimer5.current = setTimeout(() => {
                   setshowThisComponenet(false);
                   dispatch(UpdateLoader(false));
-                }, 1000);
+                }, 500);
 
 
               } else {
@@ -915,11 +844,11 @@ function Profilex({
 
 
 
-                }, 1000)
+                }, 500)
 
               }
               ///////////
-            }, 1000);
+            }, 500);
 
 
 
@@ -1192,7 +1121,9 @@ function Profilex({
 
 
 
-
+  const tyTimer2 = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const tyTimer3 = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const tyTimer4 = useRef<ReturnType<typeof setTimeout> | null>(null);
 
 
   useEffect(() => {
@@ -1200,14 +1131,20 @@ function Profilex({
   }, [miniProfile]);
 
   useEffect(() => {
+    if (tyTimer2.current) {
+      clearTimeout(tyTimer2.current);
+    }
 
-
-    setTimeout(function () {
+    tyTimer2.current = setTimeout(function () {
       dispatch(UpdateLoader(false));
       if (showThisComponenet) setshowThisComponenet(false);
     }, 4000);
 
-    setTimeout(function () {
+
+    if (tyTimer3.current) {
+      clearTimeout(tyTimer3.current);
+    }
+    tyTimer3.current = setTimeout(function () {
       if (ShowLoader2) {
         setShowLoader2(false);
       }
@@ -1326,11 +1263,7 @@ function Profilex({
                 >
 
 
-                  <div ref={
-                    setuptype === 1 || setuptype === 2 ?
-                      postData.length - 2 === i ? lastItemElement : null :
-                      null
-                  }
+                  <div
 
                     style={{
                       position: "relative",
@@ -1424,6 +1357,7 @@ function Profilex({
 
 
                     <Post
+                      profileDataHold={profileDataHold}
                       setuptype={setuptype}
                       ActualpostDataAll={ActualpostDataAll}
                       setlatestInview={setlatestInview}
@@ -1499,12 +1433,39 @@ function Profilex({
                     <Grid
                       item
                       xs={12}
+                      style={{}}
+
+                    >
+
+
+
+                      <div
+
+                        style={{
+                          margin: 'auto',
+                          width: '20%',
+                          marginTop: '18vh',
+                          backgroundColor: darkmodeReducer ? 'rgb(200,200,200,0.1)' : 'rgb(20,20,20,0.15)',
+                          height: matchMobile ? "0.25vh" : '0.25vh',
+                        }}
+                      ></div>
+
+                    </Grid>
+
+
+
+
+
+                    <Grid
+                      item
+                      xs={12}
                       style={{
-                        marginTop: "0px",
-                        height: matchMobile ? postData.length - 1 === i ? '1vh' : "30vh" :
-                          postData.length - 1 === i ? '0vh' : '30vh',
+
+                        height: matchMobile ? postData.length - 1 === i ? '1vh' : "31vh" :
+                          postData.length - 1 === i ? '0vh' : '30.3vh',
                       }}
                     ></Grid>
+
 
 
                   </div>
@@ -1530,17 +1491,17 @@ function Profilex({
 
 
           <div ref={
-            setuptype === 3 ? lastItemElement : null
+            setuptype === 1 ? lastItemElement : null
 
           }
 
             style={{
-              position: setuptype === 3 ? 'relative' : 'absolute',
-              backgroundColor: 'red',
+              position: setuptype === 1 ? 'relative' : 'absolute',
+              backgroundColor: '',
               height: '0vh',
-              marginTop: matchMobile ? '22vh' : '22vh',
+              marginTop: matchMobile ? '22vh' : '28vh',
               visibility:
-                setuptype === 3 ?
+                setuptype === 1 ?
                   'visible' : 'hidden',
             }}
           >  </div>
@@ -1550,14 +1511,14 @@ function Profilex({
             className="blinken"
             style={{
 
-              position: setuptype === 3 ? 'relative' : "absolute",
+              position: setuptype === 1 ? 'relative' : "absolute",
               height: '1vh',
               opacity: '0.8',
               marginTop: matchMobile ? '-1vh' : '-25vh',
               margin: 'auto',
               width: matchMobile ? '60%' : '40%',
               visibility:
-                setuptype === 3 ?
+                setuptype === 1 ?
                   ShowBar ? 'visible' : 'hidden' : 'hidden',
 
               backgroundImage: `linear-gradient(45deg, ${RandomColor}, ${colorReducer})`,
@@ -1568,11 +1529,11 @@ function Profilex({
           <div
 
             style={{
-              position: setuptype === 3 ? 'relative' : 'absolute',
+              position: setuptype === 1 ? 'relative' : 'absolute',
               scrollSnapAlign: 'end',
-              backgroundColor: 'pink',
+              backgroundColor: '',
               height: '0vh',
-              marginTop: matchMobile ? '20vh' : '1vh',
+              marginTop: matchMobile ? '20vh' : '9vh',
 
             }}
           >  </div>

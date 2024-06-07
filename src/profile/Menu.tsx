@@ -17,6 +17,20 @@ import SuperstarzIconDark from "../images/sd.png";
 import { UpdateOptionsTop, SnapToggleAction } from ".././GlobalActions";
 import ZoomOutIcon from "@mui/icons-material/ZoomOut";
 import BlurCircularIcon from '@material-ui/icons/BlurCircular';
+import SubjectIcon from '@material-ui/icons/Subject';
+
+
+import {
+  UpdateLoader,
+  Updatepagenum
+} from ".././GlobalActions";
+import { UserInfoUpdateMEMBER } from "../log/actions/UserdataAction";
+import SlowMotionVideoIcon from '@material-ui/icons/SlowMotionVideo';
+
+
+
+import AdjustIcon from '@material-ui/icons/Adjust';
+
 
 import { UpdateMenuNav } from "../GlobalActions";
 
@@ -43,7 +57,17 @@ function Menux({
   shownav,
   setShownav,
   showModalForm,
-  WebsiteMode
+  WebsiteMode,
+
+  setUploadGPT,
+  RandomColor,
+
+
+  pagenumReducer,
+  setuptype,
+  ActualpostDataAll,
+  profileDataHold,
+
 
 }: any) {
   ///
@@ -52,6 +76,7 @@ function Menux({
   /// USE DISPATCH
   const dispatch = useDispatch();
 
+  const { REACT_APP_SUPERSTARZ_URL, REACT_APP_CLOUNDFRONT, REACT_APP_APPX_STATE } = process.env;
 
   var isSafari = navigator.vendor && navigator.vendor.indexOf('Apple') > -1 &&
     navigator.userAgent &&
@@ -102,6 +127,190 @@ function Menux({
 
 
 
+  //
+  ///
+  ///
+  /// GET LOGGED USER DATA FROM REDUX STORE
+  interface RootStateReducerImage {
+    UserdataReducer: {
+      image: string;
+      imageThumb: string;
+      id: number;
+      username: string;
+      memeberPageid: number;
+      MemberProfileData: any;
+    };
+  }
+  const { username, image, imageThumb, id, memeberPageid, MemberProfileData } =
+    useSelector((state: RootStateReducerImage) => ({
+      ...state.UserdataReducer,
+    }));
+
+  const imageReducer = image;
+  const idReducer = id;
+  const usernameReducer = username;
+  const memeberPageidReducer = memeberPageid;
+  const MemberProfileDataReducer = MemberProfileData;
+
+
+  const Timervv = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+
+
+  const GoToMemberF = useCallback(() => {
+    dispatch(Updatepagenum(0));
+    dispatch(UserInfoUpdateMEMBER(-1));
+
+
+    var tt = paperPostScrollRef.current.scrollTop;
+
+    var n, d;
+
+
+
+    n = MemberProfileDataReducer.username;
+    d = {
+      type: 1,
+      id: memeberPageidReducer,
+      index: tt,
+      data: postData,
+      innerid: 0,
+      pagenumReducer: 0,
+      dataPageNumberState: 0,
+      dataAll: ActualpostDataAll,
+      profileDataAll: profileDataHold,
+
+      ProfileLocal: 1,
+      PostLocal: 1
+    };
+
+
+    window.history.replaceState(d, "", `${n}`);
+
+    let modalName = `${usernameReducer}`;
+
+    var dd = {
+      type: 1,
+      id: 0,
+      innerid: 0,
+      pagenumReducer: 0,
+
+      data: postData,
+      dataPageNumberState: 0,
+      dataAll: ActualpostDataAll,
+      profileDataAll: profileDataHold,
+
+      ProfileLocal: 0,
+      PostLocal: 0
+    };
+
+
+
+
+
+    window.history.pushState(dd, "", modalName);
+    dispatch(UserInfoUpdateMEMBER(0));
+    //
+
+
+  }, [pagenumReducer, memeberPageidReducer, idReducer, MemberProfileDataReducer, usernameReducer, setuptype, ActualpostDataAll, profileDataHold,]);
+
+
+
+  const GoToMemberP = useCallback(() => {
+    dispatch(Updatepagenum(0));
+    dispatch(UserInfoUpdateMEMBER(-1));
+
+
+
+    var tt = paperPostScrollRef.current.scrollTop;
+
+    var n, d;
+
+
+
+    n = MemberProfileDataReducer.username;
+    d = {
+      type: 1,
+      id: memeberPageidReducer,
+      index: tt,
+      data: postData,
+      innerid: 0,
+      pagenumReducer: pagenumReducer,
+      dataPageNumberState: setuptype,
+      dataAll: ActualpostDataAll,
+      profileDataAll: profileDataHold,
+
+      ProfileLocal: 1,
+      PostLocal: 1
+    };
+
+
+    window.history.replaceState(d, "", `${n}`);
+
+    let modalName = `${usernameReducer}`;
+
+    var dd = {
+      type: 1,
+      id: idReducer,
+      innerid: 0,
+      pagenumReducer: pagenumReducer,
+
+      data: postData,
+
+      dataPageNumberState: setuptype,
+      dataAll: ActualpostDataAll,
+      profileDataAll: profileDataHold,
+
+      ProfileLocal: 0,
+      PostLocal: 0
+    };
+
+
+
+
+
+    window.history.pushState(dd, "", modalName);
+    dispatch(UserInfoUpdateMEMBER(idReducer));
+
+    //
+
+
+  }, [pagenumReducer, memeberPageidReducer, idReducer, MemberProfileDataReducer, usernameReducer, setuptype, ActualpostDataAll, profileDataHold]);
+
+
+  const GoToMemberLoaderUpP = () => {
+    ///setshowModalFormMenu(false);
+    if (Timervv.current) {
+      clearTimeout(Timervv.current);
+    }
+    if (memeberPageidReducer === idReducer) {
+    } else {
+      dispatch(UpdateLoader(true));
+    }
+    Timervv.current = setTimeout(function () {
+      GoToMemberP();
+    }, 1000);
+  };
+
+
+  const GoToMemberLoaderUpF = () => {
+    ///setshowModalFormMenu(false);
+    if (Timervv.current) {
+      clearTimeout(Timervv.current);
+    }
+    if (memeberPageidReducer === idReducer) {
+    } else {
+      dispatch(UpdateLoader(true));
+    }
+    Timervv.current = setTimeout(function () {
+      GoToMemberF();
+    }, 1000);
+  };
+
+
+
+
   ///
   ///
   ///
@@ -134,6 +343,7 @@ function Menux({
 
 
 
+
   //
   //
   //isSafari
@@ -161,7 +371,7 @@ function Menux({
 
   const animationmenu = useSpring({
     config: {
-      duration: 500,
+      duration: 150,
     },
     opacity: shownav ? 1 : 0,
     marginTop: shownav2 ? `0vh` : `15vh`,
@@ -186,7 +396,7 @@ function Menux({
         menuTimer2.current = setTimeout(function () {
           setShownav(false);
 
-
+          //  alert('2');
         }, 3000);
       }
 
@@ -212,9 +422,12 @@ function Menux({
 
     menuTimer5.current = setTimeout(function () {
 
+
       if (ShowBigPlay) { } else {
         ///dispatch(UpdateMenuNav(true));
         setShownav(false);
+
+
         setallow(true);
         /// dispatch(SnapToggleAction(false))
       }
@@ -253,25 +466,7 @@ function Menux({
 
 
 
-  ///
-  ///
-  /// GET LOGGED USER DATA FROM REDUX STORE
-  interface RootStateReducerImage {
-    UserdataReducer: {
-      image: string;
-      imageThumb: string;
-      id: number;
-      username: string;
-      memeberPageid: number;
-      MemberProfileData: any;
-    };
-  }
-  const { username, image, imageThumb, id, memeberPageid, MemberProfileData } =
-    useSelector((state: RootStateReducerImage) => ({
-      ...state.UserdataReducer,
-    }));
 
-  const idReducer = id;
   const [Signup, setSignup] = useState(false);
 
   const Timer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -312,6 +507,69 @@ function Menux({
     superFont = "super-starz-text-Mobilex";
   }
 
+
+  ///
+  ///
+  /// GET COLOR FROM REDUX STORE
+  interface RootStateReducerColor {
+    GlobalReducerColor: {
+      color: string;
+      colordark: string;
+      colortype: number;
+    };
+  }
+  const { color, colordark, colortype } = useSelector(
+    (state: RootStateReducerColor) => ({
+      ...state.GlobalReducerColor,
+    })
+  );
+  const colorReducer = color;
+  const colorReducerdark = colordark;
+  const colortypeReducer = colortype;
+
+
+  const [Zoom1, setZoom1] = useState(false);
+  const [Zoom2, setZoom2] = useState(false);
+  const [Zoom3, setZoom3] = useState(false);
+  const [Zoom4, setZoom4] = useState(false);
+  const [Zoom5, setZoom5] = useState(false);
+
+
+
+  function hexToRgb(hex: any) {
+    hex = hex.replace('#', '');
+    var bigint = parseInt(hex, 16);
+    var r = (bigint >> 16) & 255;
+    var g = (bigint >> 8) & 255;
+    var b = bigint & 255;
+    return [r, g, b];
+  }
+
+  function rgbToHex(r: any, g: any, b: any) {
+    return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1).toUpperCase();
+  }
+
+  function blendColors(color1: any, color2: any) {
+    var rgb1 = hexToRgb(color1);
+    var rgb2 = hexToRgb(color2);
+    var blendedRgb = [
+      Math.round((rgb1[0] + rgb2[0]) / 2),
+      Math.round((rgb1[1] + rgb2[1]) / 2),
+      Math.round((rgb1[2] + rgb2[2]) / 2)
+    ];
+    return rgbToHex(blendedRgb[0], blendedRgb[1], blendedRgb[2]);
+  }
+
+
+
+
+  var color1 = RandomColor;
+  var color2 = colorReducer;
+  var blendedColor = blendColors(color1, color2);
+
+
+
+
   return (
     <>
       {shownavTop ? (
@@ -322,7 +580,7 @@ function Menux({
               ShowBigPlay ? null : <Grid
                 container
                 style={{
-                  bottom: "44vh",
+                  bottom: matchMobile ? '8vh' : "6vh",
                   position: "fixed",
                   width: "100%",
                   height: "0px",
@@ -335,66 +593,316 @@ function Menux({
 
 
                 <Grid
+
                   item
-                  xs={8}
-                  md={8}
+                  xs={12}
+
                   style={{
-                    height: "0px",
-                    display: 'flex',
-                    alignItems: "center",
-                    justifyContent: "left",
-                    textAlign: "left",
-
-
+                    height: matchMobile ? '8vh' : "6vh",
 
                   }}
                 >
-                  <animated.div style={{ ...animationmenu, height: '0px', marginLeft: matchMobile ? '11vw' : '2.6vw' }}>
-                    <span
-                      onClick={(e: any) => {
-                        ////dispatch(UpdateOptionsTop(true));
-                        setShowModalFormMenu(true);
-                      }}
-                      className={
-                        darkmodeReducer
-                          ? `menutopdark ${superFont} turdark zupermenudark  dontallowhighlighting zuperkingIconPostLight `
-                          : `menutoplight ${superFont} turlight zupermenulight  dontallowhighlighting zuperkingIconPostLightx`
-                      }
-                      style={{
 
-                      }}
+                  <animated.div
+                    className={
+                      darkmodeReducer
+                        ? `menutopdark ${superFont} turdark zupermenudark  dontallowhighlighting zuperkingIconPostLight `
+                        : `menutoplight ${superFont} turlight zupermenulight  dontallowhighlighting zuperkingIconPostLightx`
+                    } style={{ ...animationmenu, height: matchMobile ? '8vh' : '6vh', }}>
+
+
+
+                    <Grid
+                      container
+
+                      style={{}}
                     >
 
-
-
-
-                      <BlurCircularIcon
-                        className={
-                          darkmodeReducer
-                            ? "make-small-icons-clickable-lightCrop dontallowhighlighting zupermenulight "
-                            : "make-small-icons-clickable-darkCrop dontallowhighlighting zupermenudark  "
-                        }
-
+                      <Grid
+                        item
+                        xs={2}
                         style={{
-                          color: darkmodeReducer
-                            ? "#ffffff"
-                            : "#000000",
-                          transform: matchMobile ? 'scale(3.4)' : 'scale(4)',
-                          transition: "transform 0.1s",
-                          zIndex: 30,
-                          backgroundColor: darkmodeReducer
-                            ? "rgba(41,41,41,0.86)"
-                            : "rgba(205,205,205,0.9) ",
-                          cursor: "pointer",
-                          fontFamily: "Arial, Helvetica, sans-serif",
-                          fontWeight: "bolder",
-                          opacity: 1,
-                          padding: "4px",
-
+                          backgroundColor: '',
+                          height: '5vh',
+                          textAlign: 'center',
                         }}
-                      />
+                      >
+                        {memeberPageidReducer === idReducer || memeberPageidReducer === 0
+                          ? <img
 
-                    </span>
+                            onMouseEnter={(e) => {
+                              setZoom1(true);
+                            }}
+                            onMouseLeave={(e) => {
+                              setZoom1(false);
+                            }}
+                            src={`${REACT_APP_CLOUNDFRONT}${image}`}
+                            title={username}
+                            onClick={() => {
+                              GoToMemberLoaderUpP();
+                              setZoom1(false);
+                            }}
+                            style={{
+                              transform: Zoom1 ? "scale(1.5)" : "scale(1)",
+                              cursor: 'pointer',
+                              transition: "transform 0.1s",
+                              width: matchMobile ? '5.5vh' : '2.9vw',
+                              height: matchMobile ? '5.5vh' : '2.9vw',
+                              borderRadius: '50%',
+                              marginTop: matchMobile ? '1vh' : '0px',
+                              border: memeberPageidReducer === idReducer ? `2px solid ${blendedColor}` :
+                                Zoom1 ? `2px solid ${blendedColor}` :
+                                  `0px solid ${blendedColor}`, // Add this line for a round border
+                            }}
+                          /> :
+                          <img
+
+                            onMouseEnter={(e) => {
+                              setZoom1(true);
+                            }}
+                            onMouseLeave={(e) => {
+
+                              setZoom1(false);
+                            }}
+                            src={`${REACT_APP_CLOUNDFRONT}${MemberProfileDataReducer.userimage}`}
+                            title={MemberProfileDataReducer.username}
+                            onClick={() => {
+                              /// GoToMemberLoaderUpP();
+                              setZoom1(false);
+                            }}
+                            style={{
+                              transform: Zoom1 ? "scale(1.5)" : "scale(1)",
+                              cursor: 'pointer',
+                              transition: "transform 0.1s",
+                              width: matchMobile ? '5.5vh' : '2.9vw',
+                              height: matchMobile ? '5.5vh' : '2.9vw',
+                              borderRadius: '50%',
+                              marginTop: matchMobile ? '1vh' : '0px',
+                              border: `2px solid ${blendedColor}`, // Add this line for a round border
+                            }}
+                          />}
+
+
+                      </Grid>
+
+
+                      <Grid
+                        item
+                        xs={3}
+                        style={{
+                          backgroundColor: '',
+                          height: '5vh',
+                          textAlign: 'center'
+                        }}
+                      >
+
+                        <BlurCircularIcon
+                          onMouseEnter={(e: any) => {
+                            setZoom2(true);
+                          }}
+                          onMouseLeave={(e: any) => {
+                            setZoom2(false);
+                          }}
+                          onClick=
+                          {() => {
+                            setShowModalFormMenu(true);
+                            setZoom2(false);
+
+
+                          }}
+                          className={
+                            darkmodeReducer
+                              ? "make-small-icons-clickable-lightCrop dontallowhighlighting "
+                              : "make-small-icons-clickable-darkCrop dontallowhighlighting  "
+                          }
+                          style={{
+                            transform: matchMobile ? Zoom2 ? "scale(5.4)" : "scale(3)" :
+                              Zoom2 ? "scale(6)" : "scale(3.7)",
+                            transition: "transform 0.1s",
+                            color: Zoom2 ? blendedColor : darkmodeReducer
+                              ? "#ffffff"
+                              : "#000000",
+                            zIndex: 30,
+                            backgroundColor: darkmodeReducer
+                              ? "rgba(41,41,41,0)"
+                              : "rgba(205,205,205,0) ",
+                            cursor: "pointer",
+                            fontFamily: "Arial, Helvetica, sans-serif",
+                            fontWeight: "bolder",
+                            opacity: 1,
+                            padding: "4px",
+                            marginTop: matchMobile ? '2.1vh' : '0px',
+
+                          }}
+                        />
+
+                      </Grid>
+
+
+                      <Grid
+                        item
+                        xs={2}
+                        style={{
+                          backgroundColor: '',
+                          height: '5vh',
+                          textAlign: 'center'
+                        }}
+                      >
+
+                        <AdjustIcon
+                          onMouseEnter={(e: any) => {
+                            setZoom3(true);
+                          }}
+                          onMouseLeave={(e: any) => {
+                            setZoom3(false);
+                          }}
+
+                          onClick=
+                          {() => {
+
+                            setZoom3(false);
+
+
+                            if (matchMobile) {
+
+                              alert('coming soon to Mobile ');
+                            } else {
+                              setUploadGPT(true);
+
+                            }
+                          }}
+
+
+                          className={
+                            darkmodeReducer
+                              ? "make-small-icons-clickable-lightCrop dontallowhighlighting "
+                              : "make-small-icons-clickable-darkCrop dontallowhighlighting  "
+                          }
+                          style={{
+                            transform: matchMobile ? Zoom3 ? "scale(5.4)" : "scale(3)" :
+                              Zoom3 ? "scale(6)" : "scale(3.7)",
+                            transition: "transform 0.1s",
+                            color: Zoom3 ? blendedColor : darkmodeReducer
+                              ? "#ffffff"
+                              : "#000000",
+                            zIndex: 30,
+                            backgroundColor: darkmodeReducer
+                              ? "rgba(41,41,41,0)"
+                              : "rgba(205,205,205,0) ",
+                            cursor: "pointer",
+                            fontFamily: "Arial, Helvetica, sans-serif",
+                            fontWeight: "bolder",
+                            opacity: 1,
+                            padding: "4px",
+                            marginTop: matchMobile ? '2.1vh' : '0px',
+
+                          }}
+                        />
+
+                      </Grid>
+
+
+                      <Grid
+                        item
+                        xs={3}
+                        style={{
+                          backgroundColor: '',
+                          height: '5vh',
+                          textAlign: 'center'
+                        }}
+                      >
+
+                        <SubjectIcon
+                          onMouseEnter={(e: any) => {
+                            setZoom4(true);
+                          }}
+                          onMouseLeave={(e: any) => {
+                            setZoom4(false);
+                          }}
+
+                          onClick={() => {
+                            GoToMemberLoaderUpF();
+                            setZoom4(false);
+                          }}
+
+
+                          className={
+                            darkmodeReducer
+                              ? "make-small-icons-clickable-lightCrop dontallowhighlighting "
+                              : "make-small-icons-clickable-darkCrop dontallowhighlighting  "
+                          }
+                          style={{
+                            transform: matchMobile ? Zoom4 ? "scale(5.4)" : "scale(3)" :
+                              Zoom4 ? "scale(6)" : "scale(3.7)",
+                            transition: "transform 0.1s",
+                            color: memeberPageidReducer === 0 ? blendedColor :
+                              Zoom4 ? blendedColor : darkmodeReducer
+                                ? "#ffffff"
+                                : "#000000",
+                            zIndex: 30,
+                            backgroundColor: darkmodeReducer
+                              ? "rgba(41,41,41,0)"
+                              : "rgba(205,205,205,0) ",
+                            cursor: "pointer",
+                            fontFamily: "Arial, Helvetica, sans-serif",
+                            fontWeight: "bolder",
+                            opacity: 1,
+                            padding: "4px",
+                            marginTop: matchMobile ? '2.1vh' : '0px',
+
+
+
+                          }}
+                        />
+                      </Grid>
+
+                      <Grid
+                        item
+                        xs={2}
+                        style={{
+                          backgroundColor: '',
+                          height: '5vh',
+                          textAlign: 'center'
+                        }}
+                      >
+
+                        <AllOutIcon
+                          onMouseEnter={(e: any) => {
+                            setZoom5(true);
+                          }}
+                          onMouseLeave={(e: any) => {
+                            setZoom5(false);
+                          }}
+                          className={
+                            darkmodeReducer
+                              ? "make-small-icons-clickable-lightCrop dontallowhighlighting "
+                              : "make-small-icons-clickable-darkCrop dontallowhighlighting  "
+                          }
+                          style={{
+                            transform: matchMobile ? Zoom5 ? "scale(5.4)" : "scale(3)" :
+                              Zoom5 ? "scale(6)" : "scale(3.7)",
+                            transition: "transform 0.1s",
+                            color: Zoom5 ? blendedColor : darkmodeReducer
+                              ? "#ffffff"
+                              : "#000000",
+                            zIndex: 30,
+                            backgroundColor: darkmodeReducer
+                              ? "rgba(41,41,41,0)"
+                              : "rgba(205,205,205,0) ",
+                            cursor: "pointer",
+                            fontFamily: "Arial, Helvetica, sans-serif",
+                            fontWeight: "bolder",
+                            opacity: 1,
+                            padding: "4px",
+                            marginTop: matchMobile ? '2.1vh' : '0px',
+
+                          }}
+                        />
+                      </Grid>
+
+
+                    </Grid>
+
                   </animated.div>
 
                 </Grid>{" "}

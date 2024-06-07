@@ -1936,6 +1936,7 @@ function Sliderx({
               alt="a superstarz post "
               style={{
                 ...style,
+                borderRadius: matchMobile ? '0%' : '4%',
                 cursor: "pointer",
                 width: "100%",
                 height: type === 1 ? `auto` : itemheight[pey],
@@ -1969,6 +1970,7 @@ function Sliderx({
                 src={`${REACT_APP_CLOUNDFRONT}${post.item2}`}
                 alt="a clikbate post "
                 style={{
+                  display: 'none',
 
                   cursor: "pointer",
                   width: "100%",
@@ -2001,6 +2003,7 @@ function Sliderx({
                   }}
                   ref={canvasRefIn}
                   style={{
+                    borderRadius: matchMobile ? '0%' : '4%',
                     cursor: "pointer",
                     padding: "0px",
                     position: "absolute",
@@ -2019,6 +2022,12 @@ function Sliderx({
 
               <img
                 ref={pic}
+
+                onClick={() => {
+
+                  ClickAudio();
+                }}
+
                 className={
                   darkmodeReducer ? "turlightpostdark" : "turlightpostlight"
                 }
@@ -2031,7 +2040,7 @@ function Sliderx({
 
                 alt="a clikbate post "
                 style={{
-
+                  borderRadius: matchMobile ? '0%' : '4%',
                   cursor: "pointer",
                   width: "100%",
                   height: '100%',

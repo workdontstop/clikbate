@@ -275,7 +275,7 @@ function Connectx({
       setactivetimer(true);
       Timerkk.current = setTimeout(() => {
         GoToMember();
-      }, 2000);
+      }, 1000);
     }
   };
 

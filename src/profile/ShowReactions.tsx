@@ -54,6 +54,7 @@ function ShowReactionsx({
   CommentPostid,
   paperPostScrollRefxx,
   connectTemplateGo,
+  profileDataHold,
 }: any) {
 
   const { REACT_APP_SUPERSTARZ_URL, REACT_APP_CLOUNDFRONT, REACT_APP_APPX_STATE } = process.env;
@@ -186,10 +187,12 @@ function ShowReactionsx({
   const GoToMember = useCallback(() => {
 
 
-    dispatch(Updatepagenum(0));
-
-    if (memeberPageidReducer === post.reactId) {
+    if (MemberProfileDataReducer.id === post.reactId) {
+      dispatch(UpdateLoader(false));
     } else {
+
+      /// alert('kk')
+      dispatch(Updatepagenum(0));
       var n, d;
 
       ///console.log(CommentDataReducer);
@@ -213,6 +216,10 @@ function ShowReactionsx({
           reactType: reactionTypeReducer,
           dataPageNumberState: 0,
           dataAll: postData,
+          profileDataAll: profileDataHold,
+
+          ProfileLocal: 1,
+          PostLocal: 1
         };
       } else {
         n = MemberProfileDataReducer.username;
@@ -231,6 +238,10 @@ function ShowReactionsx({
           reactType: reactionTypeReducer,
           dataPageNumberState: 0,
           dataAll: postData,
+          profileDataAll: profileDataHold,
+
+          ProfileLocal: 1,
+          PostLocal: 1
         };
       }
 
@@ -240,7 +251,22 @@ function ShowReactionsx({
         type: 1,
         id: post.reactId,
         innerid: 0,
-        pagenumReducer: pagenumReducer
+
+        pagenumReducer: pagenumReducer,
+        index: historyscrollReducer,
+        data: PostDataFromCommentReducer,
+        AllMemberData: MemberProfileDataReducer,
+        comid: comIdReducer,
+        DiscussionImage: DiscussionImageReducer,
+        comOriginalData: CommentDataReducer,
+        comScroll: tt,
+        reactType: reactionTypeReducer,
+        dataPageNumberState: 0,
+        dataAll: postData,
+        profileDataAll: profileDataHold,
+
+        ProfileLocal: 0,
+        PostLocal: 0
       };
       window.history.pushState(dd, "", `${post.username}`);
       dispatch(UserInfoUpdateMEMBER(post.reactId));
@@ -262,16 +288,19 @@ function ShowReactionsx({
     CommentDataReducer,
     reactionTypeReducer,
     connectTemplateGo,
-    pagenumReducer
+    pagenumReducer,
+    MemberProfileDataReducer,
+    profileDataHold,
   ]);
 
   const GoToMemberLoaderUp = () => {
 
-    ///alert('yes');
+
     if (Timervv.current) {
       clearTimeout(Timervv.current);
     }
-    if (memeberPageidReducer === post.reactId) {
+    if (MemberProfileDataReducer.id === post.reactId) {
+      dispatch(UpdateLoader(false));
     } else {
       dispatch(UpdateLoader(true));
     }

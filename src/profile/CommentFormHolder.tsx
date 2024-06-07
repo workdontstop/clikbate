@@ -68,7 +68,8 @@ function CommentFormHolderx({
   CommentHistoryData,
   setcommentHistoryScroll,
   setCommentHistoryData,
-  mobileZoom
+  mobileZoom,
+  profileDataHold
 }: any) {
   const dispatch = useDispatch();
 
@@ -955,6 +956,7 @@ function CommentFormHolderx({
                 >
                   {reactionTemplateGo ? (
                     <MiniFormReaction
+                      profileDataHold={profileDataHold}
                       mobileZoom={mobileZoom}
                       connectTemplateGo={connectTemplateGo}
                       paperPostScrollRefxx={paperPostScrollRefxx}
@@ -981,6 +983,7 @@ function CommentFormHolderx({
                     />
                   ) : (
                     <MiniFormComment
+                      profileDataHold={profileDataHold}
                       mobileZoom={mobileZoom}
                       paperPostScrollRefxx={paperPostScrollRefxx}
                       originalData={originalData}
@@ -1283,6 +1286,7 @@ function CommentFormHolderx({
                   >
                     {reactionTemplateGo ? (
                       <MiniFormReaction
+                        profileDataHold={profileDataHold}
                         mobileZoom={mobileZoom}
                         connectTemplateGo={connectTemplateGo}
                         paperPostScrollRefxx={paperPostScrollRefxx}
@@ -1309,6 +1313,7 @@ function CommentFormHolderx({
                       />
                     ) : (
                       <MiniFormComment
+                        profileDataHold={profileDataHold}
                         mobileZoom={mobileZoom}
                         paperPostScrollRefxx={paperPostScrollRefxx}
                         originalData={originalData}

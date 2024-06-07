@@ -83,6 +83,9 @@ function ProfileSetupx({
     sethistoryScrollonload,
 
 
+    profileDataHold,
+    pagePostScroll
+
 
 
 
@@ -199,6 +202,7 @@ function ProfileSetupx({
     const CallResponseUpdate =
         useCallback(() => {
 
+            setshowProfiileData(true);
             responsex(ActualData, ActualPagenum);
 
 
@@ -207,7 +211,7 @@ function ProfileSetupx({
 
     useEffect(() => {
         if (callResponse) {
-
+            setshowProfiileData(true);
             CallResponseUpdate();
 
         }
@@ -307,6 +311,7 @@ function ProfileSetupx({
             setPostData(postdataRep);
 
             setshowProfiileData(true);
+
         }, [idReducer, GuestReducer])
 
 
@@ -317,6 +322,8 @@ function ProfileSetupx({
                     position: "relative", zIndex: 1, padding: "0px"
                 }}>
                     <Profile
+                        pagePostScroll={pagePostScroll}
+                        profileDataHold={profileDataHold}
                         sethistoryScrollonload={sethistoryScrollonload}
                         RandomColor={RandomColor}
                         ActualpostDataAll={ActualpostDataAll}

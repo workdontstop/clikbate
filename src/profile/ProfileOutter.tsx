@@ -61,7 +61,7 @@ import {
   Box,
 } from "@material-ui/core";
 
-function ProfileOutter() {
+function ProfileOutter({ CallLoggedProfile }: any) {
   const { REACT_APP_SUPERSTARZ_URL, REACT_APP_CLOUNDFRONT, REACT_APP_APPX_STATE } = process.env;
 
   const isAppleDevice = /Mac|iPhone|iPad|iPod/.test(navigator.userAgent);
@@ -96,6 +96,22 @@ function ProfileOutter() {
 
 
 
+  const [historyDataPost, sethistoryDataPost] = useState<Array<any>>([]);
+
+  const [historyDataProfile, sethistoryDataProfile] = useState<Array<any>>([]);
+
+
+
+  const [ProfileLocalNav, setProfileLocalNav] = useState(0);
+
+  const [PostLocalNav, setPostLocalNav] = useState(0);
+
+
+
+
+
+
+  const [AllowDatabase, setAllowDatabase] = useState(1);
 
   const [callResponseTop, setcallResponseTop] = useState<boolean>(false);
 
@@ -573,8 +589,22 @@ function ProfileOutter() {
 
   const paperPostScrollRef = useRef<any>(null);
 
+  const pagePostScroll = useRef<any>(null);
+
+  const T1 = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const [profileDataHold, setprofileDataHold] = useState<Array<any>>([]);
+
+
 
   useEffect(() => {
+
+
+    if (T1.current) {
+      clearTimeout(T1.current);
+    }
+
+
     setminiProfile(false);
 
     if (allowCallMemberFeeds) {
@@ -584,8 +614,6 @@ function ProfileOutter() {
       };
 
       if (memeberPageidReducer === 0) {
-        dispatch(UserInfoUpdateMEMBERDATA([]));
-
         valax = {
           id: idReducer,
           id2: idReducer,
@@ -597,47 +625,69 @@ function ProfileOutter() {
         };
       }
 
+      if (memeberPageidReducer === 0) {
 
-      Axios.post(`${REACT_APP_SUPERSTARZ_URL}/checkIsLoggedxx`, {
-        values: valax,
-      }, {
-        withCredentials: true,
-      })
-        .then((response) => {
-          if (response.data.message === "logged in") {
+        ///alert('local');
 
+        dispatch(UserInfoUpdateMEMBERDATA([]));
 
+        setprofileDataHold([]);
 
+        setshowProfiileData(false);
+        setShowLoader2(false);
+        if (memeberPageidReducer === 0) {
+          callfeeds(0, pagenumReducer, 0);
+        } else {
+          callfeeds(idReducer, pagenumReducer, 0);
+        }
 
-            paperPostScrollRef.current.scrollTop = 0;
+      } else {
 
+        ///console.log(historyDataProfile);
 
-
-            dispatch(UserInfoUpdateMEMBERDATA(response.data.payload));
-
-
-            setshowProfiileData(false);
-
-            setShowLoader2(false);
-
-            ///alert(pagenumReducer);
-
-            if (memeberPageidReducer === 0) {
-              callfeeds(0, pagenumReducer, 0);
-            } else {
-              callfeeds(response.data.payload.id, pagenumReducer, 0);
-            }
-
-          } else if (response.data.message === "logged out") {
-            alert("Ongoing Security Updates Or You Are Logged Out, Pls Try Again Later");
-          }
+        Axios.post(`${REACT_APP_SUPERSTARZ_URL}/checkIsLoggedxx`, {
+          values: valax,
+        }, {
+          withCredentials: true,
         })
-        .catch(function (error) {
-          ///console.log("app.tsx checkislogged error");
-        });
-      ///console.log(MemberProfileData.[0]);
+          .then((response) => {
+            if (response.data.message === "logged in") {
+
+
+
+
+              //paperPostScrollRef.current.scrollTop = 0;
+              dispatch(UserInfoUpdateMEMBERDATA(response.data.payload));
+              setprofileDataHold(response.data.payload);
+              setshowProfiileData(false);
+              ///alert(pagenumReducer);
+              setShowLoader2(false);
+              if (memeberPageidReducer === 0) {
+                callfeeds(0, pagenumReducer, 0);
+              } else {
+                callfeeds(response.data.payload.id, pagenumReducer, 0);
+              }
+
+
+
+
+
+            } else if (response.data.message === "logged out") {
+              alert("Ongoing Security Updates Or You Are Logged Out, Pls Try Again Later");
+            }
+          })
+          .catch(function (error) {
+            ///console.log("app.tsx checkislogged error");
+          });
+        ///console.log(MemberProfileData.[0]);
+
+
+      }
     } else { setallowCallMemberFeeds(true); }
-  }, [REACT_APP_SUPERSTARZ_URL, dispatch, memeberPageidReducer, allowCallMemberFeeds, paperPostScrollRef]);
+
+
+
+  }, [REACT_APP_SUPERSTARZ_URL, dispatch, memeberPageidReducer, allowCallMemberFeeds, paperPostScrollRef, idReducer]);
 
   ///
   ///
@@ -813,12 +863,21 @@ function ProfileOutter() {
 
   const OpenModalForm = useCallback(
     (type: any) => {
-      var dd = { type: 0, id: 0, index: 200, innerid: 0, pagenumReducer: pagenumReducer };
+      var dd = {
+        type: 0, id: 0, index: 200, innerid: 0, pagenumReducer: pagenumReducer,
+
+        data: postDataxx,
+        dataPageNumberState: 0,
+        dataAll: postDataxx,
+        profileDataAll: postDataxx,
+      };
       if (type === 1) {
         let modalName = "Biography";
         setaboutTemplateGo(true);
         setStopBodyScroll(true);
         setShowModalForm(true);
+
+
 
         window.history.pushState(dd, "", modalName);
       }
@@ -940,7 +999,16 @@ function ProfileOutter() {
         id: 0,
         index: 0,
         innerid: 0,
-        pagenumReducer: pagenumReducer
+        pagenumReducer: pagenumReducer,
+
+        data: postData,
+        dataPageNumberState: 0,
+        dataAll: ActualpostDataAll,
+        profileDataAll: postData,
+
+        ProfileLocal: 0,
+        PostLocal: 0
+
 
 
       };
@@ -1037,7 +1105,8 @@ function ProfileOutter() {
 
 
 
-  const [historyDataPost, sethistoryDataPost] = useState<Array<any>>([]);
+
+
 
 
 
@@ -1047,258 +1116,98 @@ function ProfileOutter() {
   //////
   /////
   /////
-  window.onpopstate = (e: any) => {
-
-
-
-
-    var historyDataType = JSON.stringify(window.history.state.type);
-    let historyDataTypeInt = parseInt(historyDataType);
-
-    var historyId = JSON.stringify(window.history.state.id);
-    let historyIdInt = parseInt(historyId);
-
-
-    var historyIndex = JSON.stringify(window.history.state.index);
-    let historyIndexInt = 0;
-    if (parseInt(historyIndex)) historyIndexInt = parseInt(historyIndex);
-    ///alert(parseInt(historyIndex));
-    setScrollTo(historyIndexInt);
-
-    var historyDataAllStates = window.history.state.dataAll;
-    var PostPageNumberState = window.history.state.dataPageNumberState;
-
-
-
-
-
-
-
-    if (historyIndexInt === 400) {
-
-
-      setminiProfile(true);
-      setshowThisComponenet(true);
-      if (Timergg.current) {
-        clearTimeout(Timergg.current);
-      }
-
-      Timergg.current = setTimeout(() => {
-
-        setshowThisComponenet(false);
-      }, 500)
-
-
-
-      setTimeout(() => {
-        postDivRefx.current[latestInview].scrollIntoView({
-          behavior: "smooth",
-          block: "start",
-        });
-      }, 1000)
-
-    }
-    else {
-
-      sethistoryDataPost(historyDataAllStates);
-
-      console.log(historyDataAllStates);
-
-      setStopMini(true);
-
-      if (historyIndexInt === 0) {
-
-        sethistoryScrollonload(0);
-
-      } else {
-
-        sethistoryScrollonload(historyIndexInt);
-
-      }
-
-      var historyData = window.history.state.data;
-
-
-
-
-      var historyDataAll = window.history.state.AllMemberData;
-
-      var historycomOriginalData = window.history.state.comOriginalData;
-
-      var comScroll = JSON.stringify(window.history.state.comScroll);
-      let historycomScroll = parseInt(comScroll);
-
-
-      var limValuexx = JSON.stringify(window.history.state.pagenumReducer);
-      let limValue = 0;
-      if (parseInt(limValuexx)) limValue = parseInt(limValuexx);
-
-
-
-      ///var limValue = 0;
-      //alert(limValue)
-      ///jam
-      ////////
-
-      var comidhistoryData = window.history.state.comid;
-      var DiscussionImagehistoryData = window.history.state.DiscussionImage;
-
-      var reactTypeHis = JSON.stringify(window.history.state.reactType);
-      let historyreactTypeHis = parseInt(reactTypeHis);
-
-      dispatch(Updatepagenum(limValue));
-
-
-
-      if (historyDataTypeInt === 0 || historyDataTypeInt === 1) {
-
-
-      } else {
-
-        //setshowThisComponenet(true);
-      }
-
-
-      ///alert(historyDataTypeInt);
-
-      if (
-        historyDataTypeInt === 0 ||
-        historyDataTypeInt === 5 ||
-        historyDataTypeInt === 7 ||
-        historyDataTypeInt === 9
-      ) {
-
-
-        /// alert('jj');
-        callpopstatewithoutdata(
-          historyDataAllStates,
-          historyDataTypeInt,
-          comidhistoryData,
-          DiscussionImagehistoryData,
-          historycomOriginalData,
-          historycomScroll,
-          historyreactTypeHis,
-          limValue,
-          PostPageNumberState
-        );
-      } else if (
-        historyDataTypeInt === 1 ||
-        historyDataTypeInt === 6 ||
-        historyDataTypeInt === 8 ||
-        historyDataTypeInt === 10
-      ) {
-
-
-        if (
-
-          showModalUploadProfile ||
-          showModalUploadTask ||
-          activatecropImageReducer ||
-          showModalForm
-        ) {
-          CloseModalxx();
-        } else {
-          /////IF DATA IN CACHE(history data) DONT CALL FEEDS FROM SERVER
-          if (historyDataAllStates) {
-            const arr = historyDataAllStates;
-            setHistoryDataMan(arr);
-
-            setallowCallMemberFeeds(false);
-
-            dispatch(UserInfoUpdateMEMBER(historyIdInt));
-
-            dispatch(UserInfoUpdateMEMBERDATA(historyDataAll));
-
-            setshowProfiileData(false);
-
-
-            ////////////////
-
-
-            HistoryPostCall(true, arr, limValue, PostPageNumberState);
-
-            /////responsex(arr, limValue);
-            /////////////////
-
-
-
-
-
-            if (historyDataTypeInt === 6) {
-              setCommentHistoryData(historycomOriginalData);
-              setcommentHistoryScroll(historycomScroll);
-
-              setCommentPostid(comidhistoryData);
-              setDiscussionImage(DiscussionImagehistoryData);
-
-
-              setcallhistoryModal(200)
-            } else if (historyDataTypeInt === 8) {
-              setCommentHistoryData(historycomOriginalData);
-              setcommentHistoryScroll(historycomScroll);
-
-              setconnectTemplateGo(0);
-              setCommentPostid(comidhistoryData);
-              setDiscussionImage(DiscussionImagehistoryData);
-
-              setcallhistoryModal(300)
-
-              settypeEmo(historyreactTypeHis);
-            } else if (historyDataTypeInt === 10) {
-              setCommentHistoryData(historycomOriginalData);
-              setcommentHistoryScroll(historycomScroll);
-
-              setcallhistoryModal(400);
-              setconnectTemplateGo(historyreactTypeHis);
-            } else {
-            }
-          } else {
-            ///alert("sikii");
-            //setallowCallMemberFeeds(true);
-            dispatch(UserInfoUpdateMEMBER(historyIdInt));
-
-            setallowCallMemberFeeds(true);
-            if (historyDataTypeInt === 6) {
-              setCommentHistoryData(historycomOriginalData);
-              setcommentHistoryScroll(historycomScroll);
-
-              setCommentPostid(comidhistoryData);
-              setDiscussionImage(DiscussionImagehistoryData);
-
-              setcallhistoryModal(200)
-            } else if (historyDataTypeInt === 8) {
-              setCommentHistoryData(historycomOriginalData);
-              setcommentHistoryScroll(historycomScroll);
-
-              setconnectTemplateGo(0);
-              setCommentPostid(comidhistoryData);
-              setDiscussionImage(DiscussionImagehistoryData);
-
-              setcallhistoryModal(300)
-              settypeEmo(historyreactTypeHis);
-            } else if (historyDataTypeInt === 10) {
-              setCommentHistoryData(historycomOriginalData);
-              setcommentHistoryScroll(historycomScroll);
-
-              setcallhistoryModal(400)
-              setconnectTemplateGo(historyreactTypeHis);
-            } else {
-            }
-          }
-        }
-      } else {
-      }
-
-
+  // Define interfaces for the state objects
+  interface HistoryState {
+    type: number;
+    id: number;
+    index: number;
+    dataAll: any[];
+    dataPageNumberState: number;
+    data: any;
+    AllMemberData: any;
+    comOriginalData: any;
+    comScroll: number;
+    pagenumReducer: number;
+    comid: string;
+    DiscussionImage: string;
+    reactType: number;
+    profileDataAll: any[];
+    ProfileLocal: number;
+    PostLocal: number;
+
+  }
+
+  window.onpopstate = (e: PopStateEvent) => {
+    const state: HistoryState = window.history.state;
+
+
+
+    // Destructure the state object
+    const {
+      type,
+      id,
+      index,
+      dataAll,
+      dataPageNumberState,
+      comOriginalData,
+      comScroll,
+      pagenumReducer,
+      comid,
+      DiscussionImage,
+      reactType,
+      profileDataAll,
+      ProfileLocal,
+      PostLocal,
+    } = state;
+
+
+
+
+    // Set historyDataPost and other state values
+    sethistoryDataPost(dataAll);
+    sethistoryDataProfile(profileDataAll);
+
+
+    setProfileLocalNav(ProfileLocal);
+    setPostLocalNav(PostLocal);
+
+
+    setAllowDatabase(type);
+
+
+    setScrollTo(index);
+    setStopMini(true);
+    sethistoryScrollonload(index === 0 ? 0 : index);
+
+    // Update page number if necessary
+    if (pagenumReducer) {
+      dispatch(Updatepagenum(pagenumReducer));
     }
 
+    // Determine if callpopstatewithoutOrWithdata should be called
+    const validTypes1 = [0, 5, 7, 9];
+    const validTypes2 = [1, 6, 8, 10];
 
-
+    if (validTypes1.includes(type) || validTypes2.includes(type)) {
+      callpopstatewithoutOrWithdata(
+        dataAll,
+        type,
+        comid,
+        DiscussionImage,
+        comOriginalData,
+        comScroll,
+        reactType,
+        pagenumReducer,
+        dataPageNumberState,
+        id
+      );
+    }
   };
 
+  const Timerccx = useRef<ReturnType<typeof setTimeout> | null>(null);
 
 
-  const callpopstatewithoutdata = (
+  const callpopstatewithoutOrWithdata = (
     historyDataAllStates: any,
     ty: any,
     i: any,
@@ -1307,7 +1216,8 @@ function ProfileOutter() {
     sr: any,
     reactTy: any,
     limValue: any,
-    PostPageNumberState: any
+    PostPageNumberState: any,
+    historyIdInt: any
   ) => {
     if (
       showModalUploadProfile ||
@@ -1318,60 +1228,68 @@ function ProfileOutter() {
       CloseModalxx();
     } else {
 
-      setStopBodyScroll(false);
-      setShowModalUpload(false);
-      dispatch(UserInfoUpdateMEMBER(0));
 
-      if (historyDataAllStates) {
-        // alert("h");
-        const arr = historyDataAllStates;
-        setHistoryDataMan(arr);
-        setshowProfiileData(false);
-
-
-        ////////////////
-
-        HistoryPostCall(true, arr, limValue, PostPageNumberState);
-        /////responsex(arr, limValue);
-        /////////////////
-
-
-      } else {
-        // alert("s");
-        setshowProfiileData(false);
-        callfeeds(0, limValue, 0);
-      }
-
-      if (ty == 5) {
-        setCommentHistoryData(dd);
-        setcommentHistoryScroll(sr);
-
-
-        setCommentPostid(i);
-        setDiscussionImage(d);
-
-        setcallhistoryModal(200)
-
-
-      } else if (ty === 7) {
-
-        setconnectTemplateGo(0);
-        setCommentPostid(i);
-        setDiscussionImage(d);
-
-        setcallhistoryModal(300)
-
-        settypeEmo(reactTy);
-      } else if (ty === 9) {
-        setCommentHistoryData(dd);
-        setcommentHistoryScroll(sr);
+      setTimeout(() => {
 
 
 
-        setcallhistoryModal(400)
-        setconnectTemplateGo(reactTy);
-      } else {
-      }
+        setStopBodyScroll(false);
+        setShowModalUpload(false);
+
+        dispatch(UserInfoUpdateMEMBER(historyIdInt));
+
+
+        if (Timerccx.current) {
+          clearTimeout(Timerccx.current);
+        }
+
+
+
+        if (historyDataAllStates) {
+
+          ////  This is set on Top ALREADY   sethistoryDataPost(historyDataAllStates);
+          ////  History Data Mode
+          setshowProfiileData(false);
+
+        } else {
+          // alert("s");
+          ////  DataBase  Data Mode
+          setshowProfiileData(false);
+          callfeeds(0, limValue, 0);
+        }
+
+        if (ty == 5) {
+          setCommentHistoryData(dd);
+          setcommentHistoryScroll(sr);
+
+
+          setCommentPostid(i);
+          setDiscussionImage(d);
+
+          setcallhistoryModal(200)
+
+
+        } else if (ty === 7) {
+
+          setconnectTemplateGo(0);
+          setCommentPostid(i);
+          setDiscussionImage(d);
+
+          setcallhistoryModal(300)
+
+          settypeEmo(reactTy);
+        } else if (ty === 9) {
+          setCommentHistoryData(dd);
+          setcommentHistoryScroll(sr);
+
+
+
+          setcallhistoryModal(400)
+          setconnectTemplateGo(reactTy);
+        } else {
+        }
+
+      }, 500)
     }
   };
 
@@ -1457,7 +1375,7 @@ function ProfileOutter() {
 
 
       if (miniProfile) {
-        historyBoy();
+        ////  historyBoy();
       }
       setminiProfile(false);
 
@@ -1483,39 +1401,6 @@ function ProfileOutter() {
 
 
 
-  const historyBoy = useCallback(() => {
-    if (StopMini) {
-
-    } else {
-      if (memeberPageidReducer === 0) {
-        var tt = 0;
-
-        var n, d;
-
-        n = '';
-        d = {
-          type: 1,
-          id: 0,
-          index: 400,
-          data: postData1,
-          innerid: 0,
-          pagenumReducer: pagenumReducer,
-        };
-        window.history.replaceState(d, "", `${n}`);
-
-        let modalName = ``;
-
-        var dd = {
-          type: 1,
-          id: 0,
-          innerid: 0,
-          pagenumReducer: pagenumReducer,
-        };
-        window.history.pushState(dd, "", modalName);
-      }
-    }
-
-  }, [postData1, pagenumReducer, memeberPageidReducer, StopMini])
 
 
 
@@ -1536,7 +1421,7 @@ function ProfileOutter() {
     }
 
 
-    //setshowProfiileData(false);
+    setshowProfiileData(false);
     setActualData([]);
     setActualData2([]);
     setActualData3([]);
@@ -1572,7 +1457,7 @@ function ProfileOutter() {
 
     if (postPageLimitx === 0) {
       //alert('kkkinuj');
-      historyBoy();
+      // historyBoy();
 
     }
 
@@ -1599,7 +1484,10 @@ function ProfileOutter() {
 
 
     sethistoryDataPost([]);
+    sethistoryDataProfile([]);
   }
+
+
 
   const callfeeds = useCallback(
     (aa: number, postPageLimitx: any, fromPagination: number) => {
@@ -1609,6 +1497,8 @@ function ProfileOutter() {
         id3: aa,
         postPageLimit: postPageLimitx
       };
+
+
 
 
 
@@ -1635,15 +1525,20 @@ function ProfileOutter() {
       }
 
 
+      ///alert(historyDataPost.length);
 
-      if (historyDataPost.length > 0 && fromPagination === 0) {
 
-        ///alert('local data');
+      if (PostLocalNav === 1 && fromPagination === 0) {
+
+        /// alert('post local');
+
         CallFirstFeed(historyDataPost, postPageLimitx);
 
       } else {
 
         setScrollTo(0);
+
+
 
         Axios.post(
           `${REACT_APP_SUPERSTARZ_URL}/${tt}`,
@@ -1658,10 +1553,22 @@ function ProfileOutter() {
             if (response.data.message === "feeds fetched") {
 
 
+
               var postdataRep = response.data.payload;
 
 
-              CallFirstFeed(postdataRep, postPageLimitx);
+              if (postdataRep.length === 0) {
+
+                dispatch(UpdateLoader(false));
+
+              } else {
+                CallFirstFeed(postdataRep, postPageLimitx);
+
+              }
+
+
+
+
 
 
             } else if (response.data.message === "error in fetching feeds") {
@@ -1674,7 +1581,7 @@ function ProfileOutter() {
 
       }
     },
-    [idReducer, REACT_APP_SUPERSTARZ_URL, memeberPageidReducer, postPageLimit, historyDataPost]
+    [idReducer, REACT_APP_SUPERSTARZ_URL, memeberPageidReducer, postPageLimit, historyDataPost, PostLocalNav]
   );
 
 
@@ -1723,7 +1630,8 @@ function ProfileOutter() {
 
     sethistoryDataPost([]);
 
-    var xx = ActualData3[ActualData3.length - 1].id;
+
+    var xx = ActualpostDataAll[ActualpostDataAll.length - 1].id;
 
     /////only update
 
@@ -1748,7 +1656,7 @@ function ProfileOutter() {
 
 
 
-  }, [postPageLimit, memeberPageidReducer, ActualData3])
+  }, [postPageLimit, memeberPageidReducer, ActualpostDataAll])
 
 
 
@@ -1773,17 +1681,6 @@ function ProfileOutter() {
   ///
   ///
   ///
-  useEffect(() => {
-    /// alert(idReducer);
-    if (idReducer === 0) {
-    } else {
-      setTimeout(() => {
-        callfeeds(0, 0, 0);
-      }, 600);
-
-
-    }
-  }, [REACT_APP_SUPERSTARZ_URL, idReducer]);
 
 
 
@@ -1811,6 +1708,8 @@ function ProfileOutter() {
 
 
 
+  const [postDataxx, setPostDataxx] = useState<Array<any>>([]);
+
   ///
   ///
   ///
@@ -1822,7 +1721,18 @@ function ProfileOutter() {
       //pushstate add enteries to your history
       // uploadClose(1);
 
-      var dd = { type: 0, id: 0, innerid: 0, pagenumReducer: pagenumReducer };
+      var dd = {
+        type: 0, id: 0, innerid: 0, pagenumReducer: pagenumReducer,
+
+        data: postDataxx,
+        dataPageNumberState: 0,
+        dataAll: postDataxx,
+        profileDataAll: postDataxx,
+
+        ProfileLocal: 0,
+        PostLocal: 0
+
+      };
 
       if (type === 1) {
         window.history.pushState(dd, "", "Upload_Profile");
@@ -1841,7 +1751,17 @@ function ProfileOutter() {
       //pushstate add enteries to your history
       // uploadClose(1);
 
-      var dd = { type: 0, id: 0, innerid: 0, pagenumReducer: pagenumReducer };
+      var dd = {
+        type: 0, id: 0, innerid: 0, pagenumReducer: pagenumReducer,
+
+        data: postDataxx,
+        dataPageNumberState: 0,
+        dataAll: postDataxx,
+        profileDataAll: postDataxx,
+
+        ProfileLocal: 0,
+        PostLocal: 0
+      };
 
       window.history.pushState(dd, "", "Editor");
 
@@ -1859,7 +1779,17 @@ function ProfileOutter() {
       setStopBodyScroll(true);
       setShowModalUpload(true);
       //pushstate add enteries to your history
-      var dd = { type: 0, id: 0, innerid: 0, pagenumReducer: pagenumReducer };
+      var dd = {
+        type: 0, id: 0, innerid: 0, pagenumReducer: pagenumReducer,
+
+        data: postDataxx,
+        dataPageNumberState: 0,
+        dataAll: postDataxx,
+        profileDataAll: postDataxx,
+
+        ProfileLocal: 0,
+        PostLocal: 0
+      };
       window.history.pushState(dd, "", "Upload");
     }
 
@@ -2550,7 +2480,7 @@ function ProfileOutter() {
 
 
 
-                <Grid item className="zuperxyinfotext" xs={12} style={{
+                <Grid ref={pagePostScroll} item className="zuperxyinfotext" xs={12} style={{
                   padding: '0px',
                   top: matchMobile ? "10vh" : '17vh',
                   fontFamily: "Arial, Helvetica, sans-serif",
@@ -2558,7 +2488,6 @@ function ProfileOutter() {
                   position: 'relative',
                   zIndex: 1,
                   fontSize: matchMobile ? "3.6vh" : "4vh",
-
                   color: '#ffffff'
                 }}>
 
@@ -2678,105 +2607,7 @@ function ProfileOutter() {
 
               </Grid>
 
-              {matchMobile ? null :
-                showESC ?
-                  <>
-                    <Grid item ref={setupTop} xs={12} style={{
-                      height: "0px",
-                      width: '12.5%', position: "fixed", zIndex: 6, padding: "0px", paddingRight: '6.3vw', textAlign: 'right', top: '12vh',
-                      opacity: '0.7',
-                    }}>
-                      <h1 className={
-                        darkmodeReducer
-                          ? "make-small-icons-clickable-lightCrop turdark dontallowhighlighting zuperkingIcon "
-                          : "make-small-icons-clickable-darkCrop  turdark dontallowhighlighting zuperkingIcon  "
-                      }
-                        style={{
-                          fontSize:
-                            "1.4vw",
-                          marginTop: '-6vh', padding: "3px",
-                          fontFamily: "Arial, Helvetica, sans-seri",
 
-                        }}>
-
-                        ESC
-                      </h1>
-
-                    </Grid>
-
-                  </> : null}
-
-              <Grid item ref={setupTop} xs={12} style={{
-                position: "relative", zIndex: 1, padding: "0px", display: 'none'
-              }}>
-              </Grid>
-
-
-              {/*/////////////////////////////////////////////////////////////////////////////////TO TOP*/}
-              {showDataTop ? (
-                <Grid item xs={12}
-
-                  style={{
-                    position: "relative", zIndex: 1, padding: "0px",
-                  }}>
-                  <ProfileSetup
-
-                    sethistoryScrollonload={sethistoryScrollonload}
-                    RandomColor={RandomColor}
-                    ActualpostDataAll={ActualpostDataAll}
-                    PostPageLimit={postPageLimit}
-                    setupTop={setupTop}
-                    CallMorePages={CallMorePages}
-                    showData1={showData1}
-                    setuptype={4}
-                    setcallResponse={setcallResponseTop}
-                    callResponse={callResponseTop}
-                    ActualData={ActualDataTop}
-                    ActualPagenum={ActualPagenum}
-                    setPostPageLimit={setPostPageLimit}
-                    setPostData={setPostDataBackToTop}
-                    setshowProfiileData={setshowProfiileData}
-                    showProfiileData={showProfiileData}
-                    setindexRoll={setindexRoll}
-                    postDivRefRoll={postDivRefRoll}
-                    postDivRefx={postDivRefx}
-                    setlatestInview={setlatestInview}
-                    WebsiteMode={WebsiteMode}
-                    setkeypost={setkeypost}
-                    historyScrollonload={historyScrollonload}
-                    callhistoryModal={callhistoryModal}
-                    openmodalhistory={openmodalhistory}
-                    clikplay={clikplay}
-                    ShowBigPlay={ShowBigPlay}
-                    setShowBigPlay={setShowBigPlay}
-                    callPagination={callPagination}
-                    StopMini={StopMini}
-                    setStopMini={setStopMini}
-                    ShowLoader2={ShowLoader2}
-                    setShowLoader2={setShowLoader2}
-                    setscrollLocation={setscrollLocation}
-                    showThisComponenet={showThisComponenet}
-                    setshowThisComponenet={setshowThisComponenet}
-                    ScrollTo={ScrollTo}
-                    settypeEmo={settypeEmo}
-                    setconnectTemplateGo={setconnectTemplateGo}
-                    setminiProfile={setminiProfile}
-                    miniProfilexx={miniProfile}
-                    sliderIndexMini={sliderIndexMini}
-                    setSliderIndexMini={setSliderIndexMini}
-                    zoomClickedIndex={zoomClickedIndex}
-                    setzoomClickedIndex={setzoomClickedIndex}
-                    setStopBodyScroll={setStopBodyScroll}
-                    setCommentPostid={setCommentPostid}
-                    setDiscussionImage={setDiscussionImage}
-                    setx={setx}
-                    OpenModalForm={OpenModalForm}
-                    postData={postDataBackToTop}
-                    paperPostScrollRef={paperPostScrollRef}
-                  />
-                </Grid>
-
-              ) : null}
 
 
 
@@ -2787,6 +2618,8 @@ function ProfileOutter() {
                   position: "relative", zIndex: 1, padding: "0px",
                 }}>
                   <ProfileSetup
+                    pagePostScroll={pagePostScroll}
+                    profileDataHold={profileDataHold}
                     sethistoryScrollonload={sethistoryScrollonload}
                     RandomColor={RandomColor}
                     ActualpostDataAll={ActualpostDataAll}
@@ -2797,7 +2630,7 @@ function ProfileOutter() {
                     setuptype={1}
                     setcallResponse={setcallResponse1}
                     callResponse={callResponse1}
-                    ActualData={ActualData}
+                    ActualData={ActualpostDataAll}
                     ActualPagenum={ActualPagenum}
                     setPostPageLimit={setPostPageLimit}
                     setPostData={setPostData1}
@@ -2845,138 +2678,6 @@ function ProfileOutter() {
               ) : null}
 
 
-
-
-
-
-              {/*///////////////////////////////////////////////////////////////////////////////// FEEDS  2*/}
-              {showData2 ? (
-                <Grid item xs={12} style={{
-                  position: "relative", zIndex: 1, padding: "0px", marginTop: matchMobile ? "11vh" : '1.5vh',
-                }}>
-                  <ProfileSetup
-                    sethistoryScrollonload={sethistoryScrollonload}
-                    RandomColor={RandomColor}
-                    ActualpostDataAll={ActualpostDataAll}
-                    PostPageLimit={postPageLimit}
-                    setupTop={setupTop}
-                    CallMorePages={CallMorePages}
-                    showData3={showData3}
-                    setuptype={2}
-                    setcallResponse={setcallResponse2}
-                    callResponse={callResponse2}
-                    ActualData={ActualData2}
-                    ActualPagenum={ActualPagenum}
-                    setPostPageLimit={setPostPageLimit}
-                    setPostData={setPostData2}
-                    setshowProfiileData={setshowProfiileData}
-                    showProfiileData={showProfiileData}
-                    setindexRoll={setindexRoll}
-                    postDivRefRoll={postDivRefRoll}
-                    postDivRefx={postDivRefx}
-                    setlatestInview={setlatestInview}
-                    WebsiteMode={WebsiteMode}
-                    setkeypost={setkeypost}
-                    historyScrollonload={historyScrollonload}
-                    callhistoryModal={callhistoryModal}
-                    openmodalhistory={openmodalhistory}
-                    clikplay={clikplay}
-                    ShowBigPlay={ShowBigPlay}
-                    setShowBigPlay={setShowBigPlay}
-                    callPagination={callPagination}
-                    StopMini={StopMini}
-                    setStopMini={setStopMini}
-                    ShowLoader2={ShowLoader2}
-                    setShowLoader2={setShowLoader2}
-                    setscrollLocation={setscrollLocation}
-                    showThisComponenet={showThisComponenet}
-                    setshowThisComponenet={setshowThisComponenet}
-                    ScrollTo={ScrollTo}
-                    settypeEmo={settypeEmo}
-                    setconnectTemplateGo={setconnectTemplateGo}
-                    setminiProfile={setminiProfile}
-                    miniProfilexx={miniProfile}
-                    sliderIndexMini={sliderIndexMini}
-                    setSliderIndexMini={setSliderIndexMini}
-                    zoomClickedIndex={zoomClickedIndex}
-                    setzoomClickedIndex={setzoomClickedIndex}
-                    setStopBodyScroll={setStopBodyScroll}
-                    setCommentPostid={setCommentPostid}
-                    setDiscussionImage={setDiscussionImage}
-                    setx={setx}
-                    OpenModalForm={OpenModalForm}
-                    postData={postData2}
-                    paperPostScrollRef={paperPostScrollRef}
-                  />
-
-
-                </Grid>
-              ) : null}
-
-
-
-
-              {/*///////////////////////////////////////////////////////////////////////////////// FEEDS  3*/}
-              {showData3 ? (
-                <Grid item xs={12} style={{
-                  position: "relative", zIndex: 1, padding: "0px", marginTop: matchMobile ? "12vh" : '13vh',
-                }}>
-                  <ProfileSetup
-                    sethistoryScrollonload={sethistoryScrollonload}
-                    RandomColor={RandomColor}
-                    ActualpostDataAll={ActualpostDataAll}
-                    PostPageLimit={postPageLimit}
-                    setupTop={setupTop}
-                    CallMorePages={CallMorePages}
-                    showDataTop={showDataTop}
-                    setuptype={3}
-                    setcallResponse={setcallResponse3}
-                    callResponse={callResponse3}
-                    ActualData={ActualData3}
-                    ActualPagenum={ActualPagenum}
-                    setPostPageLimit={setPostPageLimit}
-                    setPostData={setPostData3}
-                    setshowProfiileData={setshowProfiileData}
-                    showProfiileData={showProfiileData}
-                    setindexRoll={setindexRoll}
-                    postDivRefRoll={postDivRefRoll}
-                    postDivRefx={postDivRefx}
-                    setlatestInview={setlatestInview}
-                    WebsiteMode={WebsiteMode}
-                    setkeypost={setkeypost}
-                    historyScrollonload={historyScrollonload}
-                    callhistoryModal={callhistoryModal}
-                    openmodalhistory={openmodalhistory}
-                    clikplay={clikplay}
-                    ShowBigPlay={ShowBigPlay}
-                    setShowBigPlay={setShowBigPlay}
-                    callPagination={callPagination}
-                    StopMini={StopMini}
-                    setStopMini={setStopMini}
-                    ShowLoader2={ShowLoader2}
-                    setShowLoader2={setShowLoader2}
-                    setscrollLocation={setscrollLocation}
-                    showThisComponenet={showThisComponenet}
-                    setshowThisComponenet={setshowThisComponenet}
-                    ScrollTo={ScrollTo}
-                    settypeEmo={settypeEmo}
-                    setconnectTemplateGo={setconnectTemplateGo}
-                    setminiProfile={setminiProfile}
-                    miniProfilexx={miniProfile}
-                    sliderIndexMini={sliderIndexMini}
-                    setSliderIndexMini={setSliderIndexMini}
-                    zoomClickedIndex={zoomClickedIndex}
-                    setzoomClickedIndex={setzoomClickedIndex}
-                    setStopBodyScroll={setStopBodyScroll}
-                    setCommentPostid={setCommentPostid}
-                    setDiscussionImage={setDiscussionImage}
-                    setx={setx}
-                    OpenModalForm={OpenModalForm}
-                    postData={postData3}
-                    paperPostScrollRef={paperPostScrollRef}
-                  />
-                </Grid>
-              ) : null}
 
 
 
@@ -3290,6 +2991,7 @@ function ProfileOutter() {
                   />
                 </div>
                 <CommentTemplate
+                  profileDataHold={profileDataHold}
                   dontallowspring={dontallowspring}
                   setcommentHistoryScroll={setcommentHistoryScroll}
                   setCommentHistoryData={setCommentHistoryData}
@@ -3365,6 +3067,14 @@ function ProfileOutter() {
 
                 <Menu
 
+
+                  pagenumReducer={pagenumReducer}
+                  setuptype={1}
+                  ActualpostDataAll={ActualpostDataAll}
+                  profileDataHold={profileDataHold}
+
+                  RandomColor={RandomColor}
+                  setUploadGPT={setUploadGPT}
                   WebsiteMode={WebsiteMode}
                   showModalForm={showModalForm}
                   shownav={shownav}
@@ -3630,6 +3340,7 @@ function ProfileOutter() {
                 }}
               >
                 <ActualMenu
+                  profileDataHold={profileDataHold}
                   setUploadGPT={setUploadGPT}
                   paperPostScrollRef={paperPostScrollRef}
                   setuptype={1}

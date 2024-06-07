@@ -20,6 +20,7 @@
     "@mui/icons-material": "^5.8.3",
     "@mui/lab": "^5.0.0-alpha.85",
     "@mui/material": "^5.8.3",
+    "@reduxjs/toolkit": "^2.2.5",
     "@testing-library/jest-dom": "^5.16.4",
     "@types/ffmpeg": "^1.0.7",
     "@types/material-ui": "^0.21.12",

@@ -133,6 +133,8 @@ function Postx({
   ActualpostDataAll,
   setuptype,
 
+  profileDataHold
+
 
 }: any) {
   const { REACT_APP_SUPERSTARZ_URL, REACT_APP_APPX_STATE, REACT_APP_CLOUNDFRONT } = process.env;
@@ -407,26 +409,38 @@ function Postx({
   }, [post]);
 
   useEffect(() => {
-    setEin(post.EmoIn);
-    setEmo1Num(post.lovely);
-    setEmo2Num(post.cool);
-    setEmo3Num(post.care);
-    setEmo4Num(post.funny);
 
-    if (post.EmoIn === 1) {
-      startSpin();
-    } else if (post.EmoIn === 2) {
-      startSpin2();
-    } else if (post.EmoIn === 3) {
-      startSpin3();
-    } else if (post.EmoIn === 4) {
-      startSpin4();
-    } else {
-    }
 
     setTimeout(() => {
-      setStopSpring(true);
-    }, 30000);
+
+
+
+      setEin(post.EmoIn);
+
+      /// alert(post.EmoIn);
+
+      setEmo1Num(post.lovely);
+      setEmo2Num(post.cool);
+      setEmo3Num(post.care);
+      setEmo4Num(post.funny);
+
+      if (post.EmoIn === 1) {
+        startSpin();
+      } else if (post.EmoIn === 2) {
+        startSpin2();
+      } else if (post.EmoIn === 3) {
+        startSpin3();
+      } else if (post.EmoIn === 4) {
+        startSpin4();
+      } else {
+      }
+
+      setTimeout(() => {
+        setStopSpring(true);
+      }, 30000);
+    }, 3000);
+
+
   }, [post]);
 
   ///
@@ -1160,12 +1174,21 @@ function Postx({
 
   const GoToMember = () => {
 
-    dispatch(Updatepagenum(0));
 
-    if (memeberPageidReducer === post.sender) {
+
+    if (MemberProfileDataReducer.id === post.sender) {
+      dispatch(UpdateLoader(false));
+
     } else {
+
+      ///paperPostScrollRef.current.scrollTop = 0;
       ///
+
+      dispatch(Updatepagenum(0));
       dispatch(UserInfoUpdateMEMBER(post.sender));
+
+
+
       //
       var tt = paperPostScrollRef.current.scrollTop;
 
@@ -1182,6 +1205,10 @@ function Postx({
           pagenumReducer: pagenumReducer,
           dataPageNumberState: setuptype,
           dataAll: ActualpostDataAll,
+          profileDataAll: profileDataHold,
+
+          ProfileLocal: 1,
+          PostLocal: 1
 
         };
       } else {
@@ -1195,6 +1222,10 @@ function Postx({
           pagenumReducer: pagenumReducer,
           dataPageNumberState: setuptype,
           dataAll: ActualpostDataAll,
+          profileDataAll: profileDataHold,
+
+          ProfileLocal: 1,
+          PostLocal: 1
 
 
         };
@@ -1209,8 +1240,23 @@ function Postx({
         id: post.sender,
         innerid: 0,
         pagenumReducer: pagenumReducer,
+
+        data: postData,
+        dataPageNumberState: setuptype,
+        dataAll: ActualpostDataAll,
+        profileDataAll: profileDataHold,
+
+        ProfileLocal: 0,
+        PostLocal: 0
+
       };
+
+
       window.history.pushState(dd, "", modalName);
+
+
+
+
     }
   };
 
@@ -1218,13 +1264,14 @@ function Postx({
     if (Timervv.current) {
       clearTimeout(Timervv.current);
     }
-    if (memeberPageidReducer === post.sender) {
+    if (MemberProfileDataReducer.id === post.sender) {
+      dispatch(UpdateLoader(false));
     } else {
       dispatch(UpdateLoader(true));
     }
     Timervv.current = setTimeout(function () {
       GoToMember();
-    }, 1000);
+    }, 100);
   };
 
   const commentClicked = () => {
@@ -1866,8 +1913,8 @@ function Postx({
                         alignItems: "center",
                         justifyContent: "left",
                         zIndex: 1,
-                        paddingLeft: "2vw",
-                        marginLeft: matchMobile ? '18%' : '10.5%',
+                        paddingLeft: "1vw",
+                        marginLeft: matchMobile ? '1%' : '0.5%',
                         height: "20px",
                         display: post.audioData ? 'flex' : 'none'
                       }}
@@ -1911,7 +1958,7 @@ function Postx({
                               }}
                             />
 
-                            <span style={{ paddingLeft: matchMobile ? '7vw' : "1.6vw", opacity: 0.6 }}>
+                            <span style={{ paddingLeft: matchMobile ? '5vw' : "1.3vw", opacity: 0.6 }}>
                               {truncatedName}  </span>
 
                           </span>
