@@ -371,8 +371,8 @@ function Connectx({
             style={{
               backgroundImage: `linear-gradient(45deg, ${colorReducer},${post.color1})`,
               zIndex: 2,
-              left: matchMobile ? '-3px' : `${profileImagethumbLeft}px`,
-              top: matchMobile ? `${profileImagethumbTop - 22}px` : `${profileImagethumbTop}px`,
+              left: matchMobile ? '-11px' : `${profileImagethumbLeft + 5}px`,
+              top: matchMobile ? `${profileImagethumbTop - 32}px` : `${profileImagethumbTop - 11}px`,
               opacity: 0.8,
               position: "absolute",
               cursor: 'pointer',

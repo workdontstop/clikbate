@@ -284,7 +284,7 @@ function App(): JSX.Element {
               top: "0px",
               width: "100%",
               height: "100%",
-              zIndex: 10,
+              zIndex: 100000000,
             }}
           >
             <Grid container className={containerApp} style={{ top: "27%" }}>

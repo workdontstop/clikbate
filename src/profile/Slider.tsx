@@ -83,8 +83,11 @@ function Sliderx({
   ShowPost,
   setShowPost,
 
-  setPlayAudio
+  setPlayAudio,
+  minimise,
+  setminimise,
 
+  RandomColor
 
 
 }: any): JSX.Element {
@@ -250,6 +253,8 @@ function Sliderx({
 
 
 
+
+
       setlatestInview(pey);
 
       setShowPad(true);
@@ -274,9 +279,10 @@ function Sliderx({
         clearTimeout(sTimerccxxhh.current);
       }
       sTimerccxxhh.current = setTimeout(() => {
+        /// setmaximiseFirst(false);
         ///setShowAudioIcon(false);
         //setShowEmoIcon(false);
-      }, 7000)
+      }, 4000)
 
 
       if (interactContent && interact && ActiveCanvas === pey) {
@@ -311,6 +317,8 @@ function Sliderx({
       setPlayAudio(false);
 
       setShowPost(false);
+
+      /// setmaximiseFirst(false);
 
       //setShowAudioIcon(true);
       ///setShowReactionsIcon(true);
@@ -347,8 +355,11 @@ function Sliderx({
 
 
     if (inView) {
+
       setShowPost(true);
+      ///setmaximiseFirst(true);
     }
+
 
     showcaptionwaitTimer.current = setTimeout(function () {
 
@@ -1530,6 +1541,8 @@ function Sliderx({
 
             if (post.interact1b || post.interact1a) {
 
+
+
               if (clicked === 1 && clikarc2) {
 
                 ///clears stop interaction timer for long imagess (PC)
@@ -1539,6 +1552,8 @@ function Sliderx({
   */
 
                 CallInteractStart2();
+
+
 
                 ///  closeItemClick();
 
@@ -1552,35 +1567,48 @@ function Sliderx({
 
 
 
+
+
               } else if (clicked === 1) {
 
 
 
+                if (minimise && matchPc) {
 
-                switch (event.detail) {
-                  case 1:
-                    setinteract(false);
-                    setinteractContent("");
-                    setStopShowPad(false);
-                    setinteracttypeAll(0);
-                    setfadeout(false);
-
-
-                    ClickAudio();
+                  setminimise(false);
+                } else {
 
 
 
-                    ////THIS STOPS INTERACTION
-                    ///if (tiim.current) {
-                    //// clearTimeout(tiim.current);
-                    ////  } 
-                    /////THIS STOPS INTERACTION
+                  switch (event.detail) {
+                    case 1:
+                      setinteract(false);
+                      setinteractContent("");
+                      setStopShowPad(false);
+                      setinteracttypeAll(0);
+                      setfadeout(false);
 
 
-                    ///context.clearRect(0, 0, canvasRefIn.current.width, canvasRefIn.current.width);
-                    ///setHasInteractivity(false);
-                    ////clickslider(event);
-                    break;
+                      ClickAudio();
+
+
+
+
+
+                      ////THIS STOPS INTERACTION
+                      ///if (tiim.current) {
+                      //// clearTimeout(tiim.current);
+                      ////  } 
+                      /////THIS STOPS INTERACTION
+
+
+                      ///context.clearRect(0, 0, canvasRefIn.current.width, canvasRefIn.current.width);
+                      ///setHasInteractivity(false);
+                      ////clickslider(event);
+                      break;
+
+                  }
+
 
                 }
 
@@ -1592,18 +1620,20 @@ function Sliderx({
             } else {
             }
 
-            //alert(imageHeightcss);
           }
+
+          //alert(imageHeightcss);
+
         });
       }
     },
-    [data, imageWidthcss, imageHeightcss, interact, ImageDuration, isAppleDevice, bigPixel1, bigPixel2]
+    [data, imageWidthcss, imageHeightcss, interact, ImageDuration, isAppleDevice, bigPixel1, bigPixel2, minimise, matchPc]
   );
 
 
 
   ///
-  ///
+  ///,
   ///
   /// HANDLE TOUCH START EVENT
   const In = (e: any) => {
@@ -1764,6 +1794,41 @@ function Sliderx({
 
 
 
+  function hexToRgb(hex: any) {
+    hex = hex.replace('#', '');
+    var bigint = parseInt(hex, 16);
+    var r = (bigint >> 16) & 255;
+    var g = (bigint >> 8) & 255;
+    var b = bigint & 255;
+    return [r, g, b];
+  }
+
+  function rgbToHex(r: any, g: any, b: any) {
+    return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1).toUpperCase();
+  }
+
+  function blendColors(color1: any, color2: any) {
+    var rgb1 = hexToRgb(color1);
+    var rgb2 = hexToRgb(color2);
+    var blendedRgb = [
+      Math.round((rgb1[0] + rgb2[0]) / 2),
+      Math.round((rgb1[1] + rgb2[1]) / 2),
+      Math.round((rgb1[2] + rgb2[2]) / 2)
+    ];
+    return rgbToHex(blendedRgb[0], blendedRgb[1], blendedRgb[2]);
+  }
+
+
+
+
+  var color1 = RandomColor;
+  var color2 = colorReducer;
+  var blendedColor = blendColors(color1, color2);
+
+
+
+
+
 
   return (
     <>
@@ -1890,6 +1955,8 @@ function Sliderx({
         {slides.length > 0 ? (
           interactContent ? null : (
             <SliderNumber
+              minimise={minimise}
+
               autoSlideDisplay={autoSlideDisplay}
               sliderLoader={sliderLoader}
 
@@ -1936,7 +2003,7 @@ function Sliderx({
               alt="a superstarz post "
               style={{
                 ...style,
-                borderRadius: matchMobile ? '0%' : '4%',
+                borderRadius: matchMobile ? minimise ? '4%' : '0%' : '4%',
                 cursor: "pointer",
                 width: "100%",
                 height: type === 1 ? `auto` : itemheight[pey],
@@ -1960,8 +2027,13 @@ function Sliderx({
 
               <img
                 onMouseDown={() => {
+                  ///maximiseFirst
+                  if (minimise) {
+                    setminimise(false);
+                  } else {
+                    ClickAudio();
+                  }
 
-                  ClickAudio();
                 }}
                 className={
                   darkmodeReducer ? "turlightpostdark" : "turlightpostlight"
@@ -2003,7 +2075,7 @@ function Sliderx({
                   }}
                   ref={canvasRefIn}
                   style={{
-                    borderRadius: matchMobile ? '0%' : '4%',
+                    borderRadius: matchMobile ? minimise ? '4%' : '0%' : '4%',
                     cursor: "pointer",
                     padding: "0px",
                     position: "absolute",
@@ -2013,7 +2085,9 @@ function Sliderx({
                     top: "0vh",
                     margin: "auto",
                     filter: interactContent && interact && HasInteractivity && ActiveCanvas === pey ? 'blur(11px)' : 'blur(0px)',
-                    backgroundColor: ''
+                    backgroundColor: '',
+                    border: minimise ?
+                      `0px solid ${blendedColor}` : `0px solid ${blendedColor}`
 
                   }}
                 />
@@ -2025,7 +2099,15 @@ function Sliderx({
 
                 onClick={() => {
 
-                  ClickAudio();
+
+
+                  if (minimise) {
+                    setminimise(false);
+                  } else {
+                    ClickAudio();
+                  }
+
+
                 }}
 
                 className={
@@ -2040,13 +2122,15 @@ function Sliderx({
 
                 alt="a clikbate post "
                 style={{
-                  borderRadius: matchMobile ? '0%' : '4%',
+                  borderRadius: matchMobile ? minimise ? '4%' : '0%' : '4%',
                   cursor: "pointer",
                   width: "100%",
                   height: '100%',
                   position: "absolute",
                   padding: "0px",
                   zIndex: 0,
+
+
 
                 }}
                 crossOrigin="anonymous"

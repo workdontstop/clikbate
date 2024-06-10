@@ -19,6 +19,7 @@ import ZoomOutIcon from "@mui/icons-material/ZoomOut";
 import BlurCircularIcon from '@material-ui/icons/BlurCircular';
 import SubjectIcon from '@material-ui/icons/Subject';
 
+import HorizontalSplitIcon from '@material-ui/icons/HorizontalSplit';
 
 import {
   UpdateLoader,
@@ -67,6 +68,9 @@ function Menux({
   setuptype,
   ActualpostDataAll,
   profileDataHold,
+
+  setminimise,
+  minimise
 
 
 }: any) {
@@ -373,8 +377,11 @@ function Menux({
     config: {
       duration: 150,
     },
-    opacity: shownav ? 1 : 0,
-    marginTop: shownav2 ? `0vh` : `15vh`,
+    ///opacity: shownav ? 1 : 0,
+    ///marginTop: shownav ? `0vh` : `15vh`,
+
+    opacity: shownav ? 1 : 1,
+    marginTop: shownav ? `0vh` : `0vh`,
 
   });
 
@@ -450,7 +457,7 @@ function Menux({
 
   useEffect(() => {
     const handleScroll = (e: any) => {
-      jayme(e); // Call your jayme function here
+      //jayme(e); // Call your jayme function here
     };
 
     const paperPostScrollRefCurrent = paperPostScrollRef.current;
@@ -716,8 +723,9 @@ function Menux({
                               : "make-small-icons-clickable-darkCrop dontallowhighlighting  "
                           }
                           style={{
-                            transform: matchMobile ? Zoom2 ? "scale(5.4)" : "scale(3)" :
+                            transform: matchMobile ? Zoom2 ? "scale(3)" : "scale(3)" :
                               Zoom2 ? "scale(6)" : "scale(3.7)",
+                            fontSize: matchMobile ? Zoom2 ? '2rem' : '' : Zoom2 ? '' : '',
                             transition: "transform 0.1s",
                             color: Zoom2 ? blendedColor : darkmodeReducer
                               ? "#ffffff"
@@ -779,8 +787,9 @@ function Menux({
                               : "make-small-icons-clickable-darkCrop dontallowhighlighting  "
                           }
                           style={{
-                            transform: matchMobile ? Zoom3 ? "scale(5.4)" : "scale(3)" :
+                            transform: matchMobile ? Zoom3 ? "scale(3)" : "scale(3)" :
                               Zoom3 ? "scale(6)" : "scale(3.7)",
+                            fontSize: matchMobile ? Zoom3 ? '2rem' : '' : Zoom3 ? '' : '',
                             transition: "transform 0.1s",
                             color: Zoom3 ? blendedColor : darkmodeReducer
                               ? "#ffffff"
@@ -812,7 +821,8 @@ function Menux({
                         }}
                       >
 
-                        <SubjectIcon
+                        <HorizontalSplitIcon
+
                           onMouseEnter={(e: any) => {
                             setZoom4(true);
                           }}
@@ -832,8 +842,10 @@ function Menux({
                               : "make-small-icons-clickable-darkCrop dontallowhighlighting  "
                           }
                           style={{
-                            transform: matchMobile ? Zoom4 ? "scale(5.4)" : "scale(3)" :
+                            transform: matchMobile ? Zoom4 ? "scale(3)" : "scale(3)" :
                               Zoom4 ? "scale(6)" : "scale(3.7)",
+                            fontSize: matchMobile ? Zoom4 ? '2rem' : '' : Zoom4 ? '' : '',
+
                             transition: "transform 0.1s",
                             color: memeberPageidReducer === 0 ? blendedColor :
                               Zoom4 ? blendedColor : darkmodeReducer
@@ -873,14 +885,24 @@ function Menux({
                           onMouseLeave={(e: any) => {
                             setZoom5(false);
                           }}
+
+
+                          onClick={() => {
+                            if (minimise) { setminimise(false); } else { setminimise(true); }
+
+                            setZoom5(false);
+
+                          }}
+
                           className={
                             darkmodeReducer
                               ? "make-small-icons-clickable-lightCrop dontallowhighlighting "
                               : "make-small-icons-clickable-darkCrop dontallowhighlighting  "
                           }
                           style={{
-                            transform: matchMobile ? Zoom5 ? "scale(5.4)" : "scale(3)" :
+                            transform: matchMobile ? Zoom5 ? "scale(3)" : "scale(3)" :
                               Zoom5 ? "scale(6)" : "scale(3.7)",
+                            fontSize: matchMobile ? Zoom5 ? '2rem' : '' : Zoom5 ? '' : '',
                             transition: "transform 0.1s",
                             color: Zoom5 ? blendedColor : darkmodeReducer
                               ? "#ffffff"

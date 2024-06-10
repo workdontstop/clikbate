@@ -84,7 +84,10 @@ function ProfileSetupx({
 
 
     profileDataHold,
-    pagePostScroll
+    pagePostScroll,
+
+    setminimise,
+    minimise
 
 
 
@@ -322,6 +325,10 @@ function ProfileSetupx({
                     position: "relative", zIndex: 1, padding: "0px"
                 }}>
                     <Profile
+
+                        setminimise={setminimise}
+                        minimise={minimise}
+
                         pagePostScroll={pagePostScroll}
                         profileDataHold={profileDataHold}
                         sethistoryScrollonload={sethistoryScrollonload}

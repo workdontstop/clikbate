@@ -96,7 +96,10 @@ function Profilex({
   RandomColor,
 
   sethistoryScrollonload,
-  profileDataHold
+  profileDataHold,
+
+  minimise,
+  setminimise
 
 }: any) {
 
@@ -108,9 +111,8 @@ function Profilex({
 
 
 
-  var pagenumLimit = 18;
 
-  const sqlQUERYlIMIT = 40;
+  const sqlQUERYlIMIT = 21;
 
 
 
@@ -732,7 +734,7 @@ function Profilex({
 
 
 
-            dispatch(UpdateLoader(true));
+            // dispatch(UpdateLoader(true));
 
 
 
@@ -888,12 +890,7 @@ function Profilex({
     });
   };
 
-  const scrollToPostx = (index: any) => {
-    postDivRefx.current[index].scrollIntoView({
-      behavior: "smooth",
-      block: "start",
-    });
-  };
+
 
   const postitemSHOWFULLHEIGHT = (index: any, type: number) => {
     if (itemcroptype[index] === 1 || itemcroptype[index] === 2) {
@@ -1221,10 +1218,10 @@ function Profilex({
           xs={12}
           style={{
             padding: "0px",
-            paddingLeft: miniProfile ? (matchPc ? "6vw" : "0vw") : matchPc ? "0vw" : '0vw',
-            paddingRight: miniProfile ? (matchPc ? "6vw" : "0vw") : matchPc ? "0vw" : '0vw',
+            paddingLeft: matchPc ? "0vw" : '0vw',
+            paddingRight: matchPc ? "0vw" : '0vw',
             height: "auto",
-            marginTop: matchMobile ? miniProfile ? '-0.8vh' : '18vh' : miniProfile ? '5.5vh' : '18vh',
+            marginTop: matchMobile ? minimise ? '-0.8vh' : '18vh' : minimise ? '-5vh' : '22vh',
             marginLeft: miniProfile && matchPc ? '1.5vw' : '0px',
           }}
         >
@@ -1245,8 +1242,8 @@ function Profilex({
           ></Grid>
           {postData.length > 0 ? (
             <Masonry
-              columns={matchPc ? miniProfile ? 3 : 2 : miniProfile ? 3 : 1}
-              spacing={matchMobile ? miniProfile ? 0.5 : 0 : miniProfile ? 4 : 0}
+              columns={matchPc ? 2 : 1}
+              spacing={matchMobile ? 0 : 0}
               style={{
                 padding: "0px",
 
@@ -1275,88 +1272,22 @@ function Profilex({
 
 
 
-                  <div
 
-                    style={{
-                      display: miniProfile ? "block" : "none",
-                      marginTop: "-5px",
-
-                    }}
-                  >
-                    <MiniPost
-
-                      WebsiteMode={WebsiteMode}
-                      InitializingAutoPlayIndex={InitializingAutoPlayIndex}
-
-                      AllowAllHdImagesShow={AllowAllHdImagesShow}
-                      clearAllTimers={clearAllTimers}
-
-                      ShowBigPlay={ShowBigPlay}
-                      setAdded={setAdded}
-                      Added={Added}
-                      postDatainnerInteraction2={postDatainnerInteraction2}
-                      postDatainnerInteraction1={postDatainnerInteraction1}
-                      paperPostScrollRef={paperPostScrollRef}
-                      setSliderIndexMini={setSliderIndexMini}
-                      sliderIndexMini={sliderIndexMini}
-                      zoomClickedIndex={zoomClickedIndex}
-                      setzoomClickedIndex={setzoomClickedIndex}
-                      miniProfile={miniProfile}
-                      setminiProfile={setminiProfile}
-                      setStopBodyScroll={setStopBodyScroll}
-                      setx={setx}
-                      ActiveCanvasx={ActiveCanvasx}
-                      setActiveCanvasx={setActiveCanvasx}
-
-                      setCommentPostid={setCommentPostid}
-                      postData={postData}
-                      setDiscussionImage={setDiscussionImage}
-                      OpenModalForm={OpenModalForm}
-                      second={second}
-                      setsecond={setsecond}
-                      secondgo={secondgo}
-                      setsecondgo={setsecondgo}
-                      setcountAutoplay={setcountAutoplay}
-                      countAutoplay={countAutoplay}
-                      onLoadDataOnce={onLoadDataOnce}
-                      pey={i}
-                      addPostItemsRef={addPostItemsRef}
-                      postDivRefx={postDivRefx}
-                      onPostsItemload={onPostsItemload}
-                      post={post}
-                      itemheight={itemheight}
-                      itemheighthold={itemheighthold}
-                      postbackheight={postbackheight}
-                      itemcroptype={itemcroptype}
-                      length={postData.length}
-                      itemFinalPostHeight={itemFinalPostHeight}
-                      onPostsItemClicked={onPostsItemClicked}
-                      itemCLICKED={itemCLICKED}
-                      addpostDivRefx={addpostDivRefx}
-                      postDatainner={postDatainner}
-                      postDatainnerThumb={postDatainnerThumb}
-                      itemOriginalPostHeight={itemOriginalPostHeight}
-                      ActiveAutoPlay={ActiveAutoPlay}
-                      setActiveAutoPlay={setActiveAutoPlay}
-                      AUTOSlideLongImages={AUTOSlideLongImages}
-                      scrollToPostx={scrollToPostx}
-                    />
-                    <Grid
-                      item
-                      xs={12}
-                      style={{
-                        marginTop: matchMobile ? "-9px" : "1px",
-                        height: '-2vh',
-                      }}
-                    ></Grid>
-                  </div>
 
                   <div
-                    key={i} style={{ display: miniProfile ? "none" : "block", }}>
+                    key={i} style={{
+                      display: "block", transform: minimise ? matchMobile ? 'scale(0.86)' : 'scale(0.85)' :
+                        matchMobile ? 'scale(1)' : 'scale(1)'
+                    }}>
 
 
 
                     <Post
+
+                      setminimise={setminimise}
+                      RandomColor={RandomColor}
+                      postDivRefRoll={postDivRefRoll}
+                      minimise={minimise}
                       profileDataHold={profileDataHold}
                       setuptype={setuptype}
                       ActualpostDataAll={ActualpostDataAll}
@@ -1443,10 +1374,12 @@ function Profilex({
 
                         style={{
                           margin: 'auto',
-                          width: '20%',
-                          marginTop: '18vh',
+                          width: '10%',
+                          marginTop: minimise ? '0px' : matchMobile ? '15vh' : '15vh',
                           backgroundColor: darkmodeReducer ? 'rgb(200,200,200,0.1)' : 'rgb(20,20,20,0.15)',
-                          height: matchMobile ? "0.25vh" : '0.25vh',
+                          height: matchMobile ? "0vh" : '0.25vh',
+                          display: minimise ? 'none' : 'block'
+
                         }}
                       ></div>
 
@@ -1461,11 +1394,24 @@ function Profilex({
                       xs={12}
                       style={{
 
-                        height: matchMobile ? postData.length - 1 === i ? '1vh' : "31vh" :
-                          postData.length - 1 === i ? '0vh' : '30.3vh',
+                        height: matchMobile ? postData.length - 1 === i ? '10vh' : "10vh" :
+                          postData.length - 1 === i ? '0vh' : '26vh',
+                        display: minimise ? 'none' : 'block'
                       }}
                     ></Grid>
 
+
+
+                    <Grid
+                      item
+                      xs={12}
+                      style={{
+
+                        height: matchMobile ? postData.length - 1 === i ? '10vh' : "6vh" :
+                          postData.length - 1 === i ? '0vh' : '5vh',
+                        display: minimise ? 'block' : 'none'
+                      }}
+                    ></Grid>
 
 
                   </div>
@@ -1530,7 +1476,7 @@ function Profilex({
 
             style={{
               position: setuptype === 1 ? 'relative' : 'absolute',
-              scrollSnapAlign: 'end',
+              scrollSnapAlign: minimise ? 'none' : 'end',
               backgroundColor: '',
               height: '0vh',
               marginTop: matchMobile ? '20vh' : '9vh',

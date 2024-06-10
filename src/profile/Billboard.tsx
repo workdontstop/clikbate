@@ -41,7 +41,8 @@ function Billboardx({
   postData,
   showModalFormMenu,
   setshowModalFormMenu, sliderIndex,
-  setSliderIndex
+  setSliderIndex,
+  minimise
 }: any): JSX.Element {
   ///
   ///
@@ -108,7 +109,7 @@ function Billboardx({
 
   const [imageReducerThumb, setimageReducerThumb] = useState("");
 
-
+  // scrollSnapAlign: minimise ? 'none' : "start",
 
   const billboardImagesnn = ["", ""];
 
@@ -380,7 +381,7 @@ function Billboardx({
               position: "relative",
               top: "0em",
               width: "100%",
-              scrollSnapAlign: "start",
+              scrollSnapAlign: minimise ? 'none' : "start",
 
             }}
           >

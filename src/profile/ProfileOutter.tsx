@@ -589,12 +589,16 @@ function ProfileOutter({ CallLoggedProfile }: any) {
 
   const paperPostScrollRef = useRef<any>(null);
 
+  const paperPostScrollRefMini = useRef<any>(null);
+
   const pagePostScroll = useRef<any>(null);
 
   const T1 = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const [profileDataHold, setprofileDataHold] = useState<Array<any>>([]);
+  const Ticx = useRef<ReturnType<typeof setTimeout> | null>(null);
 
+  const Ticx2 = useRef<ReturnType<typeof setTimeout> | null>(null);
 
 
   useEffect(() => {
@@ -625,6 +629,20 @@ function ProfileOutter({ CallLoggedProfile }: any) {
         };
       }
 
+
+
+
+      if (Ticx.current) {
+        clearTimeout(Ticx.current);
+      }
+
+
+      Ticx.current = setTimeout(() => {
+        paperPostScrollRef.current.scrollTop = 0;
+      }, 1500);
+
+
+
       if (memeberPageidReducer === 0) {
 
         ///alert('local');
@@ -652,7 +670,6 @@ function ProfileOutter({ CallLoggedProfile }: any) {
         })
           .then((response) => {
             if (response.data.message === "logged in") {
-
 
 
 
@@ -1584,8 +1601,13 @@ function ProfileOutter({ CallLoggedProfile }: any) {
     [idReducer, REACT_APP_SUPERSTARZ_URL, memeberPageidReducer, postPageLimit, historyDataPost, PostLocalNav]
   );
 
+  //// scrollSnapAlign
+
 
   const Timercc = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+
+  const [minimise, setminimise] = useState(true);
 
 
 
@@ -1626,9 +1648,22 @@ function ProfileOutter({ CallLoggedProfile }: any) {
 
 
   const callPagination = useCallback(() => {
-    var time = 100;
+    var time = 50;
 
     sethistoryDataPost([]);
+
+
+
+    if (Ticx2.current) {
+      clearTimeout(Ticx2.current);
+    }
+
+
+    Ticx2.current = setTimeout(() => {
+      paperPostScrollRef.current.scrollTop = 0;
+    }, 1500);
+
+
 
 
     var xx = ActualpostDataAll[ActualpostDataAll.length - 1].id;
@@ -2223,7 +2258,7 @@ function ProfileOutter({ CallLoggedProfile }: any) {
                   : "postscroll-lightm"
             }
             style={{
-              scrollSnapType: 'y mandatory',
+              scrollSnapType: minimise ? 'none' : 'y mandatory',
               backgroundImage: PaperStyleReducer,
               borderRadius: "0px",
               height: "100vh",
@@ -2264,6 +2299,7 @@ function ProfileOutter({ CallLoggedProfile }: any) {
 
 
                 <Billboard
+                  minimise={minimise}
                   sliderIndex={sliderIndex}
                   setSliderIndex={setSliderIndex}
                   setshowModalFormMenu={setShowModalFormMenu}
@@ -2510,7 +2546,7 @@ function ProfileOutter({ CallLoggedProfile }: any) {
                       ? "0 0 1px #555555"
                       : "0 0 0.1px #222222",
                     width: "100%",
-                    scrollSnapAlign: "start",
+                    scrollSnapAlign: minimise ? 'none' : "start",
                     height: matchMobile ? '18vh' : "30vh",
                     padding: "0px",
                     objectFit: "cover",
@@ -2614,10 +2650,12 @@ function ProfileOutter({ CallLoggedProfile }: any) {
 
               {/*///////////////////////////////////////////////////////////////////////////////// FEEDS   1*/}
               {showData1 ? (
-                <Grid item xs={12} style={{
+                <Grid ref={paperPostScrollRefMini} item xs={12} style={{
                   position: "relative", zIndex: 1, padding: "0px",
                 }}>
                   <ProfileSetup
+                    setminimise={setminimise}
+                    minimise={minimise}
                     pagePostScroll={pagePostScroll}
                     profileDataHold={profileDataHold}
                     sethistoryScrollonload={sethistoryScrollonload}
@@ -3066,8 +3104,8 @@ function ProfileOutter({ CallLoggedProfile }: any) {
 
 
                 <Menu
-
-
+                  minimise={minimise}
+                  setminimise={setminimise}
                   pagenumReducer={pagenumReducer}
                   setuptype={1}
                   ActualpostDataAll={ActualpostDataAll}

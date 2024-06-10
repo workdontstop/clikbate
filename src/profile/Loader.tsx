@@ -7,8 +7,9 @@ import { animated, useTransition } from "react-spring";
 import { RootStateOrAny, useSelector } from "react-redux";
 import { matchMobile, matchPc, matchTablet } from "../DetectDevice";
 import ZoomOutIcon from "@mui/icons-material/ZoomOut";
+import { Minimize } from "@mui/icons-material";
 
-function Loaderx({ sliderLoader, autoSlideDisplay, post, RandomColor }: any): JSX.Element {
+function Loaderx({ sliderLoader, autoSlideDisplay, post, RandomColor, minimise }: any): JSX.Element {
   ///
   ///
   ///
@@ -77,14 +78,13 @@ function Loaderx({ sliderLoader, autoSlideDisplay, post, RandomColor }: any): JS
       <Grid
         item
         xs={12}
+
         className={
           darkmodeReducer
             ? `${sliderLoader} turLight`
             : `${sliderLoader} turlight`
         }
         style={{
-
-
           backgroundImage: post ?
             idReducer === memeberPageidReducer ? `linear-gradient(45deg, ${RandomColor}, ${colorReducer})` :
 
@@ -95,9 +95,12 @@ function Loaderx({ sliderLoader, autoSlideDisplay, post, RandomColor }: any): JS
           display: autoSlideDisplay,
           zIndex: 100000,
           top: "0em",
-          width: '92%'
+          width: '80%',
+          marginLeft: matchMobile ? minimise ? '16.6%' : '0%' : minimise ? '12%' : '4%'
+
         }}
       ></Grid>
+
     </>
   );
 }

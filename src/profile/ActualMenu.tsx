@@ -23,7 +23,12 @@ import AdjustIcon from '@material-ui/icons/Adjust';
 
 import FaceIcon from '@material-ui/icons/Face';
 import SubjectIcon from '@material-ui/icons/Subject';
+
+import HorizontalSplitIcon from '@material-ui/icons/HorizontalSplit';
+
+
 import NotificationsIcon from '@material-ui/icons/Notifications';
+
 import TheatersIcon from '@material-ui/icons/Theaters';
 
 import QueueMusicIcon from '@material-ui/icons/QueueMusic';
@@ -513,12 +518,12 @@ function ActualMenux({ showModalFormMenu,
         style={{
           width: '100%',
           height: '100vh',
-          backgroundColor: darkmodeReducer ? 'rgb(20, 20, 20, 0.6)' : 'rgb(140, 140, 140, 0.53)',
+          backgroundColor: darkmodeReducer ? 'rgb(20, 20, 20, 0.5)' : 'rgb(140, 140, 140, 0.43)',
           position: 'fixed',
           cursor: 'pointer',
           top: 0,
           left: 0,
-          display: showModalFormMenu ? 'none' : 'none'
+          display: showModalFormMenu ? 'block' : 'none'
         }}
       >
 
@@ -881,7 +886,7 @@ function ActualMenux({ showModalFormMenu,
 
                     {i === 3 ?
                       <span>
-                        <SubjectIcon
+                        <HorizontalSplitIcon
                           className={
                             darkmodeReducer
                               ? "make-small-icons-clickable-darkab dontallowhighlighting zuperkingIcon "
@@ -1009,8 +1014,10 @@ function ActualMenux({ showModalFormMenu,
                     <span
                       style={{
                         color: colr,
-                        fontSize: matchMobile ? WebsiteMode ? '2.62vh' : '2.4vh' : "1.2vw",
+                        fontSize: matchMobile ? '2vh' : "1vw",
                         marginLeft: matchMobile ? '13vw' : '5vw',
+                        fontFamily: "Roboto, Arial, Helvetica, sans-serif",
+
                         opacity: i === 1 || i === 2 || i === 3 || i === 5 ? '1' : '0.3'
                       }}>
                       {Title}

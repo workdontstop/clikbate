@@ -133,7 +133,12 @@ function Postx({
   ActualpostDataAll,
   setuptype,
 
-  profileDataHold
+  profileDataHold,
+  minimise,
+  setminimise,
+  postDivRefRoll,
+
+  RandomColor
 
 
 }: any) {
@@ -172,6 +177,9 @@ function Postx({
 
 
   const [ShowAudioIcon, setShowAudioIcon] = useState(true);
+
+  const [maximiseFirst, setmaximiseFirst] = useState(false);
+
 
   const [ShowReactionsIcon, setShowReactionsIcon] = useState(true);
 
@@ -475,6 +483,29 @@ function Postx({
   const ComColor = post.commentorColor ? post.commentorColor : colorReducer;
   const ComUsername = post.commentorUsername ? post.commentorUsername : usernameReducer;
 
+
+
+  const wa = useRef<ReturnType<typeof setTimeout> | null>(
+    null
+  );
+
+
+  useEffect(() => {
+
+    if (ActiveCanvas === pey) {
+      if (wa.current) {
+        clearTimeout(wa.current);
+      }
+
+      wa.current = setTimeout(() => {
+        postDivRef.current[pey].scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
+      }, 500)
+    }
+
+  }, [minimise])
 
 
 
@@ -1343,7 +1374,6 @@ function Postx({
 
 
         <div
-          ref={addpostDivRefRoll}
           style={{
             padding: "0px",
             width: "auto",
@@ -1371,10 +1401,8 @@ function Postx({
 
 
 
-
-
           <div
-            ref={addpostDivRef}
+
             style={{
               padding: "0px",
               width: "100%",
@@ -1382,8 +1410,11 @@ function Postx({
               zIndex: length - 1 - pey,
               paddingLeft: matchMobile ? "0px" : "0.5px",
               paddingRight: matchMobile ? "0px" : "0.5px",
-              paddingTop: "0px",
-              ////scrollSnapAlign: 'end',
+              paddingTop: minimise ? '4vh' : "0px",
+              scrollSnapAlign: minimise ? 'none' : 'start',
+
+
+              ///transform
 
 
             }}
@@ -1391,10 +1422,16 @@ function Postx({
 
 
 
+
             {/*///////////////////////////////////////////////////////////////////////////POST DATA*/}
 
             <Slider
 
+              setminimise={setminimise}
+              RandomColor={RandomColor}
+
+
+              minimise={minimise}
               setPlayAudio={setPlayAudio}
 
 
@@ -1474,6 +1511,7 @@ function Postx({
 
 
             {StopShowPad ? null : <ReactionPost
+              minimise={minimise}
               setShowAudioIcon={setShowReactionsIcon}
               Ein={Ein}
               setZoom3={setZoom3}
@@ -1592,6 +1630,7 @@ function Postx({
               style={{
                 marginLeft: matchMobile ? '90vw' : "46vw",
                 top: WebsiteMode ? matchMobile ? '3.5vh' : `5.2vh` : matchMobile ? '2.8vh' : `5.2vh`,
+                marginTop: minimise ? '5vh' : '0px',
                 fontWeight: 'bold',
                 padding: "0px",
                 cursor: "pointer",
@@ -1685,16 +1724,89 @@ function Postx({
 
 
 
+            {/*///////////////////////////////////////////////////////////////////////////TOPICS MINI*/}
+            <span
+
+              className={
+                darkmodeReducer
+                  ? " dontallowhighlighting zuperkingxx"
+                  : "  dontallowhighlighting zuperkingxx"
+              }
+
+
+              onMouseEnter={(e: any) => {
+                setZoomx(true);
+
+              }}
+              onMouseLeave={(e: any) => {
+                setZoomx(false);
+
+              }}
+
+              style={{
+                display: minimise ? 'block' : 'none',
+                width: '100%',
+                top: matchMobile ? '0vh' : `1.3vh`,
+                marginTop: minimise ? '5vh' : '0px',
+                fontWeight: 'bold',
+                zIndex: 22,
+                fontSize: matchMobile ? '1.1rem' : '1.5rem',
+                padding: "0px",
+                cursor: "pointer",
+                position: 'absolute',
+                textAlign: 'center',
+                fontFamily: "Arial, Helvetica, sans-seri",
+
+
+              }}
+            >
+
+
+
+
+
+
+              {post.topic}
+            </span>
+            {/*///////////////////////////////////////////////////////////////////////////TOPICS MINI*/}
+
+
             {
               (
 
                 <>
+
+
+
+
+
                   <animated.div
+                    ref={addpostDivRef}
+
+
+                    style={{
+
+                      height: '0px',
+                      top: matchMobile ? `-14vh` : `-13vh`,
+                      position: "absolute",
+                      backgroundColor: '',
+                      transition: "all 350ms ease",
+                      zIndex: 5,
+                    }}
+                  >
+                  </animated.div>
+
+
+
+                  <animated.div
+
+
+
                     className='post-background-dark'
                     style={{
 
                       height: '0px',
-                      top: matchMobile ? `-2vh` : `-13vh`,
+                      top: matchMobile ? minimise ? '9vh' : `-2vh` : minimise ? '-2.5vh' : `-13vh`,
                       position: "absolute",
                       backgroundColor: '',
                       transition: "all 350ms ease",
@@ -1721,10 +1833,12 @@ function Postx({
                         width: "100%",
                         zIndex: 0,
                         height: '1px',
-                        marginTop: matchMobile ? '-27%' : '-4%',
+                        marginTop: matchMobile ? '-44%' : '-4%',
                         position: 'absolute',
                         scrollSnapAlign: 'start',
-                        backgroundColor: ''
+                        backgroundColor: '',
+
+                        display: minimise ? 'none' : 'block'
 
 
                       }}
@@ -1786,7 +1900,7 @@ function Postx({
 
                             style={{
 
-                              fontSize: matchMobile ? '0.95rem' : '1.06rem',
+                              fontSize: matchMobile ? minimise ? '1.1rem' : '0.95rem' : minimise ? '1.4rem' : '1.06rem',
                               cursor: 'pointer',
                               fontFamily: "Roboto, Arial, Helvetica, sans-serif",
                               opacity: darkmodeReducer ? '0.4' : '1',
@@ -1798,7 +1912,10 @@ function Postx({
                             <span onClick={() => {
                               GoToMemberLoaderUp();
                             }}
-                              style={{ padding: '0px' }}> {post.username}</span>
+                              style={{
+                                padding: '0px',
+                                visibility: minimise ? 'hidden' : 'visible'
+                              }}> {post.username}</span>
 
                             <span style={{ visibility: 'hidden' }}>..............</span>
 
@@ -1811,7 +1928,7 @@ function Postx({
                                 paddingRight: '23%',
                                 right: '0px'
                               }}>
-                              {post.topic}</span>
+                              {minimise ? post.username : post.topic}</span>
 
 
 
@@ -1852,12 +1969,12 @@ function Postx({
 
                         top: matchMobile ? '-7.5vh' : '4.3vh',
                         position: "relative",
-                        display: "flex", //flex
+
                         alignItems: "center",
                         justifyContent: "left",
                         zIndex: 1,
                         paddingLeft: "2vw",
-
+                        display: minimise ? 'none' : 'flex',
                         marginLeft: postusernameleft,
                         height: "20px",
                       }}
@@ -1914,9 +2031,9 @@ function Postx({
                         justifyContent: "left",
                         zIndex: 1,
                         paddingLeft: "1vw",
-                        marginLeft: matchMobile ? '1%' : '0.5%',
+                        marginLeft: matchMobile ? '1%' : '1.2%',
                         height: "20px",
-                        display: post.audioData ? 'flex' : 'none'
+                        display: post.audioData ? minimise ? 'none' : 'flex' : minimise ? 'none' : 'none'
                       }}
                     >
                       <span>
@@ -2317,7 +2434,6 @@ function Postx({
       </animated.div >
 
 
-
       <div
 
         style={{
@@ -2325,15 +2441,19 @@ function Postx({
           width: "100%",
           zIndex: 0,
           height: '1px',
-          marginTop: matchMobile ? '20vh' : '6%',
+          marginTop: matchMobile ? '23vh' : '10%',
           position: 'absolute',
           scrollSnapAlign: 'end',
-          backgroundColor: ''
+          backgroundColor: '',
+
+          display: minimise ? 'none' : 'block'
+
 
 
         }}
       >
       </div>
+
 
     </>
   );

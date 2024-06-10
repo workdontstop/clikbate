@@ -24,7 +24,8 @@ function ReactionPostx({ Ein,
     Zoom4,
     Spinfun,
     Emo4Num,
-    setShowAudioIcon
+    setShowAudioIcon,
+    minimise
 }: any) {
 
 
@@ -107,78 +108,12 @@ function ReactionPostx({ Ein,
         <>
 
 
-            {Ein === null || Ein === 0 ?
+            <div style={{ marginTop: matchMobile ? minimise ? '-1vh' : '0px' : minimise ? '0px' : '0px' }}>
 
-                <FavoriteIcon
+                {Ein === null || Ein === 0 ?
 
-                    onMouseEnter={(e: any) => {
-                        setZoom3(true);
-                        setZoomBigEmo3(true);
-                    }}
-                    onMouseLeave={(e: any) => {
-                        setZoom3(false);
-                        setZoomBigEmo3(false);
-                    }}
-
-
-                    onClick={() => {
-                        ClickLove();
-
-                        // alert(Ein)
-
-                    }}
-                    className={
-                        "make-small-icons-clickable-lightCrop dontallowhighlighting zupermenulight"
-                    }
-
-                    style={{
-                        transform: Zoom3 ? "scale(2)" : "scale(1)",
-                        transition: "transform 0.1s",
-                        color: '#000000',
-                        position: "absolute",
-                        zIndex: 30,
-                        left: matchMobile ? '87vw' : '45.6vw',
-                        cursor: "pointer",
-                        bottom: matchMobile ? mobileTop : "0px",
-                        top: matchMobile ? '' : "52vh",
-                        backgroundColor: 'red',
-                        fontFamily: "Arial, Helvetica, sans-serif",
-                        fontSize: '2.8rem',
-                        fontWeight: "bolder",
-                        opacity: 1,
-                        padding: "2px",
-                        display: ShowAudioIcon ? 'block' : 'block',
-
-                    }}
-                />
-                : <span
-                    onClick={() => {
-                        ClickLove();
-                    }}
-                    className={
-                        "make-small-icons-clickable-lightCrop dontallowhighlighting zupermenulight"
-                    }
-                    style={{
-                        color: darkmodeReducer ? "#ffffff" : "#000000",
-                        transform: Zoom3 ? "scale(2)" : "scale(1.25)",
-                        transition: "transform 0.1s",
-                        position: "absolute",
-                        zIndex: 30,
-                        left: matchMobile ? '89vw' : '46.5vw',
-                        cursor: "pointer",
-                        bottom: matchMobile ? mobileemoTop : "0px",
-                        top: matchMobile ? '' : "50vh",
-                        backgroundColor: "red",
-                        fontFamily: "Arial, Helvetica, sans-serif",
-                        fontSize: "2.8rem",
-                        fontWeight: "bolder",
-                        opacity: 1,
-                        padding: "0px",
-                        height: '0px',
-                        display: ShowAudioIcon ? "inline" : "inline",
-                    }}
-                >
                     <FavoriteIcon
+
                         onMouseEnter={(e: any) => {
                             setZoom3(true);
                             setZoomBigEmo3(true);
@@ -191,6 +126,8 @@ function ReactionPostx({ Ein,
 
                         onClick={() => {
                             ClickLove();
+
+                            // alert(Ein)
 
                         }}
                         className={
@@ -198,128 +135,124 @@ function ReactionPostx({ Ein,
                         }
 
                         style={{
+                            transform: Zoom3 ? "scale(2)" : "scale(1)",
+                            transition: "transform 0.1s",
                             color: '#000000',
+                            position: "absolute",
+                            zIndex: 30,
+                            left: matchMobile ? '87vw' : '45.6vw',
+                            cursor: "pointer",
+                            bottom: matchMobile ? mobileTop : "0px",
+                            top: matchMobile ? '' : "52vh",
                             backgroundColor: 'red',
                             fontFamily: "Arial, Helvetica, sans-serif",
+                            fontSize: '2.8rem',
+                            fontWeight: "bolder",
                             opacity: 1,
                             padding: "2px",
+                            display: ShowAudioIcon ? 'block' : 'block',
 
                         }}
                     />
-
-
-
-                    <span
-                        onMouseEnter={(e: any) => {
-                            setZoom3(true);
-                            setZoomBigEmo3(true);
-                        }}
-                        onMouseLeave={(e: any) => {
-                            setZoom3(false);
-                            setZoomBigEmo3(false);
-                        }}
-
-
+                    : <span
                         onClick={() => {
                             ClickLove();
                         }}
-
+                        className={
+                            "make-small-icons-clickable-lightCrop dontallowhighlighting zupermenulight"
+                        }
                         style={{
-                            right: matchMobile ? '-7.2vw' : "-1.65vw",
-                            fontSize: matchMobile ? '2.4rem' : " ",
-                            position: 'absolute',
-                            transform: "scale(0.4)",
+                            color: darkmodeReducer ? "#ffffff" : "#000000",
+                            transform: Zoom3 ? "scale(2)" : "scale(1.25)",
                             transition: "transform 0.1s",
-                            top: matchMobile ? '-1.3vh' : '-1.3vh',
-                            color: '#ffffff',
-                            backgroundColor: 'rgb(5,5,5,0.4)',
-                            width: '80px',
-                            height: '80px',
-                            borderRadius: '50%',
-                            justifyContent: 'center',
-                            display: 'flex',
-                            alignItems: 'center',
-                            textAlign: 'center'
+                            position: "absolute",
+                            zIndex: 30,
+                            left: matchMobile ? '89vw' : '46.5vw',
+                            cursor: "pointer",
+                            bottom: matchMobile ? mobileemoTop : "0px",
+                            top: matchMobile ? '' : "50vh",
+                            backgroundColor: "red",
+                            fontFamily: "Arial, Helvetica, sans-serif",
+                            fontSize: "2.8rem",
+                            fontWeight: "bolder",
+                            opacity: 1,
+                            padding: "0px",
+                            height: '0px',
+                            display: ShowAudioIcon ? "inline" : "inline",
                         }}
                     >
-                        {Emo3Num === 0 ? "" : Emo3Num}
+                        <FavoriteIcon
+                            onMouseEnter={(e: any) => {
+                                setZoom3(true);
+                                setZoomBigEmo3(true);
+                            }}
+                            onMouseLeave={(e: any) => {
+                                setZoom3(false);
+                                setZoomBigEmo3(false);
+                            }}
+
+
+                            onClick={() => {
+                                ClickLove();
+
+                            }}
+                            className={
+                                "make-small-icons-clickable-lightCrop dontallowhighlighting zupermenulight"
+                            }
+
+                            style={{
+                                color: '#000000',
+                                backgroundColor: 'red',
+                                fontFamily: "Arial, Helvetica, sans-serif",
+                                opacity: 1,
+                                padding: "2px",
+
+                            }}
+                        />
+
+
+
+                        <span
+                            onMouseEnter={(e: any) => {
+                                setZoom3(true);
+                                setZoomBigEmo3(true);
+                            }}
+                            onMouseLeave={(e: any) => {
+                                setZoom3(false);
+                                setZoomBigEmo3(false);
+                            }}
+
+
+                            onClick={() => {
+                                ClickLove();
+                            }}
+
+                            style={{
+                                right: matchMobile ? '-7.2vw' : "-1.65vw",
+                                fontSize: matchMobile ? '2.4rem' : " ",
+                                position: 'absolute',
+                                transform: "scale(0.4)",
+                                transition: "transform 0.1s",
+                                top: matchMobile ? '-1.3vh' : '-1.3vh',
+                                color: '#ffffff',
+                                backgroundColor: 'rgb(5,5,5,0.4)',
+                                width: '80px',
+                                height: '80px',
+                                borderRadius: '50%',
+                                justifyContent: 'center',
+                                display: 'flex',
+                                alignItems: 'center',
+                                textAlign: 'center'
+                            }}
+                        >
+                            {Emo3Num === 0 ? "" : Emo3Num}
+                        </span>
                     </span>
-                </span>
 
-            }
-
-
-            {Ein === null || Ein === 0 ?
-
-                <ThumbUpAltIcon
-                    onMouseEnter={(e: any) => {
-                        setZoom4(true);
-                        setZoomBigEmo4(true);
-                    }}
-                    onMouseLeave={(e: any) => {
-                        setZoom4(false);
-                        setZoomBigEmo4(false);
-                    }}
+                }
 
 
-                    onClick={() => {
-                        ClickLike();
-
-                    }}
-                    className={
-                        "make-small-icons-clickable-lightCrop dontallowhighlighting zupermenulight"
-                    }
-
-                    style={{
-                        color: '#000000',
-                        transform: Zoom4 ? "scale(2)" : "scale(1)",
-                        transition: "transform 0.1s",
-                        position: "absolute",
-                        zIndex: 30,
-                        left: matchMobile ? '87vw' : '45.6vw',
-                        cursor: "pointer",
-                        bottom: matchMobile ? '21vh' : "0px",
-                        top: matchMobile ? '' : "38vh",
-                        backgroundColor: 'orange',
-                        fontFamily: "Arial, Helvetica, sans-serif",
-                        fontSize: '2.8rem',
-                        fontWeight: "bolder",
-                        opacity: 1,
-                        padding: "2px",
-                        display: ShowAudioIcon ? 'block' : 'block'
-                    }}
-                />
-
-                :
-
-                <span
-
-                    onClick={() => {
-                        ClickLike();
-                    }}
-                    className={
-                        "make-small-icons-clickable-lightCrop dontallowhighlighting zupermenulight"
-                    }
-                    style={{
-                        transform: Zoom4 ? "scale(2)" : "scale(1.25)",
-                        transition: "transform 0.1s",
-                        color: darkmodeReducer ? "#ffffff" : "#000000",
-                        position: "absolute",
-                        zIndex: 30,
-                        left: matchMobile ? '89vw' : '46.5vw',
-                        cursor: "pointer",
-                        bottom: matchMobile ? '29vh' : "0px",
-                        top: matchMobile ? '' : "35vh",
-                        backgroundColor: "red",
-                        fontFamily: "Arial, Helvetica, sans-serif",
-                        fontSize: "2.8rem",
-                        fontWeight: "bolder",
-                        opacity: 1,
-                        padding: "0px",
-                        height: "0px",
-                        display: ShowAudioIcon ? "inline" : "inline",
-                    }}
-                >
+                {Ein === null || Ein === 0 ?
 
                     <ThumbUpAltIcon
                         onMouseEnter={(e: any) => {
@@ -342,97 +275,170 @@ function ReactionPostx({ Ein,
 
                         style={{
                             color: '#000000',
+                            transform: Zoom4 ? "scale(2)" : "scale(1)",
+                            transition: "transform 0.1s",
+                            position: "absolute",
+                            zIndex: 30,
+                            left: matchMobile ? '87vw' : '45.6vw',
+                            cursor: "pointer",
+                            bottom: matchMobile ? '21vh' : "0px",
+                            top: matchMobile ? '' : "38vh",
                             backgroundColor: 'orange',
                             fontFamily: "Arial, Helvetica, sans-serif",
+                            fontSize: '2.8rem',
+                            fontWeight: "bolder",
                             opacity: 1,
                             padding: "2px",
-
+                            display: ShowAudioIcon ? 'block' : 'block'
                         }}
                     />
 
+                    :
+
                     <span
-
-                        onMouseEnter={(e: any) => {
-                            setZoom4(true);
-                            setZoomBigEmo4(true);
-                        }}
-                        onMouseLeave={(e: any) => {
-                            setZoom4(false);
-                            setZoomBigEmo4(false);
-                        }}
-
 
                         onClick={() => {
                             ClickLike();
-
                         }}
-
-                        className="zuperxyinfo"
+                        className={
+                            "make-small-icons-clickable-lightCrop dontallowhighlighting zupermenulight"
+                        }
                         style={{
-                            right: matchMobile ? '-7.2vw' : "-1.65vw",
-                            fontSize: matchMobile ? '2.4rem' : " ",
-                            position: 'absolute',
-                            transform: "scale(0.4)",
+                            transform: Zoom4 ? "scale(2)" : "scale(1.25)",
                             transition: "transform 0.1s",
-                            top: matchMobile ? '-1.3vh' : '-1.3vh',
-                            color: '#ffffff',
-                            backgroundColor: 'rgb(5,5,5,0.4)',
-                            width: '80px',
-                            height: '80px',
-                            borderRadius: '50%',
-                            justifyContent: 'center',
-                            display: 'flex',
-                            alignItems: 'center',
-                            textAlign: 'center'
+                            color: darkmodeReducer ? "#ffffff" : "#000000",
+                            position: "absolute",
+                            zIndex: 30,
+                            left: matchMobile ? '89vw' : '46.5vw',
+                            cursor: "pointer",
+                            bottom: matchMobile ? '29vh' : "0px",
+                            top: matchMobile ? '' : "35vh",
+                            backgroundColor: "red",
+                            fontFamily: "Arial, Helvetica, sans-serif",
+                            fontSize: "2.8rem",
+                            fontWeight: "bolder",
+                            opacity: 1,
+                            padding: "0px",
+                            height: "0px",
+                            display: ShowAudioIcon ? "inline" : "inline",
                         }}
                     >
-                        {Emo4Num === 0 ? "" : Emo4Num}
+
+                        <ThumbUpAltIcon
+                            onMouseEnter={(e: any) => {
+                                setZoom4(true);
+                                setZoomBigEmo4(true);
+                            }}
+                            onMouseLeave={(e: any) => {
+                                setZoom4(false);
+                                setZoomBigEmo4(false);
+                            }}
+
+
+                            onClick={() => {
+                                ClickLike();
+
+                            }}
+                            className={
+                                "make-small-icons-clickable-lightCrop dontallowhighlighting zupermenulight"
+                            }
+
+                            style={{
+                                color: '#000000',
+                                backgroundColor: 'orange',
+                                fontFamily: "Arial, Helvetica, sans-serif",
+                                opacity: 1,
+                                padding: "2px",
+
+                            }}
+                        />
+
+                        <span
+
+                            onMouseEnter={(e: any) => {
+                                setZoom4(true);
+                                setZoomBigEmo4(true);
+                            }}
+                            onMouseLeave={(e: any) => {
+                                setZoom4(false);
+                                setZoomBigEmo4(false);
+                            }}
+
+
+                            onClick={() => {
+                                ClickLike();
+
+                            }}
+
+                            className="zuperxyinfo"
+                            style={{
+                                right: matchMobile ? '-7.2vw' : "-1.65vw",
+                                fontSize: matchMobile ? '2.4rem' : " ",
+                                position: 'absolute',
+                                transform: "scale(0.4)",
+                                transition: "transform 0.1s",
+                                top: matchMobile ? '-1.3vh' : '-1.3vh',
+                                color: '#ffffff',
+                                backgroundColor: 'rgb(5,5,5,0.4)',
+                                width: '80px',
+                                height: '80px',
+                                borderRadius: '50%',
+                                justifyContent: 'center',
+                                display: 'flex',
+                                alignItems: 'center',
+                                textAlign: 'center'
+                            }}
+                        >
+                            {Emo4Num === 0 ? "" : Emo4Num}
+                        </span>
                     </span>
-                </span>
-            }
-
-
-            <MoodIcon
-
-                onMouseEnter={(e: any) => {
-                    setZoom(true);
-
-                }}
-                onMouseLeave={(e: any) => {
-                    setZoom(false);
-
-                }}
-
-
-                onClick={() => {
-                    setShowAudioIcon(true);
-                }}
-                className={
-                    "make-small-icons-clickable-lightCrop dontallowhighlighting zupermenulight"
                 }
 
-                style={{
-                    transform: Zoom ? "scale(1.6)" : "scale(0.8)",
-                    transition: "transform 0.1s",
-                    color: "#ffffff",
-                    position: "absolute",
-                    zIndex: 30,
-                    left: matchMobile ? '87vw' : '45.6vw',
-                    cursor: "pointer",
-                    bottom: matchMobile ? '2vh' : "0px",
-                    top: matchMobile ? '' : "62vh",
 
-                    fontFamily: "Arial, Helvetica, sans-serif",
-                    fontSize: '2.8rem',
-                    fontWeight: "bolder",
-                    opacity: 1,
-                    padding: "2px",
-                    display: ShowAudioIcon ? 'none' : 'none',
+                <MoodIcon
 
-                }}
-            />
+                    onMouseEnter={(e: any) => {
+                        setZoom(true);
 
+                    }}
+                    onMouseLeave={(e: any) => {
+                        setZoom(false);
+
+                    }}
+
+
+                    onClick={() => {
+                        setShowAudioIcon(true);
+                    }}
+                    className={
+                        "make-small-icons-clickable-lightCrop dontallowhighlighting zupermenulight"
+                    }
+
+                    style={{
+                        transform: Zoom ? "scale(1.6)" : "scale(0.8)",
+                        transition: "transform 0.1s",
+                        color: "#ffffff",
+                        position: "absolute",
+                        zIndex: 30,
+                        left: matchMobile ? '87vw' : '45.6vw',
+                        cursor: "pointer",
+                        bottom: matchMobile ? '2vh' : "0px",
+                        top: matchMobile ? '' : "62vh",
+
+                        fontFamily: "Arial, Helvetica, sans-serif",
+                        fontSize: '2.8rem',
+                        fontWeight: "bolder",
+                        opacity: 1,
+                        padding: "2px",
+                        display: ShowAudioIcon ? 'none' : 'none',
+
+                    }}
+                />
+
+            </div>
         </>
+
+
     );
 }
 

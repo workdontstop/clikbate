@@ -26,7 +26,8 @@ function SliderNumberx({
   post,
   ActiveCanvas, showSpin, setshowSpin,
   autoSlideDisplay,
-  sliderLoader
+  sliderLoader,
+  minimise
 }: any): JSX.Element {
   const startplay = () => {
     if (ActiveAutoPlay[pey]) {
@@ -90,6 +91,7 @@ function SliderNumberx({
 
       {showSpin && sliderLoader ?
         <Loader
+          minimise={minimise}
           RandomColor={RandomColor}
           post={post}
           autoSlideDisplay={autoSlideDisplay}
@@ -135,6 +137,7 @@ function SliderNumberx({
                   fontWeight: "bolder",
                   opacity: 1,
                   padding: "2px",
+                  display: 'none'
                 }}
               /> :
               <div
@@ -163,9 +166,10 @@ function SliderNumberx({
                     backgroundColor: post.color1,
                     borderRadius: "50%",
                     fontSize: "0.92vw",
-                    display: total === 1 ? HasInteractivity ? 'block' : 'none' : 'block',
+                    display: total === 1 ? HasInteractivity ? 'none' : 'none' : 'none',
                     color: darkmodeReducer ? "#ffffff" : "#000000",
-                    transform: matchMobile ? 'scale(0.15)' : 'scale(0.3)'
+                    transform: matchMobile ? 'scale(0.15)' : 'scale(0.3)',
+
                   }
                   }
                 >
