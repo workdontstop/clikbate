@@ -117,23 +117,26 @@ function CaptionTextx({
                 value={captionvalues.caption}
                 style={{
                     transform: transform,
-                    width: width,
+                    height: 'auto',
+                    width: '26vw',
                     paddingBottom: "0px",
                     paddingTop: "1.5vh",
                     position: "fixed",
-                    bottom: "27vh",
-                    left: "40.5vw",
+                    bottom: "45vh",
+                    left: "33.5vw",
                     zIndex: 26,
                     padding: '0vh',
                     borderRadius: '4%',
                     backgroundImage: PaperStyleReducer,
-                    display: 'none'
                 }}
                 label="Share Your Thoughts"
                 type="text"
                 name="caption"
-                variant='outlined'
-            />{" "}
+                variant="outlined"
+                multiline
+                rows={4}  // You can adjust the number of rows as needed
+            />
+
 
 
             <TextField
@@ -148,7 +151,7 @@ function CaptionTextx({
                     paddingBottom: "0px",
                     paddingTop: "1.5vh",
                     position: "fixed",
-                    bottom: "43vh",
+                    bottom: "63vh",
                     left: "33.5vw",
                     zIndex: 26,
                     padding: '0vh',
@@ -158,8 +161,10 @@ function CaptionTextx({
                 label="Topic"
                 type="text"
                 name="topic"
-                variant='outlined'
-            />{" "}
+                variant="outlined"
+                multiline
+                rows={2} // Adjust the number of rows as needed
+            />
         </>
     );
 }

@@ -29,6 +29,10 @@ function SliderNumberx({
   sliderLoader,
   minimise
 }: any): JSX.Element {
+
+
+
+
   const startplay = () => {
     if (ActiveAutoPlay[pey]) {
       startSlider(0);
@@ -89,17 +93,19 @@ function SliderNumberx({
 
 
 
-      {showSpin && sliderLoader ?
-        <Loader
-          minimise={minimise}
-          RandomColor={RandomColor}
-          post={post}
-          autoSlideDisplay={autoSlideDisplay}
-          sliderLoader={sliderLoader}
-        />
-        :
+      {
 
-        null
+        showSpin && sliderLoader ?
+          <Loader
+            minimise={minimise}
+            RandomColor={RandomColor}
+            post={post}
+            autoSlideDisplay={autoSlideDisplay}
+            sliderLoader={sliderLoader}
+          />
+          :
+
+          null
       }
 
 
@@ -137,7 +143,7 @@ function SliderNumberx({
                   fontWeight: "bolder",
                   opacity: 1,
                   padding: "2px",
-                  display: 'none'
+                  display: minimise ? 'none' : 'none'
                 }}
               /> :
               <div
@@ -157,6 +163,7 @@ function SliderNumberx({
                   padding: "0px",
                 }}
               >
+
                 <span
                   className={HasInteractivity ? "zuperkingtur heartbeat" : darkmodeReducer ? "turx" : "turdark"}
                   style={{
@@ -166,7 +173,7 @@ function SliderNumberx({
                     backgroundColor: post.color1,
                     borderRadius: "50%",
                     fontSize: "0.92vw",
-                    display: total === 1 ? HasInteractivity ? 'none' : 'none' : 'none',
+                    display: total === 1 ? HasInteractivity ? minimise ? 'none' : 'none' : 'none' : 'none',
                     color: darkmodeReducer ? "#ffffff" : "#000000",
                     transform: matchMobile ? 'scale(0.15)' : 'scale(0.3)',
 

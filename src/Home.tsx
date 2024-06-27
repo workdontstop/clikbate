@@ -190,7 +190,7 @@ function Home(): JSX.Element {
       PostLocal: 0
     };
 
-    window.history.replaceState(d, "", "Home");
+    ///window.history.replaceState(d, "", "Home");
     /// LOAD HISTORY ONCE ON EVERY FIRST PAGE LOAD OF THE APP
     calculateScreenHeight(); //
     let themelocaldata = JSON.parse(localStorage.getItem("darkmode")!);
@@ -244,7 +244,9 @@ function Home(): JSX.Element {
       PostLocal: 0
     };
 
-    window.history.replaceState(d, "", "Home");
+    ///window.history.replaceState(d, "", "Home");
+
+
   }, []);
 
   ///
@@ -280,7 +282,7 @@ function Home(): JSX.Element {
       };
 
       if (!OpenModalFormOnce) {
-        window.history.pushState(d, "", modalName);
+        //window.history.pushState(d, "", modalName);
         setOpenModalFormOnce(true);
         CloseModalForm(1);
       }
@@ -465,22 +467,26 @@ function Home(): JSX.Element {
 
 
 
-            <LoginButtons OpenModalForm={OpenModalForm} type={0} />
 
-            <CommentTemplate
-              profilex={profilex}
-              updateColor={updateColor}
-              formtype={formtype}
-              showModalForm={showModalForm}
-              CloseModalForm={CloseModalForm}
-              aboutTemp={aboutTemplateGo}
-              commentTemp={commentTemplateGo}
-            />
+
           </Grid>
         </Grid>
       </Paper>
     </MuiThemeProvider>
   );
 }
+
+//**
+//<LoginButtons OpenModalForm={OpenModalForm} type={0} />
+// <CommentTemplate
+// profilex={profilex}
+// updateColor={updateColor}
+// formtype={formtype}
+// showModalForm={showModalForm}
+// CloseModalForm={CloseModalForm}
+// aboutTemp={aboutTemplateGo}
+// commentTemp={commentTemplateGo}
+// />
+// */
 
 export default Home;

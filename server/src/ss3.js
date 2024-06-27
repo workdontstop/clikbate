@@ -12,12 +12,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.generateUploadURL = void 0;
+exports.generateUploadURL = generateUploadURL;
 const dotenv_1 = __importDefault(require("dotenv"));
 const aws_sdk_1 = __importDefault(require("aws-sdk"));
 const crypto_1 = __importDefault(require("crypto"));
 const util_1 = require("util");
-const randomBytes = util_1.promisify(crypto_1.default.randomBytes);
+const randomBytes = (0, util_1.promisify)(crypto_1.default.randomBytes);
 dotenv_1.default.config();
 const fs = require("fs");
 const buckname = process.env.BUCKET_NAME;
@@ -44,4 +44,3 @@ function generateUploadURL() {
         return uploadURL;
     });
 }
-exports.generateUploadURL = generateUploadURL;

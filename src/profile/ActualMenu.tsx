@@ -40,6 +40,12 @@ import SuperstarzIconLight from "../images/s.png";
 import SuperstarzIconDark from "../images/sd.png";
 
 
+import { useNavigate } from 'react-router-dom';
+import { encodeBase64 } from './utils'; // Ensure this is the correct path to your utils
+import { useLocation } from 'react-router-dom';
+
+
+
 import CircleIcon from "@mui/icons-material/Circle";
 
 
@@ -68,7 +74,14 @@ function ActualMenux({ showModalFormMenu,
   ActualpostDataAll,
   paperPostScrollRef,
   setUploadGPT,
-  profileDataHold
+  profileDataHold,
+
+  setIdReactRouterAsInt,
+  setScrollReactRouter,
+
+  PostPagenumPusher,
+  ScrollIndexPusher,
+  CurrentPage
 }: any): JSX.Element {
 
 
@@ -162,6 +175,14 @@ function ActualMenux({ showModalFormMenu,
 
   const dispatch = useDispatch();
 
+  const navigate = useNavigate();
+
+  const location = useLocation();
+
+
+
+
+
   var superFont = "";
 
   if (matchPc) {
@@ -178,7 +199,7 @@ function ActualMenux({ showModalFormMenu,
 
 
 
-  var MenuOptions = ["Search", 'Upload', "My Profile", "My Feeds", "Notification", "Setting", "Playlist", "Gallery", "Showroom"];
+  var MenuOptions = ["Search ", 'Upload', "My Profile", "My Feeds", "Notification", "Setting", "Playlist", "Gallery", "Showroom"];
 
 
 
@@ -196,8 +217,40 @@ function ActualMenux({ showModalFormMenu,
 
 
 
+  const updateCurrentURLWithScrollPosition = () => {
+    var indexplus1 = ScrollIndexPusher + 1;
 
-  const GoToMemberF = useCallback(() => {
+    const currentPath = location.pathname.split('/');
+    const currentIdRoute1 = currentPath[currentPath.length - 3]; // Assuming idRoute1 is the third last segment
+    const currentIdRoute2 = currentPath[currentPath.length - 2]; // Assuming idRoute2 is the second last segment
+    const encodedScrollIndex = encodeBase64(indexplus1.toString());
+    const encodedPageNumber = encodeBase64(PostPagenumPusher.toString());
+    navigate(`/Feeds/${currentIdRoute1}/${encodedScrollIndex}/${encodedPageNumber}`, { replace: true });
+  };
+
+
+
+
+  const GoToMemberF = () => {
+    dispatch(UserInfoUpdateMEMBER(-1));
+    const id = 0; // Replace with the actual ID you want to navigate to
+    const encodedId = encodeBase64(id.toString());
+
+    // Update the current URL with the scroll position
+
+    if (CurrentPage === 'feeds') {
+      updateCurrentURLWithScrollPosition();
+    }
+
+    // Navigate to the new URL with the new ID
+    navigate(`/Feeds/${encodedId}/${encodeBase64('0')}/${encodeBase64('0')}`);
+    dispatch(UserInfoUpdateMEMBER(0));
+    setIdReactRouterAsInt(0);
+    setScrollReactRouter(0)
+
+  };
+
+  const GoToMemberFjj = useCallback(() => {
     dispatch(Updatepagenum(0));
     dispatch(UserInfoUpdateMEMBER(-1));
 
@@ -257,7 +310,41 @@ function ActualMenux({ showModalFormMenu,
 
 
 
-  const GoToMemberP = useCallback(() => {
+  const GoToMemberP = () => {
+
+    if (idReducer === GuestReducer) {
+
+      dispatch(UpdateSign(true));
+
+
+      // commentClickedNew();
+    } else {
+
+
+
+      dispatch(UserInfoUpdateMEMBER(-1));
+      const id = idReducer; // Replace with the actual ID you want to navigate to
+      const encodedId = encodeBase64(id.toString());
+
+      // Update the current URL with the scroll position
+      //updateCurrentURLWithScrollPosition();
+      // Update the current URL with the scroll position
+
+      if (CurrentPage === 'feeds') {
+        updateCurrentURLWithScrollPosition();
+      }
+
+      // Navigate to the new URL with the new ID
+      navigate(`/Feeds/${encodedId}/${encodeBase64('0')}/${encodeBase64('0')}`);
+
+      dispatch(UserInfoUpdateMEMBER(idReducer));
+      setIdReactRouterAsInt(idReducer);
+      setScrollReactRouter(0)
+    }
+  };
+
+
+  const GoToMemberPhh = useCallback(() => {
     dispatch(Updatepagenum(0));
     dispatch(UserInfoUpdateMEMBER(-1));
 
@@ -324,13 +411,12 @@ function ActualMenux({ showModalFormMenu,
     if (Timervv.current) {
       clearTimeout(Timervv.current);
     }
-    if (memeberPageidReducer === idReducer) {
-    } else {
-      dispatch(UpdateLoader(true));
-    }
+
+    dispatch(UpdateLoader(true));
+
     Timervv.current = setTimeout(function () {
       GoToMemberP();
-    }, 1000);
+    }, 100);
   };
 
 
@@ -339,13 +425,12 @@ function ActualMenux({ showModalFormMenu,
     if (Timervv.current) {
       clearTimeout(Timervv.current);
     }
-    if (memeberPageidReducer === idReducer) {
-    } else {
-      dispatch(UpdateLoader(true));
-    }
+
+    dispatch(UpdateLoader(true));
+
     Timervv.current = setTimeout(function () {
       GoToMemberF();
-    }, 1000);
+    }, 100);
   };
 
 
@@ -367,6 +452,45 @@ function ActualMenux({ showModalFormMenu,
   const colorReducer = color;
   const colorReducerdark = colordark;
   const colortypeReducer = colortype;
+
+
+
+  function hexToRgb(hex: any) {
+    hex = hex.replace('#', '');
+    var bigint = parseInt(hex, 16);
+    var r = (bigint >> 16) & 255;
+    var g = (bigint >> 8) & 255;
+    var b = bigint & 255;
+    return [r, g, b];
+  }
+
+  function rgbToHex(r: any, g: any, b: any) {
+    return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1).toUpperCase();
+  }
+
+  function blendColors(color1: any, color2: any) {
+    var rgb1 = hexToRgb(color1);
+    var rgb2 = hexToRgb(color2);
+    var blendedRgb = [
+      Math.round((rgb1[0] + rgb2[0]) / 2),
+      Math.round((rgb1[1] + rgb2[1]) / 2),
+      Math.round((rgb1[2] + rgb2[2]) / 2)
+    ];
+    return rgbToHex(blendedRgb[0], blendedRgb[1], blendedRgb[2]);
+  }
+
+
+
+
+  var color1 = RandomColor;
+  var color2 = colorReducer;
+  var blendedColor = blendColors(color1, color2);
+
+
+
+
+
+
 
   const [MovePlay, setMovePlay] = useState(false);
 
@@ -603,10 +727,18 @@ function ActualMenux({ showModalFormMenu,
                     : "text-superstarz-light   text-superstarz-light-colorB   "
                 }
               >
-                {Signup ? 'In' : 'Bate'}
+                {Signup ? 'Up' : 'Bate'}
 
               </span>
-              <p><h6 style={{ transform: 'scale(0.8)', color: darkmodeReducer ? "#eeeeee" : "#444444", opacity: 0.7, marginLeft: '6vw' }}>Beta</h6></p>
+              <p><h6 style={{
+                transform: 'scale(0.8)',
+                color: darkmodeReducer ? "#eeeeee" : "#444444", opacity: 0.7,
+                marginLeft: Signup ? '3.5vw' : '6vw'
+              }}>
+
+                {Signup ? 'ClikBate Beta v2.5' : 'Beta'}
+
+              </h6></p>
 
 
             </span>
@@ -708,7 +840,7 @@ function ActualMenux({ showModalFormMenu,
               style={{
 
                 position: 'fixed',
-                bottom: '15.5%',
+                bottom: '13.5%',
                 marginLeft: '22vw',
                 height: 'auto'
               }}
@@ -763,12 +895,12 @@ function ActualMenux({ showModalFormMenu,
 
           <Grid
             xs={12} style={{
-              position: 'fixed', top: matchMobile ? '13vh' : '36vh', zIndex: 20, right: '0px',
+              position: 'fixed', top: matchMobile ? '16vh' : '36vh', zIndex: 20, right: '0px',
               width: '100%', height: matchMobile ? '58.2%' : '59%', overflow: 'auto',
             }}>
 
             <Grid
-              xs={12} style={{ width: '100%', alignContent: 'center', display: 'grid', opacity: '0.59', padding: '5px' }}>
+              xs={12} style={{ width: '100%', alignContent: 'center', display: 'grid', opacity: '0.79', padding: '5px', fontWeight: 'bold' }}>
 
 
               {
@@ -851,7 +983,7 @@ function ActualMenux({ showModalFormMenu,
                             : "make-small-icons-clickable-lightab  dontallowhighlighting zuperking"
                         }
                         style={{
-                          color: 'red',
+                          color: blendedColor,
                           opacity: 1,
                           fontSize: menufont,
                           marginLeft: pushh,
@@ -1014,26 +1146,30 @@ function ActualMenux({ showModalFormMenu,
                     <span
                       style={{
                         color: colr,
-                        fontSize: matchMobile ? '2vh' : "1vw",
+                        fontSize: matchMobile ? '1.1rem' : "1.3rem",
                         marginLeft: matchMobile ? '13vw' : '5vw',
                         fontFamily: "Roboto, Arial, Helvetica, sans-serif",
 
                         opacity: i === 1 || i === 2 || i === 3 || i === 5 ? '1' : '0.3'
                       }}>
-                      {Title}
+                      {idReducer === GuestReducer && i == 2 ? 'Log In' : Title}
                     </span>
-                    <Grid item xs={12} style={{
-                      height: '5px',
 
-                      padding: '0px',
-                      backgroundImage: PadIndex === i ? `linear-gradient(45deg, ${RandomColor}, ${colorReducer})` :
-                        PadIndex !== -1 ? '' :
-                          memeberPageidReducer === 0 && i === 3 ? darkmodeReducer ? `linear-gradient(45deg, ${RandomColor}, ${colorReducer})` :
-                            `linear-gradient(45deg, ${RandomColor}, ${colorReducer})` :
-                            memeberPageidReducer !== 0 && i === 2 && idReducer === memeberPageidReducer ? darkmodeReducer ? `linear-gradient(45deg, ${RandomColor}, ${colorReducer})` :
-                              `linear-gradient(45deg, ${RandomColor}, ${colorReducer})` : 'none',
 
-                    }}></Grid>
+                    {CurrentPage === 'feeds' ?
+                      <Grid item xs={12} style={{
+                        height: '5px',
+
+                        padding: '0px',
+                        backgroundImage: PadIndex === i ? `linear-gradient(45deg, ${RandomColor}, ${colorReducer})` :
+                          PadIndex !== -1 ? '' :
+                            memeberPageidReducer === 0 && i === 3 ? darkmodeReducer ? `linear-gradient(45deg, ${RandomColor}, ${colorReducer})` :
+                              `linear-gradient(45deg, ${RandomColor}, ${colorReducer})` :
+                              memeberPageidReducer !== 0 && i === 2 && idReducer === memeberPageidReducer ? darkmodeReducer ? `linear-gradient(45deg, ${RandomColor}, ${colorReducer})` :
+                                `linear-gradient(45deg, ${RandomColor}, ${colorReducer})` : 'none',
+
+                      }}></Grid> : null}
+
                   </span>
                 ))
               }

@@ -42,6 +42,7 @@ function Connectx({
   setAdded,
   GoToMember,
   connect,
+  minimise
 }: any): JSX.Element {
   const dispatch = useDispatch();
 
@@ -371,8 +372,8 @@ function Connectx({
             style={{
               backgroundImage: `linear-gradient(45deg, ${colorReducer},${post.color1})`,
               zIndex: 2,
-              left: matchMobile ? '-11px' : `${profileImagethumbLeft + 5}px`,
-              top: matchMobile ? `${profileImagethumbTop - 32}px` : `${profileImagethumbTop - 11}px`,
+              left: matchMobile ? '-2vh' : '2vh',
+              top: matchMobile ? '-6.5vh' : '-3.5vh',
               opacity: 0.8,
               position: "absolute",
               cursor: 'pointer',

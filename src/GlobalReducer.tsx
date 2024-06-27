@@ -298,7 +298,7 @@ export const GlobalReducerLoader = (
 const initialState = {
   snapStart: true,
   screenHeight: 0,
-  darkmode: false,
+  darkmode: true,
   AlertData: null,
   AlertEmojiType: 0,
   activateLoader: false,
@@ -313,7 +313,7 @@ const initialState = {
   MenuData: '',
   menunav: true,
   pagenum: 0,
-  SignIn: true,
+  SignIn: false,
   Guest: 141,
   interactContentAudiox: null,
   interactContentAudiotypex: 0,

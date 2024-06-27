@@ -12,12 +12,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.generateUploadURLaudio = void 0;
+exports.generateUploadURLaudio = generateUploadURLaudio;
 const dotenv_1 = __importDefault(require("dotenv"));
 const aws_sdk_1 = __importDefault(require("aws-sdk"));
 const crypto_1 = __importDefault(require("crypto"));
 const util_1 = require("util");
-const randomBytes = util_1.promisify(crypto_1.default.randomBytes);
+const randomBytes = (0, util_1.promisify)(crypto_1.default.randomBytes);
 dotenv_1.default.config();
 const fs = require("fs");
 const buckname = process.env.BUCKET_NAME;
@@ -37,11 +37,10 @@ function generateUploadURLaudio() {
         const params = {
             Bucket: buckname,
             Key: name,
-            Expires: 8000,
+            Expires: 8000, // You can adjust the expiration time
             ContentType: "audio/mp3", // Change this based
         };
         const uploadURLvidd = yield s3.getSignedUrlPromise("putObject", params);
         return uploadURLvidd;
     });
 }
-exports.generateUploadURLaudio = generateUploadURLaudio;

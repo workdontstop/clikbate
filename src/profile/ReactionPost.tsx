@@ -25,7 +25,8 @@ function ReactionPostx({ Ein,
     Spinfun,
     Emo4Num,
     setShowAudioIcon,
-    minimise
+    minimise,
+
 }: any) {
 
 
@@ -36,15 +37,15 @@ function ReactionPostx({ Ein,
 
     useEffect(() => {
         if (Zoom) {
-            setTimeout(() => { setZoom(false) }, 2000)
+            setTimeout(() => { setZoom(false) }, 4000)
         }
 
         if (Zoom3) {
-            setTimeout(() => { setZoom3(false) }, 2000)
+            setTimeout(() => { setZoom3(false) }, 4000)
         }
 
         if (Zoom4) {
-            setTimeout(() => { setZoom4(false) }, 2000)
+            setTimeout(() => { setZoom4(false) }, 4000)
         }
 
 
@@ -108,7 +109,10 @@ function ReactionPostx({ Ein,
         <>
 
 
-            <div style={{ marginTop: matchMobile ? minimise ? '-1vh' : '0px' : minimise ? '0px' : '0px' }}>
+            <div style={{
+                marginTop: matchMobile ? minimise ? '-1vh' : '0px' : minimise ? '0px' : '0px',
+                display: minimise ? 'none' : 'block'
+            }}>
 
                 {Ein === null || Ein === 0 ?
 

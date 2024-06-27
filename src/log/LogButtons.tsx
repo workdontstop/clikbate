@@ -9,7 +9,14 @@ import CancelIcon from '@material-ui/icons/Cancel';
 import { useRef, useState, useEffect, useCallback } from "react";
 import { RootStateOrAny, useSelector, useDispatch } from "react-redux";
 
-function LoginButtonsx({ OpenModalForm, type }: any) {
+import { useLocation } from 'react-router-dom';
+
+import { useNavigate } from 'react-router-dom';
+import { encodeBase64 } from '../profile/utils'; // Ensure this is the correct path to your utils
+
+
+
+function LoginButtonsx({ OpenModalForm, type, setScrollReactRouter, setFormtype, setCurrentPage }: any) {
   ///
   ///
   ///CONDITIONAL STATEMENT FOR DEVICE TYPE
@@ -104,9 +111,39 @@ function LoginButtonsx({ OpenModalForm, type }: any) {
 
   const dispatch = useDispatch();
 
+
+  const location = useLocation();
+
+  const navigate = useNavigate();
+
+
   const Timervv = useRef<ReturnType<typeof setTimeout> | null>(null);
 
+
+  const Loginxx = () => {
+
+    const id = 1; // Replace with the actual ID you want to navigate to
+    const encodedId = encodeBase64(id.toString());
+
+    setCurrentPage('login');
+
+    // Update the current URL with the scroll position and page number
+
+    // Navigate to the new URL with the new ID
+    navigate(`/Login/${encodedId}/${encodeBase64('0')}/${encodeBase64('0')}/${encodeBase64('0')}`);
+    //dispatch(UserInfoUpdateMEMBER(post.sender));
+    setScrollReactRouter(0);
+  };
+
+
+
+
+
+
   return (
+
+
+
 
     <>
 
@@ -145,16 +182,11 @@ function LoginButtonsx({ OpenModalForm, type }: any) {
           <Button
             onClick={() => {
 
-              if (type === 0) { OpenModalForm(1) } else {
-                OpenModalForm(8000)
-              }
 
-              if (Timervv.current) {
-                clearTimeout(Timervv.current);
-              }
-              Timervv.current = setTimeout(() => {
-                ///  dispatch(UpdateSign(false));
-              }, 2900);
+              setFormtype(true);
+
+              Loginxx();
+
 
             }}
 
@@ -184,16 +216,12 @@ function LoginButtonsx({ OpenModalForm, type }: any) {
         <Grid item className="buttonpad buttonshake" xs={6} sm={2}>
           <Button
             onClick={() => {
-              if (type === 0) { OpenModalForm(0) } else {
-                OpenModalForm(9000)
-              }
 
-              if (Timervv.current) {
-                clearTimeout(Timervv.current);
-              }
-              Timervv.current = setTimeout(() => {
-                //// dispatch(UpdateSign(false));
-              }, 2900);
+
+              setFormtype(false);
+
+              Loginxx();
+
             }}
             style={{
               fontSize: buttonFont,

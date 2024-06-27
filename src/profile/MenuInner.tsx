@@ -21,8 +21,15 @@ import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import FaceIcon from '@material-ui/icons/Face';
 import PermContactCalendarIcon from '@material-ui/icons/PermContactCalendar';
 import SubjectIcon from '@material-ui/icons/Subject';
+import HorizontalSplitIcon from '@material-ui/icons/HorizontalSplit';
 import { UpdateNavFilterReducer, UpdateSign } from "../GlobalActions";
 import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
+
+import { useNavigate } from 'react-router-dom';
+import { encodeBase64 } from './utils'; // Ensure this is the correct path to your utils
+import { useLocation } from 'react-router-dom';
+
+
 
 
 function MenuInnerx({
@@ -48,7 +55,13 @@ function MenuInnerx({
   postData,
   setUploadGPT,
   RandomColor,
-  postDatax
+  postDatax,
+
+  ScrollIndexPusher,
+  PostPagenumPusher,
+
+  setIdReactRouterAsInt,
+  setScrollReactRouter,
 }: any): JSX.Element {
   ///
   ///
@@ -78,6 +91,12 @@ function MenuInnerx({
   const GuestReducer = Guest;
 
   const dispatch = useDispatch();
+
+  const navigate = useNavigate();
+
+  const location = useLocation();
+
+
 
   const { REACT_APP_SUPERSTARZ_URL, REACT_APP_CLOUNDFRONT, REACT_APP_APPX_STATE } = process.env;
 
@@ -137,6 +156,42 @@ function MenuInnerx({
   const Timer2 = useRef<ReturnType<typeof setTimeout> | null>(null);
   const Timervv = useRef<ReturnType<typeof setTimeout> | null>(null);
   ///
+
+
+  function hexToRgb(hex: any) {
+    hex = hex.replace('#', '');
+    var bigint = parseInt(hex, 16);
+    var r = (bigint >> 16) & 255;
+    var g = (bigint >> 8) & 255;
+    var b = bigint & 255;
+    return [r, g, b];
+  }
+
+  function rgbToHex(r: any, g: any, b: any) {
+    return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1).toUpperCase();
+  }
+
+  function blendColors(color1: any, color2: any) {
+    var rgb1 = hexToRgb(color1);
+    var rgb2 = hexToRgb(color2);
+    var blendedRgb = [
+      Math.round((rgb1[0] + rgb2[0]) / 2),
+      Math.round((rgb1[1] + rgb2[1]) / 2),
+      Math.round((rgb1[2] + rgb2[2]) / 2)
+    ];
+    return rgbToHex(blendedRgb[0], blendedRgb[1], blendedRgb[2]);
+  }
+
+
+
+
+  var color1 = RandomColor;
+  var color2 = colorReducer;
+  var blendedColor = blendColors(color1, color2);
+
+
+
+
   ///
   ///
   /// GET LOGGED USER DATA FROM REDUX STORE
@@ -222,13 +277,43 @@ function MenuInnerx({
   }, [MemberProfileData, colorReducer, imageThumb, image, memeberPageid]);
 
 
+  const updateCurrentURLWithScrollPosition = () => {
+    var indexplus1 = ScrollIndexPusher + 1;
 
-
-
+    const currentPath = location.pathname.split('/');
+    const currentIdRoute1 = currentPath[currentPath.length - 3]; // Assuming idRoute1 is the third last segment
+    const currentIdRoute2 = currentPath[currentPath.length - 2]; // Assuming idRoute2 is the second last segment
+    const encodedScrollIndex = encodeBase64(indexplus1.toString());
+    const encodedPageNumber = encodeBase64(PostPagenumPusher.toString());
+    navigate(`/Feeds/${currentIdRoute1}/${encodedScrollIndex}/${encodedPageNumber}`, { replace: true });
+  };
 
 
 
   const GoToMember = () => {
+
+    dispatch(UserInfoUpdateMEMBER(-1));
+    const id = idReducer; // Replace with the actual ID you want to navigate to
+    const encodedId = encodeBase64(id.toString());
+
+    // Update the current URL with the scroll position
+    //updateCurrentURLWithScrollPosition();
+    // Update the current URL with the scroll position
+    updateCurrentURLWithScrollPosition();
+
+    // Navigate to the new URL with the new ID
+    navigate(`/Feeds/${encodedId}/${encodeBase64('0')}/${encodeBase64('0')}`);
+
+    dispatch(UserInfoUpdateMEMBER(idReducer));
+    setIdReactRouterAsInt(idReducer);
+    setScrollReactRouter(0)
+
+  };
+
+
+
+
+  const GoToMemberjj = () => {
 
     dispatch(Updatepagenum(0));
 
@@ -289,13 +374,43 @@ function MenuInnerx({
     if (Timervv.current) {
       clearTimeout(Timervv.current);
     }
-    if (memeberPageidReducer === idReducer) {
-    } else {
-      dispatch(UpdateLoader(true));
-    }
+
+    dispatch(UpdateLoader(true));
+
     Timervv.current = setTimeout(function () {
       GoToMember();
-    }, 1000);
+    }, 100);
+  };
+
+
+  const GoToMemberF = () => {
+    dispatch(UserInfoUpdateMEMBER(-1));
+    const id = 0; // Replace with the actual ID you want to navigate to
+    const encodedId = encodeBase64(id.toString());
+
+    // Update the current URL with the scroll position
+    updateCurrentURLWithScrollPosition();
+
+    // Navigate to the new URL with the new ID
+    navigate(`/Feeds/${encodedId}/${encodeBase64('0')}/${encodeBase64('0')}`);
+    dispatch(UserInfoUpdateMEMBER(0));
+    setIdReactRouterAsInt(0);
+    setScrollReactRouter(0)
+
+  };
+
+
+  const GoToMemberLoaderF = () => {
+
+    if (Timervv.current) {
+      clearTimeout(Timervv.current);
+    }
+
+    dispatch(UpdateLoader(true));
+
+    Timervv.current = setTimeout(function () {
+      GoToMemberF();
+    }, 100);
   };
 
 
@@ -542,10 +657,10 @@ function MenuInnerx({
                                     opacity: ActiveSlide === i ? 0.5 : 1,
                                     color: darkmodeReducer
                                       ? ActiveSlide === i
-                                        ? "red"
+                                        ? blendedColor
                                         : "#eeeeee"
                                       : ActiveSlide === i
-                                        ? "red"
+                                        ? blendedColor
                                         : "#222222",
                                   }}
                                   className="zuperkinginfo"
@@ -586,10 +701,10 @@ function MenuInnerx({
                                     opacity: ActiveSlide === i ? 0.5 : 1,
                                     color: darkmodeReducer
                                       ? ActiveSlide === i
-                                        ? "red"
+                                        ? blendedColor
                                         : "#eeeeee"
                                       : ActiveSlide === i
-                                        ? "red"
+                                        ? blendedColor
                                         : "#222222",
                                   }}
                                   className="zuperkinginfo"
@@ -629,10 +744,10 @@ function MenuInnerx({
                                         opacity: ActiveSlide === i ? 0.5 : 1,
                                         color: darkmodeReducer
                                           ? ActiveSlide === i
-                                            ? "red"
+                                            ? blendedColor
                                             : "#eeeeee"
                                           : ActiveSlide === i
-                                            ? "red"
+                                            ? blendedColor
                                             : "#222222",
                                       }}
                                       className="zuperkinginfo"
@@ -762,7 +877,7 @@ function MenuInnerx({
                                 if (ActiveSlide === i && i === 0) {
                                   ///alert('kk');
                                   if (memeberPageidReducer === idReducer || memeberPageidReducer === 0) {
-                                    GoToMemberLoaderUp();
+                                    GoToMemberLoaderF();
 
                                   }
                                 }
@@ -789,7 +904,7 @@ function MenuInnerx({
 
 
 
-                              <SubjectIcon
+                              <HorizontalSplitIcon
                                 style={{
                                   fontSize: matchPc ? "2.5vw" : "5vh",
                                   opacity: ActiveSlide === i ? 0.5 : 1,

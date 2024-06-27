@@ -37,6 +37,11 @@ import { UserInfoUpdateMEMBER } from "../log/actions/UserdataAction";
 import { UpdateLoader, Updatepagenum } from ".././GlobalActions";
 import { Connect } from "./Connect";
 
+import { useLocation } from 'react-router-dom';
+
+import { useNavigate } from 'react-router-dom';
+import { encodeBase64 } from './utils'; // Ensure this is the correct path to your utils
+
 
 ///Axios.defaults.withCredentials = true;
 
@@ -62,6 +67,10 @@ function ShowCommentsx({
 
   const [showdelete, setshowdelete] = useState(false);
 
+
+  const location = useLocation();
+
+  const navigate = useNavigate();
 
 
   ///
@@ -170,7 +179,28 @@ function ShowCommentsx({
     if (post !== null) setAdded(post.favCount);
   }, [post]);
 
-  const GoToMember = useCallback(() => {
+
+
+  const GoToMember = () => {
+
+    const id = post.comUserId; // Replace with the actual ID you want to navigate to
+    const encodedId = encodeBase64(id);
+
+
+    // Update the current URL with the scroll position and page number
+    //updateCurrentURLWithScrollPosition();
+
+    // Navigate to the new URL with the new ID
+    navigate(`/Feeds/${encodedId}/${encodeBase64('0')}/${encodeBase64('0')}`);
+    dispatch(UserInfoUpdateMEMBER(post.comUserId));
+    /// setIdReactRouterAsInt(0);
+    ///setScrollReactRouter(0);
+  };
+
+
+
+
+  const GoToMemberjjj = useCallback(() => {
 
 
 
@@ -290,7 +320,7 @@ function ShowCommentsx({
     }
     Timervv.current = setTimeout(function () {
       GoToMember();
-    }, 1000);
+    }, 100);
   };
 
 

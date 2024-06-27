@@ -74,7 +74,14 @@ function OptionsSliderx({
   AllowCaption,
   setUploadGPT,
   RandomColor,
-  postDatax
+  postDatax,
+
+  ScrollIndexPusher,
+  PostPagenumPusher,
+
+  setIdReactRouterAsInt,
+  setScrollReactRouter,
+  setConfirmUpload
 
 }: any) {
   ///
@@ -560,6 +567,13 @@ function OptionsSliderx({
         </>
       ) : typeUpload === 0 ? (
         <MenuInner
+          ScrollIndexPusher={ScrollIndexPusher}
+          PostPagenumPusher={PostPagenumPusher}
+
+          setIdReactRouterAsInt={setIdReactRouterAsInt}
+          setScrollReactRouter={setScrollReactRouter}
+
+
           postDatax={postDatax}
           RandomColor={RandomColor}
           setUploadGPT={setUploadGPT}
@@ -587,6 +601,7 @@ function OptionsSliderx({
         />
       ) : (
         <ImageFilterinner
+          setConfirmUpload={setConfirmUpload}
           AllowCaption={AllowCaption}
           setstartTopicCap={setstartTopicCap}
           finalImageData={finalImageData}

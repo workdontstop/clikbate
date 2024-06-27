@@ -87,7 +87,16 @@ function ProfileSetupx({
     pagePostScroll,
 
     setminimise,
-    minimise
+    minimise,
+    setIdReactRouterAsInt,
+    ScrollReactRouter,
+    setScrollReactRouter,
+    PostPagenumPusher,
+    setScrollIndexPusher,
+    setshowLogButtons,
+
+    snapallow,
+    setsnapallow
 
 
 
@@ -318,6 +327,8 @@ function ProfileSetupx({
         }, [idReducer, GuestReducer])
 
 
+
+
     return (
         <>
             {showProfiileData && ActualData.length > 0 ? (
@@ -325,7 +336,17 @@ function ProfileSetupx({
                     position: "relative", zIndex: 1, padding: "0px"
                 }}>
                     <Profile
+                        setsnapallow={setsnapallow}
+                        snapallow={snapallow}
 
+                        setshowProfiileData={setshowProfiileData}
+                        setshowLogButtons={setshowLogButtons}
+                        PostPagenumPusher={PostPagenumPusher}
+                        setScrollIndexPusher={setScrollIndexPusher}
+
+                        setScrollReactRouter={setScrollReactRouter}
+                        ScrollReactRouter={ScrollReactRouter}
+                        setIdReactRouterAsInt={setIdReactRouterAsInt}
                         setminimise={setminimise}
                         minimise={minimise}
 

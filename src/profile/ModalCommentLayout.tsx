@@ -9,6 +9,9 @@ import EditTwoToneIcon from "@mui/icons-material/EditTwoTone";
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
+import { RootStateOrAny, useSelector, useDispatch } from "react-redux";
+import { useNavigate } from 'react-router-dom';
+import { encodeBase64 } from './utils'; // Ensure this is the correct path to your utils
 
 import { AboutColor } from "./AboutColor";
 
@@ -16,10 +19,17 @@ import { CommentFormHolder } from "./CommentFormHolder";
 
 import { ServerError } from "../log/ServerError";
 
-import { RootStateOrAny, useSelector } from "react-redux";
+import {
+  UpdateLoader,
+  Updatepagenum
+} from ".././GlobalActions";
+import { UserInfoUpdateMEMBER } from "../log/actions/UserdataAction";
+
+
 import "./../log/logCss.css";
 
 import { DialogContent, Paper, Grid } from "@material-ui/core";
+import { transcode } from "buffer";
 
 function ModalCommentLayoutx({
   slidingImageWidth,
@@ -56,7 +66,6 @@ function ModalCommentLayoutx({
   profilex,
   showModalForm,
   setcheckIfColorChanged,
-  DiscussionImage,
   imageHeightoverflow,
   onimageloadx,
   ModalImageRef,
@@ -67,7 +76,7 @@ function ModalCommentLayoutx({
   CommentTimer,
   CommentPostid,
   containerHeight,
-  reactionTemplateGo,
+
   connectTemplateGo,
   typeEmo,
   postData,
@@ -79,8 +88,14 @@ function ModalCommentLayoutx({
   showComAddBack,
   setshowComAddBack,
   keypost,
+  profileDataHold,
+  DiscussionImage,
 
-  profileDataHold
+  reactionTemplateGo,
+  commentTemp,
+  connectTemplateGox,
+  PostOwner,
+  CommentPostAll
 
 }: any): JSX.Element {
   ///alert(containerHeight);
@@ -96,6 +111,9 @@ function ModalCommentLayoutx({
   const { REACT_APP_SUPERSTARZ_URL, REACT_APP_CLOUNDFRONT, REACT_APP_APPX_STATE } = process.env;
 
 
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const [sex, setsex] = useState<any>(null);
 
@@ -277,15 +295,54 @@ function ModalCommentLayoutx({
 
 
 
+  const Timervv = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+
+
+
+  const GoToMemberP = () => {
+
+
+    dispatch(UserInfoUpdateMEMBER(-1));
+    const id = idReducer; // Replace with the actual ID you want to navigate to
+    const encodedId = encodeBase64(id.toString());
+
+    // Update the current URL with the scroll position
+    //updateCurrentURLWithScrollPosition();
+    // Update the current URL with the scroll position
+
+
+    // Navigate to the new URL with the new ID
+    navigate(`/Feeds/${encodedId}/${encodeBase64('0')}/${encodeBase64('0')}`);
+
+    dispatch(UserInfoUpdateMEMBER(idReducer));
+    ///setIdReactRouterAsInt(idReducer);
+    //setScrollReactRouter(0)
+
+  };
+
+
+  const GoToMemberLoaderUpP = () => {
+    ///setshowModalFormMenu(false);
+    if (Timervv.current) {
+      clearTimeout(Timervv.current);
+    }
+    dispatch(UpdateLoader(true));
+    Timervv.current = setTimeout(function () {
+      GoToMemberP();
+    }, 100);
+  };
 
 
 
   const DelPost = useCallback(() => {
 
     var colorboy = {
-      id: CommentPostid.id,
-      post: postData[keypost]
+      id: CommentPostid,
+      post: CommentPostAll
     };
+
+
 
     Axios.post(
       `${REACT_APP_SUPERSTARZ_URL}/delPost`,
@@ -295,17 +352,51 @@ function ModalCommentLayoutx({
       .then((response) => {
         if (response.data.message === "deleted post") {
 
-          window.location.reload();
+          //window.location.reload();
+
+
+
+
+          GoToMemberLoaderUpP();
 
 
         }
       })
       .catch(function (error) {
-        /////alert(error);
+        alert(error);
       });
 
-  }, [CommentPostid, postData, keypost]);
+  }, [CommentPostid, CommentPostAll]);
 
+
+  const [showDeleteButton, setshowDeleteButton] = useState(false);
+
+  useEffect(() => {
+
+    if (reactionTemplateGo || connectTemplateGox) {
+
+      setshowDeleteButton(false);
+
+
+    } else {
+
+
+
+      if (commentTemp) {
+
+
+        if (PostOwner === idReducer) {
+          setshowDeleteButton(true);
+        }
+
+
+      }
+    }
+
+
+
+
+  }, [reactionTemplateGo, connectTemplateGox, commentTemp, PostOwner, idReducer])
 
   return (
     <>
@@ -328,27 +419,29 @@ function ModalCommentLayoutx({
                 serverErrorData={serverErrorData}
               />
 
-              {CommentPostid.sender === idReducer ? <DeleteOutlineIcon
-                onClick={() => {
+              {
 
-                  setshowdelete(true)
-                }}
-                className={
-                  darkmodeReducer
-                    ? "make-small-icons-clickable-darkab dontallowhighlighting zuperkingIcon "
-                    : "make-small-icons-clickable-lightab  dontallowhighlighting zuperkingIcon  "
-                }
-                style={{
-                  color: "#ffffff",
-                  fontSize: "2.9vw",
-                  position: "fixed",
-                  opacity: zoomedModal ? 0.3 : 0.4,
-                  top: zoomedModal ? "3vh" : "4vh",
-                  left: "1.8vw",
-                  zIndex: 200,
+                showDeleteButton ? <DeleteOutlineIcon
+                  onClick={() => {
 
-                }}
-              /> : null}
+                    setshowdelete(true)
+                  }}
+                  className={
+                    darkmodeReducer
+                      ? "make-small-icons-clickable-darkab dontallowhighlighting zuperkingIcon "
+                      : "make-small-icons-clickable-lightab  dontallowhighlighting zuperkingIcon  "
+                  }
+                  style={{
+                    color: "#ffffff",
+                    fontSize: "2.9vw",
+                    position: "fixed",
+                    opacity: zoomedModal ? 0.4 : 0.5,
+                    top: zoomedModal ? "3vh" : "4vh",
+                    left: "1.8vw",
+                    zIndex: 200,
+
+                  }}
+                /> : null}
 
 
               <DialogContent
@@ -372,9 +465,7 @@ function ModalCommentLayoutx({
                       ref={ModalSlidingImageRef}
                       onClick={Interceptzoomlogmodal}
                       onLoad={onimageload}
-                      src={
-                        connectTemplateGo > 0 ? memeberPageid === 0 ? `${REACT_APP_CLOUNDFRONT}${imageReducer}` : `${REACT_APP_CLOUNDFRONT}${MemberProfileData.userimage}`
-                          : `${REACT_APP_CLOUNDFRONT}${DiscussionImage}`
+                      src={`${REACT_APP_CLOUNDFRONT}${DiscussionImage}`
 
                       }
                       className="modalImageStylex"
@@ -424,9 +515,7 @@ function ModalCommentLayoutx({
                           onLoad={onimageloadx}
 
                           src={
-                            connectTemplateGo > 0 ? memeberPageid === 0 ? `${REACT_APP_CLOUNDFRONT}${imageReducer}` : `${REACT_APP_CLOUNDFRONT}${MemberProfileData.userimage}`
-                              : `${REACT_APP_CLOUNDFRONT}${DiscussionImage}`
-
+                            `${REACT_APP_CLOUNDFRONT}${DiscussionImage}`
                           }
                           className="modalImageStyle"
                           style={{
@@ -495,9 +584,9 @@ function ModalCommentLayoutx({
           ) : (
             /*PC PC PC PC PC PC PC PC PC PC PC PC PC PC PC PC PC PC PC PC PC PC PC PC
         PC PC PC PC PC PC PC PC PC PC PC PC */ /*MOBILE MOBILE MOBILE MOBILE
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                MOBILE MOBILEMOBILE MOBILE MOBILE MOBILE MOBILE MOBILE MOBILEMOBILE MOBILE
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    MOBILE MOBILE MOBILE MOBILE MOBILEMOBILE MOBILE MOBILE MOBILE MOBILE
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    MOBILE MOBILE MOBILE*/
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                MOBILE MOBILEMOBILE MOBILE MOBILE MOBILE MOBILE MOBILE MOBILEMOBILE MOBILE
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    MOBILE MOBILE MOBILE MOBILE MOBILEMOBILE MOBILE MOBILE MOBILE MOBILE
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    MOBILE MOBILE MOBILE*/
             <DialogContent
               className="Hide-mobile-Scrollbar  fadermodal FormDialog-container-mobile dontallowhighlighting"
               ref={imagescrollRef}
@@ -537,8 +626,7 @@ function ModalCommentLayoutx({
                         onClick={clickMobileZoom}
                         onLoad={mobileImageOnLoad}
                         src={
-                          connectTemplateGo > 0 ? memeberPageid === 0 ? `${REACT_APP_CLOUNDFRONT}${imageReducer}` : `${REACT_APP_CLOUNDFRONT}${MemberProfileData.userimage}`
-                            : `${REACT_APP_CLOUNDFRONT}${DiscussionImage}`
+                          `${REACT_APP_CLOUNDFRONT}${DiscussionImage}`
 
                         }
                         className="modalMobileImageStyle slow-Div-Change"
@@ -547,7 +635,7 @@ function ModalCommentLayoutx({
                       />
 
 
-                      {CommentPostid.sender === idReducer ? <DeleteOutlineIcon
+                      {showDeleteButton ? <DeleteOutlineIcon
                         onClick={() => {
 
                           setshowdelete(true)
@@ -561,7 +649,7 @@ function ModalCommentLayoutx({
                           color: "#ffffff",
                           fontSize: "6vh",
                           position: "fixed",
-                          opacity: zoomedModal ? 0.3 : 0.4,
+                          opacity: mobileZoom ? 0.6 : 1,
                           top: zoomedModal ? "0vh" : "3vh",
                           left: "3.8vw",
                           zIndex: 200,
@@ -688,7 +776,7 @@ function ModalCommentLayoutx({
 
             }}
           >
-            Delete This Post
+            Delete This Post    <span style={{ color: 'red', fontSize: '1rem', }}> !Important</span>
 
           </Grid>
 

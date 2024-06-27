@@ -2,6 +2,7 @@ import React, { useRef, useEffect, useState, useCallback } from "react";
 import { useSpring } from "react-spring";
 
 import { matchTablet, matchPc, matchMobile } from "./DetectDevice";
+import Axios from "axios";
 
 import "./log/logCss.css";
 import { ICommentTemplate, IGrid } from "./log/log-Interfaces";
@@ -20,6 +21,19 @@ import { Button, Grid } from "@material-ui/core";
 import { animated } from "react-spring";
 import { DialogContent } from "@material-ui/core";
 
+import { RootStateOrAny, useDispatch } from "react-redux";
+
+import { UpdateLoader, UpdateMenuData, Updatepagenum } from "./GlobalActions";
+
+import { LoaderPost } from "./profile/LoaderPost";
+
+
+import { decodeBase64, encodeBase64 } from './profile/utils';
+
+import { useParams } from 'react-router-dom';
+
+import { useLocation } from 'react-router-dom';
+
 function CommentTemplatex({
   formtype,
   CloseModalForm,
@@ -30,11 +44,10 @@ function CommentTemplatex({
   profilex,
   checkIfColorChanged,
   setcheckIfColorChanged,
-  DiscussionImage,
-  CommentPostid,
+  RandomColor,
+
   reactionTemplateGo,
-  connectTemplateGo,
-  typeEmo,
+  connectTemplateGox,
   scrollLocation,
   postData,
   commentHistoryScroll,
@@ -43,8 +56,405 @@ function CommentTemplatex({
   setCommentHistoryData,
   dontallowspring,
   keypost,
-  profileDataHold
+  profileDataHold,
+
+
+  setScrollReactRouter,
+  setPagenumReactRouter,
+  paperPostScrollRef,
+
+  setCurrentPage,
+
+  setZoomedModal,
+  setMobileZoom,
+  zoomedModal,
+  mobileZoom,
+
+
+
+
+
 }: any): JSX.Element {
+
+
+
+  const location = useLocation();
+
+
+
+
+
+  const { REACT_APP_SUPERSTARZ_URL, REACT_APP_CLOUNDFRONT, REACT_APP_APPX_STATE } = process.env;
+
+  const dispatch = useDispatch();
+
+
+  const [IdReactRouterAsInt, setIdReactRouterAsInt] = useState(0);
+
+  const [typeEmo, settypeEmo] = useState(0);
+
+  const [connectTemplateGo, setconnectTemplateGo] = useState(0);
+
+
+
+  ///
+  ///
+  ///
+  /// INTERFACE/TYPES FOR SCREENHEIGHT AND DARKMODE
+  interface RootStateGlobalReducer {
+    GlobalReducer: {
+      snapStart: boolean;
+      darkmode: boolean;
+      screenHeight: number;
+      activateLoader: boolean;
+      historyscroll: number;
+      interactContent: any;
+      interact: number;
+      MenuData: String;
+      pagenum: number;
+      SignIn: boolean,
+      Guest: number
+    };
+  }
+
+
+
+  ///
+  ///
+  ///
+  /// GET SCREENHEIGHT FROM REDUX STORE
+  const { screenHeight, darkmode, snapStart, activateLoader, historyscroll, interactContent, interact, MenuData, pagenum, SignIn, Guest } =
+    useSelector((state: RootStateGlobalReducer) => ({
+      ...state.GlobalReducer,
+    }));
+  const screenHeightReducer = screenHeight;
+  const darkmodeReducer = darkmode;
+  const snapStartReducer = snapStart;
+  const activateLoaderReducer = activateLoader;
+  const historyscrollReducer = historyscroll;
+  const interactContentReducer: any = interactContent;
+  const interactReducer = interact;
+  const MenuDataReducer = MenuData
+  const pagenumReducer = pagenum;
+  const SignInReducer = SignIn;
+  const GuestReducer = Guest;
+
+
+
+
+  ///
+  ///
+  ///
+  /// GET LOGGED USER DATA FROM REDUX STORE
+  interface RootStateReducerImage {
+    UserdataReducer: {
+      image: string;
+      username: string;
+      imageThumb: string;
+      id: number;
+      memeberPageid: number;
+      MemberProfileData: any;
+    };
+  }
+  const { username, image, imageThumb, id, memeberPageid, MemberProfileData } = useSelector(
+    (state: RootStateReducerImage) => ({
+      ...state.UserdataReducer,
+    })
+  );
+  const usernameReducer = username;
+  const imageReducer = image;
+  const imageReducerThumb = imageThumb;
+  const idReducer = id;
+  const memeberPageidReducer = memeberPageid;
+  const MemberProfileDataReducer = MemberProfileData;
+
+
+  const { idRoute1, idRoute2, idRoute3, idRoute4 } = useParams();
+  let idReactRouter: string | undefined;
+  let PagenumRouter: string | undefined;
+  let scrollRouter: string | undefined;
+
+
+  useEffect(() => {
+    const handlePopstate = () => {
+      // Extract IDs from the pathname
+      const pathSegments = window.location.pathname.split('/');
+      const idRoute1 = pathSegments[pathSegments.length - 4]; // Adjust index based on your route structure
+      const idRoute2 = pathSegments[pathSegments.length - 3]; // Adjust index based on your route structure
+      const idRoute3 = pathSegments[pathSegments.length - 2]; // Adjust index based on your route structure
+      const idRoute4 = pathSegments[pathSegments.length - 1]; // Adjust index based on your route structure
+
+
+      if (idRoute1) {
+        const decodedId1 = decodeBase64(idRoute1);
+        if (decodedId1) {
+          const parsedInt1 = parseInt(decodedId1, 10);
+          if (!isNaN(parsedInt1)) {
+            setIdReactRouterAsInt(parsedInt1);
+          }
+        }
+      }
+
+      if (idRoute2) {
+        const decodedId2 = decodeBase64(idRoute2);
+        if (decodedId2) {
+          const parsedInt2 = parseInt(decodedId2, 10);
+          if (!isNaN(parsedInt2)) {
+            setScrollReactRouter(parsedInt2);
+            // paperPostScrollRef.current.scrollTop = parsedInt2;
+          }
+        }
+      }
+
+      if (idRoute3) {
+        const decodedId3 = decodeBase64(idRoute3);
+        if (decodedId3) {
+          const parsedInt3 = parseInt(decodedId3, 10);
+          if (!isNaN(parsedInt3)) {
+            setPagenumReactRouter(parsedInt3);
+          }
+        }
+      }
+
+      if (idRoute4) {
+        const decodedId4 = decodeBase64(idRoute4);
+        if (decodedId4) {
+          const parsedInt4 = parseInt(decodedId4, 10);
+          if (!isNaN(parsedInt4)) {
+            settypeEmo(parsedInt4);
+          }
+        }
+      }
+
+
+    };
+
+    // Add an event listener for the popstate event
+    window.addEventListener('popstate', handlePopstate);
+
+    // Clean up the event listener when the component unmounts
+    return () => {
+      window.removeEventListener('popstate', handlePopstate);
+    };
+  }, []); // This effect should only run once, so it has an empty dependency array
+
+
+
+  const [ShowLoader2, setShowLoader2] = useState(false);
+
+  ///////////////////////////////////////////////////Loader
+
+  var autoSlideDisplay = "none";
+  var sliderLoader = "";
+
+  if (activateLoader || ShowLoader2) {
+    autoSlideDisplay = "block";
+    sliderLoader = "superloaderAutoSliderFast";
+  } else {
+    autoSlideDisplay = "none";
+    sliderLoader = "";
+  }
+
+  //////////////////////////////////////////////
+
+  useEffect(() => {
+    if (idRoute1) {
+      const decodedId1 = decodeBase64(idRoute1);
+      if (decodedId1) {
+        const parsedInt1 = parseInt(decodedId1, 10);
+        if (!isNaN(parsedInt1)) {
+          setIdReactRouterAsInt(parsedInt1);
+          //alert(parsedInt1)
+        }
+      }
+    }
+
+    if (idRoute2) {
+      const decodedId2 = decodeBase64(idRoute2);
+      if (decodedId2) {
+        const parsedInt2 = parseInt(decodedId2, 10);
+        if (!isNaN(parsedInt2)) {
+          setScrollReactRouter(parsedInt2);
+          //paperPostScrollRef.current.scrollTop = parsedInt2;
+        }
+      }
+    }
+
+    if (idRoute3) {
+      const decodedId3 = decodeBase64(idRoute3);
+      if (decodedId3) {
+        const parsedInt3 = parseInt(decodedId3, 10);
+        if (!isNaN(parsedInt3)) {
+          setPagenumReactRouter(parsedInt3);
+
+        }
+      }
+    }
+
+
+    if (idRoute4) {
+      const decodedId4 = decodeBase64(idRoute4);
+      if (decodedId4) {
+        const parsedInt4 = parseInt(decodedId4, 10);
+        if (!isNaN(parsedInt4)) {
+          settypeEmo(parsedInt4);
+
+        }
+      }
+    }
+
+  }, [idRoute1, idRoute2, idRoute3, idRoute4, location.pathname]);
+
+  ///alert(idReactRouterAsInt);
+
+
+
+  const [DiscussionImage, setDiscussionImage] = useState('');
+  const [PostOwner, setPostOwner] = useState(0);
+  const [CommentPostAll, setCommentPostAll] = useState<Array<any>>([]);
+
+
+  const [Bio, setBio] = useState('');
+  const [BioUser, setBioUser] = useState('');
+
+
+  var disboyx: any = {
+    commentId: IdReactRouterAsInt,
+    id: idReducer,
+  };
+
+  const callDiscussionImageConnect = () => {
+    Axios.post(
+      `${REACT_APP_SUPERSTARZ_URL}/connect_image`,
+      { values: disboyx },
+      {
+        withCredentials: true,
+      }
+    )
+      .then((response) => {
+        if (response.data.message === "fetched") {
+          var postdataRep = response.data.payload;
+
+          /// alert(IdReactRouterAsInt);
+          setDiscussionImage(postdataRep[0].profile_image);
+
+          setBio(postdataRep[0].biography);
+
+          setBioUser(postdataRep[0].username);
+
+
+          ///setshowProfiileData(true);
+        } else if (response.data.message === "error in fetching feeds") {
+          console.log("Connection malfunction modalcommentlayout");
+        }
+      })
+      .catch(function (error) {
+        console.log("Connection malfunction modalcommentlayout");
+      });
+  };
+
+
+
+  const callDiscussionImage = () => {
+    Axios.post(
+      `${REACT_APP_SUPERSTARZ_URL}/comments_image`,
+      { values: disboyx },
+      {
+        withCredentials: true,
+      }
+    )
+      .then((response) => {
+        if (response.data.message === "fetched") {
+          var postdataRep = response.data.payload;
+
+          setDiscussionImage(postdataRep[0].item2)
+          setPostOwner(postdataRep[0].sender);
+          setCommentPostAll(postdataRep[0]);
+
+
+          ///setshowProfiileData(true);
+        } else if (response.data.message === "error in fetching feeds") {
+          console.log("Connection malfunction modalcommentlayout");
+        }
+      })
+      .catch(function (error) {
+        console.log("Connection malfunction modalcommentlayout");
+      });
+  };
+
+
+
+  const Timervv = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+
+
+
+  useEffect(() => {
+
+    setCurrentPage('commentTemplate');
+
+    if (IdReactRouterAsInt === 0) { }
+
+    else {
+
+      dispatch(UpdateLoader(true));
+      setTimeout(() => {
+        dispatch(UpdateLoader(false));
+      }, 1500);
+
+
+
+
+      if (connectTemplateGox) { }
+
+      else {
+
+        if (reactionTemplateGo || commentTemp) {
+
+
+          if (Timervv.current) {
+            clearTimeout(Timervv.current);
+          }
+
+          callDiscussionImage();
+          //alert(IdReactRouterAsInt)
+        }
+      }
+    }
+  }, [IdReactRouterAsInt, reactionTemplateGo, commentTemp, connectTemplateGox]);
+
+
+
+
+
+  useEffect(() => {
+
+    setCurrentPage('commentTemplate');
+
+    if (IdReactRouterAsInt === 0) { }
+
+    else {
+      dispatch(UpdateLoader(true));
+      setTimeout(() => {
+        dispatch(UpdateLoader(false));
+      }, 1500);
+
+
+      if (connectTemplateGox || aboutTemp) {
+
+        ///alert(typeEmo);
+
+        setconnectTemplateGo(typeEmo);
+
+        callDiscussionImageConnect();
+
+      }
+
+    }
+  }, [IdReactRouterAsInt, connectTemplateGox, typeEmo, aboutTemp]);
+
+
+
   ///
   ///
   ///
@@ -62,32 +472,13 @@ function CommentTemplatex({
 
   const [showComAddBack, setshowComAddBack] = useState<boolean>(false);
 
-  ///
-  ///
-  ///
-  /// INTERFACE/TYPES FOR SCREENHEIGHT AND DARKMODE
-  interface RootStateGlobalReducer {
-    GlobalReducer: {
-      darkmode: boolean;
-      screenHeight: number;
-    };
-  }
 
-  ///
-  ///
-  ///
-  /// GET SCREENHEIGHT FROM REDUX STORE
-  const { screenHeight } = useSelector((state: RootStateGlobalReducer) => ({
-    ...state.GlobalReducer,
-  }));
-  const screenHeightReducer = screenHeight;
 
   ///
   ///
   ///
   ///MODAL ZOOMED STATE PC LOCALSTORAGE
-  const [zoomedModal, setZoomedModal] = useState<boolean>(false);
-  const [mobileZoom, setMobileZoom] = useState<boolean>(false);
+
   useEffect(() => {
     if (aboutTemp) {
     } else {
@@ -129,18 +520,18 @@ function CommentTemplatex({
   ///CREATE A SLIDE UP ANIMATION WITH  REACT SPRING
   const modalanimation = useSpring({
     config: {
-      duration: dontallowspring ? 5 : 500,
+      duration: dontallowspring ? 5 : 1500,
     },
-    opacity: showModalForm ? 1 : 0.9,
-    transform: showModalForm ? `translateY(0%)` : `translateY(100%)`,
+    opacity: IdReactRouterAsInt != 0 ? 1 : 0.3,
+    transform: IdReactRouterAsInt != 0 ? `translateY(0%)` : `translateY(100%)`,
   });
 
   const modalanimationTwo = useSpring({
     config: {
-      duration: 450,
+      duration: 1400,
     },
-    opacity: showModalForm ? 1 : 0.9,
-    transform: showModalForm ? `translateY(0%)` : `translateY(100%)`,
+    opacity: IdReactRouterAsInt != 0 ? 1 : 0.3,
+    transform: IdReactRouterAsInt != 0 ? `translateY(0%)` : `translateY(100%)`,
   });
 
   ///
@@ -316,10 +707,10 @@ function CommentTemplatex({
   const onBackgroundFocus = (e: any): void => {
     if (ModalBackgroundRef.current === e.target) {
       if (aboutTemp) {
-        CloseModalForm(0, 2);
+        //  CloseModalForm(0, 2);
         ///updateColor();
       } else {
-        CloseModalForm(0, 2);
+        // CloseModalForm(0, 2);
       }
     }
   };
@@ -424,21 +815,6 @@ function CommentTemplatex({
     [screenHeightReducer, DiscussionImage, ModalImageRef]
   );
 
-  ///
-  ///
-  ///
-  /// GET LOGGED USER DATA FROM REDUX STORE
-  interface RootStateReducerImage {
-    UserdataReducer: {
-      image: string;
-      id: number;
-    };
-  }
-  const { image, id } = useSelector((state: RootStateReducerImage) => ({
-    ...state.UserdataReducer,
-  }));
-  const imageReducer = image;
-  const idReducer = id;
 
 
 
@@ -532,13 +908,18 @@ function CommentTemplatex({
     <>
       <meta name="apple-mobile-web-app-capable" content="yes" />
 
+      <LoaderPost RandomColor={RandomColor} autoSlideDisplay={autoSlideDisplay} sliderLoader={sliderLoader} />
 
       {aboutTemp ? (
         showModalForm ? (
           <ModalAboutLayout
+            BioUser={BioUser}
+            Aboutid={IdReactRouterAsInt}
+            Bio={Bio}
             setcheckIfColorChanged={setcheckIfColorChanged}
             showModalForm={showModalForm}
             profilex={profilex}
+            DiscussionImage={DiscussionImage}
             slidingImageWidth={slidingImageWidth}
             opacitySlidingModalImage={opacitySlidingModalImage}
             zIndexModalImageZoom={zIndexModalImageZoom}
@@ -593,6 +974,16 @@ function CommentTemplatex({
           </Grid>
           (
           <ModalCommentLayout
+
+            PostOwner={PostOwner}
+            CommentPostAll={CommentPostAll}
+
+            reactionTemplateGo={reactionTemplateGo}
+            commentTemp={commentTemp}
+            connectTemplateGox={connectTemplateGox}
+
+
+            DiscussionImage={DiscussionImage}
             profileDataHold={profileDataHold}
             keypost={keypost}
             setshowComAddBack={setshowComAddBack}
@@ -605,9 +996,9 @@ function CommentTemplatex({
             scrollLocation={scrollLocation}
             typeEmo={typeEmo}
             connectTemplateGo={connectTemplateGo}
-            reactionTemplateGo={reactionTemplateGo}
+
             containerHeight={containerHeight}
-            CommentPostid={CommentPostid}
+            CommentPostid={IdReactRouterAsInt}
             CommentTimer={CommentTimer}
             setFeedbackshow={setFeedbackshow}
             setFeedBackData={setFeedBackData}
@@ -615,7 +1006,7 @@ function CommentTemplatex({
             MiniLayoutOverFlow={MiniLayoutOverFlow}
             ModalImageRef={ModalImageRef}
             onimageloadx={onimageloadx}
-            DiscussionImage={DiscussionImage}
+
             setcheckIfColorChanged={setcheckIfColorChanged}
             showModalForm={showModalForm}
             profilex={profilex}
@@ -635,6 +1026,7 @@ function CommentTemplatex({
             zIndexModalImageSmall={zIndexModalImageSmall}
             zoomedModal={zoomedModal}
             setZoomedModal={setZoomedModal}
+
             opacityFixedModalImage={opacityFixedModalImage}
             formtype={formtype}
             GridHolderB={GridHolderB}

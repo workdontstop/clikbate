@@ -51,6 +51,7 @@ import { UpdateNavFilterReducer } from "../GlobalActions";
 import { UpdateNavCropReducer } from "../GlobalActions";
 import { AudioEditor } from "./AudioEditor";
 import { CaptionText } from "./CaptionText";
+import { useNavigate } from 'react-router-dom';
 
 
 function Captionx({
@@ -263,6 +264,15 @@ function Captionx({
 
   const dispatch = useDispatch();
 
+
+  const navigate = useNavigate();
+
+  const goBack = () => {
+    navigate(-1);
+  };
+
+
+
   const calldatabase = useCallback((datak: any, t: number, audiolink: any) => {
 
     setloadmode('Saving');
@@ -302,6 +312,7 @@ function Captionx({
 
                   setsupeFilterLoadFadex(false);
                   closeUploadModal(2);
+                  goBack();
                   window.location.reload();
 
                 }
@@ -319,6 +330,7 @@ function Captionx({
           } else {
             setsupeFilterLoadFadex(false);
             closeUploadModal(2);
+            goBack();
             window.location.reload();
           }
 

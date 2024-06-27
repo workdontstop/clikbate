@@ -53,6 +53,10 @@ function ModalAboutLayoutx({
   profilex,
   showModalForm,
   setcheckIfColorChanged,
+  DiscussionImage,
+  Bio,
+  Aboutid,
+  BioUser
 }: any): JSX.Element {
   ///
   ///
@@ -308,7 +312,7 @@ function ModalAboutLayoutx({
                       onClick={zoomlogmodal}
                       onLoad={onimageload}
 
-                      src={memeberPageidReducer === 0 ? `${REACT_APP_CLOUNDFRONT}${imageReducer}` : `${REACT_APP_CLOUNDFRONT}${MemberProfileDataReducer.userimage}`}
+                      src={`${REACT_APP_CLOUNDFRONT}${DiscussionImage}`}
                       className="modalImageStylex"
                       style={{
                         opacity: opacitySlidingModalImage,
@@ -384,7 +388,7 @@ function ModalAboutLayoutx({
                               opacity: zoomedModal ? 0.3 : 0.4,
                               top: "4vh",
                               left: zoomedModal ? "1.8vw" : "8.8vw",
-                              display: memeberPageidReducer === idReducer || memeberPageidReducer === 0 ? 'block' : 'none',
+                              display: Aboutid === idReducer ? 'block' : 'none',
                             }}
                           />{" "}
                         </label>
@@ -403,7 +407,7 @@ function ModalAboutLayoutx({
                             top: zoomedModal ? "3vh" : "4vh",
                             right: zoomedModal ? "1.5vw" : "",
                             left: zoomedModal ? "" : "1.8vw",
-                            display: memeberPageidReducer === idReducer || memeberPageidReducer === 0 ? 'block' : 'none',
+                            display: Aboutid === idReducer ? 'block' : 'none',
                           }}
                         />{" "}
 
@@ -439,7 +443,7 @@ function ModalAboutLayoutx({
                             {
 
 
-                              idReducer === memeberPageidReducer || memeberPageidReducer === 0 ? biographyReducer : MemberProfileData.biography
+                              Bio
 
 
                             }
@@ -448,7 +452,7 @@ function ModalAboutLayoutx({
                         <img
                           ref={reft}
                           onClick={zoomlogmodal}
-                          src={memeberPageidReducer === 0 ? `${REACT_APP_CLOUNDFRONT}${imageReducer}` : `${REACT_APP_CLOUNDFRONT}${MemberProfileDataReducer.userimage}`}
+                          src={`${REACT_APP_CLOUNDFRONT}${DiscussionImage}`}
                           className="modalImageStyle"
                           style={{
                             opacity: opacityFixedModalImage,
@@ -467,7 +471,7 @@ function ModalAboutLayoutx({
                           style={{
                             padding: "0px",
                             marginTop: zoomedModal ? "5vh" : "0px",
-                            display: memeberPageidReducer === idReducer || memeberPageidReducer === 0 ? 'block' : 'none',
+                            display: Aboutid === idReducer ? 'block' : 'none',
                           }}
                         >
                           {showColor ? <AboutColor
@@ -495,10 +499,10 @@ function ModalAboutLayoutx({
                           style={{
                             padding: "0px",
                             marginTop: zoomedModal ? "5vh" : "0px",
-                            display: memeberPageidReducer === idReducer || memeberPageidReducer === 0 ? 'none' : 'block',
+                            display: Aboutid === idReducer ? 'none' : 'block',
                           }}
                         >
-                          <h1 style={{ marginTop: '10vh', fontFamily: "Arial, Helvetica, sans-seri", }}>{MemberProfileDataReducer.username}</h1>
+                          <h1 style={{ marginTop: '10vh', fontFamily: "Arial, Helvetica, sans-seri", }}>{BioUser}</h1>
                         </Grid>
 
                         <Grid
@@ -519,7 +523,7 @@ function ModalAboutLayoutx({
                             }}
                           >
 
-                            {memeberPageidReducer === idReducer || memeberPageidReducer === 0 ? <AboutFormHolder
+                            {Aboutid === idReducer ? <AboutFormHolder
                               zoomedModal={zoomedModal}
                               WidthHolder={WidthHolder}
                               loginForm={false}
@@ -545,9 +549,9 @@ function ModalAboutLayoutx({
           ) : (
             /*PC PC PC PC PC PC PC PC PC PC PC PC PC PC PC PC PC PC PC PC PC PC PC PC
         PC PC PC PC PC PC PC PC PC PC PC PC */ /*MOBILE MOBILE MOBILE MOBILE
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                MOBILE MOBILEMOBILE MOBILE MOBILE MOBILE MOBILE MOBILE MOBILEMOBILE MOBILE
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                MOBILE MOBILE MOBILE MOBILE MOBILEMOBILE MOBILE MOBILE MOBILE MOBILE
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                MOBILE MOBILE MOBILE*/
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            MOBILE MOBILEMOBILE MOBILE MOBILE MOBILE MOBILE MOBILE MOBILEMOBILE MOBILE
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            MOBILE MOBILE MOBILE MOBILE MOBILEMOBILE MOBILE MOBILE MOBILE MOBILE
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            MOBILE MOBILE MOBILE*/
             <DialogContent
               className="Hide-mobile-Scrollbar  fadermodal FormDialog-container-mobile dontallowhighlighting"
               ref={imagescrollRef}
@@ -610,7 +614,7 @@ function ModalAboutLayoutx({
                             opacity: zoomedModal ? 0.3 : 0.4,
                             top: "3vh",
                             left: zoomedModal ? "1.8vw" : "25.8vw",
-                            display: memeberPageidReducer === idReducer || memeberPageidReducer === 0 ? 'block' : 'none',
+                            display: Aboutid === idReducer ? 'block' : 'none',
                           }}
                         />{" "}
                       </label>
@@ -629,7 +633,7 @@ function ModalAboutLayoutx({
                           top: zoomedModal ? "3vh" : "3vh",
                           right: zoomedModal ? "1.5vw" : "",
                           left: zoomedModal ? "" : "1.8vw",
-                          display: memeberPageidReducer === idReducer || memeberPageidReducer === 0 ? 'block' : 'none',
+                          display: Aboutid === idReducer ? 'block' : 'none',
                         }}
                       />{" "}
 
@@ -663,8 +667,7 @@ function ModalAboutLayoutx({
                         >
                           {
 
-
-                            idReducer === memeberPageidReducer || memeberPageidReducer === 0 ? biographyReducer : MemberProfileData.biography
+                            Bio
 
 
                           }
@@ -673,7 +676,7 @@ function ModalAboutLayoutx({
                       <animated.img
                         onClick={clickMobileZoom}
                         onLoad={mobileImageOnLoad}
-                        src={memeberPageidReducer === 0 ? `${REACT_APP_CLOUNDFRONT}${imageReducer}` : `${REACT_APP_CLOUNDFRONT}${MemberProfileDataReducer.userimage}`}
+                        src={`${REACT_APP_CLOUNDFRONT}${DiscussionImage}`}
                         className="modalMobileImageStyle slow-Div-Change"
                         alt="SuperstarZ"
                         style={mobileLogmodalanimation}
@@ -771,20 +774,21 @@ function ModalAboutLayoutx({
                             }}
                           >
 
-                            {memeberPageidReducer === idReducer || memeberPageidReducer === 0 ? <AboutFormHolder
-                              zoomedModal={zoomedModal}
-                              WidthHolder={WidthHolder}
-                              loginForm={false}
-                              setServerErrorData={setServerErrorData}
-                              setServerErrorDisplay={setServerErrorDisplay}
-                              setserverEmojiplain={setserverEmojiplain}
-                              checkSignupPasswordACTIVATE={
-                                checkSignupPasswordACTIVATE
-                              }
-                              setcheckSignupPasswordACTIVATE={
-                                setcheckSignupPasswordACTIVATE
-                              }
-                            /> : null}
+                            {Aboutid === idReducer ?
+                              <AboutFormHolder
+                                zoomedModal={zoomedModal}
+                                WidthHolder={WidthHolder}
+                                loginForm={false}
+                                setServerErrorData={setServerErrorData}
+                                setServerErrorDisplay={setServerErrorDisplay}
+                                setserverEmojiplain={setserverEmojiplain}
+                                checkSignupPasswordACTIVATE={
+                                  checkSignupPasswordACTIVATE
+                                }
+                                setcheckSignupPasswordACTIVATE={
+                                  setcheckSignupPasswordACTIVATE
+                                }
+                              /> : null}
 
                           </Grid>
                         </Grid>

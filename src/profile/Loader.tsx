@@ -90,13 +90,13 @@ function Loaderx({ sliderLoader, autoSlideDisplay, post, RandomColor, minimise }
 
               `linear-gradient(45deg, ${colorReducer}, ${post.color1})` :
             `linear-gradient(45deg, ${RandomColor}, ${colorReducer})`,
-          height: "0.8vh",
+          height: minimise ? '0.5vh' : "0.8vh",
           position: "absolute",
           display: autoSlideDisplay,
           zIndex: 100000,
           top: "0em",
           width: '80%',
-          marginLeft: matchMobile ? minimise ? '16.6%' : '0%' : minimise ? '12%' : '4%'
+          marginLeft: matchMobile ? minimise ? '0%' : '0%' : minimise ? '0%' : '4%'
 
         }}
       ></Grid>

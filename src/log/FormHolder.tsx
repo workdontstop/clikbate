@@ -17,6 +17,13 @@ import { ActivateLoaderAction, HideLoaderAction } from "../GlobalActions";
 import { PasswordCheck } from "./PasswordCheck";
 import { UpdateColorAction } from "../GlobalActions";
 
+import { useLocation } from 'react-router-dom';
+
+import { useNavigate } from 'react-router-dom';
+import { encodeBase64 } from '../profile/utils'; // Ensure this is the correct path to your utils
+
+
+
 Axios.defaults.withCredentials = true;
 /////withCredentials: true
 
@@ -31,6 +38,12 @@ function FormHolderx({
   setcheckSignupPasswordACTIVATE,
 }: IFormHolder) {
   const dispatch = useDispatch();
+
+
+  const location = useLocation();
+
+  const navigate = useNavigate();
+
 
   const [focusUsername, setFocusUsername] = useState<boolean>(false);
   const [focusPassword, setFocusPassword] = useState<boolean>(false);
@@ -191,6 +204,25 @@ function FormHolderx({
     null
   );
 
+
+
+
+  const Reload = () => {
+
+    const id = 0; // Replace with the actual ID you want to navigate to
+    const encodedId = encodeBase64(id.toString());
+
+
+
+    // Navigate to the new URL with the new ID
+    navigate(`/Feeds/${encodedId}/${encodeBase64('0')}/${encodeBase64('0')}`);
+    //dispatch(UserInfoUpdateMEMBER(post.sender));
+    //setScrollReactRouter(0);
+
+
+  }
+
+
   ///
   ///
   ///
@@ -270,15 +302,17 @@ function FormHolderx({
                   {}
                 ).then((response) => {
                   if (response.data.message === "updated") {
-                    window.location.reload();
+                    Reload();
+
+
                   }
                 })
                   .catch(function (error) {
-                    window.location.reload();
+                    Reload();
                   });
               } else {
 
-                window.location.reload();
+                Reload();
               }
 
 
@@ -754,10 +788,20 @@ function FormHolderx({
                       dispatch(HideLoaderAction());
                     } else if (response.data.payload) {
 
+                      dispatch(HideLoaderAction());
+                      dispatch(UserdataAction(response.data.payload));
+
+                      var colorboy = {
+                        color1: response.data.payload.usercolor1,
+                        color2: response.data.payload.usercolor2,
+                        colortype: response.data.payload.usercolortype,
+                      };
+                      dispatch(UpdateColorAction(colorboy, 1));
+
 
                       localStorage.setItem('reg', '1');
 
-                      window.location.reload();
+                      Reload();
 
                     } else {
                       setServerErrorData("something went wrong");

@@ -19,6 +19,14 @@ import ZoomOutIcon from "@mui/icons-material/ZoomOut";
 import BlurCircularIcon from '@material-ui/icons/BlurCircular';
 import SubjectIcon from '@material-ui/icons/Subject';
 
+import { UpdateSign } from "../GlobalActions";
+
+import { useNavigate } from 'react-router-dom';
+import { encodeBase64 } from './utils'; // Ensure this is the correct path to your utils
+import { useLocation } from 'react-router-dom';
+
+
+
 import HorizontalSplitIcon from '@material-ui/icons/HorizontalSplit';
 
 import {
@@ -70,17 +78,35 @@ function Menux({
   profileDataHold,
 
   setminimise,
-  minimise
+  minimise,
+
+  setIdReactRouterAsInt,
+  setScrollReactRouter,
+
+  PostPagenumPusher,
+  ScrollIndexPusher,
+  CurrentPage,
+
+  setZoomedModal,
+  setMobileZoom,
+  zoomedModal,
+  mobileZoom,
 
 
 }: any) {
+
+  const { REACT_APP_SUPERSTARZ_URL, REACT_APP_CLOUNDFRONT, REACT_APP_APPX_STATE } = process.env;
+
   ///
   ///
   ///
   /// USE DISPATCH
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  const { REACT_APP_SUPERSTARZ_URL, REACT_APP_CLOUNDFRONT, REACT_APP_APPX_STATE } = process.env;
+  const location = useLocation();
+
+
 
   var isSafari = navigator.vendor && navigator.vendor.indexOf('Apple') > -1 &&
     navigator.userAgent &&
@@ -161,7 +187,40 @@ function Menux({
 
 
 
-  const GoToMemberF = useCallback(() => {
+
+  const updateCurrentURLWithScrollPosition = () => {
+    var indexplus1 = ScrollIndexPusher + 1;
+
+    const currentPath = location.pathname.split('/');
+    const currentIdRoute1 = currentPath[currentPath.length - 3]; // Assuming idRoute1 is the third last segment
+    const currentIdRoute2 = currentPath[currentPath.length - 2]; // Assuming idRoute2 is the second last segment
+    const encodedScrollIndex = encodeBase64(indexplus1.toString());
+    const encodedPageNumber = encodeBase64(PostPagenumPusher.toString());
+    navigate(`/Feeds/${currentIdRoute1}/${encodedScrollIndex}/${encodedPageNumber}`, { replace: true });
+  };
+
+
+
+
+  const GoToMemberF = () => {
+    dispatch(UserInfoUpdateMEMBER(-1));
+    const id = 0; // Replace with the actual ID you want to navigate to
+    const encodedId = encodeBase64(id.toString());
+
+
+    if (CurrentPage === 'feeds') {
+      updateCurrentURLWithScrollPosition();
+    }
+
+    // Navigate to the new URL with the new ID
+    navigate(`/Feeds/${encodedId}/${encodeBase64('0')}/${encodeBase64('0')}`);
+    dispatch(UserInfoUpdateMEMBER(0));
+    setIdReactRouterAsInt(0);
+    setScrollReactRouter(0)
+
+  };
+
+  const GoToMemberFg = useCallback(() => {
     dispatch(Updatepagenum(0));
     dispatch(UserInfoUpdateMEMBER(-1));
 
@@ -220,8 +279,41 @@ function Menux({
   }, [pagenumReducer, memeberPageidReducer, idReducer, MemberProfileDataReducer, usernameReducer, setuptype, ActualpostDataAll, profileDataHold,]);
 
 
+  const GoToMemberP = () => {
+    if (idReducer === GuestReducer) {
 
-  const GoToMemberP = useCallback(() => {
+      dispatch(UpdateSign(true));
+
+
+      // commentClickedNew();
+    } else {
+
+
+
+
+      dispatch(UserInfoUpdateMEMBER(-1));
+      const id = idReducer; // Replace with the actual ID you want to navigate to
+      const encodedId = encodeBase64(id.toString());
+
+      // Update the current URL with the scroll position
+      //updateCurrentURLWithScrollPosition();
+      // Update the current URL with the scroll position
+
+      if (CurrentPage === 'feeds') {
+        updateCurrentURLWithScrollPosition();
+      }
+
+
+      // Navigate to the new URL with the new ID
+      navigate(`/Feeds/${encodedId}/${encodeBase64('0')}/${encodeBase64('0')}`);
+
+      dispatch(UserInfoUpdateMEMBER(idReducer));
+      setIdReactRouterAsInt(idReducer);
+      setScrollReactRouter(0)
+    }
+  };
+
+  const GoToMemberPn = useCallback(() => {
     dispatch(Updatepagenum(0));
     dispatch(UserInfoUpdateMEMBER(-1));
 
@@ -288,13 +380,10 @@ function Menux({
     if (Timervv.current) {
       clearTimeout(Timervv.current);
     }
-    if (memeberPageidReducer === idReducer) {
-    } else {
-      dispatch(UpdateLoader(true));
-    }
+    dispatch(UpdateLoader(true));
     Timervv.current = setTimeout(function () {
       GoToMemberP();
-    }, 1000);
+    }, 100);
   };
 
 
@@ -303,13 +392,11 @@ function Menux({
     if (Timervv.current) {
       clearTimeout(Timervv.current);
     }
-    if (memeberPageidReducer === idReducer) {
-    } else {
-      dispatch(UpdateLoader(true));
-    }
+    dispatch(UpdateLoader(true));
+
     Timervv.current = setTimeout(function () {
       GoToMemberF();
-    }, 1000);
+    }, 100);
   };
 
 
@@ -587,12 +674,7 @@ function Menux({
               ShowBigPlay ? null : <Grid
                 container
                 style={{
-                  bottom: matchMobile ? '8vh' : "6vh",
-                  position: "fixed",
-                  width: "100%",
-                  height: "0px",
-                  zIndex: 10,
-                  opacity: "1",
+
                 }}
               >
                 {" "}
@@ -634,7 +716,7 @@ function Menux({
                           textAlign: 'center',
                         }}
                       >
-                        {memeberPageidReducer === idReducer || memeberPageidReducer === 0
+                        {memeberPageidReducer === 0 || CurrentPage === 'commentTemplate'
                           ? <img
 
                             onMouseEnter={(e) => {
@@ -646,8 +728,20 @@ function Menux({
                             src={`${REACT_APP_CLOUNDFRONT}${image}`}
                             title={username}
                             onClick={() => {
-                              GoToMemberLoaderUpP();
-                              setZoom1(false);
+                              ///GoToMemberLoaderUpP();
+                              if (idReducer === GuestReducer) {
+                                dispatch(UpdateSign(true));
+
+                              }
+                              else {
+                                if (CurrentPage === 'feeds') {
+                                  paperPostScrollRef.current.scrollTop = 0;
+                                  setZoom1(false);
+                                } else {
+                                  GoToMemberLoaderUpP();
+                                }
+                              }
+
                             }}
                             style={{
                               transform: Zoom1 ? "scale(1.5)" : "scale(1)",
@@ -674,8 +768,18 @@ function Menux({
                             src={`${REACT_APP_CLOUNDFRONT}${MemberProfileDataReducer.userimage}`}
                             title={MemberProfileDataReducer.username}
                             onClick={() => {
-                              /// GoToMemberLoaderUpP();
-                              setZoom1(false);
+
+                              if (idReducer === GuestReducer) {
+                                dispatch(UpdateSign(true));
+                              }
+                              else {
+                                if (CurrentPage === 'feeds') {
+                                  paperPostScrollRef.current.scrollTop = 0;
+                                  setZoom1(false);
+                                } else {
+                                  GoToMemberLoaderUpP();
+                                }
+                              }
                             }}
                             style={{
                               transform: Zoom1 ? "scale(1.5)" : "scale(1)",
@@ -888,7 +992,36 @@ function Menux({
 
 
                           onClick={() => {
-                            if (minimise) { setminimise(false); } else { setminimise(true); }
+
+                            if (CurrentPage === 'commentTemplate') {
+
+
+
+                              if (matchMobile) {
+
+                                setMobileZoom(!mobileZoom);
+
+                              }
+                              else {
+
+                                let toggleZoomedModal = !zoomedModal;
+                                setZoomedModal(!zoomedModal);
+                                /// hideLogo();
+                                //LOCALSTORAGE ZOOMED STATES  FOR PC
+                                localStorage.setItem("PcZoom", toggleZoomedModal.toString());
+
+                              }
+
+
+                            } else {
+
+                              if (minimise) { setminimise(false); } else { setminimise(true); }
+                            }
+
+
+
+
+
 
                             setZoom5(false);
 

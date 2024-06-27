@@ -87,7 +87,16 @@ function Sliderx({
   minimise,
   setminimise,
 
-  RandomColor
+  RandomColor,
+
+  setScrollIndexPusher,
+  setStopRouterScroll,
+  StopRouterScroll,
+
+  setminimiseSpecificScroll,
+  divBox,
+  Maximisefromcanvas,
+  setMaximisefromcanvas
 
 
 }: any): JSX.Element {
@@ -105,6 +114,106 @@ function Sliderx({
   const [showSpinx, setshowSpinx] = useState(false);
 
 
+  const postImageRef = useRef<HTMLImageElement>(null);
+
+
+  const [Unload, setUnload] = useState(false);
+
+
+
+
+  const InteractTimerxxhy = useRef<ReturnType<typeof setTimeout> | null>(
+    null
+  );
+  const InteractTimerxxhx = useRef<ReturnType<typeof setTimeout> | null>(
+    null
+  );
+  const InteractTimerxxh = useRef<ReturnType<typeof setTimeout> | null>(
+    null
+  );
+
+
+  const pic: any = useRef(null);
+  const picanonymous: any = useRef(null);
+  const canvasRefIn: any = useRef(null);
+  const DummyCanvas4ToDataURL: any = useRef(null);
+
+
+
+  useEffect(() => {
+
+    if (minimise) {
+
+      var marginLeft = 0;
+
+      if (pic.current) {
+        const previewFileReadimage: any = new Image();
+        previewFileReadimage.crossOrigin = "anonymous";
+        previewFileReadimage.src = pic.current.src;
+        previewFileReadimage.onload = () => {
+          const naturalWidth = previewFileReadimage.naturalWidth;
+          const naturalHeight = previewFileReadimage.naturalHeight;
+          const containerHeight = divBox.current.clientHeight * DivBoxMultiple;
+          const aspectRatio = naturalWidth / naturalHeight;
+          const newWidth = containerHeight * aspectRatio;
+          marginLeft = (divBox.current.clientWidth - newWidth) / 2;
+
+
+          setcanvasBorderH(divBox.current.clientHeight * DivBoxMultiple);
+          setcanvasBorderW(divBox.current.clientWidth);
+
+
+          if (InteractTimerxxhx.current) {
+            clearTimeout(InteractTimerxxhx.current);
+          }
+          InteractTimerxxhx.current = setTimeout(() => {
+            if (previewFileReadimage.naturalWidth > previewFileReadimage.naturalHeight) {
+              setMarginLeftCanvas(marginLeft);
+            } else { setMarginLeftCanvas(0); }
+
+            setcanvasBorderH(divBox.current.clientHeight * DivBoxMultiple);
+            setcanvasBorderW(divBox.current.clientWidth);
+          }, 1000)
+        }
+      }
+
+
+    } else {
+
+      setcanvasBorderH('auto');
+      setcanvasBorderW('auto');
+    }
+
+
+    //setActiveCanvas(-1);
+
+    ///stopinviewCanvas(1);
+
+
+    if (StopRouterScroll === 0) { }
+
+    else {
+
+      setStopRouterScroll(2);
+    }
+
+
+    //startInteraction();
+
+    setUnload(true);
+
+    if (InteractTimerxxh.current) {
+      clearTimeout(InteractTimerxxh.current);
+    }
+    InteractTimerxxh.current = setTimeout(() => {
+      setUnload(false);
+
+      // startinviewCanvas(1);
+    }, 10)
+
+
+
+  }, [minimise])
 
 
   interface RootStateGlobalReducer {
@@ -194,6 +303,7 @@ function Sliderx({
 
   const [isPaused, setIsPaused] = useState(false);
 
+  const DivBoxMultiple = matchMobile ? 0.87 : 0.945;
 
 
 
@@ -253,6 +363,46 @@ function Sliderx({
 
 
 
+      if (minimise) {
+
+        if (pic.current) {
+          const previewFileReadimage: any = new Image();
+          previewFileReadimage.crossOrigin = "anonymous";
+          previewFileReadimage.src = pic.current.src;
+          previewFileReadimage.onload = () => {
+            const naturalWidth = previewFileReadimage.naturalWidth;
+            const naturalHeight = previewFileReadimage.naturalHeight;
+            const containerHeight = divBox.current.clientHeight * DivBoxMultiple;
+            const aspectRatio = naturalWidth / naturalHeight;
+            const newWidth = containerHeight * aspectRatio;
+            const marginLeft = (divBox.current.clientWidth - newWidth) / 2;
+
+
+            if (InteractTimerxxhy.current) {
+              clearTimeout(InteractTimerxxhy.current);
+            }
+            InteractTimerxxhy.current = setTimeout(() => {
+
+              if (previewFileReadimage.naturalWidth > previewFileReadimage.naturalHeight) {
+                setMarginLeftCanvas(marginLeft);
+              } else { setMarginLeftCanvas(0); }
+
+
+              setcanvasBorderH(divBox.current.clientHeight * DivBoxMultiple);
+              setcanvasBorderW(divBox.current.clientWidth);
+            }, 1000);
+
+          }
+        }
+      } else {
+
+        setcanvasBorderH('auto');
+        setcanvasBorderW('auto');
+      }
+
+
+
+
 
 
       setlatestInview(pey);
@@ -302,6 +452,11 @@ function Sliderx({
         InitializingAutoPlayIndex(pey);
         ///calls active post key without clicking on post
 
+        if (minimise) { }
+
+        else {
+
+        }
 
         startInteraction();
 
@@ -333,7 +488,8 @@ function Sliderx({
 
 
     }
-  }, [inView, ActiveAutoPost, ActiveCanvas, pey, itemCLICKED, showSpin, matchMobile, matchPc, itemcroptype, interactContent, interact]);
+  }, [inView, ActiveAutoPost, ActiveCanvas, pey, itemCLICKED, showSpin, matchMobile, matchPc, itemcroptype,
+    interactContent, interact, minimise, pic, divBox]);
 
 
 
@@ -366,10 +522,13 @@ function Sliderx({
 
       startinview();
 
+
     }, 1500)
   }, [inView]);
   /// const getWidth = () => window.innerWidth;
   ///var newGetWidth = getWidth() * slides.length;
+
+
 
   const InteractTimerxx = useRef<ReturnType<typeof setTimeout> | null>(
     null
@@ -420,7 +579,16 @@ function Sliderx({
 
   const ActiveIdReducer = ActiveId;
 
-  ///
+
+  const wa = useRef<ReturnType<typeof setTimeout> | null>(
+    null
+  );
+
+
+  const wa22 = useRef<ReturnType<typeof setTimeout> | null>(
+    null
+  );
+
 
 
   ///
@@ -612,8 +780,18 @@ function Sliderx({
   const [data, setdata] = useState(null);
   const [canvasInteractWidth, setcanvasInteractWidth] = useState(0);
   const [canvasInteractheight, setcanvasInteractheight] = useState(0);
-  const [imageWidthcss, setimageWidthcss] = useState(0);
-  const [imageHeightcss, setimageHeightcss] = useState(0);
+
+
+  const [imageWidthcss, setimageWidthcss] = useState<number | 'auto'>(0);
+  const [imageHeightcss, setimageHeightcss] = useState<number | 'auto'>(0);
+
+
+  const [MarginLeftCanvas, setMarginLeftCanvas] = useState<number>(0);
+
+
+  const [canvasBorderH, setcanvasBorderH] = useState<number | 'auto'>(0);
+  const [canvasBorderW, setcanvasBorderW] = useState<number | 'auto'>(0);
+
 
   const handleTouchStartIn = useCallback(
     (event: any, type: any) => {
@@ -631,10 +809,6 @@ function Sliderx({
     [data, itemCLICKED[pey]]
   );
 
-  const pic: any = useRef(null);
-  const picanonymous: any = useRef(null);
-  const canvasRefIn: any = useRef(null);
-  const DummyCanvas4ToDataURL: any = useRef(null);
 
   const ScaleCoOrdinates = useCallback(
     (event, type) => {
@@ -677,14 +851,19 @@ function Sliderx({
   const [interactHeightResolution, setinteractHeightResolution] = useState(window.innerHeight * 0.1);
 
   useEffect(() => {
-    setinteractHeightResolution(window.innerHeight * 1);
-  }, [matchPc])
+    if (minimise) {
+      setinteractHeightResolution(window.innerHeight * 0.77);
+    }
+    else {
+      setinteractHeightResolution(window.innerHeight * 0.82);
+    }
+  }, [matchPc, minimise])
 
 
   useEffect(() => {
 
     if (matchMobile) {
-      setinteractHeightResolution(window.innerHeight * 1);
+      setinteractHeightResolution(window.innerHeight * 0.92);
     }
 
   }, [matchMobile])
@@ -719,20 +898,73 @@ function Sliderx({
       setcanvasInteractWidth(width);
       setcanvasInteractheight(hei);
 
-      if (pic.current) {
-        const newHeight = (previewFileReadimage.naturalHeight * pic.current.clientWidth) / previewFileReadimage.naturalWidth;
+
+      if (minimise) {
+
+        setcanvasBorderH(divBox.current.clientHeight * DivBoxMultiple);
+        setcanvasBorderW(divBox.current.clientWidth);
+
+        if (pic.current) {
+          const newHeight = (previewFileReadimage.naturalHeight * pic.current.clientWidth) / previewFileReadimage.naturalWidth;
 
 
-        setimageWidthcss(pic.current.clientWidth);
-        setimageHeightcss(newHeight);
+          if (previewFileReadimage.naturalWidth > previewFileReadimage.naturalHeight) {
+
+            const naturalWidth = previewFileReadimage.naturalWidth;
+            const naturalHeight = previewFileReadimage.naturalHeight;
+            const containerHeight = divBox.current.clientHeight * DivBoxMultiple;
+            const aspectRatio = naturalWidth / naturalHeight;
+            const newWidth = containerHeight * aspectRatio;
+
+
+            const marginLeft = (divBox.current.clientWidth - newWidth) / 2;
+            setMarginLeftCanvas(marginLeft);
+
+            setimageWidthcss(newWidth);
+            setimageHeightcss(divBox.current.clientHeight * DivBoxMultiple);
+
+          } else {
+
+            setMarginLeftCanvas(0);
+
+            setimageWidthcss(pic.current.clientWidth);
+            setimageHeightcss(newHeight);
+
+          }
+
+        }
+
+
+      } else {
+
+
+        setMarginLeftCanvas(0);
+
+
+        setcanvasBorderH('auto');
+        setcanvasBorderW('auto');
+
+        if (pic.current) {
+          const newHeight = (previewFileReadimage.naturalHeight * pic.current.clientWidth) / previewFileReadimage.naturalWidth;
+
+
+          setimageWidthcss(pic.current.clientWidth);
+          setimageHeightcss(newHeight);
+        }
       }
+
+
+
       if (data !== previewFileReadimage) {
         setdata(previewFileReadimage);
 
-
       }
+
+
+
+
     };
-  }, [slides, sliderIndex, postItemsRef, postDivRef, pic, interactHeightResolution]);
+  }, [slides, sliderIndex, postItemsRef, postDivRef, pic, interactHeightResolution, minimise]);
 
   const acttii = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -1529,6 +1761,8 @@ function Sliderx({
                 }
               }, bigPixel1 || bigPixel2 ? 120 : 50);
             }
+
+
             if (canvasRefIn.current) {
               canvasRefIn.current.style.width = `${imageWidthcss}px`;
               canvasRefIn.current.style.height = `${imageHeightcss}px`;
@@ -1573,44 +1807,70 @@ function Sliderx({
 
 
 
-                if (minimise && matchPc) {
+                if (minimise) {
+                  if (matchMobile) {
 
-                  setminimise(false);
-                } else {
-
-
-
-                  switch (event.detail) {
-                    case 1:
-                      setinteract(false);
-                      setinteractContent("");
-                      setStopShowPad(false);
-                      setinteracttypeAll(0);
-                      setfadeout(false);
-
-
-                      ClickAudio();
-
-
-
-
-
-                      ////THIS STOPS INTERACTION
-                      ///if (tiim.current) {
-                      //// clearTimeout(tiim.current);
-                      ////  } 
-                      /////THIS STOPS INTERACTION
-
-
-                      ///context.clearRect(0, 0, canvasRefIn.current.width, canvasRefIn.current.width);
-                      ///setHasInteractivity(false);
-                      ////clickslider(event);
-                      break;
+                    setMaximisefromcanvas(true);
+                    if (wa22.current) {
+                      clearTimeout(wa22.current);
+                    }
+                    wa22.current = setTimeout(() => {
+                      setMaximisefromcanvas(false);
+                    }, 4000)
 
                   }
 
 
+                  else {
+                    setminimiseSpecificScroll(true);
+                    setminimise(false);
+                    if (wa.current) {
+                      clearTimeout(wa.current);
+                    }
+                    wa.current = setTimeout(() => {
+                      postDivRef.current[pey].scrollIntoView({
+                        behavior: "smooth",
+                        block: "start",
+                      });
+                    }, 1500)
+
+                  }
+
                 }
+
+
+
+                switch (event.detail) {
+                  case 1:
+                    setinteract(false);
+                    setinteractContent("");
+                    setStopShowPad(false);
+                    setinteracttypeAll(0);
+                    setfadeout(false);
+
+
+                    ClickAudio();
+
+
+
+
+
+                    ////THIS STOPS INTERACTION
+                    ///if (tiim.current) {
+                    //// clearTimeout(tiim.current);
+                    ////  } 
+                    /////THIS STOPS INTERACTION
+
+
+                    ///context.clearRect(0, 0, canvasRefIn.current.width, canvasRefIn.current.width);
+                    ///setHasInteractivity(false);
+                    ////clickslider(event);
+                    break;
+
+                }
+
+
+
 
 
                 /// alert('jj');
@@ -1627,7 +1887,7 @@ function Sliderx({
         });
       }
     },
-    [data, imageWidthcss, imageHeightcss, interact, ImageDuration, isAppleDevice, bigPixel1, bigPixel2, minimise, matchPc]
+    [data, imageWidthcss, imageHeightcss, interact, ImageDuration, isAppleDevice, bigPixel1, bigPixel2, matchPc, Maximisefromcanvas, minimise]
   );
 
 
@@ -1999,14 +2259,16 @@ function Sliderx({
               className={
                 darkmodeReducer ? "turlightpostdark" : "turlightpostlight"
               }
-              src={`${REACT_APP_CLOUNDFRONT}${slidesThumb[i]}`}
+              src={Unload ? '' : `${REACT_APP_CLOUNDFRONT}${slidesThumb[i]}`}
               alt="a superstarz post "
               style={{
                 ...style,
-                borderRadius: matchMobile ? minimise ? '4%' : '0%' : '4%',
+                borderRadius: matchMobile ? minimise ? '0px' : '0%' :
+                  minimise ? '0px' : '4%',
+
                 cursor: "pointer",
                 width: "100%",
-                height: type === 1 ? `auto` : itemheight[pey],
+                height: minimise ? matchMobile ? '30vh' : '68vh' : `auto`,
                 position: "absolute",
                 padding: "0px",
                 objectFit: "cover",
@@ -2026,10 +2288,27 @@ function Sliderx({
             {AllowAllHdImagesShow ? <>
 
               <img
+
+                ref={postImageRef}
+
                 onMouseDown={() => {
                   ///maximiseFirst
                   if (minimise) {
+
+                    setminimiseSpecificScroll(true);
+
                     setminimise(false);
+
+                    if (wa.current) {
+                      clearTimeout(wa.current);
+                    }
+                    wa.current = setTimeout(() => {
+                      postDivRef.current[pey].scrollIntoView({
+                        behavior: "smooth",
+                        block: "start",
+                      });
+                    }, 1500)
+
                   } else {
                     ClickAudio();
                   }
@@ -2039,16 +2318,21 @@ function Sliderx({
                   darkmodeReducer ? "turlightpostdark" : "turlightpostlight"
                 }
 
-                src={`${REACT_APP_CLOUNDFRONT}${post.item2}`}
+                src={Unload ? `${REACT_APP_CLOUNDFRONT}${slidesThumb[i]}` : `${REACT_APP_CLOUNDFRONT}${post.item2}`}
                 alt="a clikbate post "
                 style={{
-                  display: 'none',
+
+                  borderRadius: matchMobile ? minimise ? '0px' : '0%' :
+                    minimise ? '0px' : '4%',
 
                   cursor: "pointer",
                   width: "100%",
-                  height: type === 1 ? `auto` : itemheight[pey],
+                  height: minimise ? matchMobile ? '30vh' : '68vh' : `auto`,
+
                   position: "absolute",
                   padding: "0px",
+
+
                   objectFit: "cover",
                   objectPosition:
                     itemcroptype[pey] === 1 || itemcroptype[pey] === 2
@@ -2065,32 +2349,42 @@ function Sliderx({
 
 
               {i === 0 && HasInteractivity && ActiveCanvas === pey ? (
-                <canvas
-                  onMouseUp={(e: any) => {
-                    handleTouchStartIn(e, 0);
-                  }}
+                <div style={{
+                  height: minimise ? `${canvasBorderH}px` : 'auto',
+                  width: minimise ? `${canvasBorderW}px` : 'auto',
+                  overflow: 'hidden',
+                  position: "absolute",
+                  zIndex: 11,
+                }}>
+                  <canvas
+                    onMouseUp={(e: any) => {
+                      handleTouchStartIn(e, 0);
+                    }}
 
-                  onTouchStart={(e: any) => {
-                    handleTouchStartIn(e, 1);
-                  }}
-                  ref={canvasRefIn}
-                  style={{
-                    borderRadius: matchMobile ? minimise ? '4%' : '0%' : '4%',
-                    cursor: "pointer",
-                    padding: "0px",
-                    position: "absolute",
-                    zIndex: 11,
-                    height: '0px',
-                    width: '0px',
-                    top: "0vh",
-                    margin: "auto",
-                    filter: interactContent && interact && HasInteractivity && ActiveCanvas === pey ? 'blur(11px)' : 'blur(0px)',
-                    backgroundColor: '',
-                    border: minimise ?
-                      `0px solid ${blendedColor}` : `0px solid ${blendedColor}`
+                    onTouchStart={(e: any) => {
+                      handleTouchStartIn(e, 1);
+                    }}
+                    ref={canvasRefIn}
+                    style={{
+                      borderRadius: matchMobile ? minimise ? '4%' : '0%' : '4%',
+                      cursor: "pointer",
+                      padding: "0px",
+                      height: '0px',
+                      width: '0px',
+                      top: "0vh",
+                      position: 'relative',
+                      marginLeft: interactContent && interact && HasInteractivity && ActiveCanvas === pey ? '0px'
+                        : minimise ? `${MarginLeftCanvas}px` : '0px',
+                      margin: "auto",
+                      filter: interactContent && interact && HasInteractivity && ActiveCanvas === pey ? 'blur(11px)' : 'blur(0px)',
+                      backgroundColor: '',
+                      border: minimise ?
+                        `0px solid ${blendedColor}` : `0px solid ${blendedColor}`,
 
-                  }}
-                />
+
+                    }}
+                  />
+                </div>
               ) : null}
 
 
@@ -2100,12 +2394,8 @@ function Sliderx({
                 onClick={() => {
 
 
+                  ClickAudio();
 
-                  if (minimise) {
-                    setminimise(false);
-                  } else {
-                    ClickAudio();
-                  }
 
 
                 }}
@@ -2125,7 +2415,14 @@ function Sliderx({
                   borderRadius: matchMobile ? minimise ? '4%' : '0%' : '4%',
                   cursor: "pointer",
                   width: "100%",
-                  height: '100%',
+                  height: minimise ? matchMobile ? '21.5vh' : '68vh' : `auto`,
+                  objectFit: "cover",
+                  objectPosition:
+                    itemcroptype[pey] === 1 || itemcroptype[pey] === 2
+                      ? "50% top"
+                      : "50% 50",
+
+
                   position: "absolute",
                   padding: "0px",
                   zIndex: 0,
@@ -2425,7 +2722,7 @@ function Sliderx({
           />
         ) : null}
 
-      </Grid>
+      </Grid >
 
 
     </>

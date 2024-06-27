@@ -21,6 +21,12 @@ import AudiotrackIcon from '@material-ui/icons/Audiotrack';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import ThumbUpAltIcon from "@material-ui/icons/ThumbUpAlt";
 
+import { useLocation } from 'react-router-dom';
+import ZoomInIcon from '@material-ui/icons/ZoomIn';
+import { useNavigate } from 'react-router-dom';
+import { encodeBase64 } from './utils'; // Ensure this is the correct path to your utils
+
+
 
 import { IconButton, InputAdornment, TextField } from "@material-ui/core";
 
@@ -65,6 +71,7 @@ import { UpdateSign } from "../GlobalActions";
 import { DarkMode } from "@mui/icons-material";
 import { isSafari } from "react-device-detect";
 import { SuperLoader } from "../SuperLoader";
+
 
 
 
@@ -137,8 +144,21 @@ function Postx({
   minimise,
   setminimise,
   postDivRefRoll,
+  setIdReactRouterAsInt,
+  RandomColor,
+  setScrollReactRouter,
+  PostPagenumPusher,
+  setScrollIndexPusher,
 
-  RandomColor
+  setStopRouterScroll,
+
+  setminimiseSpecificScroll,
+  minimiseSpecificScroll,
+  StopRouterScroll,
+
+  snapallow,
+  setsnapallow
+
 
 
 }: any) {
@@ -180,6 +200,9 @@ function Postx({
 
   const [maximiseFirst, setmaximiseFirst] = useState(false);
 
+  const [Maximisefromcanvas, setMaximisefromcanvas] = useState(false);
+
+
 
   const [ShowReactionsIcon, setShowReactionsIcon] = useState(true);
 
@@ -199,6 +222,10 @@ function Postx({
 
 
   const profileImageref = useRef<any>();
+
+
+  const divBox = useRef<any>();
+
 
   var allow4dev = "";
 
@@ -278,6 +305,46 @@ function Postx({
 
 
 
+  const ReactionClickedNew = (tyx: any) => {
+
+
+
+    const id = postData[pey].id; // Replace with the actual ID you want to navigate to
+    const encodedId = encodeBase64(id.toString());
+
+
+    const ty = tyx; // Replace reaction Type
+    const encodedIdx = encodeBase64(ty.toString());
+
+
+    // Update the current URL with the scroll position and page number
+    updateCurrentURLWithScrollPosition();
+
+    // Navigate to the new URL with the new ID
+    navigate(`/Reactions/${encodedId}/${encodeBase64('0')}/${encodeBase64('0')}/${encodedIdx}`);
+    //dispatch(UserInfoUpdateMEMBER(post.sender));
+    setScrollReactRouter(0);
+  };
+
+
+
+
+  const commentClickedNew = () => {
+
+    const id = postData[pey].id; // Replace with the actual ID you want to navigate to
+    const encodedId = encodeBase64(id.toString());
+
+
+    // Update the current URL with the scroll position and page number
+    updateCurrentURLWithScrollPosition();
+
+    // Navigate to the new URL with the new ID
+    navigate(`/Discussions/${encodedId}/${encodeBase64('0')}/${encodeBase64('0')}/${encodeBase64('0')}`);
+    //dispatch(UserInfoUpdateMEMBER(post.sender));
+    setScrollReactRouter(0);
+  };
+
+
 
 
   const pauseAudio = (mute: boolean) => {
@@ -333,6 +400,23 @@ function Postx({
 
 
 
+
+
+  const [charCount, setCharCount] = useState(0);
+
+
+  const countCharacters = (text: any) => {
+    if (!text) return 0;
+    return text.length;
+  };
+
+
+
+  useEffect(() => {
+    ///alert(countCharacters(post.topic));
+    setCharCount(countCharacters(post.topic));
+  }, [post.topic]);
+
   ///
   ///
   /// GET COLOR FROM REDUX STORE
@@ -360,7 +444,13 @@ function Postx({
 
   const [autoSlideDuration] = useState(6000);
 
+
   const dispatch = useDispatch();
+
+  const location = useLocation();
+
+  const navigate = useNavigate();
+
 
   const [BigCircle, setBigCircle] = useState(false);
 
@@ -485,25 +575,72 @@ function Postx({
 
 
 
+
   const wa = useRef<ReturnType<typeof setTimeout> | null>(
     null
   );
 
+  const wa2 = useRef<ReturnType<typeof setTimeout> | null>(
+    null
+  );
+
+  const wa2k = useRef<ReturnType<typeof setTimeout> | null>(
+    null
+  );
+
+
 
   useEffect(() => {
 
-    if (ActiveCanvas === pey) {
-      if (wa.current) {
-        clearTimeout(wa.current);
+    if (minimise) {
+
+      setsnapallow(true)
+    }
+
+    else {
+      if (wa2.current) {
+        clearTimeout(wa2.current);
       }
 
-      wa.current = setTimeout(() => {
-        postDivRef.current[pey].scrollIntoView({
-          behavior: "smooth",
-          block: "start",
-        });
-      }, 500)
+      wa2.current = setTimeout(() => {
+        setsnapallow(false);
+      }, 2500)
+
+
+
     }
+
+  }, [minimise])
+
+
+  useEffect(() => {
+
+    if (minimiseSpecificScroll) {
+
+      setminimiseSpecificScroll(false);
+    }
+
+    else {
+      if (ActiveCanvas === pey) {
+
+        /// alert('jj');
+
+        if (wa.current) {
+          clearTimeout(wa.current);
+        }
+
+        wa.current = setTimeout(() => {
+          postDivRef.current[pey].scrollIntoView({
+            behavior: "smooth",
+            block: "start",
+          });
+        }, 1500)
+
+
+
+      }
+    }
+
 
   }, [minimise])
 
@@ -527,21 +664,8 @@ function Postx({
 
     } else {
 
-      dispatch(
-        UpdateHistory(paperPostScrollRef.current.scrollTop)
-      );
-      dispatch(UpdatePostFromCom(postData));
-      dispatch(
-        UpdateCommentHistory(postData[pey], postData[pey].item2)
-      );
+      ReactionClickedNew(4);
 
-      dispatch(UpdateReactType(4));
-
-      setconnectTemplateGo(0);
-      setCommentPostid(postData[pey]);
-      setDiscussionImage(postData[pey].item2);
-      OpenModalForm(3);
-      settypeEmo(4);
 
     }
 
@@ -569,22 +693,8 @@ function Postx({
 
       }
     } else {
+      ReactionClickedNew(3);
 
-      dispatch(
-        UpdateHistory(paperPostScrollRef.current.scrollTop)
-      );
-      dispatch(UpdatePostFromCom(postData));
-      dispatch(
-        UpdateCommentHistory(postData[pey], postData[pey].item2)
-      );
-
-      dispatch(UpdateReactType(3));
-
-      setconnectTemplateGo(0);
-      setCommentPostid(postData[pey]);
-      setDiscussionImage(postData[pey].item2);
-      OpenModalForm(3);
-      settypeEmo(3);
 
     }
 
@@ -1038,10 +1148,10 @@ function Postx({
 
 
   var profilewidth = matchPc
-    ? "9.5%"
+    ? minimise ? '12%' : "9%"
     : matchTablet
-      ? "12.5%"
-      : "15%";
+      ? minimise ? '5%' : "12.5%"
+      : minimise ? '22%' : "15%";
 
   var postprofiletop = matchPc ? "5.7vh" : matchTablet ? "-9.3vh" : "-5.6vh";
 
@@ -1203,7 +1313,42 @@ function Postx({
     fontOptions = "1.9rem";
   }
 
+
+
+
+  const updateCurrentURLWithScrollPosition = () => {
+    var indexplus1 = pey + 1;
+
+    const currentPath = location.pathname.split('/');
+    const currentIdRoute1 = currentPath[currentPath.length - 3]; // Assuming idRoute1 is the third last segment
+    const currentIdRoute2 = currentPath[currentPath.length - 2]; // Assuming idRoute2 is the second last segment
+    const encodedScrollIndex = encodeBase64(indexplus1.toString());
+    const encodedPageNumber = encodeBase64(PostPagenumPusher.toString());
+    navigate(`/Feeds/${currentIdRoute1}/${encodedScrollIndex}/${encodedPageNumber}`, { replace: true });
+  };
+
+
+
+
   const GoToMember = () => {
+
+    const id = post.sender; // Replace with the actual ID you want to navigate to
+    const encodedId = encodeBase64(id.toString());
+
+
+    // Update the current URL with the scroll position and page number
+    updateCurrentURLWithScrollPosition();
+
+    // Navigate to the new URL with the new ID
+    navigate(`/Feeds/${encodedId}/${encodeBase64('0')}/${encodeBase64('0')}`);
+    dispatch(UserInfoUpdateMEMBER(post.sender));
+    setIdReactRouterAsInt(post.sender);
+    setScrollReactRouter(0);
+  };
+
+
+
+  const GoToMembercc = () => {
 
 
 
@@ -1295,11 +1440,9 @@ function Postx({
     if (Timervv.current) {
       clearTimeout(Timervv.current);
     }
-    if (MemberProfileDataReducer.id === post.sender) {
-      dispatch(UpdateLoader(false));
-    } else {
-      dispatch(UpdateLoader(true));
-    }
+
+    dispatch(UpdateLoader(true));
+
     Timervv.current = setTimeout(function () {
       GoToMember();
     }, 100);
@@ -1403,6 +1546,7 @@ function Postx({
 
           <div
 
+            ref={divBox}
             style={{
               padding: "0px",
               width: "100%",
@@ -1411,7 +1555,7 @@ function Postx({
               paddingLeft: matchMobile ? "0px" : "0.5px",
               paddingRight: matchMobile ? "0px" : "0.5px",
               paddingTop: minimise ? '4vh' : "0px",
-              scrollSnapAlign: minimise ? 'none' : 'start',
+              scrollSnapAlign: snapallow ? 'none' : 'start',
 
 
               ///transform
@@ -1426,7 +1570,18 @@ function Postx({
             {/*///////////////////////////////////////////////////////////////////////////POST DATA*/}
 
             <Slider
+              Maximisefromcanvas={Maximisefromcanvas}
+              setMaximisefromcanvas={setMaximisefromcanvas}
 
+              divBox={divBox}
+
+              setminimiseSpecificScroll={setminimiseSpecificScroll}
+
+              setStopRouterScroll={setStopRouterScroll}
+              StopRouterScroll={StopRouterScroll}
+
+
+              setScrollIndexPusher={setScrollIndexPusher}
               setminimise={setminimise}
               RandomColor={RandomColor}
 
@@ -1510,24 +1665,25 @@ function Postx({
             />
 
 
-            {StopShowPad ? null : <ReactionPost
-              minimise={minimise}
-              setShowAudioIcon={setShowReactionsIcon}
-              Ein={Ein}
-              setZoom3={setZoom3}
-              setZoomBigEmo3={setZoomBigEmo3}
-              Zoom3={Zoom3}
-              ClickLove={ClickLove}
-              ShowAudioIcon={ShowReactionsIcon}
-              Spincare={Spincare}
-              Emo3Num={Emo3Num}
-              ClickLike={ClickLike}
-              setZoom4={setZoom4}
-              setZoomBigEmo4={setZoomBigEmo4}
-              Zoom4={Zoom4}
-              Spinfun={Spinfun}
-              Emo4Num={Emo4Num}
-            />}
+            {StopShowPad ? null :
+              <ReactionPost
+                minimise={minimise}
+                setShowAudioIcon={setShowReactionsIcon}
+                Ein={Ein}
+                setZoom3={setZoom3}
+                setZoomBigEmo3={setZoomBigEmo3}
+                Zoom3={Zoom3}
+                ClickLove={ClickLove}
+                ShowAudioIcon={ShowReactionsIcon}
+                Spincare={Spincare}
+                Emo3Num={Emo3Num}
+                ClickLike={ClickLike}
+                setZoom4={setZoom4}
+                setZoomBigEmo4={setZoomBigEmo4}
+                Zoom4={Zoom4}
+                Spinfun={Spinfun}
+                Emo4Num={Emo4Num}
+              />}
 
 
 
@@ -1628,23 +1784,33 @@ function Postx({
               }}
 
               style={{
-                marginLeft: matchMobile ? '90vw' : "46vw",
+                marginLeft: matchMobile ? minimise ? '80vw' : '90vw'
+                  : minimise ? '29vw' : "46vw",
+
                 top: WebsiteMode ? matchMobile ? '3.5vh' : `5.2vh` : matchMobile ? '2.8vh' : `5.2vh`,
-                marginTop: minimise ? '5vh' : '0px',
+
+                marginTop: minimise ? '2vh' : '0px',
+
                 fontWeight: 'bold',
                 padding: "0px",
                 cursor: "pointer",
                 position: 'absolute',
-                display: interactContentx ? 'none' : 'block',
+                visibility: interactContentx ? 'hidden' : 'visible',
+
+                display: matchMobile ? minimise ? 'none' : 'block'
+                  : minimise ? 'block' : "block",
+
               }}
             >
               <span
                 onClick={() => {
-
                   if (idReducer === GuestReducer) {
                     dispatch(UpdateSign(true));
+
+
+                    /// commentClickedNew();
                   } else {
-                    commentClicked();
+                    commentClickedNew();
 
                   }
 
@@ -1678,6 +1844,7 @@ function Postx({
                   fontFamily: "Arial, Helvetica, sans-seri",
                   visibility:
                     post.commentCount === 0 ? "hidden" : "visible",
+
                 }}
               >
                 {Ein === null || Ein === 0 ? "+" : post.commentCount}
@@ -1698,9 +1865,12 @@ function Postx({
                 onClick={() => {
 
                   if (idReducer === GuestReducer) {
+
                     dispatch(UpdateSign(true));
+
+                    // commentClickedNew();
                   } else {
-                    commentClicked();
+                    commentClickedNew();
 
                   }
 
@@ -1715,6 +1885,7 @@ function Postx({
                   fontSize: postcommentfont,
                   opacity: 1,
                   color: darkmodeReducer ? "#000000" : "#dddddd",
+
                 }}
               />
             </span>
@@ -1723,17 +1894,9 @@ function Postx({
 
 
 
+            {/*///////////////////////////////////////////////////////////////////////////Profile pic minimise*/}
 
-            {/*///////////////////////////////////////////////////////////////////////////TOPICS MINI*/}
-            <span
-
-              className={
-                darkmodeReducer
-                  ? " dontallowhighlighting zuperkingxx"
-                  : "  dontallowhighlighting zuperkingxx"
-              }
-
-
+            <div
               onMouseEnter={(e: any) => {
                 setZoomx(true);
 
@@ -1744,18 +1907,18 @@ function Postx({
               }}
 
               style={{
-                display: minimise ? 'block' : 'none',
-                width: '100%',
-                top: matchMobile ? '0vh' : `1.3vh`,
-                marginTop: minimise ? '5vh' : '0px',
-                fontWeight: 'bold',
-                zIndex: 22,
-                fontSize: matchMobile ? '1.1rem' : '1.5rem',
+                top: '7.8vh',
+                marginLeft: '45%',
+                position: "fixed",
+                // display: "flex", //flex
+                alignItems: "center",
+                justifyContent: "left",
+                zIndex: 75,
                 padding: "0px",
-                cursor: "pointer",
-                position: 'absolute',
-                textAlign: 'center',
-                fontFamily: "Arial, Helvetica, sans-seri",
+                height: "0px",
+                display: matchMobile ? minimise ? 'block' : 'none' : minimise ? 'none' : 'none',
+                visibility: Maximisefromcanvas ? 'visible' : 'hidden',
+                backgroundColor: ''
 
 
               }}
@@ -1764,11 +1927,49 @@ function Postx({
 
 
 
+              <ZoomInIcon
 
 
-              {post.topic}
-            </span>
-            {/*///////////////////////////////////////////////////////////////////////////TOPICS MINI*/}
+                className={
+                  darkmodeReducer
+                    ? " dontallowhighlighting zuperkingIcon  zuperkingIconPostDark"
+                    : "  dontallowhighlighting zuperkingIcon  zuperkingIconPostLight"
+                }
+                onClick={() => {
+
+
+                  setminimiseSpecificScroll(true);
+
+                  setminimise(false);
+
+                  if (wa2k.current) {
+                    clearTimeout(wa2k.current);
+                  }
+                  wa2k.current = setTimeout(() => {
+                    postDivRef.current[pey].scrollIntoView({
+                      behavior: "smooth",
+                      block: "start",
+                    });
+                  }, 1500)
+
+
+                }}
+                style={{
+                  position: "relative",
+                  transform: matchMobile ? Zoomx ? "scale(2)" : "scale(1.4)" : Zoomx ? "scale(2)" : "scale(1.2)",
+                  transition: "transform 0.1s",
+                  zIndex: 1,
+                  verticalAlign: "middle",
+                  fontSize: '5vh',
+                  opacity: 1,
+                  color: darkmodeReducer ? "#000000" : "#dddddd",
+
+                }}
+              />
+            </div>
+
+            {/*///////////////////////////////////////////////////////////////////////////Profile pic minimise*/}
+
 
 
             {
@@ -1799,9 +2000,6 @@ function Postx({
 
 
                   <animated.div
-
-
-
                     className='post-background-dark'
                     style={{
 
@@ -1813,6 +2011,7 @@ function Postx({
                       zIndex: 12,
                       borderBottomLeftRadius: "0px",
                       borderBottomRightRadius: "0px",
+                      display: minimise ? 'none' : 'block'
 
 
                     }}
@@ -1833,9 +2032,9 @@ function Postx({
                         width: "100%",
                         zIndex: 0,
                         height: '1px',
-                        marginTop: matchMobile ? '-44%' : '-4%',
+                        marginTop: matchMobile ? '-26%' : '-4%',
                         position: 'absolute',
-                        scrollSnapAlign: 'start',
+                        scrollSnapAlign: snapallow ? 'none' : 'start',
                         backgroundColor: '',
 
                         display: minimise ? 'none' : 'block'
@@ -1846,6 +2045,7 @@ function Postx({
                     </div>
 
                     <Connect
+                      minimise={minimise}
                       GoToMember={GoToMember}
                       Added={Added}
                       setAdded={setAdded}
@@ -1900,7 +2100,7 @@ function Postx({
 
                             style={{
 
-                              fontSize: matchMobile ? minimise ? '1.1rem' : '0.95rem' : minimise ? '1.4rem' : '1.06rem',
+                              fontSize: matchMobile ? '0.95rem' : '1.06rem',
                               cursor: 'pointer',
                               fontFamily: "Roboto, Arial, Helvetica, sans-serif",
                               opacity: darkmodeReducer ? '0.4' : '1',
@@ -1921,14 +2121,18 @@ function Postx({
 
                             <span
                               style={{
+                                /// fontSize: matchMobile ? charCount > 28 ? '0.rem' : '' : charCount > 28 ? '' : '',
+                                fontSize: matchMobile ? '0.75rem' : '0.91rem',
                                 padding: '0px',
                                 position: 'absolute',
                                 width: '100%',
                                 textAlign: 'right',
                                 paddingRight: '23%',
-                                right: '0px'
+                                fontWeight: 'normal',
+                                right: '0px',
+                                marginTop: matchMobile ? '-1.5vh' : '-1.5vh',
                               }}>
-                              {minimise ? post.username : post.topic}</span>
+                              {post.topic}</span>
 
 
 
@@ -2088,9 +2292,6 @@ function Postx({
 
 
 
-
-
-
                     <Grid
                       item
                       className={Spincare ? "" : "changeOpacity"}
@@ -2181,6 +2382,7 @@ function Postx({
 
 
 
+
                   {/*///////////////////////////////////////////////////////////////////////////COMMENT */}
 
                   <div
@@ -2193,7 +2395,7 @@ function Postx({
                       width: "100%",
                       top: matchMobile ? '2.5vh' : `1.8vh`,
                       position: "relative",
-                      display: "flex", //flex
+
                       alignItems: "center",
                       justifyContent: "left",
                       zIndex: 1,
@@ -2203,6 +2405,7 @@ function Postx({
                       color: darkmodeReducer
                         ? "#ffffff"
                         : "#000000",
+                      display: minimise ? 'none' : 'flex'
                     }}
                   >
 
@@ -2257,8 +2460,10 @@ function Postx({
                       onClick={() => {
                         if (idReducer === GuestReducer) {
                           dispatch(UpdateSign(true));
+
+                          ///commentClickedNew();
                         } else {
-                          commentClicked();
+                          commentClickedNew();
 
                         }
 
@@ -2441,9 +2646,9 @@ function Postx({
           width: "100%",
           zIndex: 0,
           height: '1px',
-          marginTop: matchMobile ? '23vh' : '10%',
+          marginTop: matchMobile ? '26vh' : '10%',
           position: 'absolute',
-          scrollSnapAlign: 'end',
+          scrollSnapAlign: snapallow ? 'none' : 'end',
           backgroundColor: '',
 
           display: minimise ? 'none' : 'block'

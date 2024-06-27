@@ -56,7 +56,7 @@ if (process.env.APP_STATE === "dev") {
             /////"http://localhost:3000", // Add your front-end origin
             "https://oaidalleapiprodscus.blob.core.windows.net", // Add your blob storage origin
         ],
-        credentials: true,
+        credentials: true, //access-control-allow-credentials:true
         optionsSuccessStatus: 200,
     };
     app.use(cors(corsOptions));
@@ -64,7 +64,7 @@ if (process.env.APP_STATE === "dev") {
 else {
     var corsOptionsx = {
         origin: ["https://clikbate.com", "https://www.clikbate.com"],
-        credentials: true,
+        credentials: true, //access-control-allow-credentials:true
         optionsSuccessStatus: 200,
     };
     app.use(cors(corsOptionsx));
@@ -161,6 +161,8 @@ const loginId = `SELECT
 ///usernamecheck
 const checkpassword = `SELECT id FROM members WHERE  username =?`;
 const getstickers = `SELECT stickname FROM stickers  ORDER BY id DESC  LIMIT 30  `;
+const CommentImage = `SELECT item2,sender,item1,thumb1,interact1a,interact1b FROM posts WHERE  posts.id=?`;
+const ProfileImage = `SELECT profile_image,biography,username  FROM members WHERE  members.id=?`;
 ///checkIsLogged
 const postsx = `
 SELECT
@@ -195,7 +197,7 @@ LEFT JOIN members AS m ON m.id = (SELECT commented_by FROM comments WHERE post =
 
 
 ORDER BY posts.id DESC
-LIMIT 21;
+LIMIT 30;
 
 
 
@@ -232,7 +234,7 @@ LEFT JOIN members AS m ON m.id = (SELECT commented_by FROM comments WHERE post =
 
 
 ORDER BY posts.id DESC
-LIMIT 21`;
+LIMIT 30`;
 const posts_moreOld = `SELECT
 (SELECT COUNT(*)   
   FROM fan
@@ -395,7 +397,7 @@ LEFT JOIN members AS m ON m.id = (SELECT commented_by FROM comments WHERE post =
 WHERE posts.sender = ?
 
 ORDER BY posts.id DESC
-LIMIT 21;
+LIMIT 30;
 
 
 `;
@@ -432,7 +434,7 @@ LEFT JOIN members AS m ON m.id = (SELECT commented_by FROM comments WHERE post =
 WHERE posts.sender = ? AND posts.id < ? 
 
 ORDER BY posts.id DESC
-LIMIT 21;
+LIMIT 30;
 
 
 
@@ -446,6 +448,45 @@ const execPoolQuery = util.promisify(pool.query.bind(pool));
 /////////
 ////////
 ////////
+////////
+///////////
+//////
+app.post("/connect_image", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { values } = req.body;
+    try {
+        const chronologicaldata = yield execPoolQuery(ProfileImage, [
+            values.commentId,
+        ]);
+        ///console.log(chronologicaldata[7].favCount);
+        return res.send({
+            ///gettingcookie: userSessionData,
+            message: "fetched",
+            payload: chronologicaldata,
+        });
+    }
+    catch (e) {
+        console.log(e);
+        return res.send({ message: "error in fetching feeds" });
+    }
+}));
+app.post("/comments_image", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { values } = req.body;
+    try {
+        const chronologicaldata = yield execPoolQuery(CommentImage, [
+            values.commentId,
+        ]);
+        ///console.log(chronologicaldata[7].favCount);
+        return res.send({
+            ///gettingcookie: userSessionData,
+            message: "fetched",
+            payload: chronologicaldata,
+        });
+    }
+    catch (e) {
+        console.log(e);
+        return res.send({ message: "error in fetching feeds" });
+    }
+}));
 app.post("/profile", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { values } = req.body;
     if (values.postPageLimit == 0) {
@@ -711,7 +752,7 @@ app.post("/comments_chronological_more", (req, res) => __awaiter(void 0, void 0,
             payload: chronologicaldata,
         });
     }
-    catch (_b) {
+    catch (_a) {
         return res.send({ message: "error in fetching feeds" });
     }
 }));
@@ -774,7 +815,7 @@ app.post("/comments_chronological", (req, res) => __awaiter(void 0, void 0, void
             payload: chronologicaldata,
         });
     }
-    catch (_c) {
+    catch (_a) {
         return res.send({ message: "error in fetching feeds" });
     }
 }));
@@ -790,7 +831,7 @@ app.post("/Create_comment", (req, res) => __awaiter(void 0, void 0, void 0, func
         ]);
         return res.send({ message: "Comment Added" });
     }
-    catch (_d) {
+    catch (_a) {
         return res.send({ message: "Comment Failed" });
     }
 }));
@@ -798,11 +839,11 @@ app.post("/get_signed_url_4upload_post", (req, res) => __awaiter(void 0, void 0,
     const { values } = req.body;
     var holder = [];
     for (let i = 0; i < values.count; i++) {
-        const urlHD = yield ss3_1.generateUploadURL();
-        const urlThumb = yield ss3_1.generateUploadURL();
-        const urlinteraction1 = yield ss3_1.generateUploadURL();
-        const urlinteraction2 = yield ss3_1.generateUploadURL();
-        const urlHD2 = yield ss3_1.generateUploadURL();
+        const urlHD = yield (0, ss3_1.generateUploadURL)();
+        const urlThumb = yield (0, ss3_1.generateUploadURL)();
+        const urlinteraction1 = yield (0, ss3_1.generateUploadURL)();
+        const urlinteraction2 = yield (0, ss3_1.generateUploadURL)();
+        const urlHD2 = yield (0, ss3_1.generateUploadURL)();
         var cc = {
             urlHD: urlHD,
             urlThumb: urlThumb,
@@ -819,7 +860,7 @@ app.post("/get_signed_url_4upload_post", (req, res) => __awaiter(void 0, void 0,
 app.post("/get_signed_url_4upload_post_audio", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { values } = req.body;
     var holder = [];
-    const urlA = yield ss3audio_1.generateUploadURLaudio();
+    const urlA = yield (0, ss3audio_1.generateUploadURLaudio)();
     var cc = {
         urlA: urlA,
     };
@@ -830,10 +871,10 @@ app.post("/get_signed_url_4upload_post_vid", (req, res) => __awaiter(void 0, voi
     const { values } = req.body;
     var holder = [];
     for (let i = 0; i < values.count; i++) {
-        const urlVID = yield ss3vid_1.generateUploadURLvid();
-        const urlVID2 = yield ss3vid_1.generateUploadURLvid();
-        const urlVIDimage1 = yield ss3_1.generateUploadURL();
-        const urlVIDimage2 = yield ss3_1.generateUploadURL();
+        const urlVID = yield (0, ss3vid_1.generateUploadURLvid)();
+        const urlVID2 = yield (0, ss3vid_1.generateUploadURLvid)();
+        const urlVIDimage1 = yield (0, ss3_1.generateUploadURL)();
+        const urlVIDimage2 = yield (0, ss3_1.generateUploadURL)();
         var cc = {
             urlVid: urlVID,
             urlVid2: urlVID2,
@@ -847,7 +888,7 @@ app.post("/get_signed_url_4upload_post_vid", (req, res) => __awaiter(void 0, voi
     }
 }));
 app.post("/get_signed_url_Sticker", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const url = yield ss3_1.generateUploadURL();
+    const url = yield (0, ss3_1.generateUploadURL)();
     res.send({ url });
 }));
 app.post("/sticker_upload_data", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -856,13 +897,13 @@ app.post("/sticker_upload_data", (req, res) => __awaiter(void 0, void 0, void 0,
         yield execPoolQuery(updateSticker, [values.imagedata, values.id]);
         return res.send({ message: "sticker image data updated" });
     }
-    catch (_e) {
+    catch (_a) {
         return res.send({ message: "Failed" });
     }
 }));
 app.post("/get_signed_url_4upload", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const urlHD = yield ss3_1.generateUploadURL();
-    const urlThumb = yield ss3_1.generateUploadURL();
+    const urlHD = yield (0, ss3_1.generateUploadURL)();
+    const urlThumb = yield (0, ss3_1.generateUploadURL)();
     const url = { urlHD: urlHD, urlThumb: urlThumb };
     res.send({ url });
 }));
@@ -908,7 +949,7 @@ app.put("/profile_upload_data", (req, res) => __awaiter(void 0, void 0, void 0, 
         }
         return res.send({ message: "profile image data updated" });
     }
-    catch (_f) {
+    catch (_a) {
         return res.send({ message: "Failed" });
     }
 }));
@@ -942,7 +983,7 @@ app.put("/billboard_upload_data", (req, res, next) => __awaiter(void 0, void 0, 
             message: "billboard image uploaded",
         });
     }
-    catch (_g) {
+    catch (_a) {
         return res.send({ message: "images upload failed" });
     }
 }));
@@ -1009,7 +1050,7 @@ app.post("/transAudio", (req, res) => __awaiter(void 0, void 0, void 0, function
         // Define the clip settings
         const clipSettings = {
             TimeSpan: {
-                StartTime: startTime,
+                StartTime: startTime, // Start time for clipping (0:00)
                 Duration: Math.ceil(values.Durationx).toString(), // Duration of the clip (5 seconds)
             },
         };
@@ -1080,7 +1121,7 @@ app.post("/trans", (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         // Define the clip settings
         const clipSettings = {
             TimeSpan: {
-                StartTime: startTime,
+                StartTime: startTime, // Start time for clipping (0:00)
                 Duration: Math.ceil(values.Durationx).toString(), // Duration of the clip (5 seconds)
             },
         };
@@ -1195,7 +1236,7 @@ app.put("/update_basic", (req, res) => __awaiter(void 0, void 0, void 0, functio
         ]);
         return res.send({ message: "username updated" });
     }
-    catch (_h) {
+    catch (_a) {
         return res.send({ message: "usernameFailed" });
     }
 }));
@@ -1205,7 +1246,7 @@ app.put("/update_Reg", (req, res) => __awaiter(void 0, void 0, void 0, function*
         yield execPoolQuery(updateReg, [values.id]);
         return res.send({ message: "updated" });
     }
-    catch (_j) {
+    catch (_a) {
         return res.send({ message: "reg update Failed" });
     }
 }));
@@ -1215,7 +1256,7 @@ app.put("/update_color", (req, res) => __awaiter(void 0, void 0, void 0, functio
         yield execPoolQuery(updateColor, [values.color1, values.id]);
         return res.send({ message: "color updated" });
     }
-    catch (_k) {
+    catch (_a) {
         return res.send({ message: "colorFailed" });
     }
 }));
@@ -1228,7 +1269,7 @@ app.post("/feeds_stickers", (req, res) => __awaiter(void 0, void 0, void 0, func
             payload: chronologicaldata,
         });
     }
-    catch (_l) {
+    catch (_a) {
         return res.send({ message: "error in fetching feeds" });
     }
 }));
@@ -1302,8 +1343,8 @@ function generateImage(promptxx) {
             model: "dall-e-3",
             prompt: promptxx,
             num_images: 1,
-            size: "1024x1024",
-            quality: "standard",
+            size: "1024x1024", // Adjust the size according to your preference
+            quality: "standard", // Or use "hd" for enhanced detail
             response_format: "url",
         };
         const response = yield fetch(url, {
@@ -1342,7 +1383,7 @@ app.post("/DalleApi", (req, res) => __awaiter(void 0, void 0, void 0, function* 
 app.post("/keepmeloggedin", validateToken, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     if (req.cookies.accesst) {
         const { values } = req.body;
-        const userSessionData = jwt_decode_1.default(req.cookies.accesst);
+        const userSessionData = (0, jwt_decode_1.default)(req.cookies.accesst);
         const accessToken = createTokensUpdate(userSessionData);
         if (values === "session") {
             return res
@@ -1356,7 +1397,7 @@ app.post("/keepmeloggedin", validateToken, (req, res) => __awaiter(void 0, void 
         else if (values === "forever") {
             const days30inseconds = 60 * 60 * 24 * 30 * 1000;
             const CurrentTimePlusSecs = new Date(new Date().getTime() + 60 * 60 * 24 * 30 * 1000);
-            const userSessionData = jwt_decode_1.default(req.cookies.accesst);
+            const userSessionData = (0, jwt_decode_1.default)(req.cookies.accesst);
             const accessToken = createTokensUpdate(userSessionData);
             return res
                 .cookie("accesst", accessToken, {
@@ -1371,7 +1412,7 @@ app.post("/keepmeloggedin", validateToken, (req, res) => __awaiter(void 0, void 
         else {
             const days30inseconds = 2;
             const CurrentTimePlusSecs = new Date(new Date().getTime() + 2);
-            const userSessionData = jwt_decode_1.default(req.cookies.accesst);
+            const userSessionData = (0, jwt_decode_1.default)(req.cookies.accesst);
             const accessToken = createTokensUpdate(userSessionData);
             return res
                 .cookie("accesst", accessToken, {
@@ -1390,7 +1431,7 @@ app.post("/keepmeloggedin", validateToken, (req, res) => __awaiter(void 0, void 
 }));
 app.post("/checkIsLogged", validateToken, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     if (req.cookies.accesst) {
-        const userSessionData = jwt_decode_1.default(req.cookies.accesst);
+        const userSessionData = (0, jwt_decode_1.default)(req.cookies.accesst);
         try {
             const logindata = yield execPoolQuery(loginId, [
                 userSessionData.id,
@@ -1422,7 +1463,7 @@ app.post("/checkIsLogged", validateToken, (req, res) => __awaiter(void 0, void 0
                 payload: payloadValue,
             });
         }
-        catch (_m) {
+        catch (_a) {
             return res.send({ message: "Wrong id" });
         }
     }
@@ -1440,10 +1481,10 @@ app.post("/logout", (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         return res.send({ message: "cookie null" });
     }
 }));
-app.post("/usernamecheck", express_validator_1.body("value")
+app.post("/usernamecheck", (0, express_validator_1.body)("value")
     .isLength({ max: 26 })
     .matches(/^([A-z0-9áéíóúñü\ \_.]+)$/, "gim"), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const validateErrors = express_validator_1.validationResult(req);
+    const validateErrors = (0, express_validator_1.validationResult)(req);
     if (!validateErrors.isEmpty()) {
         return res.status(400).json({
             method: req.method,
@@ -1460,17 +1501,17 @@ app.post("/usernamecheck", express_validator_1.body("value")
                 return res.send({ message: "username is not unique" });
             }
         }
-        catch (_o) {
+        catch (_a) {
             return res.send({ message: "username is available" });
         }
     }
 }));
-app.post("/loging", express_validator_1.body("values.inputedUsername")
+app.post("/loging", (0, express_validator_1.body)("values.inputedUsername")
     .isLength({ max: 26 })
-    .matches(/^([A-z0-9áéíóúñü\ \_.]+)$/, "gim"), express_validator_1.body("values.inputedPassword")
+    .matches(/^([A-z0-9áéíóúñü\ \_.]+)$/, "gim"), (0, express_validator_1.body)("values.inputedPassword")
     .isLength({ min: 8 })
     .exists({ checkFalsy: true }), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const validateErrors = express_validator_1.validationResult(req);
+    const validateErrors = (0, express_validator_1.validationResult)(req);
     if (!validateErrors.isEmpty()) {
         return res.status(400).json({
             method: req.method,
@@ -1538,14 +1579,14 @@ function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 var colorHolder = ["#32a852", "#32a0a8", "#6f32a8", "#a83265", "#a4a832"];
-app.post("/registration", express_validator_1.body("values.inputedEmail")
+app.post("/registration", (0, express_validator_1.body)("values.inputedEmail")
     .isEmail()
-    .normalizeEmail({ gmail_remove_dots: false }), express_validator_1.body("values.inputedUsername")
+    .normalizeEmail({ gmail_remove_dots: false }), (0, express_validator_1.body)("values.inputedUsername")
     .isLength({ max: 26 })
-    .matches(/^([A-z0-9áéíóúñü\ \_.]+)$/, "gim"), express_validator_1.body("values.inputedPassword")
+    .matches(/^([A-z0-9áéíóúñü\ \_.]+)$/, "gim"), (0, express_validator_1.body)("values.inputedPassword")
     .isLength({ min: 8 })
     .exists({ checkFalsy: true }), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const validateErrors = express_validator_1.validationResult(req);
+    const validateErrors = (0, express_validator_1.validationResult)(req);
     if (!validateErrors.isEmpty()) {
         return res.status(400).json({
             method: req.method,

@@ -176,6 +176,10 @@ const checkpassword = `SELECT id FROM members WHERE  username =?`;
 
 const getstickers = `SELECT stickname FROM stickers  ORDER BY id DESC  LIMIT 30  `;
 
+const CommentImage = `SELECT item2,sender,item1,thumb1,interact1a,interact1b FROM posts WHERE  posts.id=?`;
+
+const ProfileImage = `SELECT profile_image,biography,username  FROM members WHERE  members.id=?`;
+
 ///checkIsLogged
 
 const postsx = `
@@ -211,7 +215,7 @@ LEFT JOIN members AS m ON m.id = (SELECT commented_by FROM comments WHERE post =
 
 
 ORDER BY posts.id DESC
-LIMIT 21;
+LIMIT 30;
 
 
 
@@ -249,7 +253,7 @@ LEFT JOIN members AS m ON m.id = (SELECT commented_by FROM comments WHERE post =
 
 
 ORDER BY posts.id DESC
-LIMIT 21`;
+LIMIT 30`;
 
 const posts_moreOld = `SELECT
 (SELECT COUNT(*)   
@@ -438,7 +442,7 @@ LEFT JOIN members AS m ON m.id = (SELECT commented_by FROM comments WHERE post =
 WHERE posts.sender = ?
 
 ORDER BY posts.id DESC
-LIMIT 21;
+LIMIT 30;
 
 
 `;
@@ -476,7 +480,7 @@ LEFT JOIN members AS m ON m.id = (SELECT commented_by FROM comments WHERE post =
 WHERE posts.sender = ? AND posts.id < ? 
 
 ORDER BY posts.id DESC
-LIMIT 21;
+LIMIT 30;
 
 
 
@@ -493,6 +497,49 @@ const execPoolQuery = util.promisify(pool.query.bind(pool));
 /////////
 ////////
 ////////
+////////
+///////////
+//////
+
+app.post("/connect_image", async (req: Request, res: Response) => {
+  const { values } = req.body;
+
+  try {
+    const chronologicaldata = await execPoolQuery(ProfileImage, [
+      values.commentId,
+    ]);
+
+    ///console.log(chronologicaldata[7].favCount);
+    return res.send({
+      ///gettingcookie: userSessionData,
+      message: "fetched",
+      payload: chronologicaldata,
+    });
+  } catch (e: any) {
+    console.log(e);
+    return res.send({ message: "error in fetching feeds" });
+  }
+});
+
+app.post("/comments_image", async (req: Request, res: Response) => {
+  const { values } = req.body;
+
+  try {
+    const chronologicaldata = await execPoolQuery(CommentImage, [
+      values.commentId,
+    ]);
+
+    ///console.log(chronologicaldata[7].favCount);
+    return res.send({
+      ///gettingcookie: userSessionData,
+      message: "fetched",
+      payload: chronologicaldata,
+    });
+  } catch (e: any) {
+    console.log(e);
+    return res.send({ message: "error in fetching feeds" });
+  }
+});
 
 app.post("/profile", async (req: Request, res: Response) => {
   const { values } = req.body;

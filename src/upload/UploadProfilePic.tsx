@@ -19,6 +19,7 @@ import { UserInfoUpdatePROFILE } from "../log/actions/UserdataAction";
 import { UserInfoUpdateBILLBOARD } from "../log/actions/UserdataAction";
 import { usePalette } from "react-palette";
 import { UpdateColorAction } from "../GlobalActions";
+import { useNavigate } from 'react-router-dom';
 
 function UploadProfilePicx({
   showModalUploadProfile,
@@ -32,6 +33,16 @@ function UploadProfilePicx({
   const cropCanvasRefx: any = useRef(null);
 
   const dispatch = useDispatch();
+
+
+  const navigate = useNavigate();
+
+  const goBack = () => {
+    navigate(-1);
+  };
+
+
+
 
   const [CropImageHolder, setCropImageHolder] = useState<any>(null);
 
@@ -431,6 +442,12 @@ function UploadProfilePicx({
   const billboard1Reducer = billboard1;
   const billboardstateReducer = billboardstate;
 
+
+
+
+
+
+
   function blobToBase64(blob: any) {
     return new Promise((resolve, _) => {
       const reader = new FileReader();
@@ -590,8 +607,10 @@ function UploadProfilePicx({
             dispatch(UserInfoUpdateBILLBOARD(data, datak.type));
             uploadClose(3);
             setsuperLoadFadex(false);
-          }, 1500)
+            goBack();
 
+
+          }, 1000)
 
 
           ///window.location.reload(true);
@@ -603,6 +622,7 @@ function UploadProfilePicx({
         alert(" error");
       });
   };
+
 
   const UpdateProfileDatabaseStatus200 = (datak: any, b: any, color: any) => {
     Axios.put(`${REACT_APP_SUPERSTARZ_URL}/profile_upload_data`, {
@@ -621,12 +641,17 @@ function UploadProfilePicx({
             image: datak.imagedata,
           };
 
+
           setTimeout(() => {
 
             dispatch(UserInfoUpdatePROFILE(data));
             uploadClose(4);
             setsuperLoadFadex(false);
-          }, 1500)
+            goBack();
+            window.location.reload();
+          }, 1000)
+
+
 
         }
       })
@@ -636,6 +661,7 @@ function UploadProfilePicx({
       });
   };
 
+
   const postProfiledata = useCallback(
     (hdBlob: any, thumbBlob: any, hdBase64: any, gg: any) => {
       setsuperLoadFadex(true);
@@ -643,6 +669,8 @@ function UploadProfilePicx({
     },
     [idReducer, s3finaldata]
   );
+
+
 
   const drawcropper = (upl: number, gg: any) => {
     if (CropImageHolder && cropCanvasRefx.current) {

@@ -468,7 +468,7 @@ function CommentFormHolderx({
 
   var disboy: any = {
     inputedCom: "",
-    postid: CommentPostid.id,
+    postid: CommentPostid,
     id: idReducer,
   };
 
@@ -476,7 +476,7 @@ function CommentFormHolderx({
     if (inputedCommentFinal) {
       disboy = {
         inputedCom: inputedComment,
-        postid: CommentPostid.id,
+        postid: CommentPostid,
         id: idReducer,
       };
 
@@ -536,26 +536,27 @@ function CommentFormHolderx({
   }, [enterPress]);
 
   var disboyReactionX: any = {
-    post: CommentPostid.id,
+    post: CommentPostid,
     type: typeEmo,
     limit: postlimit,
-    id: idReducer,
+    id: CommentPostid,
   };
 
   var disboyReactionXMember: any = {
-    post: CommentPostid.id,
+    post: CommentPostid,
     type: typeEmo,
     limit: postlimit,
-    id: memeberPageidReducer === 0 ? idReducer : memeberPageidReducer,
+    id: CommentPostid,
+    ///id: memeberPageidReducer === 0 ? idReducer : memeberPageidReducer,
   };
 
   var disboyx: any = {
-    commentId: CommentPostid.id,
+    commentId: CommentPostid,
     id: idReducer,
   };
 
   var disboyxmore: any = {
-    commentId: CommentPostid.id,
+    commentId: CommentPostid,
     id: idReducer,
     limit: postlimit,
   };
@@ -580,7 +581,7 @@ function CommentFormHolderx({
 
           ///setshowProfiileData(true);
         } else if (response.data.message === "error in fetching feeds") {
-          alert("Connection malfunction profile outter");
+          /// alert("Connection malfunction profile outter");
         }
       })
       .catch(function (error) {
@@ -642,6 +643,9 @@ function CommentFormHolderx({
     )
       .then((response) => {
         if (response.data.message === "feeds fetched") {
+
+          ///alert(CommentPostid);
+
           var postdataRep = response.data.payload;
 
           dispatch(UpdateComData(postdataRep));
@@ -659,6 +663,9 @@ function CommentFormHolderx({
         console.log("Connection malfunction commentformholder");
       });
   };
+
+
+
   const callfeedsReactionxx = () => {
     var ss: string =
       connectTemplateGo === 1
@@ -735,22 +742,23 @@ function CommentFormHolderx({
   };
 
   useEffect(() => {
-    if (reactionTemplateGo) {
-      if (CommentHistoryData.length === 0) {
+
+    if (CommentPostid === 0) { }
+    else {
+      if (reactionTemplateGo) {
+
         callfeedsReaction();
+        /// alert('kjj');
       } else {
-        callPaginationReaction(CommentHistoryData, 0);
-        setCommentHistoryData([]);
-      }
-    } else {
-      if (CommentHistoryData.length === 0) {
+
         callfeeds();
-      } else {
-        callPagination(CommentHistoryData, 0);
-        setCommentHistoryData([]);
+        //alert('k');
+
+
       }
     }
-  }, [REACT_APP_SUPERSTARZ_URL, reactionTemplateGo, connectTemplateGo]);
+  }, [CommentPostid, connectTemplateGo,]);
+
 
   const callPaginationReaction = (postdataRep: any, ty: number) => {
     if (commentHistoryScroll === 0) {

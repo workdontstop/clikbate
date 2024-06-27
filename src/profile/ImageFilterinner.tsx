@@ -59,6 +59,7 @@ function ImageFilterinnerx({
   setstartTopicCap,
   itemUploadRefSD,
   setsupeFilterLoadFade,
+  setConfirmUpload
 }: any): JSX.Element {
   const finalImageDataxx = [...finalImageData];
   const finalImageDataxxSD = [...finalImageDataSD];
@@ -1419,7 +1420,9 @@ function ImageFilterinnerx({
                         <>
                           <div
                             onMouseDown={() => {
-                              startImageFilter(i);
+                              //startImageFilter(i);
+
+                              setConfirmUpload(true);
                             }}
                             style={{
                               cursor: ActiveSlide === i ? "pointer" : "copy",

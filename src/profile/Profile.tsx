@@ -99,20 +99,26 @@ function Profilex({
   profileDataHold,
 
   minimise,
-  setminimise
+  setminimise,
+  setIdReactRouterAsInt,
+
+  ScrollReactRouter,
+  setScrollReactRouter,
+  PostPagenumPusher,
+
+  setScrollIndexPusher,
+  setshowProfiileData,
+
+  snapallow,
+  setsnapallow
+
 
 }: any) {
 
   const [countAutoplay, setcountAutoplay] = useState<number>(0);
 
   const dispatch = useDispatch();
-
-
-
-
-
-
-  const sqlQUERYlIMIT = 21;
+  const sqlQUERYlIMIT = 30;
 
 
 
@@ -172,6 +178,25 @@ function Profilex({
 
 
 
+  ///
+  ///
+  ///
+  /// GET LOGGED USER DATA FROM REDUX STORE
+  interface RootStateReducerImage {
+    UserdataReducer: {
+      image: string;
+      memeberPageid: number;
+      id: number;
+
+    };
+  }
+  const { image, id, memeberPageid } = useSelector((state: RootStateReducerImage) => ({
+    ...state.UserdataReducer,
+  }));
+  const imageReducer = image;
+  const idReducer = id;
+  const memeberPageidReducer = memeberPageid;
+
 
 
   useEffect(() => {
@@ -191,31 +216,8 @@ function Profilex({
   }, [])
 
 
-  useEffect(() => {
 
 
-    setCloudPost(true);
-
-  }, [postData])
-
-  ///
-  ///
-  ///
-  /// GET LOGGED USER DATA FROM REDUX STORE
-  interface RootStateReducerImage {
-    UserdataReducer: {
-      image: string;
-      memeberPageid: number;
-      id: number;
-
-    };
-  }
-  const { image, id, memeberPageid } = useSelector((state: RootStateReducerImage) => ({
-    ...state.UserdataReducer,
-  }));
-  const imageReducer = image;
-  const idReducer = id;
-  const memeberPageidReducer = memeberPageid;
 
   /////
   /////
@@ -300,7 +302,7 @@ function Profilex({
                       ///paperPostScrollRef.current.scrollTop = 20;
 
 
-                    }, 4000)
+                    }, 7000)
                   }
 
                 } else { }
@@ -531,6 +533,10 @@ function Profilex({
       setActiveAutoPost(initialsetsetActiveAutoPost);
 
 
+      if (memeberPageidReducer === 0) { } else {
+        setminimise(true);
+      }
+
     }
   }, [postData, showProfiileData]);
 
@@ -551,19 +557,7 @@ function Profilex({
   }
 
   const navvScroll = useCallback(() => {
-    /// alert(ScrollTo);
 
-    if (StopMini) {
-      if (ScrollTo === 0) {
-      } else {
-        //alert('kjjhg');
-        setTimeout(() => {
-          paperPostScrollRef.current.scrollTop = ScrollTo;
-        }, 30);
-      }
-    } else {
-
-    }
 
   }, [StopMini, ScrollTo]);
 
@@ -572,9 +566,7 @@ function Profilex({
   const [CloudPost, setCloudPost] = useState(true);
 
 
-
-
-
+  const [StopRouterScroll, setStopRouterScroll] = useState(0);
 
 
 
@@ -622,7 +614,7 @@ function Profilex({
             /////WIDE IMAGE SET
 
             newArr[index] = `${choppedwidth}px`;
-            setitemheight(newArr);
+            /// setitemheight(newArr);
             ///////////////////////////////
 
             var newh = choppedwidth / 1.015 - postbackheighthold;
@@ -644,7 +636,7 @@ function Profilex({
             /////LONG IMAGE SET
 
             newArr[index] = `${choppedHeight}px`;
-            setitemheight(newArr);
+            // setitemheight(newArr);
             ///////////////////////////////
 
             var newh = choppedHeight / 1 - postbackheighthold;
@@ -722,10 +714,40 @@ function Profilex({
           }
 
 
+
+
           if (postData.length - 1 === index) {
 
 
 
+
+            if (StopRouterScroll === 2) {
+              ///alert('kkk');
+              setStopRouterScroll(1);
+            }
+            else {
+              setStopRouterScroll(1);
+              if (postTimer6.current) {
+                clearTimeout(postTimer6.current);
+              }
+              postTimer6.current = setTimeout(function () {
+                if (ScrollReactRouter === 0) {
+                  paperPostScrollRef.current.scrollTop = ScrollReactRouter;
+                }
+                else {
+                  var skroll = ScrollReactRouter - 1;
+
+                  postDivRef.current[skroll].scrollIntoView({
+                    behavior: "smooth",
+                    block: "start",
+                  });
+                }
+
+              }, 1000)
+            }
+
+
+            //alert(ScrollReactRouter);
 
 
             /**  if (activateLoaderReducer) {
@@ -753,14 +775,14 @@ function Profilex({
 
                 cloudTimer2.current = setTimeout(function () {
                   setCloudPost(false);
-                }, 1000);
+                }, 500);
 
                 if (postTimer2.current) {
                   clearTimeout(postTimer2.current);
                 }
                 postTimer2.current = setTimeout(function () {
                   setStopMini(false)
-                }, 1000);
+                }, 500);
               } else {
 
                 if (memeberPageidReducer === 0) {
@@ -775,7 +797,7 @@ function Profilex({
 
                   cloudTimer2.current = setTimeout(function () {
                     setCloudPost(false);
-                  }, 1000);
+                  }, 500);
 
 
 
@@ -807,7 +829,7 @@ function Profilex({
                 postTimer4.current = setTimeout(() => {
                   /// alert('zzzzzz');
 
-                  paperPostScrollRef.current.scrollTop = historyScrollonload;
+                  /// paperPostScrollRef.current.scrollTop = historyScrollonload;
 
                   sethistoryScrollonload(0);
                 }, 500);
@@ -875,7 +897,9 @@ function Profilex({
       postData,
       pagenumReducer,
       setuptype,
-      historyScrollonload
+      historyScrollonload,
+      ScrollReactRouter,
+      StopRouterScroll
 
     ]
   );
@@ -1189,6 +1213,8 @@ function Profilex({
 
   const [TempMini, setTempMini] = useState(true);
 
+  const [minimiseSpecificScroll, setminimiseSpecificScroll] = useState(false);
+
 
   return (
     <>
@@ -1217,11 +1243,14 @@ function Profilex({
           item
           xs={12}
           style={{
-            padding: "0px",
+            padding: matchMobile ? minimise ? '0px' : "0px" : minimise ? '0vh' : "0px",
+
             paddingLeft: matchPc ? "0vw" : '0vw',
             paddingRight: matchPc ? "0vw" : '0vw',
             height: "auto",
-            marginTop: matchMobile ? minimise ? '-0.8vh' : '18vh' : minimise ? '-5vh' : '22vh',
+            marginTop: matchMobile ? minimise ? '-8.5vh' : '18vh' :
+              minimise ? '-16.3vh' : '16vh',
+
             marginLeft: miniProfile && matchPc ? '1.5vw' : '0px',
           }}
         >
@@ -1242,8 +1271,13 @@ function Profilex({
           ></Grid>
           {postData.length > 0 ? (
             <Masonry
-              columns={matchPc ? 2 : 1}
-              spacing={matchMobile ? 0 : 0}
+              columns={matchPc ? minimise ? 3 : 2
+                : minimise ? 2 : 1}
+
+              spacing={matchPc ? minimise ? 1 : 0 :
+                minimise ? 0.2 : 0}
+
+
               style={{
                 padding: "0px",
 
@@ -1276,14 +1310,27 @@ function Profilex({
 
                   <div
                     key={i} style={{
-                      display: "block", transform: minimise ? matchMobile ? 'scale(0.86)' : 'scale(0.85)' :
-                        matchMobile ? 'scale(1)' : 'scale(1)'
+                      display: "block",
+                      transition: "transform 0.1s",
                     }}>
 
 
 
                     <Post
 
+                      setsnapallow={setsnapallow}
+                      snapallow={snapallow}
+
+                      setminimiseSpecificScroll={setminimiseSpecificScroll}
+                      minimiseSpecificScroll={minimiseSpecificScroll}
+
+                      StopRouterScroll={StopRouterScroll}
+                      setStopRouterScroll={setStopRouterScroll}
+
+                      setScrollIndexPusher={setScrollIndexPusher}
+                      PostPagenumPusher={PostPagenumPusher}
+                      setScrollReactRouter={setScrollReactRouter}
+                      setIdReactRouterAsInt={setIdReactRouterAsInt}
                       setminimise={setminimise}
                       RandomColor={RandomColor}
                       postDivRefRoll={postDivRefRoll}
@@ -1394,7 +1441,7 @@ function Profilex({
                       xs={12}
                       style={{
 
-                        height: matchMobile ? postData.length - 1 === i ? '10vh' : "10vh" :
+                        height: matchMobile ? postData.length - 1 === i ? '10vh' : "15vh" :
                           postData.length - 1 === i ? '0vh' : '26vh',
                         display: minimise ? 'none' : 'block'
                       }}
@@ -1406,9 +1453,11 @@ function Profilex({
                       item
                       xs={12}
                       style={{
+                        marginTop: matchMobile ? postData.length - 1 === i ? '0vh' : "-4vh" :
+                          postData.length - 1 === i ? '0vh' : '-3.5vh',
 
-                        height: matchMobile ? postData.length - 1 === i ? '10vh' : "6vh" :
-                          postData.length - 1 === i ? '0vh' : '5vh',
+                        height: matchMobile ? postData.length - 1 === i ? '10vh' : "0vh" :
+                          postData.length - 1 === i ? '0vh' : '0vh',
                         display: minimise ? 'block' : 'none'
                       }}
                     ></Grid>

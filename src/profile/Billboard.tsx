@@ -28,6 +28,16 @@ import {
 } from ".././GlobalActions";
 
 
+
+
+import { useLocation } from 'react-router-dom';
+
+import { useNavigate } from 'react-router-dom';
+import { encodeBase64 } from '../profile/utils'; // Ensure this is the correct path to your utils
+
+
+
+
 function Billboardx({
   OpenModalForm,
   click,
@@ -42,13 +52,20 @@ function Billboardx({
   showModalFormMenu,
   setshowModalFormMenu, sliderIndex,
   setSliderIndex,
-  minimise
+  minimise,
+
+  snapallow,
+  setsnapallow
 }: any): JSX.Element {
   ///
   ///
   ///
   /// USE DISPATCH
   const dispatch = useDispatch();
+
+  const location = useLocation();
+
+  const navigate = useNavigate();
 
   ///
   ///
@@ -367,6 +384,39 @@ function Billboardx({
   ///scrollSnapAlign: x ? "start" : "",
   ///hoverOverImageRef.current.style.background = "red";
 
+
+
+
+  const ConnectClickedNew = (tyx: any) => {
+    var v = 0;
+    if (memeberPageid === 0) {
+      v = idReducer;
+    } else {
+      v = memeberPageid;
+    }
+
+    ///alert(v);
+    const id = v; // 
+    const encodedId = encodeBase64(id.toString());
+
+
+    const ty = tyx; // Replace reaction Type
+    const encodedIdx = encodeBase64(ty.toString());
+
+
+    // Update the current URL with the scroll position and page number
+    //// updateCurrentURLWithScrollPosition();
+
+    // Navigate to the new URL with the new ID
+    navigate(`/Connections/${encodedId}/${encodeBase64('0')}/${encodeBase64('0')}/${encodedIdx}`);
+    //dispatch(UserInfoUpdateMEMBER(post.sender));
+    ///setScrollReactRouter(0);
+  };
+
+
+
+
+
   return (
     <>
       <>
@@ -379,9 +429,9 @@ function Billboardx({
             container
             style={{
               position: "relative",
-              top: "0em",
+              top: "0vh",
               width: "100%",
-              scrollSnapAlign: minimise ? 'none' : "start",
+              scrollSnapAlign: snapallow ? 'none' : "start",
 
             }}
           >
@@ -468,12 +518,16 @@ function Billboardx({
                   {" "}
                   <span
                     onClick={() => {
-                      dispatch(UpdatePostFromCom(postData));
-                      dispatch(UpdateReactType(2));
+
+                      ConnectClickedNew(2);
+
+                      ///dispatch(UpdatePostFromCom(postData));
+                      ////dispatch(UpdateReactType(2));
                       //// setCommentPostid(postData[pey]);
                       ////setDiscussionImage(postDatainner[pey]);
-                      OpenModalForm(4);
-                      setconnectTemplateGo(2);
+                      ///OpenModalForm(4);
+                      ////setconnectTemplateGo(2);
+
                     }}
                     style={{
                       cursor: "pointer",
@@ -499,12 +553,7 @@ function Billboardx({
                   <Grid xs={12} item style={{ height: "10px" }}></Grid>
                   <span
                     onClick={() => {
-                      dispatch(UpdatePostFromCom(postData));
-                      dispatch(UpdateReactType(2));
-                      //// setCommentPostid(postData[pey]);
-                      ////setDiscussionImage(postDatainner[pey]);
-                      OpenModalForm(4);
-                      setconnectTemplateGo(2);
+                      ConnectClickedNew(2);
                     }}
                     style={{
                       cursor: "pointer",
@@ -525,12 +574,15 @@ function Billboardx({
                   {" "}
                   <span
                     onClick={() => {
-                      dispatch(UpdatePostFromCom(postData));
-                      dispatch(UpdateReactType(1));
+
+                      ConnectClickedNew(1);
+
+                      //</Grid></Grid>dispatch(UpdatePostFromCom(postData));
+                      ///dispatch(UpdateReactType(1));
                       //// setCommentPostid(postData[pey]);
                       ////setDiscussionImage(postDatainner[pey]);
-                      OpenModalForm(4);
-                      setconnectTemplateGo(1);
+                      ///OpenModalForm(4);
+                      ///setconnectTemplateGo(1);
                     }}
                     style={{
                       cursor: "pointer",
@@ -556,13 +608,7 @@ function Billboardx({
                   <Grid xs={12} item style={{ height: "10px" }}></Grid>
                   <span
                     onClick={() => {
-                      dispatch(UpdatePostFromCom(postData));
-                      dispatch(UpdateReactType(1));
-
-                      //// setCommentPostid(postData[pey]);
-                      ////setDiscussionImage(postDatainner[pey]);
-                      OpenModalForm(4);
-                      setconnectTemplateGo(1);
+                      ConnectClickedNew(1);
                     }}
                     style={{
                       cursor: "pointer",

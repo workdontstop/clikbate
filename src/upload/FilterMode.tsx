@@ -389,9 +389,9 @@ function FilterModex({
 
       } else {
 
-        usernameLimiter = /^.{45}$/;
+        usernameLimiter = /^.{65}$/;
 
-        x = 45;
+        x = 65;
 
       }
 
@@ -913,6 +913,7 @@ function FilterModex({
           }}
         >
           <OptionsSlider
+            setConfirmUpload={setConfirmUpload}
             AllowCaption={AllowCaption}
             setstartTopicCap={setstartTopicCap}
             finalImageData={finalImageData}
@@ -1811,13 +1812,13 @@ function FilterModex({
             item
             xs={4}
             style={{
-              marginTop: '36vh',
+              marginTop: '12vh',
 
               padding: '0px',
               backgroundColor: darkmodeReducer
                 ? "rgba(50,50,50,0.98)"
                 : "rgba(200,200,200,0.85)",
-              height: '35vh',
+              height: '46vh',
               borderRadius: '20px',
 
             }}
@@ -1855,7 +1856,7 @@ function FilterModex({
                 position: 'absolute',
                 borderRadius: '80%',
                 zIndex: 2,
-                bottom: '61vh',
+                bottom: '80vh',
                 display: startTopicCap ? 'none' : 'block',
 
               }}
@@ -1880,7 +1881,7 @@ function FilterModex({
                 position: 'absolute',
                 borderRadius: '80%',
                 zIndex: 2,
-                bottom: '46vh',
+                bottom: '60vh',
                 display: startTopicCap ? 'none' : 'block',
 
               }}
