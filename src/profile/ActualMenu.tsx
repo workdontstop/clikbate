@@ -207,7 +207,7 @@ function ActualMenux({ showModalFormMenu,
   const Timer2 = useRef<ReturnType<typeof setTimeout> | null>(null);
   const Timervv = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  var menufont = matchMobile ? '3.5vh' : '1.35vw';
+  var menufont = matchMobile ? '3.5vh' : '1.26vw';
 
   var colr = darkmodeReducer ? "#ffffff" : '#111111';
 
@@ -1146,7 +1146,7 @@ function ActualMenux({ showModalFormMenu,
                     <span
                       style={{
                         color: colr,
-                        fontSize: matchMobile ? '1.1rem' : "1.3rem",
+                        fontSize: matchMobile ? '1.1rem' : "1.1rem",
                         marginLeft: matchMobile ? '13vw' : '5vw',
                         fontFamily: "Roboto, Arial, Helvetica, sans-serif",
 

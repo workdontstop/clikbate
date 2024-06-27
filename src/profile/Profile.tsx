@@ -118,7 +118,7 @@ function Profilex({
   const [countAutoplay, setcountAutoplay] = useState<number>(0);
 
   const dispatch = useDispatch();
-  const sqlQUERYlIMIT = 30;
+  const sqlQUERYlIMIT = 21;
 
 
 
@@ -397,6 +397,7 @@ function Profilex({
   const postTimer4 = useRef<ReturnType<typeof setTimeout> | null>(null);
   const postTimer5 = useRef<ReturnType<typeof setTimeout> | null>(null);
   const postTimer6 = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const postTimer6x = useRef<ReturnType<typeof setTimeout> | null>(null);
   const postTimer7 = useRef<ReturnType<typeof setTimeout> | null>(null);
   const cloudTimer2 = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -535,6 +536,34 @@ function Profilex({
 
       if (memeberPageidReducer === 0) { } else {
         setminimise(true);
+      }
+
+
+
+      if (StopRouterScroll === 2) {
+        ///alert('kkk');
+
+        setStopRouterScroll(1);
+      }
+      else {
+        setStopRouterScroll(1);
+        if (postTimer6.current) {
+          clearTimeout(postTimer6.current);
+        }
+        postTimer6.current = setTimeout(function () {
+          if (ScrollReactRouter === 0) {
+            paperPostScrollRef.current.scrollTop = ScrollReactRouter;
+          }
+          else {
+            var skroll = ScrollReactRouter - 1;
+
+            postDivRef.current[skroll].scrollIntoView({
+              behavior: "smooth",
+              block: "start",
+            });
+          }
+
+        }, 10)
       }
 
     }
@@ -703,7 +732,7 @@ function Profilex({
           }
 
 
-          setAllowAllHdImagesShow(true);
+
           if (memeberPageidReducer === 0) { setCloudPost(false); }
 
 
@@ -719,10 +748,18 @@ function Profilex({
           if (postData.length - 1 === index) {
 
 
+            if (postTimer6x.current) {
+              clearTimeout(postTimer6x.current);
+            }
+            postTimer6x.current = setTimeout(function () {
+              setAllowAllHdImagesShow(true);
+            }, 4000)
+
 
 
             if (StopRouterScroll === 2) {
               ///alert('kkk');
+
               setStopRouterScroll(1);
             }
             else {
@@ -743,8 +780,9 @@ function Profilex({
                   });
                 }
 
-              }, 1000)
+              }, 10)
             }
+
 
 
             //alert(ScrollReactRouter);

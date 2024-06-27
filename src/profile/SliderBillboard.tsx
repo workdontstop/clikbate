@@ -14,7 +14,9 @@ function SliderBillboardx({
   ShowBillboard,
   billboardserverswitch,
   sliderIndex,
-  setSliderIndex
+  setSliderIndex,
+  billboardBlank,
+  billboardBlankthumb
 }: any): JSX.Element {
 
 
@@ -387,7 +389,14 @@ function SliderBillboardx({
               filter: "blur(0px)",
             }}
 
-            src={`${REACT_APP_CLOUNDFRONT}${slidesthumb[i]}`}
+
+
+
+            src={slidesthumb[i] ? `${REACT_APP_CLOUNDFRONT}${slidesthumb[i]}` :
+
+              `${REACT_APP_CLOUNDFRONT}${billboardBlankthumb[i]}`}
+
+
           />
           <animated.img
             ref={SlideimageRef}
@@ -416,7 +425,14 @@ function SliderBillboardx({
               left: "0",
               zIndex: 2,
             }}
-            src={`${REACT_APP_CLOUNDFRONT}${slides[i]}`}
+
+
+            src={slides[i] ? `${REACT_APP_CLOUNDFRONT}${slides[i]}` :
+
+              `${REACT_APP_CLOUNDFRONT}${billboardBlankthumb[i]}`}
+
+
+
           />
         </Grid>
       ))}{" "}

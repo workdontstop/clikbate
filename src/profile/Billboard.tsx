@@ -119,6 +119,56 @@ function Billboardx({
   const fansReducer = fans;
 
 
+  var billboardImagesnnz = [
+    billboard1Reducer,
+    billboard2Reducer,
+  ];
+
+
+
+
+  var billboardImagesnnzthumb = [
+    billboardthumb1Reducer,
+    billboardthumb2Reducer,
+  ];
+
+
+
+
+  const [billboardBlank, setbillboardBlank] =
+    useState(billboardImagesnnz);
+
+  const [billboardBlankthumb, setbillboardBlankthumb] =
+    useState(billboardImagesnnzthumb);
+
+
+
+
+
+  useEffect(() => {
+
+    var billboardImagesnnzc = [
+      billboard1Reducer,
+      billboard2Reducer,
+    ];
+
+    var billboardImagesnnzthumbc = [
+      billboardthumb1Reducer,
+      billboardthumb2Reducer,
+    ];
+
+
+    setbillboardBlank(billboardImagesnnzc);
+    setbillboardBlankthumb(billboardImagesnnzthumbc);
+
+  }, [
+    billboard1Reducer,
+    billboard2Reducer,
+    billboardthumb1Reducer,
+    billboardthumb2Reducer,])
+
+
+
   const [quoteReducer, setquoteReducer] = useState("");
   const [favoritesReducer, setfavoritesReducer] = useState(0);
   const [hidefanReducer, sethidefanReducer] = useState(false);
@@ -129,6 +179,7 @@ function Billboardx({
   // scrollSnapAlign: minimise ? 'none' : "start",
 
   const billboardImagesnn = ["", ""];
+
 
   const [billboardImages, setbillboardImages] = useState(billboardImagesnn);
 
@@ -819,6 +870,8 @@ function Billboardx({
               {/*///////////////////////////////////////////////////////////////////////////BILLBOARD IMAGE*/}
 
               <SliderBillboard
+                billboardBlank={billboardBlank}
+                billboardBlankthumb={billboardBlankthumb}
                 sliderIndex={sliderIndex}
                 setSliderIndex={setSliderIndex}
                 billboardserverswitch={billboardserverswitch}

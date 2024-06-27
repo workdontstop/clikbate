@@ -634,7 +634,7 @@ function Postx({
             behavior: "smooth",
             block: "start",
           });
-        }, 1500)
+        }, 2500)
 
 
 
@@ -1950,7 +1950,7 @@ function Postx({
                       behavior: "smooth",
                       block: "start",
                     });
-                  }, 1500)
+                  }, 2500)
 
 
                 }}

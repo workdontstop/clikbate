@@ -303,7 +303,9 @@ function Sliderx({
 
   const [isPaused, setIsPaused] = useState(false);
 
-  const DivBoxMultiple = matchMobile ? 0.87 : 0.945;
+  const DivBoxMultiplex = matchMobile ? 0.87 : 0.945;
+
+  const [DivBoxMultiple, setDivBoxMultiple] = useState(DivBoxMultiplex);
 
 
 
@@ -366,32 +368,35 @@ function Sliderx({
       if (minimise) {
 
         if (pic.current) {
-          const previewFileReadimage: any = new Image();
-          previewFileReadimage.crossOrigin = "anonymous";
-          previewFileReadimage.src = pic.current.src;
-          previewFileReadimage.onload = () => {
-            const naturalWidth = previewFileReadimage.naturalWidth;
-            const naturalHeight = previewFileReadimage.naturalHeight;
-            const containerHeight = divBox.current.clientHeight * DivBoxMultiple;
-            const aspectRatio = naturalWidth / naturalHeight;
-            const newWidth = containerHeight * aspectRatio;
-            const marginLeft = (divBox.current.clientWidth - newWidth) / 2;
+          if (divBox.current) {
+
+            const previewFileReadimage: any = new Image();
+            previewFileReadimage.crossOrigin = "anonymous";
+            previewFileReadimage.src = pic.current.src;
+            previewFileReadimage.onload = () => {
+              const naturalWidth = previewFileReadimage.naturalWidth;
+              const naturalHeight = previewFileReadimage.naturalHeight;
+              const containerHeight = divBox.current.clientHeight * DivBoxMultiple;
+              const aspectRatio = naturalWidth / naturalHeight;
+              const newWidth = containerHeight * aspectRatio;
+              const marginLeft = (divBox.current.clientWidth - newWidth) / 2;
 
 
-            if (InteractTimerxxhy.current) {
-              clearTimeout(InteractTimerxxhy.current);
+              if (InteractTimerxxhy.current) {
+                clearTimeout(InteractTimerxxhy.current);
+              }
+              InteractTimerxxhy.current = setTimeout(() => {
+
+                if (previewFileReadimage.naturalWidth > previewFileReadimage.naturalHeight) {
+                  setMarginLeftCanvas(marginLeft);
+                } else { setMarginLeftCanvas(0); }
+
+
+                setcanvasBorderH(divBox.current.clientHeight * DivBoxMultiple);
+                setcanvasBorderW(divBox.current.clientWidth);
+              }, 1000);
+
             }
-            InteractTimerxxhy.current = setTimeout(() => {
-
-              if (previewFileReadimage.naturalWidth > previewFileReadimage.naturalHeight) {
-                setMarginLeftCanvas(marginLeft);
-              } else { setMarginLeftCanvas(0); }
-
-
-              setcanvasBorderH(divBox.current.clientHeight * DivBoxMultiple);
-              setcanvasBorderW(divBox.current.clientWidth);
-            }, 1000);
-
           }
         }
       } else {
@@ -1832,7 +1837,7 @@ function Sliderx({
                         behavior: "smooth",
                         block: "start",
                       });
-                    }, 1500)
+                    }, 2500)
 
                   }
 
@@ -2266,6 +2271,7 @@ function Sliderx({
                 borderRadius: matchMobile ? minimise ? '0px' : '0%' :
                   minimise ? '0px' : '4%',
 
+
                 cursor: "pointer",
                 width: "100%",
                 height: minimise ? matchMobile ? '30vh' : '68vh' : `auto`,
@@ -2276,7 +2282,7 @@ function Sliderx({
                   itemcroptype[pey] === 1 || itemcroptype[pey] === 2
                     ? "50% top"
                     : "50% 50",
-                zIndex: 0,
+                zIndex: AllowAllHdImagesShow ? 0 : 100,
 
 
               }}
@@ -2307,7 +2313,7 @@ function Sliderx({
                         behavior: "smooth",
                         block: "start",
                       });
-                    }, 1500)
+                    }, 2500)
 
                   } else {
                     ClickAudio();

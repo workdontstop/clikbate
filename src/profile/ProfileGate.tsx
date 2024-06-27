@@ -638,16 +638,21 @@ function ProfileGatex({
             username: string;
             memeberPageid: number;
             MemberProfileData: any;
-            reg: number
+            reg: number,
+
+            billboardthumb2: string;
         };
     }
-    const { username, image, imageThumb, id, memeberPageid, MemberProfileData, reg } =
+    const { username, image, imageThumb, id, memeberPageid, MemberProfileData, reg, billboardthumb2, } =
         useSelector((state: RootStateReducerImage) => ({
             ...state.UserdataReducer,
         }));
 
 
+
     ///switchThemes
+
+    const billboardthumb2Reducer = billboardthumb2;
 
     const idReducer = id;
     const memeberPageidReducer = memeberPageid;
@@ -2213,8 +2218,12 @@ function ProfileGatex({
                                 visibility: matchMobile && showModalFormMenu ? 'hidden' : 'visible',
                             }}
 
-                            src={`${REACT_APP_CLOUNDFRONT}${imageReducerThumb}`}
-                            alt="Superstarz Billboard "
+
+
+                            src={imageReducerThumb ? `${REACT_APP_CLOUNDFRONT}${imageReducerThumb}` :
+
+                                `${REACT_APP_CLOUNDFRONT}${imageThumb}`}
+                            alt="Profile pic"
                         />
 
                         <img
@@ -2250,8 +2259,12 @@ function ProfileGatex({
 
 
 
-                            src={`${REACT_APP_CLOUNDFRONT}${imageReducer}`}
-                            alt="Superstarz Billboard "
+                            src={imageReducer ? `${REACT_APP_CLOUNDFRONT}${imageReducer}` :
+
+                                ``}
+
+
+                            alt={imageReducer ? 'Profile pic' : ''}
                         />
                     </Grid>
                 </Grid>
@@ -2342,7 +2355,13 @@ function ProfileGatex({
 
                     <img
 
-                        src={`${REACT_APP_CLOUNDFRONT}${RandomFromPostData}`}
+
+
+                        src={RandomFromPostData ? `${REACT_APP_CLOUNDFRONT}${RandomFromPostData}` :
+
+                            `${REACT_APP_CLOUNDFRONT}${billboardthumb2Reducer}`}
+
+
                         alt="Discover"
                         style={{
                             cursor: "pointer",
