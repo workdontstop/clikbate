@@ -52,7 +52,7 @@ if (process.env.APP_STATE === "dev") {
     var corsOptions = {
         ///origin: "http://192.168.0.39:3000",
         origin: [
-            "http://192.168.0.39:3000",
+            "http://192.168.0.20:3000",
             /////"http://localhost:3000", // Add your front-end origin
             "https://oaidalleapiprodscus.blob.core.windows.net", // Add your blob storage origin
         ],

@@ -72,6 +72,7 @@ function Sliderx({
   setinteractContent,
   interactContent,
   dateint,
+  dateint2,
   setShowPad,
   setStopShowPad,
   setShowAudioIcon,
@@ -142,41 +143,45 @@ function Sliderx({
 
   useEffect(() => {
 
+
+    startInteraction();
+
     if (minimise) {
 
       var marginLeft = 0;
 
       if (pic.current) {
-        const previewFileReadimage: any = new Image();
-        previewFileReadimage.crossOrigin = "anonymous";
-        previewFileReadimage.src = pic.current.src;
-        previewFileReadimage.onload = () => {
-          const naturalWidth = previewFileReadimage.naturalWidth;
-          const naturalHeight = previewFileReadimage.naturalHeight;
-          const containerHeight = divBox.current.clientHeight * DivBoxMultiple;
-          const aspectRatio = naturalWidth / naturalHeight;
-          const newWidth = containerHeight * aspectRatio;
-          marginLeft = (divBox.current.clientWidth - newWidth) / 2;
+        if (divBox.current) {
+          const previewFileReadimage: any = new Image();
+          previewFileReadimage.crossOrigin = "anonymous";
+          previewFileReadimage.src = pic.current.src;
+          previewFileReadimage.onload = () => {
+            const naturalWidth = previewFileReadimage.naturalWidth;
+            const naturalHeight = previewFileReadimage.naturalHeight;
+            const containerHeight = divBox.current.clientHeight * DivBoxMultiple;
+            const aspectRatio = naturalWidth / naturalHeight;
+            const newWidth = containerHeight * aspectRatio;
+            marginLeft = (divBox.current.clientWidth - newWidth) / 2;
 
-
-          setcanvasBorderH(divBox.current.clientHeight * DivBoxMultiple);
-          setcanvasBorderW(divBox.current.clientWidth);
-
-
-          if (InteractTimerxxhx.current) {
-            clearTimeout(InteractTimerxxhx.current);
-          }
-          InteractTimerxxhx.current = setTimeout(() => {
-            if (previewFileReadimage.naturalWidth > previewFileReadimage.naturalHeight) {
-              setMarginLeftCanvas(marginLeft);
-            } else { setMarginLeftCanvas(0); }
 
             setcanvasBorderH(divBox.current.clientHeight * DivBoxMultiple);
             setcanvasBorderW(divBox.current.clientWidth);
-          }, 1000)
+
+
+            if (InteractTimerxxhx.current) {
+              clearTimeout(InteractTimerxxhx.current);
+            }
+            InteractTimerxxhx.current = setTimeout(() => {
+              if (previewFileReadimage.naturalWidth > previewFileReadimage.naturalHeight) {
+                setMarginLeftCanvas(marginLeft);
+              } else { setMarginLeftCanvas(0); }
+
+              setcanvasBorderH(divBox.current.clientHeight * DivBoxMultiple);
+              setcanvasBorderW(divBox.current.clientWidth);
+            }, 1000)
+          }
         }
       }
-
 
     } else {
 
@@ -268,7 +273,7 @@ function Sliderx({
 
   const { ref, inView, entry } = useInView({
     /* Optional options */
-    threshold: matchMobile ? 0.93 : 0.55,
+    threshold: matchMobile ? 0.80 : 0.55,
 
 
   });
@@ -307,6 +312,11 @@ function Sliderx({
 
   const [DivBoxMultiple, setDivBoxMultiple] = useState(DivBoxMultiplex);
 
+
+
+  const InteractTimerxxhyv = useRef<ReturnType<typeof setTimeout> | null>(
+    null
+  );
 
 
   //////REDUCE AUDIO VOLUME
@@ -652,6 +662,27 @@ function Sliderx({
 
 
 
+  const [canvasHide, setcanvasHide] = useState(false);
+
+
+  useEffect(() => {
+
+    setcanvasHide(true);
+
+
+    if (InteractTimerxxhyv.current) {
+      clearTimeout(InteractTimerxxhyv.current);
+    }
+    InteractTimerxxhyv.current = setTimeout(() => {
+
+      setcanvasHide(false);
+
+
+
+    }, 2000)
+
+
+  }, [minimise])
 
 
 
@@ -904,7 +935,7 @@ function Sliderx({
       setcanvasInteractheight(hei);
 
 
-      if (minimise) {
+      if (minimise && divBox.current) {
 
         setcanvasBorderH(divBox.current.clientHeight * DivBoxMultiple);
         setcanvasBorderW(divBox.current.clientWidth);
@@ -1837,7 +1868,7 @@ function Sliderx({
                         behavior: "smooth",
                         block: "start",
                       });
-                    }, 2500)
+                    }, 1000)
 
                   }
 
@@ -2313,7 +2344,7 @@ function Sliderx({
                         behavior: "smooth",
                         block: "start",
                       });
-                    }, 2500)
+                    }, 1000)
 
                   } else {
                     ClickAudio();
@@ -2386,6 +2417,8 @@ function Sliderx({
                       backgroundColor: '',
                       border: minimise ?
                         `0px solid ${blendedColor}` : `0px solid ${blendedColor}`,
+                      visibility: canvasHide ? 'hidden' : 'visible'
+
 
 
                     }}
@@ -2414,7 +2447,7 @@ function Sliderx({
                   ///alert('jj');
                 }}
 
-                src={`${slides[0]}?v=${dateint}`}
+                src={minimise ? `${slides[0]}?v=${dateint2}` : `${slides[0]}?v=${dateint}`}
 
                 alt="a clikbate post "
                 style={{
@@ -2432,6 +2465,7 @@ function Sliderx({
                   position: "absolute",
                   padding: "0px",
                   zIndex: 0,
+
 
 
 

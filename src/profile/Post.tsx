@@ -212,11 +212,18 @@ function Postx({
 
   const [dateint, setdateint] = useState<any>(null);
 
+  const [dateint2, setdateint2] = useState<any>(null);
+
 
   useEffect(() => {
     if (post) {
       setdateint(new Date().getTime());
+
+      setTimeout(() => {
+        setdateint2(new Date().getTime());
+      }, 400)
     }
+
 
   }, [post]);
 
@@ -634,7 +641,7 @@ function Postx({
             behavior: "smooth",
             block: "start",
           });
-        }, 2500)
+        }, 1000)
 
 
 
@@ -1575,6 +1582,8 @@ function Postx({
 
               divBox={divBox}
 
+              dateint2={dateint2}
+
               setminimiseSpecificScroll={setminimiseSpecificScroll}
 
               setStopRouterScroll={setStopRouterScroll}
@@ -1950,7 +1959,7 @@ function Postx({
                       behavior: "smooth",
                       block: "start",
                     });
-                  }, 2500)
+                  }, 1000)
 
 
                 }}
