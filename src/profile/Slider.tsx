@@ -18,7 +18,9 @@ import { UpdateInteract, MuteAction, MuteIndexAudio } from ".././GlobalActions";
 import { Tutorial } from "../Tutorial";
 import VideocamOffIcon from '@material-ui/icons/VideocamOff';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
-import { useInView } from "react-intersection-observer";
+import { InView, useInView } from "react-intersection-observer";
+
+import VideoComponent from "./VideoComponent";
 
 function Sliderx({
   slides,
@@ -122,7 +124,9 @@ function Sliderx({
 
 
 
-
+  const InteractTimerxxhyx = useRef<ReturnType<typeof setTimeout> | null>(
+    null
+  );
   const InteractTimerxxhy = useRef<ReturnType<typeof setTimeout> | null>(
     null
   );
@@ -164,8 +168,10 @@ function Sliderx({
             marginLeft = (divBox.current.clientWidth - newWidth) / 2;
 
 
-            setcanvasBorderH(divBox.current.clientHeight * DivBoxMultiple);
-            setcanvasBorderW(divBox.current.clientWidth);
+            if (divBox.current.clientHeight && divBox.current.clientWidth) {
+              setcanvasBorderH(divBox.current.clientHeight * DivBoxMultiple);
+              setcanvasBorderW(divBox.current.clientWidth);
+            }
 
 
             if (InteractTimerxxhx.current) {
@@ -176,8 +182,10 @@ function Sliderx({
                 setMarginLeftCanvas(marginLeft);
               } else { setMarginLeftCanvas(0); }
 
-              setcanvasBorderH(divBox.current.clientHeight * DivBoxMultiple);
-              setcanvasBorderW(divBox.current.clientWidth);
+              if (divBox.current.clientHeight && divBox.current.clientWidth) {
+                setcanvasBorderH(divBox.current.clientHeight * DivBoxMultiple);
+                setcanvasBorderW(divBox.current.clientWidth);
+              }
             }, 1000)
           }
         }
@@ -253,6 +261,7 @@ function Sliderx({
 
 
 
+  const [xl, setxl] = useState(false);
 
 
 
@@ -273,7 +282,7 @@ function Sliderx({
 
   const { ref, inView, entry } = useInView({
     /* Optional options */
-    threshold: matchMobile ? 0.80 : 0.55,
+    threshold: matchMobile ? 0.50 : 0.55,
 
 
   });
@@ -323,23 +332,23 @@ function Sliderx({
   useEffect(() => {
     if (HaltAudio) {
 
-      setTimeout(() => {
-        if (audioPlayerRef.current) {
-          // Set volume to desired level (between 0 and 1)
-          audioPlayerRef.current.pause();// Example: setting volume to 50%
-          setIsPaused(true);
-        }
-      }, 20)
+
+      if (audioPlayerRef.current) {
+        // Set volume to desired level (between 0 and 1)
+        audioPlayerRef.current.pause();// Example: setting volume to 50%
+        setIsPaused(true);
+      }
+
 
     } else {
 
-      setTimeout(() => {
-        if (audioPlayerRef.current && audioPlayerRef.current.paused) {
-          // Set volume to desired level (between 0 and 1)
-          audioPlayerRef.current.play(); // Example: setting volume to 50%
-          setIsPaused(false);
-        }
-      }, 20)
+
+      if (audioPlayerRef.current && audioPlayerRef.current.paused) {
+        // Set volume to desired level (between 0 and 1)
+        audioPlayerRef.current.play(); // Example: setting volume to 50%
+        setIsPaused(false);
+      }
+
     }
   }, [HaltAudio, isPaused])
 
@@ -366,6 +375,58 @@ function Sliderx({
   }, [currentClicked, itemCLICKED])
 
 
+
+  const [show, setshow] = useState(true);
+  const [hidePrevVid, sethidePrevVid] = useState(false);
+
+
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  const videoImRef = useRef<HTMLImageElement>(null);
+
+  useEffect(() => {
+    if (videoRef.current && inView) {
+      videoRef.current.play();
+      setshow(true);
+
+      sethidePrevVid(false);
+
+      if (InteractTimerxxhyx.current) {
+        clearTimeout(InteractTimerxxhyx.current);
+      }
+      InteractTimerxxhyx.current = setTimeout(() => {
+        sethidePrevVid(true);
+        setxl(false);
+      }, 12000)
+
+    } else {
+      setshow(false)
+    }
+  }, [inView]);
+
+
+  useEffect(() => {
+    if (videoImRef.current && inView) {
+
+      setshow(true);
+
+      sethidePrevVid(false);
+
+      if (InteractTimerxxhyx.current) {
+        clearTimeout(InteractTimerxxhyx.current);
+      }
+      InteractTimerxxhyx.current = setTimeout(() => {
+        sethidePrevVid(true);
+        setxl(false);
+      }, 12000)
+
+    } else {
+      setshow(false)
+    }
+  }, [inView]);
+
+
+
   const startinview = useCallback(() => {
 
 
@@ -386,7 +447,16 @@ function Sliderx({
             previewFileReadimage.onload = () => {
               const naturalWidth = previewFileReadimage.naturalWidth;
               const naturalHeight = previewFileReadimage.naturalHeight;
-              const containerHeight = divBox.current.clientHeight * DivBoxMultiple;
+
+              var containerHeight = 0;
+
+              if (divBox.current) {
+                containerHeight = divBox.current.clientHeight * DivBoxMultiple;
+
+              } else {
+                containerHeight = 0;
+              }
+
               const aspectRatio = naturalWidth / naturalHeight;
               const newWidth = containerHeight * aspectRatio;
               const marginLeft = (divBox.current.clientWidth - newWidth) / 2;
@@ -402,8 +472,10 @@ function Sliderx({
                 } else { setMarginLeftCanvas(0); }
 
 
-                setcanvasBorderH(divBox.current.clientHeight * DivBoxMultiple);
-                setcanvasBorderW(divBox.current.clientWidth);
+                if (divBox.current.clientHeight && divBox.current.clientWidth) {
+                  setcanvasBorderH(divBox.current.clientHeight * DivBoxMultiple);
+                  setcanvasBorderW(divBox.current.clientWidth);
+                }
               }, 1000);
 
             }
@@ -791,22 +863,42 @@ function Sliderx({
     return urlPattern.test(str);
   };
 
+  const [PreviewVid, setPreviewVid] = useState('');
+
+  const [postty, setPostty] = useState(0);
+
+
 
   useEffect(() => {
 
 
-    if (post.interact1a) {
+    if (post.interact1b) {
+      /// post.interact2a
+
       setHasInteractivity(true);
-      ///alert(post.interact1a);
-    } else {
-      //setHasInteractivity(false);
-    }
+      const randomValue = Math.random() < 0.5 ? 1 : 2;
+
+      if (randomValue === 1) {
+        setPreviewVid(post.interact1a);
+        setPostty(post.interacttype1);
+      } else {
+        setPreviewVid(post.interact1b);
+        setPostty(post.interacttype2);
+      }
 
 
-    if (post.interact2a) {
+
+    } else if (post.interact1a) {
+
+
       setHasInteractivity(true);
+      setPreviewVid(post.interact1a);
+      setPostty(post.interacttype1);
+
+
     } else {
-      //setHasInteractivity(false);
+      setHasInteractivity(false);
+      ///setPreviewVid('');
     }
 
 
@@ -937,8 +1029,11 @@ function Sliderx({
 
       if (minimise && divBox.current) {
 
-        setcanvasBorderH(divBox.current.clientHeight * DivBoxMultiple);
-        setcanvasBorderW(divBox.current.clientWidth);
+
+        if (divBox.current.clientHeight && divBox.current.clientWidth) {
+          setcanvasBorderH(divBox.current.clientHeight * DivBoxMultiple);
+          setcanvasBorderW(divBox.current.clientWidth);
+        }
 
         if (pic.current) {
           const newHeight = (previewFileReadimage.naturalHeight * pic.current.clientWidth) / previewFileReadimage.naturalWidth;
@@ -1384,6 +1479,9 @@ function Sliderx({
 
     if (itemCLICKED[pey]) {
 
+      sethidePrevVid(true);
+      setxl(false);
+
       dispatch(MuteIndexAudio(pey));
       if (audioPlayerRef.current) { audioPlayerRef.current.volume = 1; }
 
@@ -1444,6 +1542,10 @@ function Sliderx({
 
 
     if (itemCLICKED[pey]) {
+
+      sethidePrevVid(true);
+      setxl(false);
+
 
       dispatch(MuteIndexAudio(pey));
       if (audioPlayerRef.current) { audioPlayerRef.current.volume = 1; }
@@ -1611,10 +1713,10 @@ function Sliderx({
           if (post.interact1a || post.interact1b) {
             //alert('jj');
 
-            var scaleFactor1 = matchMobile ? bigPixel1 ? 1.1 : 1.023 : bigPixel1 ? 1.1 : 1.018; // You can adjust this value to control the zoom level
+            var scaleFactor1 = matchMobile ? 1.018 : 1.008; // You can adjust this value to control the zoom level
 
 
-            var scaleFactor2 = matchMobile ? bigPixel2 ? 1.1 : 1.023 : bigPixel2 ? 1.1 : 1.018; // You can adjust this value to control the zoom level
+            var scaleFactor2 = matchMobile ? 1.018 : 1.008; // You can adjust this value to control the zoom level
 
             if (post.interact1a) {
               if (typex === 0 || typex === 3) {
@@ -1795,7 +1897,7 @@ function Sliderx({
                 } else {
                   drawInteraction(0, event, 0);
                 }
-              }, bigPixel1 || bigPixel2 ? 120 : 50);
+              }, 50);
             }
 
 
@@ -2762,7 +2864,23 @@ function Sliderx({
           />
         ) : null}
 
+        {
+          minimise ? null :
+            inView ?
+
+              < VideoComponent
+                xl={xl}
+                setxl={setxl}
+                src={PreviewVid} inView={inView} setshow={setshow} videoRef={videoRef} show={show}
+                hidePrevVid={hidePrevVid} InteractTimerxxhyx={InteractTimerxxhyx}
+                sethidePrevVid={sethidePrevVid} postty={postty}
+                videoImRef={videoImRef} />
+
+
+              : null}
       </Grid >
+
+
 
 
     </>

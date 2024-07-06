@@ -1,6 +1,8 @@
 import React, { useRef, useState, useEffect, useCallback } from "react";
 import { matchMobile, matchPc, matchTablet } from "../DetectDevice";
 import { RootStateOrAny, useSelector, useDispatch } from "react-redux";
+import { animated, useTransition, useSpring } from "react-spring";
+import { Button } from "@material-ui/core";
 import { Menu } from "./Menu";
 import { Billboard } from "./Billboard";
 import "./profile.css";
@@ -9,8 +11,12 @@ import { ProfileSetup } from "./ProfileSetup";
 import { GenerateAndUpload } from "./GenerateAndUpload";
 import { ActualMenu } from "./ActualMenu";
 
+import ImageSlider from "./ImageSlider";
+
+import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 
 import { useLocation } from 'react-router-dom';
+import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
 
 
 
@@ -23,7 +29,9 @@ import { CommentTemplate } from "../CommentTemplate";
 import { Upload } from "../upload/Upload";
 import { UploadProfilePic } from "../upload/UploadProfilePic";
 import AddIcon from "@mui/icons-material/Add";
+
 import { OptionsSlider } from "./OptionsSlider";
+
 import { UpdateNavFilterReducer, UpdateSign } from "../GlobalActions";
 import { UpdateNavCropReducer } from "../GlobalActions";
 import LogoutIcon from "@mui/icons-material/Logout";
@@ -71,6 +79,8 @@ import {
     MuiThemeProvider,
     Box,
 } from "@material-ui/core";
+import { set } from "date-fns";
+import { setTimeout } from "timers";
 
 
 
@@ -126,10 +136,12 @@ function ProfileGatex({
     ShowmaxPost,
     setUploadGPT,
 
-
+    setShowImageSlider,
+    ShowImageSlider
 
 
 }: any): JSX.Element {
+
 
 
 
@@ -149,6 +161,14 @@ function ProfileGatex({
     let scrollRouter: string | undefined;
 
 
+
+    const [ExtendBill, setExtendBill] = useState(false);
+
+
+    const heightAnimation = useSpring({
+        height: ExtendBill ? (matchMobile ? '49vh' : '70vh') : (matchMobile ? '19vh' : '30vh'),
+        config: { duration: 300 }
+    });
 
 
     useEffect(() => {
@@ -201,6 +221,11 @@ function ProfileGatex({
     }, []); // This effect should only run once, so it has an empty dependency array
 
 
+    const [RandomFromPostData, setRandomFromPostData] = useState('');
+    const [RandomFromPostData2, setRandomFromPostData2] = useState('');
+
+
+
     useEffect(() => {
         if (idRoute1) {
             const decodedId1 = decodeBase64(idRoute1);
@@ -218,7 +243,8 @@ function ProfileGatex({
                 const parsedInt2 = parseInt(decodedId2, 10);
                 if (!isNaN(parsedInt2)) {
                     setScrollReactRouter(parsedInt2);
-                    paperPostScrollRef.current.scrollTop = parsedInt2;
+                    pagePostScroll.current.scrollTop = parsedInt2;
+                    /// paperPostScrollRef.current.scrollTop = parsedInt2;
                 }
             }
         }
@@ -247,6 +273,300 @@ function ProfileGatex({
     } else {
         allow4dev = "";
     }
+
+
+
+    ///
+    ///
+    ///
+    /// INTERFACE/TYPES FOR SCREENHEIGHT AND DARKMODE
+    interface RootStateGlobalReducer {
+        GlobalReducer: {
+            snapStart: boolean;
+            darkmode: boolean;
+            screenHeight: number;
+            activateLoader: boolean;
+            historyscroll: number;
+            interactContent: any;
+            interact: number;
+            MenuData: String;
+            pagenum: number;
+            SignIn: boolean,
+            Guest: number
+        };
+    }
+
+
+    const [shownav, setShownav] = useState<boolean>(true);
+    ///
+    ///
+    ///
+    /// GET SCREENHEIGHT FROM REDUX STORE
+    const { screenHeight, darkmode, snapStart, activateLoader, historyscroll, interactContent, interact, MenuData, pagenum, SignIn, Guest } =
+        useSelector((state: RootStateGlobalReducer) => ({
+            ...state.GlobalReducer,
+        }));
+    const screenHeightReducer = screenHeight;
+    const darkmodeReducer = darkmode;
+    const snapStartReducer = snapStart;
+    const activateLoaderReducer = activateLoader;
+    const historyscrollReducer = historyscroll;
+    const interactContentReducer: any = interactContent;
+    const interactReducer = interact;
+    const MenuDataReducer = MenuData
+    const pagenumReducer = pagenum;
+    const SignInReducer = SignIn;
+    const GuestReducer = Guest;
+
+
+
+
+    ///
+    ///
+    ///
+    /// GET  SIGNUP BUTTON AND LOGIN BUTTON STYLE FROM REDUX
+    const { MozBoxShadowSD, WebkitBoxShadowSD, boxShadowSD } = useSelector(
+        (state: RootStateOrAny) => ({
+            ...state.ButtonsSignUpReducerDark,
+        })
+    );
+
+    const { MozBoxShadowSL, WebkitBoxShadowSL, boxShadowSL } = useSelector(
+        (state: RootStateOrAny) => ({
+            ...state.ButtonsSignUpReducerLight,
+        })
+    );
+
+    const { MozBoxShadowLD, WebkitBoxShadowLD, boxShadowLD } = useSelector(
+        (state: RootStateOrAny) => ({
+            ...state.ButtonsLoginReducerDark,
+        })
+    );
+
+    const { MozBoxShadowLL, WebkitBoxShadowLL, boxShadowLL } = useSelector(
+        (state: RootStateOrAny) => ({
+            ...state.ButtonsLoginReducerLight,
+        })
+    );
+
+    var MozBoxShadowReducerLogin = " ";
+    var WebkitBoxShadowReducerLogin = " ";
+    var boxShadowReducerLogin = " ";
+
+    var MozBoxShadowReducerSign = " ";
+    var WebkitBoxShadowReducerSign = " ";
+    var boxShadowReducerSign = " ";
+
+    if (darkmodeReducer) {
+        MozBoxShadowReducerLogin = MozBoxShadowLD;
+        WebkitBoxShadowReducerLogin = WebkitBoxShadowLD;
+        boxShadowReducerLogin = boxShadowLD;
+
+        MozBoxShadowReducerSign = MozBoxShadowSD;
+        WebkitBoxShadowReducerSign = WebkitBoxShadowSD;
+        boxShadowReducerSign = boxShadowSD;
+    } else {
+        MozBoxShadowReducerLogin = MozBoxShadowLD;
+        WebkitBoxShadowReducerLogin = WebkitBoxShadowLD;
+        boxShadowReducerLogin = boxShadowLD;
+
+        MozBoxShadowReducerSign = MozBoxShadowSD;
+        WebkitBoxShadowReducerSign = WebkitBoxShadowSD;
+        boxShadowReducerSign = boxShadowSD;
+    }
+
+
+
+
+    ///
+    ///
+    ///
+    /// GET LOGGED USER DATA FROM REDUX STORE
+    interface RootStateReducerImage {
+        UserdataReducer: {
+            id: number;
+            image: string;
+            username: string;
+            quote: string;
+            billboard1: string;
+            billboard2: string;
+            billboardthumb1: string;
+            billboardthumb2: string;
+            fans: number;
+            favorites: number;
+            memeberPageid: number;
+            MemberProfileData: any;
+            billboardstate: number;
+            reg: number,
+            imageThumb: string;
+        };
+    }
+    const {
+        id,
+        image,
+        username,
+        quote,
+        billboard1,
+        billboard2,
+        billboardthumb1,
+        billboardthumb2,
+        fans,
+        favorites,
+        memeberPageid,
+        MemberProfileData,
+        billboardstate,
+        reg,
+        imageThumb
+
+    } = useSelector((state: RootStateReducerImage) => ({
+        ...state.UserdataReducer,
+    }));
+
+    const [usernameReducer, setusernameReducer] = useState("");
+
+    const idReducer = id;
+    const imageReducerx = image;
+    const imageReducerxx = imageThumb;
+
+    const billboard1Reducer = billboard1;
+    const billboardstateReducer = billboardstate;
+    const billboard2Reducer = billboard2;
+    const billboardthumb1Reducer = billboardthumb1;
+    const billboardthumb2Reducer = billboardthumb2;
+    const memeberPageidReducer = memeberPageid;
+    const MemberProfileDataReducer = MemberProfileData;
+    const regReducer = reg;
+
+    //const fansReducer = fans;
+
+
+
+    const imageSources = [
+        { src: `${REACT_APP_CLOUNDFRONT}${RandomFromPostData}`, text: 'My feeds' },
+
+
+        { src: `${REACT_APP_CLOUNDFRONT}erik-mclean-munBJq3Bpg0-unsplash.jpg`, text: 'For You' },
+        { src: `${REACT_APP_CLOUNDFRONT}joe-neric-EGzkhZyFRX4-unsplash.jpg`, text: 'Live Feeds' },
+        { src: `${REACT_APP_CLOUNDFRONT}carmen-laezza-lMN4RnmM4iU-unsplash.jpg`, text: 'Random Feeds' },
+        { src: `${REACT_APP_CLOUNDFRONT}mulyadi-eG_xKGd-YCA-unsplash.jpg`, text: 'Interests' }
+    ];
+
+    const [imageReducer, setimageReducer] = useState(imageReducerx);
+    const [imageReducerThumb, setimageReducerThumb] = useState(imageReducerxx);
+
+
+    var billboardImagesnnz = [
+        billboard1Reducer,
+        billboard2Reducer,
+    ];
+
+
+
+
+    var billboardImagesnnzthumb = [
+        billboardthumb1Reducer,
+        billboardthumb2Reducer,
+    ];
+
+
+
+
+    const [billboardBlank, setbillboardBlank] =
+        useState(billboardImagesnnz);
+
+    const [billboardBlankthumb, setbillboardBlankthumb] =
+        useState(billboardImagesnnzthumb);
+
+
+
+    const billboardImagesnn = ["", ""];
+
+
+    const [billboardImages, setbillboardImages] = useState(billboardImagesnn);
+
+    const [billboardthumbImages, setbillboardthumbImages] =
+        useState(billboardImagesnn);
+
+
+    const Timervva = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+    const Timervv = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+
+
+    const [quoteReducer, setquoteReducer] = useState("");
+    const [favoritesReducer, setfavoritesReducer] = useState(0);
+    const [fansReducer, setfansReducer] = useState(0);
+    const [hidefanReducer, sethidefanReducer] = useState(false);
+
+
+
+
+    const ChangeProfilex = useCallback(() => {
+
+        if (Timervv.current) {
+            clearTimeout(Timervv.current);
+        }
+
+        Timervv.current = setTimeout(() => {
+            var billboardImagesxx = [billboard1, billboard2];
+            var billboardImagesxxT = [billboardthumb1, billboardthumb2];
+
+            var billboardImageszz = [
+                MemberProfileData.userbillboard1,
+                MemberProfileData.userbillboard2,
+            ];
+
+
+            var billboardImageszzT = [
+                MemberProfileData.userbillboardthumb1,
+                MemberProfileData.userbillboardthumb2,
+            ];
+
+
+            if (memeberPageid === 0 || idReducer === memeberPageid) {
+
+                setbillboardthumbImages(billboardImagesxxT);
+                setbillboardImages(billboardImagesxx);
+                setusernameReducer(username);
+                setquoteReducer(quote);
+                setfavoritesReducer(favorites);
+                setfansReducer(fans)
+            } else {
+                setbillboardthumbImages(billboardImageszzT);
+                setbillboardImages(billboardImageszz);
+                setusernameReducer(MemberProfileData.username);
+                setquoteReducer(MemberProfileData.userquote);
+                setfavoritesReducer(MemberProfileData.favorites);
+                setfansReducer(MemberProfileData.fans)
+            }
+
+        }, 1500)
+    }, [idReducer, memeberPageid, billboardstateReducer, billboard1, billboard2, username,
+        quote, favorites, billboardthumb1, billboardthumb2, MemberProfileData]);
+
+    useEffect(() => {
+
+        ///alert(MemberProfileData.userbillboardthumb1)
+        ChangeProfilex();
+        ChangeProfile();
+
+    }, [MemberProfileData, idReducer, memeberPageid]);
+
+    useEffect(() => {
+        ChangeProfilex();
+        ChangeProfile();
+    }, [image]);
+
+
+    useEffect(() => {
+        ChangeProfilex();
+        ChangeProfile();
+    }, [billboardstateReducer, billboard1, billboard2]);
+
+
+    const [Zoomx, setZoomx] = useState(false);
+
 
 
 
@@ -488,49 +808,6 @@ function ProfileGatex({
 
 
 
-    ///
-    ///
-    ///
-    /// INTERFACE/TYPES FOR SCREENHEIGHT AND DARKMODE
-    interface RootStateGlobalReducer {
-        GlobalReducer: {
-            snapStart: boolean;
-            darkmode: boolean;
-            screenHeight: number;
-            activateLoader: boolean;
-            historyscroll: number;
-            interactContent: any;
-            interact: number;
-            MenuData: String;
-            pagenum: number;
-            SignIn: boolean,
-            Guest: number
-        };
-    }
-
-
-    const [shownav, setShownav] = useState<boolean>(true);
-    ///
-    ///
-    ///
-    /// GET SCREENHEIGHT FROM REDUX STORE
-    const { screenHeight, darkmode, snapStart, activateLoader, historyscroll, interactContent, interact, MenuData, pagenum, SignIn, Guest } =
-        useSelector((state: RootStateGlobalReducer) => ({
-            ...state.GlobalReducer,
-        }));
-    const screenHeightReducer = screenHeight;
-    const darkmodeReducer = darkmode;
-    const snapStartReducer = snapStart;
-    const activateLoaderReducer = activateLoader;
-    const historyscrollReducer = historyscroll;
-    const interactContentReducer: any = interactContent;
-    const interactReducer = interact;
-    const MenuDataReducer = MenuData
-    const pagenumReducer = pagenum;
-    const SignInReducer = SignIn;
-    const GuestReducer = Guest;
-
-
 
 
 
@@ -626,45 +903,14 @@ function ProfileGatex({
     const colorReducerdark = colordark;
     const colortypeReducer = colortype;
 
-    ///
-    ///
-    ///
-    /// GET LOGGED USER DATA FROM REDUX STORE
-    interface RootStateReducerImage {
-        UserdataReducer: {
-            image: string;
-            imageThumb: string;
-            id: number;
-            username: string;
-            memeberPageid: number;
-            MemberProfileData: any;
-            reg: number,
-
-            billboardthumb2: string;
-        };
-    }
-    const { username, image, imageThumb, id, memeberPageid, MemberProfileData, reg, billboardthumb2, } =
-        useSelector((state: RootStateReducerImage) => ({
-            ...state.UserdataReducer,
-        }));
 
 
 
     ///switchThemes
 
-    const billboardthumb2Reducer = billboardthumb2;
-
-    const idReducer = id;
-    const memeberPageidReducer = memeberPageid;
-    const usernameReducer = username;
-    const MemberProfileDataReducer = MemberProfileData;
-    const regReducer = reg;
-
-    const [imageReducer, setimageReducer] = useState("");
 
 
-
-    const [imageReducerThumb, setimageReducerThumb] = useState("");
+    // const [imageReducerThumb, setimageReducerThumb] = useState("");
     const [ColorMemberReducer, setColorMemberReducer] = useState("");
 
     const [ShowLoader2, setShowLoader2] = useState(false);
@@ -687,16 +933,16 @@ function ProfileGatex({
 
 
 
-    const Timervv = useRef<ReturnType<typeof setTimeout> | null>(null);
+    const Timervvx = useRef<ReturnType<typeof setTimeout> | null>(null);
 
     const ChangeProfile = () => {
 
 
-        if (Timervv.current) {
-            clearTimeout(Timervv.current);
+        if (Timervvx.current) {
+            clearTimeout(Timervvx.current);
         }
 
-        Timervv.current = setTimeout(() => {
+        Timervvx.current = setTimeout(() => {
             if (memeberPageid === 0) {
                 setimageReducer(image);
                 setimageReducerThumb(imageThumb);
@@ -716,6 +962,36 @@ function ProfileGatex({
 
 
 
+    const ConnectClickedNew = (tyx: any) => {
+        var v = 0;
+        if (memeberPageid === 0) {
+            v = idReducer;
+        } else {
+            v = memeberPageid;
+        }
+
+        ///alert(v);
+        const id = v; // 
+        const encodedId = encodeBase64(id.toString());
+
+
+        const ty = tyx; // Replace reaction Type
+        const encodedIdx = encodeBase64(ty.toString());
+
+
+        // Update the current URL with the scroll position and page number
+        //// updateCurrentURLWithScrollPosition();
+
+        // Navigate to the new URL with the new ID
+        navigate(`/Connections/${encodedId}/${encodeBase64('0')}/${encodeBase64('0')}/${encodedIdx}`);
+        //dispatch(UserInfoUpdateMEMBER(post.sender));
+        ///setScrollReactRouter(0);
+    };
+
+
+
+
+
 
     // Assuming temp is of type any (replace with your specific type)
     const [newPostData, setNewPostData] = useState<any | null>(null);
@@ -731,7 +1007,7 @@ function ProfileGatex({
 
     useEffect(() => {
         ////console.log(postData)
-        ChangeProfile();
+        ChangeProfilex();
     }, [MemberProfileData, colorReducer, imageThumb, image, memeberPageid]);
 
     useEffect(() => {
@@ -747,7 +1023,7 @@ function ProfileGatex({
     }, [memeberPageid]);
 
     useEffect(() => {
-        ChangeProfile();
+        ChangeProfilex();
     }, [image]);
 
     useEffect(() => {
@@ -834,7 +1110,7 @@ function ProfileGatex({
             }
 
             Ticx.current = setTimeout(() => {
-                ///window paperPostScrollRef.current.scrollTop = 0;
+                ///window 
             }, 1500);
 
             Axios.post(`${REACT_APP_SUPERSTARZ_URL}/checkIsLoggedxx`, {
@@ -844,6 +1120,8 @@ function ProfileGatex({
             })
                 .then((response) => {
                     if (response.data.message === "logged in") {
+
+                        paperPostScrollRef.current.scrollTop = 0;
 
                         //alert(IdReactRouterAsInt);
 
@@ -952,8 +1230,6 @@ function ProfileGatex({
     ///CLOSE LOG MODAL
     const [OpenModalFormOnce, setOpenModalFormOnce] = useState<boolean>(false);
 
-    const [RandomFromPostData, setRandomFromPostData] = useState('');
-
 
     useEffect(() => {
         // Check if there's any data in postData
@@ -962,10 +1238,15 @@ function ProfileGatex({
         if (postData1.length > 0) {
             // Generate a random index within the range of the postData array
             const randomIndex = Math.floor(Math.random() * postData1.length);
-            // Get the random post data
             var randomPostDatax = postData1[randomIndex];
+
+            const randomIndex2 = Math.floor(Math.random() * postData1.length);
+            var randomPostDatax2 = postData1[randomIndex2];
+
+
             // Set the random image from the post data to state
             setRandomFromPostData(randomPostDatax.item2);
+            setRandomFromPostData2(randomPostDatax2.item2);
         } else {
             if (postData2.length > 0) {
                 // Generate a random index within the range of the postData array
@@ -973,7 +1254,12 @@ function ProfileGatex({
                 // Get the random post data
                 var randomPostDatas = postData2[randomIndex];
                 // Set the random image from the post data to state
+
+                const randomIndex2 = Math.floor(Math.random() * postData1.length);
+                var randomPostDatax2 = postData1[randomIndex2];
+
                 setRandomFromPostData(randomPostDatas.item2);
+                setRandomFromPostData2(randomPostDatax2.item2);
             } else {
                 if (postData3.length > 0) {
                     // Generate a random index within the range of the postData array
@@ -981,7 +1267,13 @@ function ProfileGatex({
                     // Get the random post data
                     var randomPostDataw = postData3[randomIndex];
                     // Set the random image from the post data to state
+
+                    const randomIndex2 = Math.floor(Math.random() * postData1.length);
+                    var randomPostDatax2 = postData1[randomIndex2];
+
+
                     setRandomFromPostData(randomPostDataw.item2);
+                    setRandomFromPostData2(randomPostDatax2.item2);
                 } else {
                     if (postDataBackToTop.length > 0) {
                         // Generate a random index within the range of the postData array
@@ -990,7 +1282,13 @@ function ProfileGatex({
 
                         var randomPostDataq = postDataBackToTop[randomIndex];
                         // Set the random image from the post data to state
+
+                        const randomIndex2 = Math.floor(Math.random() * postData1.length);
+                        var randomPostDatax2 = postData1[randomIndex2];
+
+
                         setRandomFromPostData(randomPostDataq.item2);
+                        setRandomFromPostData2(randomPostDatax2.item2);
                     }
                 }
             }
@@ -1681,6 +1979,7 @@ function ProfileGatex({
 
 
         Ticx2.current = setTimeout(() => {
+            //pagePostScroll.current.scrollTop = 0;
             paperPostScrollRef.current.scrollTop = 0;
         }, 1500);
 
@@ -1848,16 +2147,43 @@ function ProfileGatex({
 
 
 
+    const containerRef = useRef<HTMLDivElement>(null);
 
+    const handleScroll = () => {
+        const container = containerRef.current;
+        if (container) {
+            const index = Math.round(container.scrollLeft / container.offsetWidth);
+            if (index === 0) {
+                setSliderIndex(1);
+            } else {
+                setSliderIndex(0);
+            }
 
+        }
+    };
+
+    useEffect(() => {
+        const container = containerRef.current;
+        if (container) {
+            container.addEventListener('scroll', handleScroll);
+            return () => {
+                container.removeEventListener('scroll', handleScroll);
+            };
+        }
+    }, []);
 
 
     const click = (event: any) => {
         event.target.value = null;
     };
 
+
+
     const billboardx = (e: any) => {
         if (e.target.files && e.target.files.length > 0) {
+
+            ///setSliderIndex(1);
+
             const FileArray = Array.from(e.target.files).map((file: any) =>
                 URL.createObjectURL(file)
             );
@@ -1869,6 +2195,7 @@ function ProfileGatex({
                 }, 3000);
             } else {
                 settypex("billboard");
+                /// 
                 setprofileimageSource([]);
                 setprofileimageSource((prevImages: any) =>
                     prevImages.concat(FileArray)
@@ -1898,11 +2225,11 @@ function ProfileGatex({
 
 
         if (matchMobile) {
-            setprofileImagethumbLeft(v - v / 0.98);
+            setprofileImagethumbLeft(v - v * 13.58);
             setprofileImagethumbTop(t - t / 1.02);
 
         } else {
-            setprofileImagethumbLeft(v - v / 1);
+            setprofileImagethumbLeft(v - v / 0.94);
             setprofileImagethumbTop(t - t / 1.07);
         }
 
@@ -1999,7 +2326,7 @@ function ProfileGatex({
             if (memeberPageidReducer === 0) {
                 setClikHeader('Feeds')
             } else {
-                setClikHeader(`${MemberProfileData.username}'s Page`)
+                setClikHeader(`${MemberProfileData.username}`)
             }
 
         }, 1500);
@@ -2091,294 +2418,577 @@ function ProfileGatex({
 
 
 
-
-
-                <Billboard
-                    setsnapallow={setsnapallow}
-                    snapallow={snapallow}
-                    minimise={minimise}
-                    sliderIndex={sliderIndex}
-                    setSliderIndex={setSliderIndex}
-                    setshowModalFormMenu={setShowModalFormMenu}
-                    showModalFormMenu={showModalFormMenu}
-                    postData={postData}
-                    setconnectTemplateGo={setconnectTemplateGo}
-                    setDiscussionImage={setDiscussionImage}
-                    setCommentPostid={setCommentPostid}
-                    billdefaultbill={billdefaultbill}
-                    billboardserverswitch={billboardserverswitch}
-                    OpenModalForm={OpenModalForm}
-                    click={click}
-                    billboardx={billboardx}
-                    x={x}
-                />
-                <Grid item md={12} style={{ height: '0px', }}></Grid>
-
-                <Grid
-                    item
-                    xs={12}
-                    style={{ padding: "0px", height: "0px" }}
-                ></Grid>
-                <Grid
-                    item
-                    ref={getSliderWidthRef}
-                    xs={2}
-                    md={1}
-                    style={{ padding: "0px" }}
-                ></Grid>
-                <Grid
-                    item
-                    xs={12}
-                    style={{ padding: "0px", height: "0px" }}
-                ></Grid>
-                <Grid
-                    item
-                    component={Box}
-                    display={{ xs: "none", md: "block" }}
-                    md={2}
-                ></Grid>
-
-                <Grid item xs={5} md={3} style={{ padding: "0px" }}>
-                    {" "}
-                    <Grid
-                        item
-                        xs={12}
-                        style={{
-                            position: "relative",
-                            width: widthProfilePic,
-                            height: "auto",
-                            marginLeft: leftProfilePic,
-                            top: topProfilePic,
-                            zIndex: 3,
-                        }}
-                    >
-                        <Grid
-                            onClick={() => {
-                                if (Added === 1) {
-                                    callDelfav();
-                                } else if (Added === 0) {
-                                    callAddfav();
-                                }
-                            }}
-                            className={ShowBigPlay ? `blinkingxx    ${optionsClass}   ` : `   ${optionsClass}   `}
-                            style={{
-                                zIndex: 2,
-
-
-                                backgroundImage: idReducer === memeberPageidReducer ? `linear-gradient(45deg, ${RandomColor}, ${colorReducer})` :
-                                    `linear-gradient(45deg, ${RandomColor}, ${ColorMemberReducer})`,
-                                left: `${profileImagethumbLeft}px`,
-                                top: `${profileImagethumbTop}px`,
-                                opacity: 0.7,
-                                visibility: showModalFormMenu ? 'hidden' : "visible",
-
-                            }}
-                        >
-                            <Connect
-                                fontOptions={fontOptions}
-                                Added={Added}
-                                setAdded={setAdded}
-                                connect={1}
-                                PostCon={0}
-                                Comment={0}
-                                Reaction={0}
-                                Profile={0}
-                                Mini={0}
-                            />{" "}
-                        </Grid>
-                        <img
-                            ref={profileImagethumb}
-                            onLoad={calculateconnectPosition}
-                            onClick={() => {
-
-                                if (idReducer === GuestReducer) {
-                                    dispatch(UpdateSign(true));
-                                } else {
-                                    BiographyClickNew()
-                                }
-
-
-                            }}
-                            className={
-                                darkmodeReducer
-                                    ? `image-gray-on-click`
-                                    : `image-gray-on-click`
-                            }
-                            style={{
-                                cursor: "pointer",
-                                position: "absolute",
-                                zIndex: 1,
-                                objectFit: "contain",
-                                width: "100%",
-                                left: showModalFormMenu ? '30vw' : "0px",
-                                top: showModalFormMenu ? '-30vh' : "0px",
-                                borderRadius: "50%",
-                                margin: "auto",
-                                filter: "blur(4px)",
-                                visibility: matchMobile && showModalFormMenu ? 'hidden' : 'visible',
-                            }}
-
-
-
-                            src={imageReducerThumb ? `${REACT_APP_CLOUNDFRONT}${imageReducerThumb}` :
-
-                                `${REACT_APP_CLOUNDFRONT}${imageThumb}`}
-                            alt="Profile pic"
-                        />
-
-                        <img
-                            ref={profileImageR}
-                            onClick={() => {
-
-                                if (idReducer === GuestReducer) {
-                                    dispatch(UpdateSign(true));
-                                } else {
-                                    BiographyClickNew()
-                                }
-
-
-                            }}
-                            className={
-                                darkmodeReducer
-                                    ? `turprofileLight image-gray-on-click`
-                                    : ` turprofileDark image-gray-on-click`
-                            }
-                            style={{
-                                cursor: "pointer",
-                                position: "absolute",
-
-                                zIndex: 1,
-                                objectFit: "contain",
-                                width: "100%",
-                                borderRadius: "50%",
-                                left: showModalFormMenu ? '30vw' : "0px",
-                                top: showModalFormMenu ? '-30vh' : "0px",
-                                margin: "auto",
-                                visibility: matchMobile && showModalFormMenu ? 'hidden' : 'visible',
-                            }}
-
-
-
-                            src={imageReducer ? `${REACT_APP_CLOUNDFRONT}${imageReducer}` :
-
-                                ``}
-
-
-                            alt={imageReducer ? 'Profile pic' : ''}
-                        />
-                    </Grid>
-                </Grid>
-
-                <Grid
-                    item
-                    xs={7}
-                    md={5}
-                    style={{
-                        position: "relative",
-                        height: "20vh",
-                        paddingLeft: matchPc
-                            ? "25px"
-                            : "24px",
-                        marginTop: "-0.5vh",
-                        zIndex: 1,
-
-
-                    }}
-                >
-
-
-                    <OptionsSlider
-                        ScrollIndexPusher={ScrollIndexPusher}
-                        PostPagenumPusher={PostPagenumPusher}
-
-                        setIdReactRouterAsInt={setIdReactRouterAsInt}
-                        setScrollReactRouter={setScrollReactRouter}
-
-
-                        postDatax={ActualpostDataAll}
-                        RandomColor={RandomColor}
-                        setUploadGPT={setUploadGPT}
-                        selectedImage={selectedImage}
-                        setselectedImage={setselectedImage}
-                        setsuperSettings={setsuperSettings}
-                        typeUpload={0}
-                        showModalUpload={showModalUpload}
-                        OpenUploadModal={OpenUploadModal}
-                        sethaltedTop={blank}
-                        typeTop={false}
-                        getSliderWidth={getSliderWidth}
-                    />
-
-
-
-
-                </Grid>
-
-
-
-
-
-
-
-                <Grid item className="zuperxyinfotext" xs={12} style={{
+                <Grid item xs={12} style={{
                     padding: '0px',
-                    top: matchTablet || matchMobile ? "1vh" : '2vh',
+                    display: matchMobile ? 'block' : 'block',
                     position: 'relative',
-                    paddingBottom: miniProfile ? matchMobile ? '1vh' : '5vh'
-                        : matchMobile ? '5vh' : '15vh',
-                    textAlign: 'left',
-                    color: '#ffffff'
+                    height: matchMobile ? '4vh' : '10vh',
+                    scrollSnapAlign: snapallow ? 'none' : "start",
+
                 }}>
 
+                </Grid>
 
 
 
-                    <Grid ref={pagePostScroll} item className="zuperxyinfotext" xs={12} style={{
+
+
+                <Grid item ref={pagePostScroll} className="zuperxyinfotext" xs={12} style={{
+                    padding: '0px',
+                    top: '0vh',
+                    marginTop: matchMobile ? '6vh' : '0vh',
+                    position: 'relative',
+                    paddingBottom: miniProfile ? matchMobile ? '1vh' : '5vh' : matchMobile ? '5vh' : '15vh',
+                    textAlign: 'left',
+                    color: '#ffffff',
+                    scrollSnapAlign: snapallow ? 'none' : "start",
+
+                }}>
+
+                    <Grid item className="zuperxyinfotext" xs={12} style={{
                         padding: '0px',
-                        top: matchMobile ? "10vh" : '17vh',
+                        top: matchMobile ? "3vh" : '7vh',
                         fontFamily: "Arial, Helvetica, sans-serif",
                         fontWeight: 'bold',
                         position: 'relative',
                         zIndex: 1,
                         fontSize: matchMobile ? "3.6vh" : "4vh",
-                        color: '#ffffff'
+                        color: '#ffffff',
+                        height: '0px'
                     }}>
-
-
                         <span style={{ padding: '0px', marginLeft: matchMobile ? "10vw" : '20vw' }}>
-                            <LanguageIcon />
-                            {ClikHeader}
-                        </span>
 
+
+                            {memeberPageidReducer === 0 ? null :
+                                memeberPageidReducer === idReducer && ExtendBill ?
+                                    <>
+
+                                        <label htmlFor="billboardxx">
+                                            <AddPhotoAlternateIcon
+                                                style={{
+                                                    fontSize: matchMobile ? '3rem' : '5rem', cursor: 'pointer',
+                                                    marginTop: '2vh'
+
+
+                                                }}
+                                                className="zuperkinginfo"
+                                            />{" "}
+                                        </label>
+                                    </> :
+                                    ClikHeader}
+
+
+
+                        </span>
+                    </Grid>
+
+                    <>
+                        <input
+                            onClick={click}
+                            onInput={() => {
+                                //setShowBillboard(false);
+                            }}
+                            onChange={billboardx}
+                            type="file"
+                            name="superImages"
+                            accept="image/*"
+                            multiple
+                            id="billboardxx"
+                            style={{ visibility: "hidden" }}
+                        />
+                    </>
+
+
+                    <Grid item className="zuperxyinfotext" xs={6} style={{
+                        padding: '0px',
+                        top: matchMobile ? "7.5vh" : '12vh',
+                        fontFamily: "Arial, Helvetica, sans-serif",
+                        fontWeight: 'bold',
+                        position: 'relative',
+                        zIndex: 1,
+                        fontSize: matchMobile ? "0.9rem" : "2.5vh",
+                        color: '#ffffff',
+                        height: '0px',
+                        display: memeberPageidReducer === 0 ? 'none' : 'block'
+                    }}>
+                        <span style={{ padding: '0px', marginLeft: matchMobile ? "3vw" : '20vw', height: '0px', display: ExtendBill ? 'none' : 'block' }}>
+
+
+
+                            <span style={{ padding: '0px', marginLeft: matchMobile ? "7vw" : '0px' }}>
+                                {quoteReducer ? quoteReducer : ''}
+                            </span>
+
+
+                        </span>
+                    </Grid>
+
+
+                    <Grid item className="zuperxyinfotext" xs={6} style={{
+                        padding: '0px',
+                        top: matchMobile ? "7.5vh" : '12vh',
+                        fontFamily: "Arial, Helvetica, sans-serif",
+                        fontWeight: 'bold',
+                        position: 'relative',
+                        zIndex: 1,
+                        fontSize: matchMobile ? "0.9rem" : "2.5vh",
+                        color: '#ffffff',
+                        height: '0px',
+                        display: memeberPageidReducer === 0 ? 'none' : 'block'
+                    }}>
+                        <span style={{ padding: '0px', marginLeft: matchMobile ? "3vw" : '20vw', height: '0px', }}>
+
+
+
+
+                            <Grid item className="buttonpad buttonshake " xs={6} sm={2}
+
+                                style={{
+                                    position: "relative",
+                                    height: '0px',
+                                    top: matchMobile ? "-3.5vh" : '-1.5vh',
+                                    left: matchMobile ? "1vw" : '13vw',
+                                    zIndex: 4,
+                                    display: ExtendBill ? 'none' : 'block'
+                                }}
+                            >
+                                <Button
+                                    onClick={() => {
+                                        ConnectClickedNew(1);
+                                    }}
+
+                                    className="zuperxyinfotext"
+                                    style={{
+
+                                        fontSize: matchMobile ? '0.9rem' : '1rem',
+                                        transform: 'scale(1)',
+                                        padding: matchMobile ? '10px' : "21.5px",
+                                        borderRadius: "52px",
+                                        MozBoxShadow: MozBoxShadowReducerLogin,
+                                        WebkitBoxShadow: WebkitBoxShadowReducerLogin,
+                                        boxShadow: boxShadowReducerLogin,
+                                        color: '#ffffff'
+                                    }}
+                                    fullWidth={true}
+                                    variant="outlined"
+                                    size="large"
+                                    color="primary"
+                                >
+                                    Favs {favoritesReducer === 0 ? "" : favoritesReducer}
+                                </Button>
+                            </Grid>
+
+                        </span>
+                    </Grid>
+
+
+
+
+                    <Grid item className="zuperxyinfotext" xs={6} style={{
+                        padding: '0px',
+                        top: matchMobile ? "7.5vh" : '12vh',
+                        fontFamily: "Arial, Helvetica, sans-serif",
+                        fontWeight: 'bold',
+                        position: 'relative',
+                        zIndex: 1,
+                        fontSize: matchMobile ? "0.9rem" : "2.5vh",
+                        color: '#ffffff',
+                        height: '0px',
+                        display: memeberPageidReducer === 0 ? 'none' : 'block'
+                    }}>
+                        <span style={{ padding: '0px', marginLeft: matchMobile ? "3vw" : '20vw', height: '0px', }}>
+
+
+
+
+                            <Grid item className="buttonpad buttonshake " xs={7} sm={2}
+
+                                style={{
+                                    position: "relative",
+                                    height: '0px',
+                                    top: matchMobile ? "-3.5vh" : '-1.5vh',
+                                    left: matchMobile ? "28vw" : '28vw',
+                                    zIndex: 5,
+                                    display: ExtendBill ? 'none' : 'block'
+                                }}
+                            >
+                                <Button
+                                    onClick={() => {
+                                        ConnectClickedNew(2);
+                                    }}
+                                    className="zuperxyinfotext"
+                                    style={{
+
+                                        fontSize: matchMobile ? '0.9rem' : '1rem',
+                                        padding: matchMobile ? '10px' : "21.5px",
+                                        borderRadius: "52px",
+                                        MozBoxShadow: MozBoxShadowReducerLogin,
+                                        WebkitBoxShadow: WebkitBoxShadowReducerLogin,
+                                        boxShadow: boxShadowReducerLogin,
+                                        color: '#ffffff'
+                                    }}
+                                    fullWidth={true}
+                                    variant="outlined"
+                                    size="large"
+                                    color="primary"
+                                >
+                                    Fans {fansReducer === 0 ? "" : fansReducer}
+                                </Button>
+                            </Grid>
+
+                        </span>
+                    </Grid>
+
+
+
+                    <Grid item xs={4} md={2} style={{ padding: "0px", display: memeberPageid === 0 ? 'none' : 'block', height: '0px', }}>
+                        {" "}
+                        <Grid
+                            item
+                            xs={12}
+                            style={{
+                                position: "relative",
+                                width: widthProfilePic,
+                                height: "auto",
+                                top: matchMobile ? ShowImageSlider ? '0.8vh' : "11vh" :
+                                    ShowImageSlider ? '4vh' : '4vh',
+
+                                marginLeft: matchMobile ? "65vw" : '70vw',
+                                zIndex: 3,
+                                display: ExtendBill ? 'none' : 'block'
+
+
+                            }}
+                        >
+                            <Grid
+                                onClick={() => {
+                                    if (Added === 1) {
+                                        callDelfav();
+                                    } else if (Added === 0) {
+                                        callAddfav();
+                                    }
+                                }}
+                                className={ShowBigPlay ? `blinkingxx    ${optionsClass}   ` : `   ${optionsClass}   `}
+                                style={{
+                                    zIndex: 2,
+
+
+                                    backgroundImage: idReducer === memeberPageidReducer ? `linear-gradient(45deg, ${RandomColor}, ${colorReducer})` :
+                                        `linear-gradient(45deg, ${RandomColor}, ${ColorMemberReducer})`,
+                                    left: matchMobile ? `-5vw` : '0px',
+                                    top: matchMobile ? '0px' : `0px`,
+                                    opacity: 0.7,
+                                    visibility: showModalFormMenu ? 'hidden' : "visible",
+
+
+                                }}
+                            >
+                                <Connect
+                                    fontOptions={fontOptions}
+                                    Added={Added}
+                                    setAdded={setAdded}
+                                    connect={1}
+                                    PostCon={0}
+                                    Comment={0}
+                                    Reaction={0}
+                                    Profile={0}
+                                    Mini={0}
+                                />{" "}
+                            </Grid>
+                            <img
+                                ref={profileImagethumb}
+                                onLoad={calculateconnectPosition}
+                                onClick={() => {
+
+                                    if (idReducer === GuestReducer) {
+                                        dispatch(UpdateSign(true));
+                                    } else {
+                                        BiographyClickNew()
+                                    }
+
+
+                                }}
+                                className={
+                                    darkmodeReducer
+                                        ? `image-gray-on-click`
+                                        : `image-gray-on-click`
+                                }
+                                style={{
+                                    cursor: "pointer",
+                                    position: "absolute",
+                                    zIndex: 1,
+                                    objectFit: "contain",
+                                    width: "100%",
+                                    left: showModalFormMenu ? '30vw' : "0px",
+                                    top: showModalFormMenu ? '-30vh' : "0px",
+                                    borderRadius: "50%",
+                                    margin: "auto",
+                                    filter: "blur(4px)",
+                                    visibility: matchMobile && showModalFormMenu ? 'hidden' : 'visible',
+
+                                }}
+
+
+
+                                src={imageReducerThumb ? `${REACT_APP_CLOUNDFRONT}${imageReducerThumb}` :
+
+                                    `${REACT_APP_CLOUNDFRONT}${imageThumb}`}
+                                alt="Profile pic"
+                            />
+
+                            <img
+                                ref={profileImageR}
+                                onClick={() => {
+
+                                    if (idReducer === GuestReducer) {
+                                        dispatch(UpdateSign(true));
+                                    } else {
+                                        BiographyClickNew()
+                                    }
+
+
+                                }}
+                                className={
+                                    darkmodeReducer
+                                        ? `turprofileLight image-gray-on-click`
+                                        : ` turprofileDark image-gray-on-click`
+                                }
+                                style={{
+                                    cursor: "pointer",
+                                    position: "absolute",
+
+                                    zIndex: 1,
+                                    objectFit: "contain",
+                                    width: "100%",
+                                    borderRadius: "50%",
+                                    left: showModalFormMenu ? '30vw' : "0px",
+                                    top: showModalFormMenu ? '-30vh' : "0px",
+                                    margin: "auto",
+                                    visibility: matchMobile && showModalFormMenu ? 'hidden' : 'visible',
+                                    display: memeberPageid === 0 ? 'none' : 'block'
+                                }}
+
+
+
+                                src={imageReducer ? `${REACT_APP_CLOUNDFRONT}${imageReducer}` :
+
+                                    ``}
+
+
+                                alt={imageReducer ? 'Profile pic' : ''}
+                            />
+                        </Grid>
+                    </Grid>
+
+                    {memeberPageid === 0 ?
+
+                        //////////////////////////////////////// BILLBOARD FEEDS  BILLBOARD FEEDS  BILLBOARD FEEDS ////////////////////////////////
+                        <Grid item xs={12} style={{
+                            padding: '0px',
+                            display: 'flex', // Use flexbox to align items horizontally
+                            overflowX: 'scroll', // Enable horizontal scrolling
+                            scrollSnapType: 'x mandatory', // Enable snap scrolling
+                            scrollBehavior: 'smooth', // Smooth scrolling
+                            width: '100vw', // Full viewport width
+                        }} ref={containerRef}>
+                            {imageSources.map((image, index) => (
+                                <div key={index} style={{ flex: '0 0 90%', scrollSnapAlign: 'start', position: 'relative' }}>
+                                    <animated.img
+                                        onClick={() => {
+                                            setExtendBill(!ExtendBill);
+                                        }}
+                                        src={index === 0 ? RandomFromPostData ? image.src :
+
+                                            `${REACT_APP_CLOUNDFRONT}mitchell-orr---LyFIjXoFY-unsplash.jpg` : image.src}
+                                        alt={image.text}
+                                        style={{
+                                            cursor: "pointer",
+                                            boxShadow:
+                                                darkmodeReducer ? "0 0 1px #555555" : "0 0 0.1px #222222",
+                                            width: "100%", // Full width of the container
+                                            padding: "0px",
+                                            objectFit: "cover",
+                                            borderRadius: "0px",
+                                            filter: 'brightness(91%)',
+                                            opacity: 1,
+                                            transition: "transform 0.1s",
+                                            ...heightAnimation,
+                                        }}
+                                    />
+                                    <div style={{
+                                        position: 'absolute',
+                                        bottom: '10px',
+                                        left: ExtendBill ? '29%' : matchMobile ? '10px' : '10vw',
+                                        color: 'white',
+                                        backgroundColor: ExtendBill ? '' : 'rgba(0, 0, 0, 0.5)',
+                                        padding: '5px 10px',
+                                        borderRadius: '5px',
+                                        fontWeight: ExtendBill ? 'bold' : 'normal',
+                                        fontSize: ExtendBill ? matchMobile ? '1.4rem' : '2rem' : matchMobile ? '' : '1.4rem',
+                                        pointerEvents: 'none', // Ensure the text does not interfere with the click event
+                                        fontFamily: "Arial, Helvetica, sans-serif",
+
+                                    }}>
+                                        {image.text}
+                                    </div>
+                                </div>
+                            ))}
+                        </Grid>
+
+                        //////////////////////////////////////// BILLBOARD FEEDS  BILLBOARD FEEDS  BILLBOARD FEEDS ////////////////////////////////
+
+                        :
+
+
+
+                        //////////////////////////////////////// BILLBOARD PROFILE  BILLBOARD PROFILE  BILLBOARD PROFILE ////////////////////////////////
+
+
+                        < Grid item xs={12} style={{
+                            padding: '0px',
+                            display: 'flex', // Use flexbox to align items horizontally
+                            overflowX: 'scroll', // Enable horizontal scrolling
+                            scrollSnapType: 'x mandatory', // Enable snap scrolling
+                            scrollBehavior: 'smooth', // Smooth scrolling
+                            width: '100vw', // Full viewport width
+                        }} ref={containerRef}>
+                            <div style={{ flex: '0 0 90%', scrollSnapAlign: 'start' }}>
+                                <animated.img
+                                    onClick={() => {
+                                        setExtendBill(!ExtendBill);
+                                    }}
+                                    src={
+                                        RandomFromPostData
+                                            ? memeberPageidReducer === 0
+                                                ? `${REACT_APP_CLOUNDFRONT}${RandomFromPostData}`
+                                                : `${REACT_APP_CLOUNDFRONT}${billboardImages[1]}`
+                                            : `${REACT_APP_CLOUNDFRONT}${billboardthumb2Reducer}`
+                                    }
+                                    alt="Discover"
+                                    style={{
+                                        cursor: "pointer",
+                                        boxShadow: darkmodeReducer ? "0 0 1px #555555" : "0 0 0.1px #222222",
+                                        width: "100%", // Full width of the container
+                                        padding: "0px",
+                                        objectFit: "cover",
+                                        borderRadius: "0px",
+                                        filter: 'brightness(91%)',
+                                        opacity: 1,
+                                        transition: "transform 0.1s",
+                                        ...heightAnimation,
+                                    }}
+                                />
+                            </div>
+                            <div style={{ flex: '0 0 90%', scrollSnapAlign: 'start' }}>
+                                <animated.img
+                                    onClick={() => {
+                                        setExtendBill(!ExtendBill);
+                                    }}
+                                    src={
+                                        RandomFromPostData2
+                                            ? memeberPageidReducer === 0
+                                                ? `${REACT_APP_CLOUNDFRONT}${RandomFromPostData2}`
+                                                : `${REACT_APP_CLOUNDFRONT}${billboardImages[0]}`
+                                            : `${REACT_APP_CLOUNDFRONT}${billboardthumb1Reducer}`
+                                    }
+                                    alt="Discover"
+                                    style={{
+                                        cursor: "pointer",
+                                        boxShadow: darkmodeReducer ? "0 0 1px #555555" : "0 0 0.1px #222222",
+                                        width: "100%", // Full width of the container
+                                        padding: "0px",
+                                        objectFit: "cover",
+                                        borderRadius: "0px",
+                                        filter: 'brightness(91%)',
+                                        opacity: 1,
+                                        transition: "transform 0.1s",
+                                        ...heightAnimation,
+                                    }}
+                                />
+                            </div>
+                        </Grid>
+
+
+                        /////////////////////////////////////// BILLBOARD PROFILE  BILLBOARD PROFILE  BILLBOARD PROFILE ////////////////////////////////
+
+
+
+
+                    }
+
+                    <Grid xs={12}
+                        style={{
+                            position: "relative",
+                            padding: '0px',
+                            height: '6vh',
+                            display: ShowImageSlider ? 'block' : 'none'
+                        }} item>
 
                     </Grid>
 
-                    <img
+                    {ShowImageSlider ? <ImageSlider RandomColor={RandomColor} /> : null}
 
 
 
-                        src={RandomFromPostData ? `${REACT_APP_CLOUNDFRONT}${RandomFromPostData}` :
-
-                            `${REACT_APP_CLOUNDFRONT}${billboardthumb2Reducer}`}
-
-
-                        alt="Discover"
+                    <Grid xs={12}
                         style={{
-                            cursor: "pointer",
-                            boxShadow: darkmodeReducer
-                                ? "0 0 1px #555555"
-                                : "0 0 0.1px #222222",
-                            width: "100%",
-                            scrollSnapAlign: snapallow ? 'none' : "start",
-                            height: matchMobile ? '18vh' : "30vh",
-                            padding: "0px",
-                            objectFit: "cover",
-                            borderRadius: "0px",
-                            filter: 'brightness(91%)',
-                            opacity: 1,
+                            position: "absolute",
+                            padding: '0px',
+                            width: '100%',
                             transition: "transform 0.1s",
-                        }}
-                    />
+                            textAlign: 'center',
+                            marginTop: '3vh'
+
+
+                        }} item>
+
+                        <MoreHorizIcon
+
+
+
+                            onMouseEnter={(e: any) => {
+                                setZoomx(true);
+
+                            }}
+                            onMouseLeave={(e: any) => {
+                                setZoomx(false);
+
+                            }}
+
+
+                            className={
+                                darkmodeReducer
+                                    ? " dontallowhighlighting zuperkingIcon  zuperkingIconPostDark"
+                                    : "  dontallowhighlighting zuperkingIcon  zuperkingIconPostLight"
+                            }
+                            onClick={() => {
+                                setShowImageSlider(!ShowImageSlider);
+                                if (Timervva.current) {
+                                    clearTimeout(Timervva.current);
+                                }
+
+                                Timervva.current = setTimeout(() => {
+                                    setZoomx(false);
+                                }, 1000)
+
+
+                            }}
+                            style={{
+                                position: "relative",
+
+                                transform: matchMobile ? Zoomx ? "scale(3)" : "scale(1.5)" : Zoomx ? "scale(3)" : "scale(1.3)",
+                                transition: "transform 0.1s",
+                                cursor: 'pointer',
+                                zIndex: 1,
+                                verticalAlign: "middle",
+                                fontSize: '2rem',
+                                opacity: 1,
+
+                                color: darkmodeReducer ? "#ffffff" : "#000000",
+
+                            }}
+                        />
+                    </Grid>
 
                 </Grid>
 
@@ -2545,7 +3155,7 @@ function ProfileGatex({
                                 setx={setx}
                                 OpenModalForm={OpenModalForm}
                                 postData={postData1}
-                                paperPostScrollRef={paperPostScrollRef}
+                                paperPostScrollRef={pagePostScroll}
                             />
 
                         </Grid>

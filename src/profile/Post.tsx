@@ -231,7 +231,7 @@ function Postx({
   const profileImageref = useRef<any>();
 
 
-  const divBox = useRef<any>();
+  const divBox = useRef<HTMLDivElement>(null);
 
 
   var allow4dev = "";
@@ -601,7 +601,7 @@ function Postx({
 
     if (minimise) {
 
-      setsnapallow(true)
+      ///setsnapallow(true)
     }
 
     else {
@@ -610,7 +610,7 @@ function Postx({
       }
 
       wa2.current = setTimeout(() => {
-        setsnapallow(false);
+        ///setsnapallow(false);
       }, 2500)
 
 
@@ -2041,7 +2041,7 @@ function Postx({
                         width: "100%",
                         zIndex: 0,
                         height: '1px',
-                        marginTop: matchMobile ? '-26%' : '-4%',
+                        marginTop: matchMobile ? '-24%' : '-4%',
                         position: 'absolute',
                         scrollSnapAlign: snapallow ? 'none' : 'start',
                         backgroundColor: '',
@@ -2655,7 +2655,7 @@ function Postx({
           width: "100%",
           zIndex: 0,
           height: '1px',
-          marginTop: matchMobile ? '26vh' : '10%',
+          marginTop: matchMobile ? '12vh' : '10%',
           position: 'absolute',
           scrollSnapAlign: snapallow ? 'none' : 'end',
           backgroundColor: '',

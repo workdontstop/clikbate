@@ -12,6 +12,10 @@ import PlayCircleFilledWhiteIcon from '@material-ui/icons/PlayCircleFilledWhite'
 
 import { UpdateInteract, UpdateAlertReducer } from ".././GlobalActions";
 
+import AudiotrackIcon from '@material-ui/icons/Audiotrack';
+
+import ControlPointIcon from '@material-ui/icons/ControlPoint';
+
 
 import {
   Paper,
@@ -164,6 +168,10 @@ function Profilex({
   const lastItemElement = useRef<any>();
 
 
+  const [Zoom1, setZoom1] = useState(false);
+
+
+
 
 
 
@@ -279,7 +287,7 @@ function Profilex({
 
 
                   if (postData.length === sqlQUERYlIMIT) {
-                    setShowBar(true);
+                    /// setShowBar(true);
 
 
                     if (sTimer6.current) {
@@ -1218,6 +1226,41 @@ function Profilex({
 
 
 
+
+
+  function hexToRgb(hex: any) {
+    hex = hex.replace('#', '');
+    var bigint = parseInt(hex, 16);
+    var r = (bigint >> 16) & 255;
+    var g = (bigint >> 8) & 255;
+    var b = bigint & 255;
+    return [r, g, b];
+  }
+
+  function rgbToHex(r: any, g: any, b: any) {
+    return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1).toUpperCase();
+  }
+
+  function blendColors(color1: any, color2: any) {
+    var rgb1 = hexToRgb(color1);
+    var rgb2 = hexToRgb(color2);
+    var blendedRgb = [
+      Math.round((rgb1[0] + rgb2[0]) / 2),
+      Math.round((rgb1[1] + rgb2[1]) / 2),
+      Math.round((rgb1[2] + rgb2[2]) / 2)
+    ];
+    return rgbToHex(blendedRgb[0], blendedRgb[1], blendedRgb[2]);
+  }
+
+
+
+
+  var color1 = RandomColor;
+  var color2 = colorReducer;
+  var blendedColor = blendColors(color1, color2);
+
+
+
   const TopRef = useRef<any>();
 
 
@@ -1286,15 +1329,18 @@ function Profilex({
             paddingLeft: matchPc ? "0vw" : '0vw',
             paddingRight: matchPc ? "0vw" : '0vw',
             height: "auto",
-            marginTop: matchMobile ? minimise ? '-8.5vh' : '18vh' :
-              minimise ? '-16.3vh' : '16vh',
+            marginTop: matchMobile ?
+              minimise ? '1.4vh' : '22vh' :
+
+              minimise ? '-6.3vh' : '10vh',
 
             marginLeft: miniProfile && matchPc ? '1.5vw' : '0px',
           }}
         >
           <Grid
             item
-            className={darkmodeReducer ? 'post-background-darkx' : 'post-background-lightx'}
+            className=''
+            ///darkmodeReducer ? 'post-background-darkx' : 'post-background-lightx'}
             xs={12}
             style={{
 
@@ -1507,7 +1553,6 @@ function Profilex({
 
 
 
-
                 </div>
               ))}
             </Masonry>
@@ -1516,60 +1561,75 @@ function Profilex({
 
 
 
-
-
-
-
-
-
-
-          <div ref={
-            setuptype === 1 ? lastItemElement : null
-
-          }
-
+          <Grid
+            item
+            xs={12}
             style={{
-              position: setuptype === 1 ? 'relative' : 'absolute',
-              backgroundColor: '',
-              height: '0vh',
-              marginTop: matchMobile ? '22vh' : '28vh',
-              visibility:
-                setuptype === 1 ?
-                  'visible' : 'hidden',
+              padding: '0px', margin: 'auto', textAlign: 'center',
+              marginTop: matchMobile ? minimise ? '2vh' : '-15vh' : '5vh'
             }}
-          >  </div>
+          >
+            <ControlPointIcon
+
+              onClick={(e: any) => {
 
 
-          <div
-            className="blinken"
+                setminiProfile(false);
+                callPagination();
+                if (sTimer3.current) {
+                  clearTimeout(sTimer3.current);
+                }
+                ///paperPostScrollRef.current.scrollTop = 20;
+
+              }}
+
+
+              onMouseEnter={(e) => {
+                setZoom1(true);
+              }}
+              onMouseLeave={(e) => {
+                setZoom1(false);
+              }}
+              style={{
+                cursor: 'pointer',
+                transition: "transform 0.1s",
+                transform: Zoom1 ? "scale(1.5)" : "scale(1)",
+                fontSize: matchMobile ? '3rem' : '4rem', position: 'relative', color: blendedColor,
+                visibility: postData.length > 0 ? postData.length === sqlQUERYlIMIT ? 'visible' : 'hidden' : 'hidden'
+              }} />
+
+          </Grid>
+
+
+
+          <Grid
+            item
+            xs={12}
             style={{
-
-              position: setuptype === 1 ? 'relative' : "absolute",
-              height: '1vh',
-              opacity: '0.8',
-              marginTop: matchMobile ? '-1vh' : '-25vh',
-              margin: 'auto',
-              width: matchMobile ? '60%' : '40%',
-              visibility:
-                setuptype === 1 ?
-                  ShowBar ? 'visible' : 'hidden' : 'hidden',
-
-              backgroundImage: `linear-gradient(45deg, ${RandomColor}, ${colorReducer})`,
+              padding: '0px', margin: 'auto', textAlign: 'center',
+              marginTop: matchMobile ? '20vh' : '25vh',
+              scrollSnapAlign: 'end',
+              visibility: postData.length > 0 ? postData.length === sqlQUERYlIMIT ? 'visible' : 'hidden' : 'hidden'
             }}
-          >  </div>
+          >
 
 
-          <div
+          </Grid>
 
-            style={{
-              position: setuptype === 1 ? 'relative' : 'absolute',
-              scrollSnapAlign: minimise ? 'none' : 'end',
-              backgroundColor: '',
-              height: '0vh',
-              marginTop: matchMobile ? '20vh' : '9vh',
 
-            }}
-          >  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         </Grid>
 

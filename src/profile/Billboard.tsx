@@ -472,7 +472,7 @@ function Billboardx({
     <>
       <>
         <Grid item md={12} style={{ height: '0px', }}></Grid>
-        <Grid container className="dontallowhighlighting" style={{}}>
+        <Grid container className="dontallowhighlighting" style={{ display: memeberPageid === 0 ? 'none' : 'block' }}>
 
 
           {/*///////////////////////////////////////////////////////////////////////////BACKPAD BILLBOARD LIGHTINING/DARKEN*/}

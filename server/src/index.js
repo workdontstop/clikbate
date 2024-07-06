@@ -52,7 +52,7 @@ if (process.env.APP_STATE === "dev") {
     var corsOptions = {
         ///origin: "http://192.168.0.39:3000",
         origin: [
-            "http://192.168.0.20:3000",
+            "http://192.168.0.39:3000",
             /////"http://localhost:3000", // Add your front-end origin
             "https://oaidalleapiprodscus.blob.core.windows.net", // Add your blob storage origin
         ],
@@ -89,7 +89,7 @@ app.use("/images", (req, res, next) => {
     res.set("Access-Control-Allow-Origin", [
         "https://clikbate.com",
         "https://www.clikbate.com",
-        "http://192.168.0.13:3000",
+        "http://192.168.0.39:3000",
     ]);
     res.set("Cache-Control", "public, max-age=0");
     next();

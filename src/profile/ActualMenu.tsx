@@ -19,6 +19,8 @@ import { useSpring, config } from "react-spring";
 import SearchIcon from '@material-ui/icons/Search';
 import PersonIcon from '@material-ui/icons/Person';
 
+import MenuIcon from '@material-ui/icons/Menu';
+
 import AdjustIcon from '@material-ui/icons/Adjust';
 
 import FaceIcon from '@material-ui/icons/Face';
@@ -1019,6 +1021,7 @@ function ActualMenux({ showModalFormMenu,
                     {i === 3 ?
                       <span>
                         <HorizontalSplitIcon
+
                           className={
                             darkmodeReducer
                               ? "make-small-icons-clickable-darkab dontallowhighlighting zuperkingIcon "

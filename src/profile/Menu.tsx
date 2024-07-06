@@ -18,7 +18,7 @@ import { UpdateOptionsTop, SnapToggleAction } from ".././GlobalActions";
 import ZoomOutIcon from "@mui/icons-material/ZoomOut";
 import BlurCircularIcon from '@material-ui/icons/BlurCircular';
 import SubjectIcon from '@material-ui/icons/Subject';
-
+import LanguageIcon from '@material-ui/icons/Language';
 import { UpdateSign } from "../GlobalActions";
 
 import { useNavigate } from 'react-router-dom';

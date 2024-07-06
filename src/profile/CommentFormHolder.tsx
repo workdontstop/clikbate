@@ -624,6 +624,7 @@ function CommentFormHolderx({
           ? `fan_chronological`
           : `reaction_chronological`;
 
+    /// alert(CommentPostid);
 
     var newval: any =
       connectTemplateGo === 1
@@ -652,6 +653,7 @@ function CommentFormHolderx({
 
           if (postdataRep.length > 0) {
             callPaginationReaction(postdataRep, 0);
+
           }
 
           ///setshowProfiileData(true);

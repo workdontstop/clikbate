@@ -356,7 +356,9 @@ function ProfileOutter({ CallLoggedProfile }: any) {
   const paperPostScrollRef = useRef<any>(null);
   const [minimise, setminimise] = useState(false);
 
-  const [snapallow, setsnapallow] = useState(false);
+
+  ////true stops snap
+  const [snapallow, setsnapallow] = useState(true);
 
 
 
@@ -432,7 +434,7 @@ function ProfileOutter({ CallLoggedProfile }: any) {
 
 
 
-  const [sliderIndex, setSliderIndex] = useState(0);
+  const [sliderIndex, setSliderIndex] = useState(1);
   var billdefaultbill =
     "https://superstarz-data-tank.s3.eu-west-2.amazonaws.com/fc284f4924c7405bb44ab8e2c3f05891";///not used
   const [profileimageSource, setprofileimageSource] = useState<any>([]);
@@ -441,6 +443,10 @@ function ProfileOutter({ CallLoggedProfile }: any) {
     useState<boolean>(false);
   const [typex, settypex] = useState<any>(null);
 
+
+
+
+  const [ShowImageSlider, setShowImageSlider] = useState<boolean>(false);
 
 
 
@@ -987,6 +993,8 @@ function ProfileOutter({ CallLoggedProfile }: any) {
 
 
                           <ProfileGate
+                            setShowImageSlider={setShowImageSlider}
+                            ShowImageSlider={ShowImageSlider}
                             setUploadGPT={setUploadGPT}
 
 
