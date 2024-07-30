@@ -96,7 +96,8 @@ function ProfileSetupx({
     setshowLogButtons,
 
     snapallow,
-    setsnapallow
+    setsnapallow,
+    FeedType
 
 
 
@@ -336,6 +337,7 @@ function ProfileSetupx({
                     position: "relative", zIndex: 1, padding: "0px"
                 }}>
                     <Profile
+                        FeedType={FeedType}
                         setsnapallow={setsnapallow}
                         snapallow={snapallow}
 

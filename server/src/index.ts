@@ -1,13 +1,19 @@
 const util = require("util");
 const mysql = require("mysql");
+
 const fs = require("fs");
 const sharp = require("sharp");
 const unlinkFile = util.promisify(fs.unlink);
 const https = require("https");
+const FormData = require("form-data");
 
 const fetch = require("node-fetch");
 
+import axios from "axios";
+
 import dotenv from "dotenv";
+import { TextToSpeechClient } from "@google-cloud/text-to-speech";
+// Creates a client
 
 dotenv.config();
 ///deleted bill
@@ -23,6 +29,27 @@ var cors = require("cors");
 const path = require("path");
 
 const multer = require("multer");
+
+const upload = multer();
+
+// Define the request type to include the file property
+interface MulterRequest extends Request {
+  file: Express.Multer.File;
+}
+import OpenAI from "openai";
+
+const { APP_STATE_STABLE_KEY } = process.env;
+
+const DalleKey = process.env.DALLE_KEY;
+const openKey = process.env.OPEN_KEY;
+const GPTKey = process.env.DALLE_KEY;
+
+// API key for Google Cloud Text-to-Speech
+const client = new TextToSpeechClient();
+
+const openai = new OpenAI({
+  apiKey: GPTKey,
+});
 
 /////
 /////
@@ -50,7 +77,7 @@ if (process.env.APP_STATE === "dev") {
     ///origin: "http://192.168.0.39:3000",
     origin: [
       "http://192.168.0.39:3000",
-      /////"http://localhost:3000", // Add your front-end origin
+      "https://api.stability.ai/v2beta/stable-diffusion/generate", // Add your front-end origin
       "https://oaidalleapiprodscus.blob.core.windows.net", // Add your blob storage origin
     ],
     credentials: true, //access-control-allow-credentials:true
@@ -89,7 +116,7 @@ app.use("/images", (req, res, next) => {
   res.set("Access-Control-Allow-Origin", [
     "https://clikbate.com",
     "https://www.clikbate.com",
-    "http://192.168.0.39:3000",
+    "http://192.168.0.106:3000",
   ]);
   res.set("Cache-Control", "public, max-age=0");
 
@@ -121,9 +148,6 @@ const CONNECTION_CONFIG = {
   database: process.env.DATABASE_NAMEx,
   charset: "utf8mb4",
 };
-
-const DalleKey = process.env.DALLE_KEY;
-const openKey = process.env.OPEN_KEY;
 
 // Node.js program to demonstrate the
 // Date.format() method
@@ -1125,33 +1149,6 @@ app.post("/post_upload_audio_data", async (req: any, res: any, next: any) => {
   }
 });
 
-app.get("/ProxyDalle", async (req, res) => {
-  const { dalle } = req.query; // Extracting 'dalle' from query parameters
-  console.log(dalle);
-  try {
-    if (!dalle) {
-      // If 'dalle' parameter is missing
-      return res.status(400).send("Missing 'dalle' parameter");
-    }
-
-    const imageUrl = dalle.toString(); // Convert 'dalle' to string
-    const response: any = await fetch(imageUrl);
-
-    // Check if the response is successful (status code in the range 200-299)
-    if (!response.ok) {
-      return res
-        .status(response.status)
-        .send(`Error fetching image: ${response.statusText}`);
-    }
-
-    const imageBuffer = await response.buffer();
-    res.contentType("image/png").send(imageBuffer);
-  } catch (error) {
-    console.error("Error fetching image:", error);
-    res.status(500).send("Internal Server Error");
-  }
-});
-
 app.post("/transAudio", async (req: Request, res: Response) => {
   const { values } = req.body;
 
@@ -1507,7 +1504,9 @@ app.post("/feeds_chronological", async (req: Request, res: Response) => {
   }
 });
 
-async function generateImage(promptxx: string) {
+///////////////////////////DALLE////////////////////////////////////
+
+async function generateImageDalle3(promptxx: string) {
   const API_KEY = DalleKey;
   const url: any = openKey;
 
@@ -1538,9 +1537,33 @@ async function generateImage(promptxx: string) {
   return response.json();
 }
 
-////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////
-//////////////////////////////////
+app.get("/ProxyDalle", async (req, res) => {
+  const { dalle } = req.query; // Extracting 'dalle' from query parameters
+  console.log(dalle);
+  try {
+    if (!dalle) {
+      // If 'dalle' parameter is missing
+      return res.status(400).send("Missing 'dalle' parameter");
+    }
+
+    const imageUrl = dalle.toString(); // Convert 'dalle' to string
+    const response: any = await fetch(imageUrl);
+
+    // Check if the response is successful (status code in the range 200-299)
+    if (!response.ok) {
+      return res
+        .status(response.status)
+        .send(`Error fetching image: ${response.statusText}`);
+    }
+
+    const imageBuffer = await response.buffer();
+    res.contentType("image/png").send(imageBuffer);
+  } catch (error) {
+    console.error("Error fetching image:", error);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
 app.post("/DalleApi", async (req, res) => {
   const { values } = req.body;
 
@@ -1551,7 +1574,8 @@ app.post("/DalleApi", async (req, res) => {
   console.log(promptx);
 
   try {
-    const response = await generateImage(promptx);
+    const response = await generateImageDalle3(promptx);
+    console.log(response);
     console.log("good");
     return res.send({
       message: "Done",
@@ -1562,6 +1586,417 @@ app.post("/DalleApi", async (req, res) => {
     return res.status(500).send({ message: "Error in accessing Dalle Api" });
   }
 });
+
+// Function to call GPT-4o for creating or improving prompts
+async function generateGPT4oPrompt(messages: any) {
+  const completion = await openai.chat.completions.create({
+    messages,
+    model: "gpt-4o", // Change to GPT-4o
+    max_tokens: 300,
+    n: 1,
+  });
+
+  if (
+    !completion ||
+    !completion.choices ||
+    !completion.choices[0] ||
+    !completion.choices[0].message ||
+    !completion.choices[0].message.content
+  ) {
+    throw new Error("Incomplete response from OpenAI");
+  }
+
+  return completion.choices[0].message.content
+    .split("\n")
+    .filter((line) => line.trim() !== "");
+}
+
+app.post("/ChatGPTApi4", async (req, res) => {
+  const { prompt } = req.body;
+
+  try {
+    // Step 1: Generate initial key points
+    const initialMessages = [
+      {
+        role: "system",
+        content:
+          "You are an expert communicator. Your task is to give a response to any given topic in a clear, concise, and engaging manner and Respond STRICTLY in 6 points",
+      },
+      {
+        role: "user",
+        content: `Explain ${prompt} in 6 key points  format 1,2,3,4,5,6, `,
+      },
+    ];
+    const initialResponseData = await generateGPT4oPrompt(initialMessages);
+
+    console.log(initialResponseData.length);
+
+    console.log("Initial Response Array:", initialResponseData);
+
+    const initialResponseFormatted = initialResponseData.join(",");
+
+    return res.send({
+      message: "Done",
+      initialSteps: initialResponseFormatted,
+    });
+  } catch (e: any) {
+    console.error("Error:", e.message);
+    return res.status(500).send({ message: "Error in accessing ChatGPT API" });
+  }
+});
+
+app.post("/ChatGPTApiDesign4", async (req, res) => {
+  const { pp, prompt } = req.body;
+
+  console.log(prompt);
+  try {
+    // Step 1: Generate initial key points
+    const initialMessages = [
+      {
+        role: "system",
+        content:
+          "You are an expert Descriptor. Your task is to describe any text into an improved clear, concise, prompt for image generation using an a.i model",
+      },
+      {
+        role: "user",
+        content: `using  ${prompt} for context Describe this text to create a visual representation of text here: ${pp}   `,
+      },
+    ];
+
+    const initialResponseData = await generateGPT4oPrompt(initialMessages);
+
+    console.log(initialResponseData.length);
+
+    console.log("Initial Response Array:", initialResponseData);
+
+    const initialResponseFormatted = initialResponseData.join(",");
+
+    return res.send({
+      message: "Done",
+      initialSteps: initialResponseFormatted,
+    });
+  } catch (e: any) {
+    console.error("Error:", e.message);
+    return res.status(500).send({ message: "Error in accessing ChatGPT API" });
+  }
+});
+
+// Function to call GPT-4o for creating or improving prompts
+async function generateGPT35Prompt(messages: any) {
+  const completion = await openai.chat.completions.create({
+    messages,
+    model: "gpt-4o-mini-2024-07-18", // Change to GPT-3.5 Turbo 0125
+    max_tokens: 300,
+    n: 1,
+  });
+
+  if (
+    !completion ||
+    !completion.choices ||
+    !completion.choices[0] ||
+    !completion.choices[0].message ||
+    !completion.choices[0].message.content
+  ) {
+    throw new Error("Incomplete response from OpenAI");
+  }
+
+  return completion.choices[0].message.content
+    .split("\n")
+    .filter((line) => line.trim() !== "");
+}
+
+app.post("/ChatGPTApi3", async (req, res) => {
+  const { prompt } = req.body;
+
+  try {
+    // Step 1: Generate initial key points
+    const initialMessages = [
+      {
+        role: "system",
+        content:
+          "You are an expert communicator. Your task is to give a response to any given topic in a clear, concise, and engaging manner and Respond STRICTLY in 6 points",
+      },
+      {
+        role: "user",
+        content: `Explain ${prompt} in 6 key points  format 1,2,3,4,5,6, `,
+      },
+    ];
+
+    const initialResponseData = await generateGPT35Prompt(initialMessages);
+
+    console.log(initialResponseData.length);
+    console.log("Initial Response Array:", initialResponseData);
+
+    const initialResponseFormatted = initialResponseData.join(",");
+
+    return res.send({
+      message: "Done",
+      initialSteps: initialResponseFormatted,
+    });
+  } catch (e: any) {
+    console.error("Error:", e.message);
+    return res.status(500).send({ message: "Error in accessing ChatGPT API" });
+  }
+});
+
+app.post("/ChatGPTApiDesign3", async (req, res) => {
+  const { pp, prompt } = req.body;
+  console.log(prompt);
+  try {
+    // Step 1: Generate initial key points
+    const initialMessages = [
+      {
+        role: "system",
+        content: `You are an expert Descriptor. Your task is to describe any text into an improved clear, concise, prompt for image generation using an a.i model`,
+      },
+      {
+        role: "user",
+        content: `using  ${prompt} for context Describe this text to create a visual representation of text here: ${pp}   `,
+      },
+    ];
+
+    const initialResponseData = await generateGPT35Prompt(initialMessages);
+
+    console.log(initialResponseData.length);
+    console.log("Initial Response Array:", initialResponseData);
+
+    const initialResponseFormatted = initialResponseData.join(",");
+
+    return res.send({
+      message: "Done",
+      initialSteps: initialResponseFormatted,
+    });
+  } catch (e: any) {
+    console.error("Error:", e.message);
+    return res.status(500).send({ message: "Error in accessing ChatGPT API" });
+  }
+});
+
+///////////////////////////DALLE////////////////////////////////////
+
+///////////////////////////STABLE////////////////////////////////////
+
+async function generateImagexImage(
+  prompt: string,
+  image: Express.Multer.File,
+  strength: string
+) {
+  const apiHost = "https://api.stability.ai";
+  const apiKey = APP_STATE_STABLE_KEY;
+
+  const form = new FormData();
+  form.append("prompt", prompt);
+  form.append("model", "sd3-large-turbo"); // Use the SD3 Large Turbo model
+  form.append("output_format", "jpeg");
+  form.append("mode", "image-to-image"); // Set mode to 'image-to-image'
+  form.append("strength", strength); // Add the strength parameter
+  form.append("image", image.buffer, image.originalname);
+
+  const response = await fetch(`${apiHost}/v2beta/stable-image/generate/sd3`, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${apiKey}`,
+      ...form.getHeaders(),
+      Accept: "image/*",
+    },
+    body: form,
+  });
+
+  if (!response.ok) {
+    throw new Error(`Non-200 response: ${await response.text()}`);
+  }
+
+  const imageBuffer = await response.buffer();
+
+  return imageBuffer; // Return the image buffer
+}
+
+app.post(
+  "/StableDiffusionApiImage",
+  upload.single("image"),
+  async (req: Request, res: Response) => {
+    const { prompt, strength } = req.body;
+    const image = (req as MulterRequest).file;
+
+    if (!image) {
+      return res.status(400).send({ message: "Image file is required" });
+    }
+
+    try {
+      const imageBuffer = await generateImagexImage(prompt, image, strength);
+
+      // Save the generated image to a file
+      const imagePath = path.join(__dirname, "output.jpeg");
+      fs.writeFileSync(imagePath, imageBuffer);
+
+      // Send the generated image back to the client
+      res.sendFile(imagePath, {}, (err) => {
+        if (err) {
+          console.error("Failed to send image:", err);
+          res.status(500).send({ message: "Error sending the image" });
+        } else {
+          // Optionally delete the image file after sending
+          fs.unlink(imagePath, (unlinkErr: any) => {
+            if (unlinkErr) {
+              console.error("Failed to delete image:", unlinkErr);
+            }
+          });
+        }
+      });
+    } catch (e: any) {
+      console.error("Error:", e.message);
+      res.status(500).send({ message: "Error in generating image" });
+    }
+  }
+);
+
+async function generateImageStable3turbo(prompt: any) {
+  const apiHost = "https://api.stability.ai";
+  const apiKey = APP_STATE_STABLE_KEY;
+
+  const form = new FormData();
+  form.append("prompt", prompt);
+  form.append("model", "sd3-large-turbo"); // Use the SD3 Large Turbo model
+  form.append("output_format", "jpeg");
+
+  const response = await fetch(`${apiHost}/v2beta/stable-image/generate/sd3`, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${apiKey}`,
+      ...form.getHeaders(),
+      Accept: "image/*",
+    },
+    body: form,
+  });
+
+  if (!response.ok) {
+    throw new Error(`Non-200 response: ${await response.text()}`);
+  }
+
+  const imageBuffer = await response.buffer();
+
+  return imageBuffer; // Return the image buffer
+}
+
+app.post("/StableDiffusionApi", async (req, res) => {
+  const { prompt } = req.body.values;
+
+  try {
+    const imageBuffer = await generateImageStable3turbo(prompt);
+
+    // Save the generated image to a file
+    const imagePath = path.join(__dirname, "output.jpeg");
+    fs.writeFileSync(imagePath, imageBuffer);
+
+    // Send the generated image back to the client
+    res.sendFile(imagePath, {}, (err) => {
+      if (err) {
+        console.error("Failed to send image:", err);
+        res.status(500).send({ message: "Error sending the image" });
+      } else {
+        // Optionally delete the image file after sending
+        fs.unlink(imagePath, (unlinkErr: any) => {
+          if (unlinkErr) {
+            console.error("Failed to delete image:", unlinkErr);
+          }
+        });
+      }
+    });
+  } catch (e: any) {
+    console.error("Error:", e.message);
+    res.status(500).send({ message: "Error in generating image" });
+  }
+});
+
+async function generateImageStableSDXL(
+  prompt: string,
+  model: string,
+  height: number,
+  width: number
+) {
+  const apiHost = "https://api.stability.ai";
+  const apiKey = APP_STATE_STABLE_KEY;
+
+  const payload = {
+    text_prompts: [
+      {
+        text: prompt,
+        weight: 0.5,
+      },
+    ],
+    height,
+    width,
+    cfg_scale: 7,
+    sampler: "K_DPM_2_ANCESTRAL",
+    samples: 1,
+    steps: 30,
+  };
+
+  const response = await fetch(
+    `${apiHost}/v1/generation/${model}/text-to-image`,
+    {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        "Content-Type": "application/json",
+        Accept: "image/png", // Corrected Accept header
+      },
+      body: JSON.stringify(payload),
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error(`Non-200 response: ${await response.text()}`);
+  }
+
+  const imageBuffer = await response.arrayBuffer();
+  return Buffer.from(imageBuffer);
+}
+
+app.post("/StableDiffusionApisd", async (req, res) => {
+  const { prompt, model, height, width } = req.body.values;
+
+  try {
+    const imageBuffer = await generateImageStableSDXL(
+      prompt,
+      model,
+      height,
+      width
+    );
+
+    // Save the generated image to a file
+    const imagePath = path.join(__dirname, "output.png"); // Changed to .png
+    fs.writeFileSync(imagePath, imageBuffer);
+
+    // Send the generated image back to the client
+    res.sendFile(imagePath, {}, (err) => {
+      if (err) {
+        console.error("Failed to send image:", err);
+        res.status(500).send({ message: "Error sending the image" });
+      } else {
+        // Optionally delete the image file after sending
+        fs.unlink(imagePath, (unlinkErr: any) => {
+          if (unlinkErr) {
+            console.error("Failed to delete image:", unlinkErr);
+          }
+        });
+      }
+    });
+  } catch (e: any) {
+    console.error("Error:", e.message);
+    res.status(500).send({ message: "Error in generating image" });
+  }
+});
+
+///////////////////////////STABLE////////////////////////////////////
+
+///////////////////////////TEXT-TO-SPEECH////////////////////////////////////
+
+///////////////////////////TEXT-TO-SPEECH////////////////////////////////////
+
+////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////
+//////////////////////////////////
 
 app.post(
   "/keepmeloggedin",

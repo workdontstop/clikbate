@@ -54,81 +54,100 @@ const VideoComponent: React.FC<VideoComponentProps> = ({ src, inView, setshow, v
     }
 
     return (
-        <div className="video-container" style={{ visibility: hidePrevVid ? 'hidden' : 'visible' }}>
-
-            {postty === 1 ?
 
 
-                matchMobile ? (
+        <>
+
+            <div
+
+                onClick={() => {
+
+
+                    setxl(false);
+
+                    sethidePrevVid(true)
+                }}
+
+                style={{
+                    cursor: 'pointer',
+                    width: '100%',
+                    height: '92%',
+                    backgroundColor: '',
+                    position: 'fixed',
+                    top: '0vh',
+                    zIndex: 200,
+                    display: hidePrevVid ? 'none' : 'block'
+                }}>
 
 
 
-                    xl ? <video
-                        onClick={() => {
-                            clik();
-                        }
+            </div >
 
-                        }
-                        ref={videoRef}
-                        autoPlay
-
-                        playsInline
-                        loop
-
-                        className={"circular-video2x"}
+            <div className="video-container" style={{
+                visibility: hidePrevVid ? 'hidden' : 'visible',
 
 
-                    >
-                        <source
-                            src={`${REACT_APP_CLOUNDFRONT}videos/${src}`}
-                        />
-                        Your browser does not support the video tag.
-                    </video> : <video
-                        onClick={() => {
-                            clik();
-                        }
-
-                        }
-                        ref={videoRef}
-                        autoPlay
-                        muted
-                        playsInline
-                        loop
-
-                        className={"circular-video2"}
 
 
-                    >
-                        <source
-                            src={`${REACT_APP_CLOUNDFRONT}videos/${src}`}
-                        />
-                        Your browser does not support the video tag.
-                    </video>
-                ) : (
+                left: xl ? matchMobile ? '15% ' : '20% ' :
+                    matchMobile ? '29% ' : '36% ',
 
-                    xl ? <video
 
-                        style={{ cursor: 'pointer' }}
-                        onClick={
-                            () => {
+                bottom: xl ? matchMobile ? '3% ' : '10% ' :
+                    matchMobile ? '8% ' : '19% '
+            }}>
+
+                {postty === 1 ?
+
+
+                    matchMobile ? (
+
+
+
+                        xl ? <video
+                            onClick={() => {
                                 clik();
                             }
-                        }
-                        ref={videoRef}
-                        autoPlay
 
-                        playsInline
-                        loop
-                        className={"circular-videox"}
+                            }
+                            ref={videoRef}
+                            autoPlay
 
-                    >
-                        <source
-                            src={`${REACT_APP_CLOUNDFRONT}videos/${src}`}
-                            type="video/mp4"
-                        />
-                        Your browser does not support the video tag.
-                    </video > :
-                        <video
+                            playsInline
+                            loop
+
+                            className={"circular-video2x"}
+
+
+                        >
+                            <source
+                                src={`${REACT_APP_CLOUNDFRONT}videos/${src}`}
+                            />
+                            Your browser does not support the video tag.
+                        </video> : <video
+                            onClick={() => {
+                                clik();
+                            }
+
+                            }
+                            ref={videoRef}
+                            autoPlay
+                            muted
+                            playsInline
+                            loop
+
+                            className={"circular-video2"}
+
+
+                        >
+                            <source
+                                src={`${REACT_APP_CLOUNDFRONT}videos/${src}`}
+                            />
+                            Your browser does not support the video tag.
+                        </video>
+                    ) : (
+
+                        xl ? <video
 
                             style={{ cursor: 'pointer' }}
                             onClick={
@@ -138,10 +157,10 @@ const VideoComponent: React.FC<VideoComponentProps> = ({ src, inView, setshow, v
                             }
                             ref={videoRef}
                             autoPlay
-                            muted
+
                             playsInline
                             loop
-                            className={"circular-video"}
+                            className={"circular-videox"}
 
                         >
                             <source
@@ -149,49 +168,73 @@ const VideoComponent: React.FC<VideoComponentProps> = ({ src, inView, setshow, v
                                 type="video/mp4"
                             />
                             Your browser does not support the video tag.
-                        </video >
-                )
-                :
+                        </video > :
+                            <video
 
-                matchMobile ?
+                                style={{ cursor: 'pointer' }}
+                                onClick={
+                                    () => {
+                                        clik();
+                                    }
+                                }
+                                ref={videoRef}
+                                autoPlay
+                                muted
+                                playsInline
+                                loop
+                                className={"circular-video"}
 
-                    <img
-
-                        ref={videoImRef}
-                        onClick={
-                            () => {
-                                clik();
-                            }
-                        }
-                        src={`${REACT_APP_CLOUNDFRONT}${src}`}
-
-                        // Assuming the images have .jpg extension
-                        alt="placeholder"
-                        className={xl ? "circular-video2x" : "circular-video2"}
-                        style={{ cursor: 'pointer' }}
-                    />
+                            >
+                                <source
+                                    src={`${REACT_APP_CLOUNDFRONT}videos/${src}`}
+                                    type="video/mp4"
+                                />
+                                Your browser does not support the video tag.
+                            </video >
+                    )
                     :
 
-                    <img
-                        ref={videoImRef}
-                        onClick={
-                            () => {
-                                clik();
+                    matchMobile ?
+
+                        <img
+
+                            ref={videoImRef}
+                            onClick={
+                                () => {
+                                    clik();
+                                }
                             }
-                        }
+                            src={`${REACT_APP_CLOUNDFRONT}${src}`}
 
-                        src={`${REACT_APP_CLOUNDFRONT}${src}`}
+                            // Assuming the images have .jpg extension
+                            alt="placeholder"
+                            className={xl ? "circular-video2x" : "circular-video2"}
+                            style={{ cursor: 'pointer' }}
+                        />
+                        :
 
-                        // Assuming the images have .jpg extension
-                        alt="placeholder"
-                        className={xl ? "circular-videox" : "circular-video"}
-                        style={{ cursor: 'pointer' }}
-                    />
+                        <img
+                            ref={videoImRef}
+                            onClick={
+                                () => {
+                                    clik();
+                                }
+                            }
 
-            }
+                            src={`${REACT_APP_CLOUNDFRONT}${src}`}
+
+                            // Assuming the images have .jpg extension
+                            alt="placeholder"
+                            className={xl ? "circular-videox" : "circular-video"}
+                            style={{ cursor: 'pointer' }}
+                        />
+
+                }
 
 
-        </div >
+            </div >
+
+        </>
     );
 };
 

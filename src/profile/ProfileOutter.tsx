@@ -1,6 +1,8 @@
 import React, { useRef, useState, useEffect, useCallback } from "react";
 import { matchMobile, matchPc, matchTablet } from "../DetectDevice";
 import { RootStateOrAny, useSelector, useDispatch } from "react-redux";
+
+
 import { Menu } from "./Menu";
 import { Billboard } from "./Billboard";
 import "./profile.css";
@@ -22,6 +24,8 @@ import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import Axios from "axios";
+
+
 import { CommentTemplate } from "../CommentTemplate";
 import { ProfileGate } from "./ProfileGate";
 
@@ -82,6 +86,10 @@ function ProfileOutter({ CallLoggedProfile }: any) {
 
 
   const { REACT_APP_SUPERSTARZ_URL, REACT_APP_CLOUNDFRONT, REACT_APP_APPX_STATE } = process.env;
+
+
+  var AiLock = true;
+
 
   const isAppleDevice = /Mac|iPhone|iPad|iPod/.test(navigator.userAgent);
 
@@ -420,7 +428,7 @@ function ProfileOutter({ CallLoggedProfile }: any) {
   const [PostPagenumPusher, setPostPagenumPusher] = useState(0);
   const [ScrollIndexPusher, setScrollIndexPusher] = useState(0)
 
-
+  const [FeedType, setFeedType] = useState(0);
 
 
 
@@ -446,9 +454,8 @@ function ProfileOutter({ CallLoggedProfile }: any) {
 
 
 
-  const [ShowImageSlider, setShowImageSlider] = useState<boolean>(false);
 
-
+  const [ShowImageSlider, setShowImageSlider] = useState<boolean>(true);
 
 
 
@@ -782,6 +789,7 @@ function ProfileOutter({ CallLoggedProfile }: any) {
                       }}
                     >
                       <ActualMenu
+                        FeedType={FeedType}
                         CurrentPage={CurrentPage}
 
                         ScrollIndexPusher={ScrollIndexPusher}
@@ -828,6 +836,7 @@ function ProfileOutter({ CallLoggedProfile }: any) {
 
                     <Menu
 
+                      FeedType={FeedType}
                       zoomedModal={zoomedModal}
                       mobileZoom={mobileZoom}
                       setZoomedModal={setZoomedModal}
@@ -988,11 +997,15 @@ function ProfileOutter({ CallLoggedProfile }: any) {
                   <Routes>
                     <Route element={<ProtectedRoute />}>
                       <Route
-                        path="/Feeds/:idRoute1/:idRoute2/:idRoute3"
+                        path="/Feeds/:idRoute1/:idRoute2/:idRoute3/:idRoute4"
                         element={
 
 
                           <ProfileGate
+                            AiLock={AiLock}
+                            setFeedType={setFeedType}
+                            FeedType={FeedType}
+
                             setShowImageSlider={setShowImageSlider}
                             ShowImageSlider={ShowImageSlider}
                             setUploadGPT={setUploadGPT}
@@ -1276,7 +1289,7 @@ function ProfileOutter({ CallLoggedProfile }: any) {
 
                     <Route
                       path="/"
-                      element={<Navigate to={`/Feeds/${encodeBase64('0')}/${encodeBase64('0')}/${encodeBase64('0')}`} />}
+                      element={<Navigate to={`/Feeds/${encodeBase64('0')}/${encodeBase64('0')}/${encodeBase64('0')}/${encodeBase64('1')}`} />}
                     />
                   </Routes>
                 </div>
@@ -1704,6 +1717,8 @@ function ProfileOutter({ CallLoggedProfile }: any) {
                       >
 
                         <GenerateAndUpload
+                          AiLock={AiLock}
+
                           setUploadGPT={setUploadGPT}
                           Loader={Loaderx}
                           setLoader={setLoaderx}

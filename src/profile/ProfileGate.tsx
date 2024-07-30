@@ -10,8 +10,17 @@ import { Connect } from "./Connect";
 import { ProfileSetup } from "./ProfileSetup";
 import { GenerateAndUpload } from "./GenerateAndUpload";
 import { ActualMenu } from "./ActualMenu";
+import { TextField } from "@material-ui/core";
+
+import ExplainItPreview from "./ExplainItPreview";
+
 
 import ImageSlider from "./ImageSlider";
+
+import SearchIcon from '@material-ui/icons/Search';
+import FilterListIcon from '@material-ui/icons/FilterList';
+import CheckIcon from '@material-ui/icons/Check';
+import LockIcon from '@material-ui/icons/Lock';
 
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 
@@ -137,7 +146,11 @@ function ProfileGatex({
     setUploadGPT,
 
     setShowImageSlider,
-    ShowImageSlider
+    ShowImageSlider,
+
+    setFeedType,
+    FeedType,
+    AiLock
 
 
 }: any): JSX.Element {
@@ -145,39 +158,84 @@ function ProfileGatex({
 
 
 
+
     const { REACT_APP_SUPERSTARZ_URL, REACT_APP_CLOUNDFRONT, REACT_APP_APPX_STATE } = process.env;
     const dispatch = useDispatch();
     const location = useLocation();
-
-
     const navigate = useNavigate();
+
+
+    /////
+    ///////
+    /////////////
+    var transform = "";
+    var font1 = "";
+    var font2 = "";
+    var paddingbutU = "";
+
+    var width = " ";
+    var sizex: "small" | "medium" | undefined = undefined;
+    ///
+    ///
+    ///
+    if (matchPc) {
+        sizex = "medium";
+        width = "33%";
+        transform = "scale(1)";
+        font1 = "2.7vh";
+        font2 = "2.1vh";
+        paddingbutU = "70px";
+    } else if (matchTablet) {
+        sizex = "small";
+        width = "62%";
+        transform = "scale(1)";
+        font1 = "2.6vh";
+        font2 = "2vh";
+        paddingbutU = "100px";
+    } else {
+        sizex = "small";
+        width = "100%";
+        transform = "scale(0.94)";
+        font1 = "";
+        font2 = "";
+        paddingbutU = "80px";
+    }
+
+
+    ///
+    ///
+    ///CONDITIONAL STATEMENT FOR DEVICE TYPE
+    var buttonFont = "4vw";
+    var buttonTransform = matchMobile ? "scale(1)" : "scale(1.6)";
+    var pad = "";
+
+    const [ShowExplainIt, setShowExplainIt] = useState(false);
+
+
+
 
     const isAppleDevice = /Mac|iPhone|iPad|iPod/.test(navigator.userAgent);
 
-
-    const { idRoute1, idRoute2, idRoute3 } = useParams();
+    const { idRoute1, idRoute2, idRoute3, idRoute4 } = useParams();
     let idReactRouter: string | undefined;
     let PagenumRouter: string | undefined;
     let scrollRouter: string | undefined;
 
-
-
     const [ExtendBill, setExtendBill] = useState(false);
-
 
     const heightAnimation = useSpring({
         height: ExtendBill ? (matchMobile ? '49vh' : '70vh') : (matchMobile ? '19vh' : '30vh'),
         config: { duration: 300 }
     });
 
-
     useEffect(() => {
         const handlePopstate = () => {
             // Extract IDs from the pathname
             const pathSegments = window.location.pathname.split('/');
-            const idRoute1 = pathSegments[pathSegments.length - 3]; // Adjust index based on your route structure
-            const idRoute2 = pathSegments[pathSegments.length - 2]; // Adjust index based on your route structure
-            const idRoute3 = pathSegments[pathSegments.length - 1]; // Adjust index based on your route structure
+            const idRoute1 = pathSegments[pathSegments.length - 4]; // Adjust index based on your route structure
+            const idRoute2 = pathSegments[pathSegments.length - 3]; // Adjust index based on your route structure
+            const idRoute3 = pathSegments[pathSegments.length - 2]; // Adjust index based on your route structure
+            const idRoute4 = pathSegments[pathSegments.length - 1]; // Adjust index based on your route structure
 
             if (idRoute1) {
                 const decodedId1 = decodeBase64(idRoute1);
@@ -195,7 +253,6 @@ function ProfileGatex({
                     const parsedInt2 = parseInt(decodedId2, 10);
                     if (!isNaN(parsedInt2)) {
                         setScrollReactRouter(parsedInt2);
-                        // paperPostScrollRef.current.scrollTop = parsedInt2;
                     }
                 }
             }
@@ -206,6 +263,16 @@ function ProfileGatex({
                     const parsedInt3 = parseInt(decodedId3, 10);
                     if (!isNaN(parsedInt3)) {
                         setPagenumReactRouter(parsedInt3);
+                    }
+                }
+            }
+
+            if (idRoute4) {
+                const decodedId4 = decodeBase64(idRoute4);
+                if (decodedId4) {
+                    const parsedInt4 = parseInt(decodedId4, 10);
+                    if (!isNaN(parsedInt4)) {
+                        setFeedType(parsedInt4);
                     }
                 }
             }
@@ -220,11 +287,10 @@ function ProfileGatex({
         };
     }, []); // This effect should only run once, so it has an empty dependency array
 
-
     const [RandomFromPostData, setRandomFromPostData] = useState('');
     const [RandomFromPostData2, setRandomFromPostData2] = useState('');
 
-
+    const [loaderx, setloader] = useState(false);
 
     useEffect(() => {
         if (idRoute1) {
@@ -244,7 +310,6 @@ function ProfileGatex({
                 if (!isNaN(parsedInt2)) {
                     setScrollReactRouter(parsedInt2);
                     pagePostScroll.current.scrollTop = parsedInt2;
-                    /// paperPostScrollRef.current.scrollTop = parsedInt2;
                 }
             }
         }
@@ -255,11 +320,20 @@ function ProfileGatex({
                 const parsedInt3 = parseInt(decodedId3, 10);
                 if (!isNaN(parsedInt3)) {
                     setPagenumReactRouter(parsedInt3);
-                    //paperPostScrollRef.current.scrollTop = parsedInt3;
                 }
             }
         }
-    }, [idRoute1, idRoute2, idRoute3, location.pathname]);
+
+        if (idRoute4) {
+            const decodedId4 = decodeBase64(idRoute4);
+            if (decodedId4) {
+                const parsedInt4 = parseInt(decodedId4, 10);
+                if (!isNaN(parsedInt4)) {
+                    setFeedType(parsedInt4);
+                }
+            }
+        }
+    }, [idRoute1, idRoute2, idRoute3, idRoute4, location.pathname]);
 
     ///alert(idReactRouterAsInt);
 
@@ -447,8 +521,9 @@ function ProfileGatex({
 
         { src: `${REACT_APP_CLOUNDFRONT}erik-mclean-munBJq3Bpg0-unsplash.jpg`, text: 'For You' },
         { src: `${REACT_APP_CLOUNDFRONT}joe-neric-EGzkhZyFRX4-unsplash.jpg`, text: 'Live Feeds' },
-        { src: `${REACT_APP_CLOUNDFRONT}carmen-laezza-lMN4RnmM4iU-unsplash.jpg`, text: 'Random Feeds' },
-        { src: `${REACT_APP_CLOUNDFRONT}mulyadi-eG_xKGd-YCA-unsplash.jpg`, text: 'Interests' }
+        { src: `${REACT_APP_CLOUNDFRONT}c52a85f5-52f4-4989-86b4-5118c571b139.webp`, text: 'Interests' },
+        { src: `${REACT_APP_CLOUNDFRONT}download+(29).png`, text: 'Random Feeds' },
+
     ];
 
     const [imageReducer, setimageReducer] = useState(imageReducerx);
@@ -499,6 +574,70 @@ function ProfileGatex({
     const [fansReducer, setfansReducer] = useState(0);
     const [hidefanReducer, sethidefanReducer] = useState(false);
 
+
+
+
+    const [prompt, setPrompt] = useState('');
+    const [promptx, setPromptx] = useState('');
+
+    const [response, setResponse] = useState('');
+
+    const [initialSteps, setInitialSteps] = useState([]);
+    const [refinedSteps, setRefinedSteps] = useState([]);
+
+
+
+    const handleSubmit = async (e: any, x: number) => {
+        e.preventDefault();
+
+        setPromptx(prompt);
+
+        setInitialSteps([]);
+
+
+
+
+
+        try {
+
+            if (x === 2) {
+
+                setloader(true);
+                var response = await Axios.post(`${REACT_APP_SUPERSTARZ_URL}/ChatGPTApi3`, { prompt });
+                const { initialSteps: initial } = response.data;
+                // Split the responses by commas to create arrays
+                const initialArray = initial.split(/\d+\.\s/).map((sentence: any) => sentence.trim()).filter(Boolean);
+                console.log(initialArray);
+                // Example usage in a function
+                setInitialSteps(initialArray);
+
+            } else {
+                if (AiLock) {
+
+                } else {
+
+                    setloader(true);
+                    var response = await Axios.post(`${REACT_APP_SUPERSTARZ_URL}/ChatGPTApi4`, { prompt })
+                    const { initialSteps: initial } = response.data;
+                    // Split the responses by commas to create arrays
+                    const initialArray = initial.split(/\d+\.\s/).map((sentence: any) => sentence.trim()).filter(Boolean);
+                    console.log(initialArray);
+                    // Example usage in a function
+                    setInitialSteps(initialArray);
+
+                }
+
+            }
+
+
+
+
+
+        } catch (error: any) {
+            console.error('Error:', error.message);
+            setloader(false);
+        }
+    };
 
 
 
@@ -608,6 +747,7 @@ function ProfileGatex({
     const [deferredPrompt, setDeferredPrompt] = useState<Event | null>(null);
     const [haltDownload, sethaltDownload] = useState(false);
 
+    const [AImodel, setAImodel] = useState(2);
 
 
 
@@ -1943,20 +2083,22 @@ function ProfileGatex({
     }, [memeberPageidReducer, MemberProfileDataReducer, idReducer]);
 
 
-
-    const updateCurrentURLWithScrollPosition = () => {
+    const updateCurrentURLWithScrollPosition = useCallback(() => {
         var x = 0;
 
         const currentPath = location.pathname.split('/');
-        const currentIdRoute1 = currentPath[currentPath.length - 3]; // Assuming idRoute1 is the third last segment
-        const currentIdRoute2 = currentPath[currentPath.length - 2]; // Assuming idRoute2 is the second last segment
-        const currentIdRoute3 = currentPath[currentPath.length - 1]; // Assuming idRoute2 is the second last segment
+        const currentIdRoute1 = currentPath[currentPath.length - 4]; // Assuming idRoute1 is the fourth last segment
+        const currentIdRoute2 = currentPath[currentPath.length - 3]; // Assuming idRoute2 is the third last segment
+        const currentIdRoute3 = currentPath[currentPath.length - 2]; // Assuming idRoute3 is the second last segment
+        const currentIdRoute4 = currentPath[currentPath.length - 1]; // Assuming idRoute4 is the last segment
 
         const encodedScrollIndex = encodeBase64(x.toString());
+        const encodedFeedtype = encodeBase64(FeedType.toString());
 
-        navigate(`/Feeds/${currentIdRoute1}/${encodedScrollIndex}/${currentIdRoute3}`, { replace: true });
-    };
 
+
+        navigate(`/Feeds/${currentIdRoute1}/${encodedScrollIndex}/${currentIdRoute3}/${encodedFeedtype}`, { replace: true });
+    }, [FeedType]);
 
 
     const callPagination = useCallback(() => {
@@ -2409,6 +2551,10 @@ function ProfileGatex({
     return (
         <>
 
+            <Grid ref={getSliderWidthRef} item xs={1} style={{
+                height: '0px',
+            }}>
+            </Grid>
 
 
             <LoaderPost RandomColor={RandomColor} autoSlideDisplay={autoSlideDisplay} sliderLoader={sliderLoader} />
@@ -2433,7 +2579,7 @@ function ProfileGatex({
 
 
 
-                <Grid item ref={pagePostScroll} className="zuperxyinfotext" xs={12} style={{
+                <Grid item ref={pagePostScroll} xs={12} style={{
                     padding: '0px',
                     top: '0vh',
                     marginTop: matchMobile ? '6vh' : '0vh',
@@ -2803,6 +2949,7 @@ function ProfileGatex({
                                         alt={image.text}
                                         style={{
                                             cursor: "pointer",
+
                                             boxShadow:
                                                 darkmodeReducer ? "0 0 1px #555555" : "0 0 0.1px #222222",
                                             width: "100%", // Full width of the container
@@ -2827,6 +2974,7 @@ function ProfileGatex({
                                         fontSize: ExtendBill ? matchMobile ? '1.4rem' : '2rem' : matchMobile ? '' : '1.4rem',
                                         pointerEvents: 'none', // Ensure the text does not interfere with the click event
                                         fontFamily: "Arial, Helvetica, sans-serif",
+                                        opacity: index === 0 ? 1 : 0.4,
 
                                     }}>
                                         {image.text}
@@ -2844,7 +2992,7 @@ function ProfileGatex({
                         //////////////////////////////////////// BILLBOARD PROFILE  BILLBOARD PROFILE  BILLBOARD PROFILE ////////////////////////////////
 
 
-                        < Grid item xs={12} style={{
+                        <Grid item xs={12} style={{
                             padding: '0px',
                             display: 'flex', // Use flexbox to align items horizontally
                             overflowX: 'scroll', // Enable horizontal scrolling
@@ -2916,19 +3064,11 @@ function ProfileGatex({
 
                     }
 
-                    <Grid xs={12}
-                        style={{
-                            position: "relative",
-                            padding: '0px',
-                            height: '6vh',
-                            display: ShowImageSlider ? 'block' : 'none'
-                        }} item>
-
-                    </Grid>
-
-                    {ShowImageSlider ? <ImageSlider RandomColor={RandomColor} /> : null}
 
 
+                    <ImageSlider
+
+                        RandomColor={RandomColor} FeedType={FeedType} setFeedType={setFeedType} />
 
                     <Grid xs={12}
                         style={{
@@ -2937,62 +3077,316 @@ function ProfileGatex({
                             width: '100%',
                             transition: "transform 0.1s",
                             textAlign: 'center',
-                            marginTop: '3vh'
+                            marginTop: matchMobile ? '10vh' : '9vh',
 
-
+                            zIndex: 2
                         }} item>
 
-                        <MoreHorizIcon
+                        {FeedType === 1 ?
+                            <Grid container alignItems="center" justifyContent="center" spacing={matchMobile ? 0 : 1}>
+                                <Grid item>
+
+
+                                    {AImodel === 0 ?
+
+                                        <Button
 
 
 
-                            onMouseEnter={(e: any) => {
-                                setZoomx(true);
-
-                            }}
-                            onMouseLeave={(e: any) => {
-                                setZoomx(false);
-
-                            }}
+                                            style={{
+                                                fontSize: matchMobile ? '1.4vh' : '0.5vw',
+                                                transform: buttonTransform,
+                                                padding: '1.4vh',
+                                                borderRadius: "50px",
 
 
-                            className={
-                                darkmodeReducer
-                                    ? " dontallowhighlighting zuperkingIcon  zuperkingIconPostDark"
-                                    : "  dontallowhighlighting zuperkingIcon  zuperkingIconPostLight"
-                            }
-                            onClick={() => {
-                                setShowImageSlider(!ShowImageSlider);
-                                if (Timervva.current) {
-                                    clearTimeout(Timervva.current);
-                                }
 
-                                Timervva.current = setTimeout(() => {
-                                    setZoomx(false);
-                                }, 1000)
+                                                MozBoxShadow: MozBoxShadowReducerSign,
+                                                WebkitBoxShadow: WebkitBoxShadowReducerSign,
+                                                boxShadow: boxShadowReducerSign,
+                                                left: '-2vw',
+                                                opacity: AiLock ? '0.3' : '1'
+                                            }}
 
 
-                            }}
-                            style={{
-                                position: "relative",
+                                            variant="contained"
+                                            size="large"
+                                            color="secondary"
+                                            onClick={() => {
+                                                setAImodel(1);
+                                            }}
+                                        >
+                                            DIFFUSION
 
-                                transform: matchMobile ? Zoomx ? "scale(3)" : "scale(1.5)" : Zoomx ? "scale(3)" : "scale(1.3)",
-                                transition: "transform 0.1s",
-                                cursor: 'pointer',
-                                zIndex: 1,
-                                verticalAlign: "middle",
-                                fontSize: '2rem',
-                                opacity: 1,
 
-                                color: darkmodeReducer ? "#ffffff" : "#000000",
+                                        </Button> : AImodel == 1 ?
 
-                            }}
-                        />
+
+                                            <Button
+                                                style={{
+                                                    fontSize: matchMobile ? '1.4vh' : '0.5vw',
+                                                    transform: buttonTransform,
+                                                    padding: '1.4vh',
+                                                    borderRadius: "50px",
+                                                    MozBoxShadow: MozBoxShadowReducerLogin,
+                                                    WebkitBoxShadow: WebkitBoxShadowReducerLogin,
+                                                    boxShadow: boxShadowReducerLogin,
+                                                    left: '-2vw',
+                                                    opacity: AiLock ? '0.3' : '1'
+                                                }}
+
+                                                variant="outlined"
+                                                size="large"
+                                                color="primary"
+                                                onClick={() => {
+                                                    setAImodel(2);
+                                                }}
+                                            >
+                                                DALLE
+
+
+                                            </Button> :
+
+                                            AImodel == 2 ?
+
+                                                <Button
+
+
+
+                                                    style={{
+                                                        fontSize: matchMobile ? '1.4vh' : '0.5vw',
+                                                        transform: buttonTransform,
+                                                        padding: '1.4vh',
+                                                        borderRadius: "50px",
+
+                                                        MozBoxShadow: MozBoxShadowReducerLogin,
+                                                        WebkitBoxShadow: WebkitBoxShadowReducerLogin,
+                                                        boxShadow: boxShadowReducerLogin,
+                                                        left: '-2vw',
+                                                    }}
+                                                    variant="outlined"
+                                                    size="large"
+                                                    color="primary"
+                                                    onClick={() => {
+                                                        setAImodel(3);
+                                                    }}
+                                                >
+                                                    SDXL
+
+
+                                                </Button> :
+
+                                                <Button
+                                                    style={{
+                                                        fontSize: buttonFont,
+                                                        transform: buttonTransform,
+                                                        padding: pad,
+                                                        borderRadius: "50px",
+                                                        MozBoxShadow: MozBoxShadowReducerLogin,
+                                                        WebkitBoxShadow: WebkitBoxShadowReducerLogin,
+                                                        boxShadow: boxShadowReducerLogin,
+                                                        left: '-2vw',
+                                                    }}
+                                                    variant="outlined"
+                                                    size="large"
+                                                    color="primary"
+                                                    onClick={() => {
+                                                        setAImodel(0);
+                                                    }}
+                                                >
+                                                    <SearchIcon />
+
+
+                                                </Button>}
+
+                                </Grid>
+                                <Grid item>
+
+                                    {
+
+
+                                        AImodel == 3 ?
+                                            <TextField
+                                                size={sizex}
+                                                inputProps={{ style: { fontSize: font1 } }}
+                                                InputLabelProps={{ style: { fontSize: font2 } }}
+                                                onChange={(e) => {
+                                                    setPrompt(e.target.value)
+                                                }}
+                                                style={{
+                                                    transform: transform,
+                                                    width: matchMobile ? '58vw' : '30vw',
+                                                    paddingBottom: "0px",
+                                                    paddingTop: "6vh",
+                                                    position: "relative",
+                                                    top: "0vh",
+                                                    left: "0vw",
+                                                    padding: '0vh',
+                                                    borderRadius: '10vw',
+                                                    backgroundImage: 'rgb(255,255,255,0.2)',
+                                                }}
+                                                label={'Search Explain IT'}
+                                                type="text"
+                                                name="caption"
+                                                variant='outlined'
+                                            /> :
+                                            <TextField
+                                                className={loaderx ? "blinken" : ''}
+                                                size={sizex}
+                                                inputProps={{ style: { fontSize: font1 } }}
+                                                InputLabelProps={{ style: { fontSize: font2 } }}
+                                                onChange={(e) => {
+                                                    setPrompt(e.target.value)
+                                                }}
+                                                style={{
+                                                    transform: transform,
+                                                    width: matchMobile ? '58vw' : '30vw',
+                                                    paddingBottom: "0px",
+                                                    paddingTop: "6vh",
+                                                    position: "relative",
+                                                    top: "0vh",
+                                                    left: "0vw",
+                                                    padding: '0vh',
+                                                    borderRadius: '10vw',
+                                                    backgroundImage: 'rgb(255,255,255,0.2)',
+                                                }}
+                                                label="Ask &#129302; to explain in video"
+                                                type="text"
+                                                name="caption"
+                                                variant='outlined'
+                                            />
+                                    }
+
+                                </Grid>
+                                <Grid item>
+                                    <Button
+                                        onClick={(e: any) => {
+                                            handleSubmit(e, AImodel);
+                                        }}
+                                        style={{
+                                            fontSize: buttonFont,
+                                            transform: buttonTransform,
+                                            padding: pad,
+                                            borderRadius: "50px",
+                                            MozBoxShadow: MozBoxShadowReducerLogin,
+                                            WebkitBoxShadow: WebkitBoxShadowReducerLogin,
+                                            boxShadow: boxShadowReducerLogin,
+                                            right: '-2vw'
+                                        }}
+                                        variant="outlined"
+                                        size="large"
+                                        color="primary"
+
+                                    >
+
+                                        {AImodel == 1 || AImodel == 0 ?
+
+                                            AiLock ? <LockIcon /> : <CheckIcon />
+                                            : <CheckIcon />}
+
+                                    </Button>
+                                </Grid>
+                            </Grid>
+                            :
+                            <Grid container alignItems="center" justifyContent="center" spacing={matchMobile ? 0 : 1}>
+                                <Grid item>
+                                    <Button
+                                        style={{
+                                            fontSize: buttonFont,
+                                            transform: buttonTransform,
+                                            padding: pad,
+                                            borderRadius: "50px",
+                                            MozBoxShadow: MozBoxShadowReducerLogin,
+                                            WebkitBoxShadow: WebkitBoxShadowReducerLogin,
+                                            boxShadow: boxShadowReducerLogin,
+                                            left: '-2vw'
+                                        }}
+                                        variant="outlined"
+                                        size="large"
+                                        color="primary"
+                                        onClick={() => {
+                                            // Add your search function here
+                                        }}
+                                    >
+
+                                        <FilterListIcon />
+                                    </Button>
+                                </Grid>
+                                <Grid item>
+                                    <TextField
+
+                                        size={sizex}
+                                        inputProps={{ style: { fontSize: font1 } }}
+                                        InputLabelProps={{ style: { fontSize: font2 } }}
+                                        onChange={(e) => {
+                                            //setpromptx(e.target.value)
+                                        }}
+                                        style={{
+                                            transform: transform,
+                                            width: matchMobile ? '58vw' : '30vw',
+                                            paddingBottom: "0px",
+                                            paddingTop: "6vh",
+                                            position: "relative",
+                                            top: "0vh",
+                                            left: "0vw",
+                                            padding: '0vh',
+                                            borderRadius: '10vw',
+                                            backgroundImage: 'rgb(255,255,255,0.2)',
+                                        }}
+                                        label={memeberPageid === 0 ? "Search All Feeds" : `Search ${MemberProfileData.username}'s Page  `}
+                                        type="text"
+                                        name="caption"
+                                        variant='outlined'
+                                    />
+                                </Grid>
+                                <Grid item>
+                                    <Button
+                                        style={{
+                                            fontSize: buttonFont,
+                                            transform: buttonTransform,
+                                            padding: pad,
+                                            borderRadius: "50px",
+                                            MozBoxShadow: MozBoxShadowReducerLogin,
+                                            WebkitBoxShadow: WebkitBoxShadowReducerLogin,
+                                            boxShadow: boxShadowReducerLogin,
+                                            right: '-2vw'
+                                        }}
+                                        variant="outlined"
+                                        size="large"
+                                        color="primary"
+                                        onClick={() => {
+                                            // Add your check function here
+                                        }}
+                                    >
+                                        <CheckIcon />
+                                    </Button>
+                                </Grid>
+                            </Grid>
+                        }
                     </Grid>
+
 
                 </Grid>
 
 
+
+
+                {initialSteps.length > 0 ?
+                    <>
+
+                        <Grid item
+                            xs={12}
+
+
+
+                            style={{
+                                padding: '0px'
+                            }}>
+                            <ExplainItPreview initialSteps={initialSteps} AImodel={AImodel} promptx={promptx}
+                                setloader={setloader} loaderx={loaderx} />
+                        </Grid>
+                    </>
+                    : null}
 
 
 
@@ -3092,6 +3486,7 @@ function ProfileGatex({
                         }}>
                             <ProfileSetup
 
+                                FeedType={FeedType}
                                 setsnapallow={setsnapallow}
                                 snapallow={snapallow}
 

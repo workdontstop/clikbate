@@ -397,7 +397,7 @@ function Sliderx({
       InteractTimerxxhyx.current = setTimeout(() => {
         sethidePrevVid(true);
         setxl(false);
-      }, 12000)
+      }, 14000)
 
     } else {
       setshow(false)
@@ -418,7 +418,7 @@ function Sliderx({
       InteractTimerxxhyx.current = setTimeout(() => {
         sethidePrevVid(true);
         setxl(false);
-      }, 12000)
+      }, 14000)
 
     } else {
       setshow(false)
@@ -979,11 +979,13 @@ function Sliderx({
   const [interactHeightResolution, setinteractHeightResolution] = useState(window.innerHeight * 0.1);
 
   useEffect(() => {
-    if (minimise) {
-      setinteractHeightResolution(window.innerHeight * 0.77);
-    }
-    else {
-      setinteractHeightResolution(window.innerHeight * 0.82);
+    if (matchPc) {
+      if (minimise) {
+        setinteractHeightResolution(window.innerHeight * 0.74);
+      }
+      else {
+        setinteractHeightResolution(window.innerHeight * 0.85);
+      }
     }
   }, [matchPc, minimise])
 
@@ -991,10 +993,15 @@ function Sliderx({
   useEffect(() => {
 
     if (matchMobile) {
-      setinteractHeightResolution(window.innerHeight * 0.92);
+      if (minimise) {
+        setinteractHeightResolution(window.innerHeight * 0.84);
+      }
+      else {
+        setinteractHeightResolution(window.innerHeight * 0.94);
+      }
     }
 
-  }, [matchMobile])
+  }, [matchMobile, minimise])
 
 
   const callInteract = useCallback(() => {
@@ -1713,10 +1720,10 @@ function Sliderx({
           if (post.interact1a || post.interact1b) {
             //alert('jj');
 
-            var scaleFactor1 = matchMobile ? 1.018 : 1.008; // You can adjust this value to control the zoom level
+            var scaleFactor1 = matchMobile ? 1.014 : 1.018; // You can adjust this value to control the zoom level
 
 
-            var scaleFactor2 = matchMobile ? 1.018 : 1.008; // You can adjust this value to control the zoom level
+            var scaleFactor2 = matchMobile ? 1.014 : 1.018; // You can adjust this value to control the zoom level
 
             if (post.interact1a) {
               if (typex === 0 || typex === 3) {
@@ -1897,7 +1904,7 @@ function Sliderx({
                 } else {
                   drawInteraction(0, event, 0);
                 }
-              }, 50);
+              }, 100);
             }
 
 
@@ -2038,6 +2045,7 @@ function Sliderx({
     if (itemCLICKED[pey]) {
       ////onMouseDown onMouseMove
       ////touchDown = e.clientX
+      //scale
       const touchDown = e.touches[0].clientX;
       setTouchPosition(touchDown);
     }
@@ -2401,8 +2409,7 @@ function Sliderx({
               alt="a superstarz post "
               style={{
                 ...style,
-                borderRadius: matchMobile ? minimise ? '0px' : '0%' :
-                  minimise ? '0px' : '4%',
+                borderRadius: '0px',
 
 
                 cursor: "pointer",
@@ -2461,8 +2468,7 @@ function Sliderx({
                 alt="a clikbate post "
                 style={{
 
-                  borderRadius: matchMobile ? minimise ? '0px' : '0%' :
-                    minimise ? '0px' : '4%',
+                  borderRadius: '0px',
 
                   cursor: "pointer",
                   width: "100%",
@@ -2505,7 +2511,7 @@ function Sliderx({
                     }}
                     ref={canvasRefIn}
                     style={{
-                      borderRadius: matchMobile ? minimise ? '4%' : '0%' : '4%',
+                      borderRadius: '0px',
                       cursor: "pointer",
                       padding: "0px",
                       height: '0px',
@@ -2553,7 +2559,7 @@ function Sliderx({
 
                 alt="a clikbate post "
                 style={{
-                  borderRadius: matchMobile ? minimise ? '4%' : '0%' : '4%',
+                  borderRadius: '0px',
                   cursor: "pointer",
                   width: "100%",
                   height: minimise ? matchMobile ? '21.5vh' : '68vh' : `auto`,
@@ -2866,8 +2872,7 @@ function Sliderx({
 
         {
           minimise ? null :
-            inView ?
-
+            inView && HasInteractivity ?
               < VideoComponent
                 xl={xl}
                 setxl={setxl}

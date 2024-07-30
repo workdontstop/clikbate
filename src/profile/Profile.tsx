@@ -114,7 +114,8 @@ function Profilex({
   setshowProfiileData,
 
   snapallow,
-  setsnapallow
+  setsnapallow,
+  FeedType
 
 
 }: any) {
@@ -1330,9 +1331,9 @@ function Profilex({
             paddingRight: matchPc ? "0vw" : '0vw',
             height: "auto",
             marginTop: matchMobile ?
-              minimise ? '1.4vh' : '22vh' :
+              minimise ? '8.4vh' : '40vh' :
 
-              minimise ? '-6.3vh' : '10vh',
+              minimise ? '0vh' : '35vh',
 
             marginLeft: miniProfile && matchPc ? '1.5vw' : '0px',
           }}
@@ -1402,6 +1403,7 @@ function Profilex({
 
                     <Post
 
+                      FeedType={FeedType}
                       setsnapallow={setsnapallow}
                       snapallow={snapallow}
 
@@ -1508,7 +1510,7 @@ function Profilex({
                           width: '10%',
                           marginTop: minimise ? '0px' : matchMobile ? '15vh' : '15vh',
                           backgroundColor: darkmodeReducer ? 'rgb(200,200,200,0.1)' : 'rgb(20,20,20,0.15)',
-                          height: matchMobile ? "0vh" : '0.25vh',
+                          height: matchMobile ? "0vh" : '0vh',
                           display: minimise ? 'none' : 'block'
 
                         }}

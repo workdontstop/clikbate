@@ -24,10 +24,11 @@ import OpenAI from 'openai';
 
 
 import Axios from "axios";
+import { setTimeout } from "timers";
 
 
 
-function GenerateAndUploadx({ setUploadGPT, OpenUploadModal, Loader, setLoader }: any) {
+function GenerateAndUploadx({ setUploadGPT, OpenUploadModal, Loader, setLoader, AiLock }: any) {
 
 
   const { REACT_APP_SUPERSTARZ_URL } = process.env;
@@ -36,9 +37,9 @@ function GenerateAndUploadx({ setUploadGPT, OpenUploadModal, Loader, setLoader }
 
   const dispatch = useDispatch();
 
-  const [prompt, setprompt] = useState('');
 
-  const [Total, setTotal] = useState(1);
+
+  const [Total, setTotal] = useState(4);
 
   const [pxResolution, setpxResolution] = useState('');
 
@@ -46,8 +47,16 @@ function GenerateAndUploadx({ setUploadGPT, OpenUploadModal, Loader, setLoader }
   const [imageUrl, setimageUrl] = useState('');
 
 
+  const [showModelType, setShowModelType] = useState(true);
+  const [AImodel, setAImodel] = useState(2);
 
 
+  const [prompt, setprompt] = useState('');
+
+
+
+
+  const Timervv = useRef<ReturnType<typeof setTimeout> | null>(null);
 
 
 
@@ -75,7 +84,8 @@ function GenerateAndUploadx({ setUploadGPT, OpenUploadModal, Loader, setLoader }
 
   const [imageDataURL, setImageDataURL] = useState('');
 
-  const imageHandleChangeDalle = useCallback(() => {
+
+  const importToFiltersDalle = useCallback(() => {
     // Access the image element using ref
     const par = {
       dalle: imageUrl,
@@ -109,6 +119,41 @@ function GenerateAndUploadx({ setUploadGPT, OpenUploadModal, Loader, setLoader }
       });
   }, [imageUrl]);
 
+
+  const importToFiltersStablility = useCallback(() => {
+    if (!imageUrl) {
+      console.error('Invalid image URL');
+      return;
+    }
+
+    const img = new Image();
+    img.crossOrigin = 'Anonymous';
+    img.src = imageUrl;
+
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      canvas.width = img.width;
+      canvas.height = img.height;
+      const ctx = canvas.getContext('2d');
+      if (ctx) {
+        ctx.drawImage(img, 0, 0);
+        const dataURL = canvas.toDataURL('image/png');
+        setImageDataURL(dataURL);
+
+        const ray = [dataURL];
+
+        setLoader(false);
+
+        dispatch(UpdateUploadData(ray, ray[0]));
+        OpenUploadModal(1);
+      }
+    };
+
+    img.onerror = (error) => {
+      console.error('Error loading image:', error);
+      setLoader(false);
+    };
+  }, [imageUrl, dispatch]);
 
 
 
@@ -150,8 +195,46 @@ function GenerateAndUploadx({ setUploadGPT, OpenUploadModal, Loader, setLoader }
 
 
 
+  const handleImageChange = (e: any) => {
+    //setImage(e.target.files[0]);
+  };
+
+  var strength = '';
+  var image: any = null;
+
+  const GenerateImagetoImage = useCallback(async () => {
+    setLoader(true);
+
+
+
+    const formData = new FormData();
+    formData.append('prompt', prompt);
+    formData.append('strength', strength);
+    if (image) {
+      formData.append('image', image);
+    } else {
+      alert('Please upload an image.');
+      setLoader(false);
+      return;
+    }
+
+    try {
+      const response = await Axios.post(`${process.env.REACT_APP_SUPERSTARZ_URL}/StableDiffusionApi`, formData, { responseType: 'blob' });
+      const url = URL.createObjectURL(new Blob([response.data]));
+      setimageUrl(url);
+    } catch (error) {
+      console.error('Error generating image:', error);
+    } finally {
+      setLoader(false);
+    }
+  }, [prompt, strength, image]);
+
+
+
+
+
   //////
-  const GenerateImage = useCallback(async () => {
+  const GenerateImageGpt = useCallback(async () => {
 
     const par = {
       prompt: prompt,
@@ -194,7 +277,48 @@ function GenerateAndUploadx({ setUploadGPT, OpenUploadModal, Loader, setLoader }
 
 
 
+  const GenerateImageStableSDXL = useCallback(async () => {
+    setLoader(true);
+    const model = "stable-diffusion-xl-1024-v1-0"; // or "stable-diffusion-v1-6"
+    const height = 1024;
+    const width = 1024;
 
+    const par = {
+      prompt: prompt,
+      model,
+      height,
+      width
+    };
+
+    try {
+      const response = await Axios.post(`${REACT_APP_SUPERSTARZ_URL}/StableDiffusionApisd`, { values: par }, { responseType: 'blob' });
+      const url = URL.createObjectURL(new Blob([response.data]));
+      setimageUrl(url);
+    } catch (error) {
+      console.error('Error generating image:', error);
+    } finally {
+      setLoader(false);
+    }
+  }, [prompt]);
+
+
+  const GenerateImageStable3 = useCallback(async () => {
+
+    setLoader(true);
+    const par = {
+      prompt: prompt,
+    };
+
+    try {
+      const response = await Axios.post(`${REACT_APP_SUPERSTARZ_URL}/StableDiffusionApi`, { values: par }, { responseType: 'blob' });
+      const url = URL.createObjectURL(new Blob([response.data]));
+      setimageUrl(url);
+    } catch (error) {
+      console.error('Error generating image:', error);
+    } finally {
+      setLoader(false);
+    }
+  }, [prompt]);
 
   /////
   ///////
@@ -255,7 +379,7 @@ function GenerateAndUploadx({ setUploadGPT, OpenUploadModal, Loader, setLoader }
   const darkmodeReducer = darkmode;
 
   if (matchPc) {
-    buttonFont = "1.5vw";
+    buttonFont = "1vw";
     buttonTransform = " ";
     pad = darkmodeReducer ? "25px" : "27px";
     ///
@@ -413,59 +537,65 @@ function GenerateAndUploadx({ setUploadGPT, OpenUploadModal, Loader, setLoader }
 
               }}
             />
+
+
             <Grid item className="buttonpad buttonshake" xs={12} style={{ marginTop: '-17vh', }} >
 
 
-
-
-
-
-              <PublishIcon
-                className={
-                  darkmodeReducer
-                    ? "make-small-icons-clickable-lightCrop turdark dontallowhighlighting zuperkingIcon "
-                    : "make-small-icons-clickable-darkCrop  turdark dontallowhighlighting zuperkingIcon  "
-                }
-                style={{
-                  position: 'absolute',
-                  marginTop: '2.7vh',
-                  marginLeft: '-6.9vh',
-
-                  fontSize:
-                    matchTablet || matchMobile ? "4.8vh" : "2.5vw",
-                }}
-              />
-
-
-
-
-
-
-
-              <div
-                onClick={imageHandleChangeDalle}
+              <Button
                 className="zuperxyinfo"
+
+                onClick={() => {
+                  if (AImodel === 0) {
+
+                    importToFiltersStablility();
+                  }
+                  else if (AImodel === 2) {
+
+                    importToFiltersStablility();
+                  }
+                  else {
+
+                    importToFiltersDalle();
+                  }
+                }
+
+                }
                 style={{
                   fontSize: buttonFont,
                   transform: buttonTransform,
-                  padding: "16.5px",
-                  marginTop: '1.8vh',
-                  borderRadius: "52px",
-                  MozBoxShadow: MozBoxShadowReducerLogin,
-                  WebkitBoxShadow: WebkitBoxShadowReducerLogin,
-                  boxShadow: boxShadowReducerLogin,
-                  fontFamily: ' Arial, Helvetica, sans-serif',
-                  textAlign: 'center',
+                  padding: '2vh',
                   color: '#ffffff',
-                  cursor: 'pointer',
-                  position: 'relative',
-                  zIndex: 40
+                  borderRadius: "50px",
+                  MozBoxShadow: MozBoxShadowReducerSign,
+                  WebkitBoxShadow: WebkitBoxShadowReducerSign,
+                  boxShadow: boxShadowReducerSign,
                 }}
-
+                fullWidth={true}
+                variant='outlined'
+                size="large"
+                color="secondary"
               >
-                IMPORT
+                {" "}
 
-              </div>
+                <PublishIcon
+                  className={
+                    darkmodeReducer
+                      ? "make-small-icons-clickable-lightCrop turdark dontallowhighlighting zuperkingIcon "
+                      : "make-small-icons-clickable-darkCrop  turdark dontallowhighlighting zuperkingIcon  "
+                  }
+                  style={{
+
+                    fontSize:
+                      matchTablet || matchMobile ? "4.8vh" : "2vw",
+                  }}
+                />
+
+
+                <span style={{ marginLeft: '1vw' }}>
+                  IMPORT
+                </span>
+              </Button>
 
 
             </Grid>
@@ -563,53 +693,54 @@ function GenerateAndUploadx({ setUploadGPT, OpenUploadModal, Loader, setLoader }
 
             <Grid item className="buttonpad buttonshake" xs={12} style={{ marginTop: '0.5vh', }} >
 
-              <label htmlFor="fileoo">
-
-                <PublishIcon
-                  className={
-                    darkmodeReducer
-                      ? "make-small-icons-clickable-lightCrop turdark dontallowhighlighting zuperkingIcon "
-                      : "make-small-icons-clickable-darkCrop  turdark dontallowhighlighting zuperkingIcon  "
-                  }
-                  style={{
-                    position: 'absolute',
-                    marginTop: '1.5vh',
-                    marginLeft: '-6.9vh',
-
-                    fontSize:
-                      matchTablet || matchMobile ? "4.8vh" : "2.5vw",
-                  }}
-                />
 
 
+              <Button
 
 
+                style={{
+                  fontSize: buttonFont,
+                  transform: buttonTransform,
+                  padding: '2vh',
+
+                  borderRadius: "50px",
+                  MozBoxShadow: MozBoxShadowReducerLogin,
+                  WebkitBoxShadow: WebkitBoxShadowReducerLogin,
+                  boxShadow: boxShadowReducerLogin,
+                }}
+                fullWidth={true}
+                variant='outlined'
+                size="large"
+                color="primary"
+              >
+                {" "}
+
+                <label htmlFor="fileoo" style={{ padding: '0px' }}>
+
+                  <PublishIcon
+                    className={
+                      darkmodeReducer
+                        ? "make-small-icons-clickable-lightCrop turdark dontallowhighlighting zuperkingIcon "
+                        : "make-small-icons-clickable-darkCrop  turdark dontallowhighlighting zuperkingIcon  "
+                    }
+                    style={{
+
+                      fontSize:
+                        matchTablet || matchMobile ? "4.8vh" : "2vw",
+                    }}
+                  />
+                </label>
 
 
+                <span style={{ marginLeft: '1vw' }}>
+                  <label htmlFor="fileoo" style={{
+                    padding: '0px', cursor: 'pointer'
+                  }}>
+                    IMPORT   </label>
+                </span>
+              </Button>
 
-                <div
 
-
-                  style={{
-                    fontSize: buttonFont,
-                    transform: buttonTransform,
-                    padding: "16.5px",
-                    borderRadius: "52px",
-                    MozBoxShadow: MozBoxShadowReducerLogin,
-                    WebkitBoxShadow: WebkitBoxShadowReducerLogin,
-                    boxShadow: boxShadowReducerLogin,
-                    fontFamily: ' Arial, Helvetica, sans-serif',
-                    textAlign: 'center',
-                    color: darkmodeReducer ? '#ffffff' : '#000000',
-                    cursor: 'pointer'
-                  }}
-
-                >
-                  IMPORT
-
-                </div>
-
-              </label>
 
             </Grid>
 
@@ -617,6 +748,119 @@ function GenerateAndUploadx({ setUploadGPT, OpenUploadModal, Loader, setLoader }
           </Grid>
 
 
+
+
+
+          {showModelType ?
+            <Grid
+              item
+              xs={12}
+              style={{
+                width: '100%',
+                height: '0px',
+                padding: '0px',
+                textAlign: 'center',
+                position: 'fixed',
+                top: '42vh',
+                left: '45.5vw',
+              }}
+            >
+
+
+
+
+              <Grid
+                item
+                xs={1}
+                style={{
+                  padding: '0px',
+
+                }}
+              >
+
+
+                {AImodel === 0 ? <Button
+                  onClick={() => {
+                    setAImodel(1);
+
+                  }}
+                  style={{
+                    fontSize: '0.7rem',
+                    transform: buttonTransform,
+                    padding: '2vh',
+
+                    borderRadius: "50px",
+
+
+                    MozBoxShadow: MozBoxShadowReducerSign,
+                    WebkitBoxShadow: WebkitBoxShadowReducerSign,
+                    boxShadow: boxShadowReducerSign,
+                    opacity: AiLock ? '0.3' : '1'
+                  }}
+                  fullWidth={true}
+
+                  variant="contained"
+                  size="large"
+                  color="secondary"
+                >
+                  {" "}
+                  DIFFUSION
+                </Button> :
+                  AImodel === 1 ? <Button
+                    onClick={() => {
+                      setAImodel(2);
+
+                    }}
+                    style={{
+                      fontSize: '0.7rem',
+                      transform: buttonTransform,
+                      padding: '2vh',
+
+                      borderRadius: "50px",
+
+                      MozBoxShadow: MozBoxShadowReducerLogin,
+                      WebkitBoxShadow: WebkitBoxShadowReducerLogin,
+                      boxShadow: boxShadowReducerLogin,
+                      opacity: AiLock ? '0.3' : '1'
+
+                    }}
+                    fullWidth={true}
+
+                    variant='outlined'
+                    size="large"
+
+                    color="primary"
+                  >
+                    {" "}
+                    DALLE
+                  </Button> :
+                    <Button
+                      onClick={() => {
+                        setAImodel(0);
+
+                      }}
+                      style={{
+                        fontSize: '0.7rem',
+                        transform: buttonTransform,
+                        padding: '2vh',
+
+                        borderRadius: "50px",
+
+                        MozBoxShadow: MozBoxShadowReducerLogin,
+                        WebkitBoxShadow: WebkitBoxShadowReducerLogin,
+                        boxShadow: boxShadowReducerLogin,
+                      }}
+                      fullWidth={true}
+
+
+                      variant='outlined'
+                      size="large"
+
+                      color="primary"
+                    >
+                      {" "}
+                      SDXL
+                    </Button>}</Grid> </Grid> : null}
 
           <Grid
             item
@@ -626,16 +870,25 @@ function GenerateAndUploadx({ setUploadGPT, OpenUploadModal, Loader, setLoader }
               padding: '0.04px',
               textAlign: 'center',
               opacity: '0.7',
-              backgroundColor: '#aaaaaa'
+
             }}>
           </Grid>
 
 
+
           <TextField
             size={sizex}
+            onBlur={
+              () => {
+                ///setShowModelType(false);
+              }
+            }
             inputProps={{ style: { fontSize: font1 } }}
             InputLabelProps={{ style: { fontSize: font2 } }}
-            onChange={(e) => { setprompt(e.target.value) }}
+            onChange={(e) => {
+              setprompt(e.target.value)
+
+            }}
             /// value={captionvalues.caption}
             style={{
               transform: transform,
@@ -677,31 +930,37 @@ function GenerateAndUploadx({ setUploadGPT, OpenUploadModal, Loader, setLoader }
 
             <Grid item className="buttonpad buttonshake" xs={12} style={{ display: Loader ? 'none' : 'block' }}>
 
-              <ImageSearchIcon
-                className={
-                  darkmodeReducer
-                    ? "make-small-icons-clickable-lightCrop turdark dontallowhighlighting zuperkingIcon "
-                    : "make-small-icons-clickable-darkCrop  turdark dontallowhighlighting zuperkingIcon  "
-                }
-                style={{
-                  position: 'absolute',
-                  marginTop: '2vh',
-                  marginLeft: '-7vh',
-
-                  fontSize:
-                    matchTablet || matchMobile ? "4.8vh" : "2.5vw",
-                }}
-              />
 
               <Button
                 onClick={() => {
-                  setLoader(true);
-                  GenerateImage();
+
+
+                  if (AImodel === 0) {
+
+                    if (AiLock) { } else {
+                      setLoader(true);
+                      GenerateImageStable3();
+                    }
+
+
+                  } else if (AImodel === 1) {
+
+                    if (AiLock) { } else {
+                      setLoader(true);
+                      GenerateImageGpt();
+                    }
+
+
+                  } else {
+                    setLoader(true);
+                    GenerateImageStableSDXL();
+                  }
+
                 }}
                 style={{
                   fontSize: buttonFont,
                   transform: buttonTransform,
-                  padding: pad,
+                  padding: '2vh',
                   borderRadius: "50px",
                   MozBoxShadow: MozBoxShadowReducerSign,
                   WebkitBoxShadow: WebkitBoxShadowReducerSign,
@@ -712,8 +971,26 @@ function GenerateAndUploadx({ setUploadGPT, OpenUploadModal, Loader, setLoader }
                 size="large"
                 color="secondary"
               >
+                <ImageSearchIcon
+                  className={
+                    darkmodeReducer
+                      ? "make-small-icons-clickable-lightCrop turdark dontallowhighlighting zuperkingIcon "
+                      : "make-small-icons-clickable-darkCrop  turdark dontallowhighlighting zuperkingIcon  "
+                  }
+                  style={{
+
+
+                    fontSize:
+                      matchTablet || matchMobile ? "4.8vh" : "2vw",
+                  }}
+                />
+
                 {" "}
-                CREATE
+
+                <span style={{ marginLeft: '1vw' }}>
+                  CREATE
+                </span>
+
               </Button>
             </Grid>
 
@@ -742,7 +1019,7 @@ function GenerateAndUploadx({ setUploadGPT, OpenUploadModal, Loader, setLoader }
 
 
 
-    </Grid>
+    </Grid >
 
   </>);
 }

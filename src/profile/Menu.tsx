@@ -91,6 +91,8 @@ function Menux({
   setMobileZoom,
   zoomedModal,
   mobileZoom,
+  FeedType
+
 
 
 }: any) {
@@ -188,16 +190,24 @@ function Menux({
 
 
 
-  const updateCurrentURLWithScrollPosition = () => {
+
+  const updateCurrentURLWithScrollPosition = useCallback(() => {
     var indexplus1 = ScrollIndexPusher + 1;
 
     const currentPath = location.pathname.split('/');
-    const currentIdRoute1 = currentPath[currentPath.length - 3]; // Assuming idRoute1 is the third last segment
-    const currentIdRoute2 = currentPath[currentPath.length - 2]; // Assuming idRoute2 is the second last segment
+    const currentIdRoute1 = currentPath[currentPath.length - 4]; // Assuming idRoute1 is the fourth last segment
+    const currentIdRoute2 = currentPath[currentPath.length - 3]; // Assuming idRoute2 is the third last segment
+    const currentIdRoute3 = currentPath[currentPath.length - 2]; // Assuming idRoute3 is the second last segment
+    const currentIdRoute4 = currentPath[currentPath.length - 1]; // Assuming idRoute4 is the last segment
+
     const encodedScrollIndex = encodeBase64(indexplus1.toString());
     const encodedPageNumber = encodeBase64(PostPagenumPusher.toString());
-    navigate(`/Feeds/${currentIdRoute1}/${encodedScrollIndex}/${encodedPageNumber}`, { replace: true });
-  };
+    const encodedFeedtype = encodeBase64(FeedType.toString());
+
+    navigate(`/Feeds/${currentIdRoute1}/${encodedScrollIndex}/${encodedPageNumber}/${encodedFeedtype}`, { replace: true });
+  }, [FeedType, PostPagenumPusher, ScrollIndexPusher]);
+
+
 
 
 
@@ -213,7 +223,7 @@ function Menux({
     }
 
     // Navigate to the new URL with the new ID
-    navigate(`/Feeds/${encodedId}/${encodeBase64('0')}/${encodeBase64('0')}`);
+    navigate(`/Feeds/${encodedId}/${encodeBase64('0')}/${encodeBase64('0')}/${encodeBase64('0')}`);
     dispatch(UserInfoUpdateMEMBER(0));
     setIdReactRouterAsInt(0);
     setScrollReactRouter(0)
@@ -305,7 +315,7 @@ function Menux({
 
 
       // Navigate to the new URL with the new ID
-      navigate(`/Feeds/${encodedId}/${encodeBase64('0')}/${encodeBase64('0')}`);
+      navigate(`/Feeds/${encodedId}/${encodeBase64('0')}/${encodeBase64('0')}/${encodeBase64('0')}`);
 
       dispatch(UserInfoUpdateMEMBER(idReducer));
       setIdReactRouterAsInt(idReducer);

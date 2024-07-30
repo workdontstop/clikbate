@@ -157,7 +157,8 @@ function Postx({
   StopRouterScroll,
 
   snapallow,
-  setsnapallow
+  setsnapallow,
+  FeedType
 
 
 
@@ -213,6 +214,27 @@ function Postx({
   const [dateint, setdateint] = useState<any>(null);
 
   const [dateint2, setdateint2] = useState<any>(null);
+
+
+
+  const updateCurrentURLWithScrollPosition = useCallback(() => {
+    var indexplus1 = pey + 1;
+
+
+    const currentPath = location.pathname.split('/');
+    const currentIdRoute1 = currentPath[currentPath.length - 4]; // Assuming idRoute1 is the fourth last segment
+    const currentIdRoute2 = currentPath[currentPath.length - 3]; // Assuming idRoute2 is the third last segment
+    const currentIdRoute3 = currentPath[currentPath.length - 2]; // Assuming idRoute3 is the second last segment
+    const currentIdRoute4 = currentPath[currentPath.length - 1]; // Assuming idRoute4 is the last segment
+
+    const encodedScrollIndex = encodeBase64(indexplus1.toString());
+    const encodedPageNumber = encodeBase64(PostPagenumPusher.toString());
+    const encodedFeedtype = encodeBase64(FeedType.toString());
+
+    navigate(`/Feeds/${currentIdRoute1}/${encodedScrollIndex}/${encodedPageNumber}/${encodedFeedtype}`, { replace: true });
+  }, [FeedType, PostPagenumPusher]);
+
+
 
 
   useEffect(() => {
@@ -1160,9 +1182,9 @@ function Postx({
       ? minimise ? '5%' : "12.5%"
       : minimise ? '22%' : "15%";
 
-  var postprofiletop = matchPc ? "5.7vh" : matchTablet ? "-9.3vh" : "-5.6vh";
+  var postprofiletop = matchPc ? "3.7vh" : matchTablet ? "-9.3vh" : "-8vh";
 
-  var postusernametop = matchPc ? "2.6vh" : matchTablet ? "-11.9vh" : "-9.6vh";
+  var postusernametop = matchPc ? "1.6vh" : matchTablet ? "-11.9vh" : "-10.6vh";
 
   var postusernametoptime = matchPc ? "0vh" : matchTablet ? "-11.9vh" : "-12.3vh";
 
@@ -1323,16 +1345,8 @@ function Postx({
 
 
 
-  const updateCurrentURLWithScrollPosition = () => {
-    var indexplus1 = pey + 1;
 
-    const currentPath = location.pathname.split('/');
-    const currentIdRoute1 = currentPath[currentPath.length - 3]; // Assuming idRoute1 is the third last segment
-    const currentIdRoute2 = currentPath[currentPath.length - 2]; // Assuming idRoute2 is the second last segment
-    const encodedScrollIndex = encodeBase64(indexplus1.toString());
-    const encodedPageNumber = encodeBase64(PostPagenumPusher.toString());
-    navigate(`/Feeds/${currentIdRoute1}/${encodedScrollIndex}/${encodedPageNumber}`, { replace: true });
-  };
+
 
 
 
@@ -1347,7 +1361,7 @@ function Postx({
     updateCurrentURLWithScrollPosition();
 
     // Navigate to the new URL with the new ID
-    navigate(`/Feeds/${encodedId}/${encodeBase64('0')}/${encodeBase64('0')}`);
+    navigate(`/Feeds/${encodedId}/${encodeBase64('0')}/${encodeBase64('0')}/${encodeBase64('0')}`);
     dispatch(UserInfoUpdateMEMBER(post.sender));
     setIdReactRouterAsInt(post.sender);
     setScrollReactRouter(0);
@@ -2136,10 +2150,10 @@ function Postx({
                                 position: 'absolute',
                                 width: '100%',
                                 textAlign: 'right',
-                                paddingRight: '23%',
+                                paddingRight: matchMobile ? '21%' : '13%',
                                 fontWeight: 'normal',
                                 right: '0px',
-                                marginTop: matchMobile ? '-1.5vh' : '-1.5vh',
+                                marginTop: matchMobile ? '-1.2vh' : '-1.5vh',
                               }}>
                               {post.topic}</span>
 
@@ -2180,7 +2194,7 @@ function Postx({
                       style={{
                         width: "79%",
 
-                        top: matchMobile ? '-7.5vh' : '4.3vh',
+                        top: matchMobile ? '-8.5vh' : '3.3vh',
                         position: "relative",
 
                         alignItems: "center",
@@ -2237,14 +2251,14 @@ function Postx({
                       }
                       style={{
                         width: "79%",
-                        top: matchMobile ? '-6vh' : '5.6vh',
+                        top: matchMobile ? '-7vh' : '4.6vh',
                         position: "relative",
                         // display: "flex", //flex
                         alignItems: "center",
                         justifyContent: "left",
                         zIndex: 1,
                         paddingLeft: "1vw",
-                        marginLeft: matchMobile ? '1%' : '1.2%',
+                        marginLeft: matchMobile ? '19%' : '12.5%',
                         height: "20px",
                         display: post.audioData ? minimise ? 'none' : 'flex' : minimise ? 'none' : 'none'
                       }}
@@ -2288,7 +2302,7 @@ function Postx({
                               }}
                             />
 
-                            <span style={{ paddingLeft: matchMobile ? '5vw' : "1.3vw", opacity: 0.6 }}>
+                            <span style={{ paddingLeft: matchMobile ? '5vw' : "1.3vw", opacity: 0.4 }}>
                               {truncatedName}  </span>
 
                           </span>
@@ -2451,8 +2465,8 @@ function Postx({
                       /// cursor: 'pointer',
                       fontFamily: "Roboto, Arial, Helvetica, sans-serif",
                       opacity: darkmodeReducer ? '0.4' : '0.7',
-                      marginLeft: matchMobile ? '2.5vw' : '1vw'
-                    }}> {ComUsername}</span>
+                      marginLeft: matchMobile ? '2.5vw' : '0vw'
+                    }}> </span>
 
                     <span style={{ marginLeft: "0.8vw" }}>
                       {" "}
@@ -2471,6 +2485,7 @@ function Postx({
                           dispatch(UpdateSign(true));
 
                           ///commentClickedNew();
+                          //   //scale
                         } else {
                           commentClickedNew();
 
@@ -2481,11 +2496,12 @@ function Postx({
                         fontWeight: "normal",
                         fontSize: matchMobile ? '0.8rem' : '1rem',
                         /// cursor: 'pointer',
-                        width: matchMobile ? '48%' : "64%",
+                        width: matchMobile ? '58%' : "64%",
                         fontFamily: "Roboto, Arial, Helvetica, sans-serif",
                         opacity: darkmodeReducer ? '0.5' : '0.8',
                         marginLeft: '1vw',
-                        backgroundColor: ''
+                        backgroundColor: '',
+                        overflow: 'hidden'
 
                       }}>
 

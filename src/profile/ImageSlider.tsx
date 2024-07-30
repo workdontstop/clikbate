@@ -1,13 +1,16 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import './GptCss.css';
 import { useSelector } from 'react-redux';
 import { matchMobile } from '../DetectDevice';
 
 interface ImageSliderProps {
     RandomColor: string;
+    FeedType: number
+    setFeedType: any;
+
 }
 
-const ImageSlider: React.FC<ImageSliderProps> = ({ RandomColor }) => {
+const ImageSlider: React.FC<ImageSliderProps> = ({ RandomColor, FeedType, setFeedType }) => {
     const { REACT_APP_CLOUNDFRONT } = process.env;
 
     interface RootStateReducerImage {
@@ -26,17 +29,23 @@ const ImageSlider: React.FC<ImageSliderProps> = ({ RandomColor }) => {
         `${REACT_APP_CLOUNDFRONT}lisa-blackpink-v0-vat3v3pubew91.webp`,
         `${REACT_APP_CLOUNDFRONT}elon-musk-collecting-signatures-to-stop-ai-development-v0-5clnkr98nisa1.webp`,
         `${REACT_APP_CLOUNDFRONT}yj1odjcejc451.jpg`,
-        `${REACT_APP_CLOUNDFRONT}0b5b23f942c2a6fa3cd88a77c5666bc2.jpg`,
         `${REACT_APP_CLOUNDFRONT}2f61783767acb1d7823de5891ac01211.jpg`,
+        `${REACT_APP_CLOUNDFRONT}0b5b23f942c2a6fa3cd88a77c5666bc2.jpg`,
     ];
 
-    const textArray = ['Top Feeds', 'Never Seen', 'Connections', 'Friends Feed', 'Topics'];
+    const textArray = ['All Feeds', 'Explain IT', 'Friends Feed', 'Discover', 'Topics'];
 
-    const [activeIndex, setActiveIndex] = useState<number | null>(0);
+    const [activeIndex, setActiveIndex] = useState<number | null>(FeedType);
+
     const refs = useRef<(HTMLDivElement | null)[]>([]);
 
 
 
+    useEffect(() => {
+
+        setActiveIndex(FeedType)
+
+    }, [FeedType])
 
     ///
     ///
@@ -96,9 +105,18 @@ const ImageSlider: React.FC<ImageSliderProps> = ({ RandomColor }) => {
 
     const handleImageClick = (index: number) => {
         if (activeIndex === index) {
+
             console.log(`Image ${index + 1} clicked again`);
+
+
+            setFeedType(index);
+
         } else {
+
+            setFeedType(index);
+
             setActiveIndex(index);
+
 
             const imageContainer = refs.current[index];
             if (imageContainer) {
@@ -125,9 +143,39 @@ const ImageSlider: React.FC<ImageSliderProps> = ({ RandomColor }) => {
                         className={matchMobile ? "image-containerx" : "image-container"}
                         onClick={() => handleImageClick(index)}
                         ref={(el) => (refs.current[index] = el)}
-                        style={{ borderColor: activeIndex === index ? blendedColor : 'transparent' }}>
-                        <img src={image} alt={`Slide ${index + 1}`} className="image" />
-                        <div className={matchMobile ? "overlay-textx" : "overlay-text"}>{textArray[index]}</div>
+                        style={{
+                            // borderColor: activeIndex === index ? blendedColor : 'transparent',
+                            opacity: index === 0 || index === 1 ? 1 : '0.7',
+
+                        }}>
+
+                        <img src={image} alt={`Slide ${index + 1}`} className="image"
+                            style={{
+                                transform: activeIndex === index ? 'scale(1)' : 'scale(0.8)',
+                                transition: "transform 0.1s",
+
+                            }} />
+
+                        <div className={matchMobile ? "overlay-textx" : "overlay-text"}>
+
+                            {index === 1 ?
+                                <>
+                                    <span style={{ color: 'white' }}>
+                                        Explain
+                                    </span>
+
+                                    <span style={{ visibility: 'hidden' }}>
+                                        .
+                                    </span>
+
+                                    <span style={{ color: '#00ccff' }}>
+                                        IT
+                                    </span> </> : textArray[index]}
+
+
+
+
+                        </div>
                     </div>
                 ))}
             </div>

@@ -14,7 +14,7 @@
   border-radius: 50%;
   object-fit: cover;
   overflow: hidden;
-  transition: transform 0.2s, width 0.2s, height 0.2s;
+  transition: transform 1.8s, width 0.2s, height 0.2s;
 }
 
 .circular-videox {
@@ -27,7 +27,7 @@
   border-radius: 50%;
   object-fit: cover;
   overflow: hidden;
-  transition: transform 0.2s, width 0.2s, height 0.2s;
+  transition: transform 1.8s, width 0.2s, height 0.2s;
 }
 
 .circular-video2 {
@@ -40,7 +40,7 @@
   border-radius: 50%;
   object-fit: cover;
   overflow: hidden;
-  transition: transform 0.2s, width 0.2s, height 0.2s;
+  transition: transform 1.8s, width 0.2s, height 0.2s;
 }
 .circular-video2x {
   position: absolute;
@@ -52,7 +52,7 @@
   border-radius: 50%;
   object-fit: cover;
   overflow: hidden;
-  transition: transform 0.2s, width 0.2s, height 0.2s;
+  transition: transform 1.8s, width 0.2s, height 0.2s;
 }
 
 /* IMAGE SLIDER xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx*/
@@ -93,7 +93,7 @@
   scroll-snap-align: center;
   position: relative;
   margin: 10px;
-  border: 4px solid transparent;
+  border: 0.28vw solid transparent;
   transition: border-color 0.3s;
   border-radius: 50%;
   cursor: pointer;
@@ -126,7 +126,7 @@
   left: 50%;
   transform: translateX(-50%);
   color: white;
-  font-size: 0.71rem;
+  font-size: 0.62rem;
   font-weight: bold;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
   font-family: Arial, Helvetica, sans-serif;
@@ -138,7 +138,8 @@
   left: 50%;
   transform: translateX(-50%);
   color: white;
-  font-size: 1rem;
+  font-size: 0.89rem;
+  padding: 0px;
   font-weight: bold;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
   font-family: Arial, Helvetica, sans-serif;
