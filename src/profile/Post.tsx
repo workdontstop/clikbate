@@ -1182,9 +1182,13 @@ function Postx({
       ? minimise ? '5%' : "12.5%"
       : minimise ? '22%' : "15%";
 
-  var postprofiletop = matchPc ? "3.7vh" : matchTablet ? "-9.3vh" : "-8vh";
+  var postprofiletop = matchPc ? "3vh" : matchTablet ? "-9.3vh" : "-10vh";
 
-  var postusernametop = matchPc ? "1.6vh" : matchTablet ? "-11.9vh" : "-10.6vh";
+  var postusernametop = matchPc ? "-0.5vh" : matchTablet ? "-11.9vh" : "-13.6vh";
+
+  var topV = matchPc ? "0.6vh" : "-13vh";
+
+
 
   var postusernametoptime = matchPc ? "0vh" : matchTablet ? "-11.9vh" : "-12.3vh";
 
@@ -2091,7 +2095,7 @@ function Postx({
 
 
 
-                    {/*///////////////////////////////////////////////////////////////////////////USERNAME  TOPIC */}
+                    {/*///////////////////////////////////////////////////////////////////////////USERNAME   */}
                     <div
                       className={
                         darkmodeReducer
@@ -2139,9 +2143,56 @@ function Postx({
                                 padding: '0px',
                                 visibility: minimise ? 'hidden' : 'visible'
                               }}> {post.username}</span>
+                          </span>
+                        </span>
+                      </span>
+                    </div>
 
-                            <span style={{ visibility: 'hidden' }}>..............</span>
 
+                    {/*///////////////////////////////////////////////////////////////////////////USERNAME   */}
+
+
+
+
+
+
+
+                    {/*/////////////////////////////////////////////////////////////////////////// TOPIC */}
+                    <div
+                      className={
+                        darkmodeReducer
+                          ? "zuperxy"
+                          : "zuperxy"
+                      }
+                      style={{
+                        width: "100%",
+
+                        top: topV,
+                        position: "relative",
+                        display: "flex", //flex
+                        alignItems: "center",
+                        justifyContent: "left",
+                        zIndex: 1,
+                        paddingLeft: "2vw",
+                        marginLeft: postusernameleft,
+                        height: "20px",
+                      }}
+                    >
+                      <span>
+                        <span
+                          style={{
+                            color: darkmodeReducer ? "#ffffff" : "#000000",
+                          }}
+                        >
+                          <span
+                            style={{
+                              fontSize: matchMobile ? '0.95rem' : '1.06rem',
+                              cursor: 'pointer',
+                              fontFamily: "Roboto, Arial, Helvetica, sans-serif",
+                              opacity: darkmodeReducer ? '0.4' : '1',
+                              fontWeight: "bold",
+                            }}
+                          >
                             <span
                               style={{
                                 /// fontSize: matchMobile ? charCount > 28 ? '0.rem' : '' : charCount > 28 ? '' : '',
@@ -2149,34 +2200,22 @@ function Postx({
                                 padding: '0px',
                                 position: 'absolute',
                                 width: '100%',
-                                textAlign: 'right',
-                                paddingRight: matchMobile ? '21%' : '13%',
+                                textAlign: 'left',
+
                                 fontWeight: 'normal',
-                                right: '0px',
+
                                 marginTop: matchMobile ? '-1.2vh' : '-1.5vh',
                               }}>
                               {post.topic}</span>
 
-
-
-
-
-
-
-
                           </span>
-
-
-
-
-
-
                         </span>
                       </span>
                     </div>
 
 
-                    {/*///////////////////////////////////////////////////////////////////////////USERNAME  TOPIC */}
+                    {/*/////////////////////////////////////////////////////////////////////////// TOPIC */}
+
 
 
 
@@ -2194,7 +2233,7 @@ function Postx({
                       style={{
                         width: "79%",
 
-                        top: matchMobile ? '-8.5vh' : '3.3vh',
+                        top: matchMobile ? '-11.5vh' : '1vh',
                         position: "relative",
 
                         alignItems: "center",
@@ -2251,7 +2290,7 @@ function Postx({
                       }
                       style={{
                         width: "79%",
-                        top: matchMobile ? '-7vh' : '4.6vh',
+                        top: matchMobile ? '-10vh' : '1.7vh',
                         position: "relative",
                         // display: "flex", //flex
                         alignItems: "center",
