@@ -38,6 +38,10 @@ import { matchMobile, matchPc, matchTablet } from "../DetectDevice";
 import { Slider } from "./Slider";
 
 import { ReactionPost } from "./ReactionPost";
+
+import { ReactionPost2k } from "./ReactionPost2k";
+
+
 import { Connect } from "./Connect";
 
 import laughim from "../images/emotions/laugh.png";
@@ -1692,25 +1696,6 @@ function Postx({
             />
 
 
-            {StopShowPad ? null :
-              <ReactionPost
-                minimise={minimise}
-                setShowAudioIcon={setShowReactionsIcon}
-                Ein={Ein}
-                setZoom3={setZoom3}
-                setZoomBigEmo3={setZoomBigEmo3}
-                Zoom3={Zoom3}
-                ClickLove={ClickLove}
-                ShowAudioIcon={ShowReactionsIcon}
-                Spincare={Spincare}
-                Emo3Num={Emo3Num}
-                ClickLike={ClickLike}
-                setZoom4={setZoom4}
-                setZoomBigEmo4={setZoomBigEmo4}
-                Zoom4={Zoom4}
-                Spinfun={Spinfun}
-                Emo4Num={Emo4Num}
-              />}
 
 
 
@@ -2280,6 +2265,7 @@ function Postx({
 
 
 
+
                     {/*///////////////////////////////////////////////////////////////////////////AUDIO */}
 
                     <div
@@ -2443,6 +2429,64 @@ function Postx({
                   </animated.div >
 
 
+                  <div style={{
+                    position: 'absolute', bottom: matchMobile ? '-10vh' : '56.5vh',
+                    left: '-60%'
+                  }}>
+
+                    {StopShowPad ? null :
+                      <ReactionPost
+                        minimise={minimise}
+                        setShowAudioIcon={setShowReactionsIcon}
+                        Ein={Ein}
+                        setZoom3={setZoom3}
+                        setZoomBigEmo3={setZoomBigEmo3}
+                        Zoom3={Zoom3}
+                        ClickLove={ClickLove}
+                        ShowAudioIcon={ShowReactionsIcon}
+                        Spincare={Spincare}
+                        Emo3Num={Emo3Num}
+                        ClickLike={ClickLike}
+                        setZoom4={setZoom4}
+                        setZoomBigEmo4={setZoomBigEmo4}
+                        Zoom4={Zoom4}
+                        Spinfun={Spinfun}
+                        Emo4Num={Emo4Num}
+                      />}
+
+                  </div>
+
+
+
+                  <div style={{
+                    position: 'absolute', bottom:
+                      matchMobile ? Ein === null || Ein === 0 ? '-23.3vh' : '-23.2vh' :
+                        '42.3vh', left: matchMobile ? '-25%' : '-30%'
+                  }}>
+
+                    {StopShowPad ? null :
+                      <ReactionPost2k
+                        minimise={minimise}
+                        setShowAudioIcon={setShowReactionsIcon}
+                        Ein={Ein}
+                        setZoom3={setZoom3}
+                        setZoomBigEmo3={setZoomBigEmo3}
+                        Zoom3={Zoom3}
+                        ClickLove={ClickLove}
+                        ShowAudioIcon={ShowReactionsIcon}
+                        Spincare={Spincare}
+                        Emo3Num={Emo3Num}
+                        ClickLike={ClickLike}
+                        setZoom4={setZoom4}
+                        setZoomBigEmo4={setZoomBigEmo4}
+                        Zoom4={Zoom4}
+                        Spinfun={Spinfun}
+                        Emo4Num={Emo4Num}
+                      />}
+
+                  </div>
+
+
 
 
                   {/*///////////////////////////////////////////////////////////////////////////COMMENT */}
@@ -2455,7 +2499,7 @@ function Postx({
                     }
                     style={{
                       width: "100%",
-                      top: matchMobile ? '2.5vh' : `1.8vh`,
+                      top: matchMobile ? '10.5vh' : `10vh`,
                       position: "relative",
 
                       alignItems: "center",
@@ -2553,7 +2597,7 @@ function Postx({
                           inputProps={{ style: { fontSize: "20px" } }}
                           InputLabelProps={{ style: { fontSize: matchMobile ? "11.2px" : '15px' } }}
                           style={{
-                            width: matchMobile ? '90%' : "90%",
+                            width: matchMobile ? '90%' : "80%",
                             marginLeft: '2vw',
                             marginTop: '-2vh',
                             zIndex: 100,

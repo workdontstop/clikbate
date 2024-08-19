@@ -9,8 +9,8 @@
   bottom: 0;
   left: 0;
   z-index: 200;
-  width: 15vw; /* Adjust as needed */
-  height: 30vh; /* Adjust as needed */
+  width: 11vw; /* Adjust as needed */
+  height: 22.5vh; /* Adjust as needed */
   border-radius: 50%;
   object-fit: cover;
   overflow: hidden;
@@ -35,8 +35,8 @@
   bottom: 0;
   left: 0;
   z-index: 200;
-  width: 40vw; /* Adjust as needed */
-  height: 20vh; /* Adjust as needed */
+  width: 30vw; /* Adjust as needed */
+  height: 15vh; /* Adjust as needed */
   border-radius: 50%;
   object-fit: cover;
   overflow: hidden;

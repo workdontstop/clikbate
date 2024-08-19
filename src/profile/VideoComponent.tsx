@@ -16,11 +16,13 @@ interface VideoComponentProps {
     sethidePrevVid: any;
     postty: number;
     videoImRef: any;
+    itemcroptype: any;
+    index: any
 
 }
 
 const VideoComponent: React.FC<VideoComponentProps> = ({ src, inView, setshow, videoRef, show, hidePrevVid,
-    InteractTimerxxhyx, xl, setxl, sethidePrevVid, postty, videoImRef }) => {
+    InteractTimerxxhyx, xl, setxl, sethidePrevVid, postty, videoImRef, itemcroptype, index }) => {
 
     const { REACT_APP_CLOUNDFRONT } = process.env;
 
@@ -70,7 +72,7 @@ const VideoComponent: React.FC<VideoComponentProps> = ({ src, inView, setshow, v
 
                 style={{
                     cursor: 'pointer',
-                    width: '100%',
+                    width: matchMobile ? '85%' : '90%',
                     height: '92%',
                     backgroundColor: '',
                     position: 'fixed',
@@ -90,11 +92,14 @@ const VideoComponent: React.FC<VideoComponentProps> = ({ src, inView, setshow, v
 
 
                 left: xl ? matchMobile ? '15% ' : '20% ' :
-                    matchMobile ? '29% ' : '36% ',
+                    matchMobile ? '64% ' : '75% ',
 
 
                 bottom: xl ? matchMobile ? '3% ' : '10% ' :
-                    matchMobile ? '8% ' : '19% '
+                    matchMobile ? itemcroptype[index] === 1 ? '30% ' : '5%' :
+                        itemcroptype[index] === 2 ? '30% ' : '16%'
+
+
             }}>
 
                 {postty === 1 ?

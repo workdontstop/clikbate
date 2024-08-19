@@ -115,7 +115,10 @@ function Profilex({
 
   snapallow,
   setsnapallow,
-  FeedType
+  FeedType,
+
+  PCZOOM,
+  setPCZOOM
 
 
 }: any) {
@@ -542,9 +545,9 @@ function Profilex({
       );
       setActiveAutoPost(initialsetsetActiveAutoPost);
 
-
+      setminimise(true);
       if (memeberPageidReducer === 0) { } else {
-        setminimise(true);
+        ///setminimise(true);
       }
 
 
@@ -1325,7 +1328,8 @@ function Profilex({
           item
           xs={12}
           style={{
-            padding: matchMobile ? minimise ? '0px' : "0px" : minimise ? '0vh' : "0px",
+            padding: matchMobile ? minimise ? '0px' : "0px" :
+              minimise ? '0vh' : '0px',
 
             paddingLeft: matchPc ? "0vw" : '0vw',
             paddingRight: matchPc ? "0vw" : '0vw',
@@ -1334,7 +1338,8 @@ function Profilex({
               minimise ? '8.4vh' : '40vh' :
 
               minimise ? '0vh' : '35vh',
-
+            transform: 'scale(1)',
+            transition: "transform 0.1s",
             marginLeft: miniProfile && matchPc ? '1.5vw' : '0px',
           }}
         >
@@ -1527,8 +1532,8 @@ function Profilex({
                       xs={12}
                       style={{
 
-                        height: matchMobile ? postData.length - 1 === i ? '10vh' : "15vh" :
-                          postData.length - 1 === i ? '0vh' : '26vh',
+                        height: matchMobile ? postData.length - 1 === i ? '10vh' : "30vh" :
+                          postData.length - 1 === i ? '0vh' : '33vh',
                         display: minimise ? 'none' : 'block'
                       }}
                     ></Grid>

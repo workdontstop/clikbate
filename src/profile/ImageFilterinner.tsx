@@ -478,7 +478,7 @@ function ImageFilterinnerx({
 
       previewFileReadimage.onload = function () {
         const ctx = canvasRef.current.getContext("2d");
-        const qualityValue = 0.8;
+        const qualityValue = 0.88;
 
         if (
           previewFileReadimage.naturalWidth > previewFileReadimage.naturalHeight

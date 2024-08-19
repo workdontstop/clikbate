@@ -96,6 +96,31 @@
   padding-top: 40px;
 }
 
+.blinkenx {
+  -webkit-animation: blinken-keyframex 4.3s infinite; /* Safari 4+ */
+  -moz-animation: blinken-keyframex 4.3s infinite; /* Fx 5+ */
+  -o-animation: blinken-keyframex 4.3s infinite; /* Opera 12+ */
+  animation: blinken-keyframex 4.3s infinite; /* IE 10+, Fx 29+ */
+}
+
+@keyframes blinken-keyframex {
+  0% {
+    opacity: 1;
+  }
+
+  25% {
+    opacity: 0.9;
+  }
+
+  50% {
+    opacity: 0.7;
+  }
+
+  75% {
+    opacity: 0.5;
+  }
+}
+
 .blinken {
   -webkit-animation: blinken-keyframe 0.8s infinite; /* Safari 4+ */
   -moz-animation: blinken-keyframe 0.8s infinite; /* Fx 5+ */

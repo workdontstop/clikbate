@@ -397,7 +397,7 @@ function Sliderx({
       InteractTimerxxhyx.current = setTimeout(() => {
         sethidePrevVid(true);
         setxl(false);
-      }, 14000)
+      }, 10000)
 
     } else {
       setshow(false)
@@ -1720,10 +1720,10 @@ function Sliderx({
           if (post.interact1a || post.interact1b) {
             //alert('jj');
 
-            var scaleFactor1 = matchMobile ? 1.014 : 1.018; // You can adjust this value to control the zoom level
+            var scaleFactor1 = matchMobile ? 1.025 : 1.015; // You can adjust this value to control the zoom level
 
 
-            var scaleFactor2 = matchMobile ? 1.014 : 1.018; // You can adjust this value to control the zoom level
+            var scaleFactor2 = matchMobile ? 1.025 : 1.015; // You can adjust this value to control the zoom level
 
             if (post.interact1a) {
               if (typex === 0 || typex === 3) {
@@ -1904,7 +1904,7 @@ function Sliderx({
                 } else {
                   drawInteraction(0, event, 0);
                 }
-              }, 100);
+              }, 500);
             }
 
 
@@ -2874,6 +2874,8 @@ function Sliderx({
           minimise ? null :
             inView && HasInteractivity ?
               < VideoComponent
+                index={pey}
+                itemcroptype={itemcroptype}
                 xl={xl}
                 setxl={setxl}
                 src={PreviewVid} inView={inView} setshow={setshow} videoRef={videoRef} show={show}

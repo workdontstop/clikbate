@@ -7,7 +7,9 @@ import { Menu } from "./Menu";
 import { Billboard } from "./Billboard";
 import "./profile.css";
 import { Connect } from "./Connect";
+
 import { ProfileSetup } from "./ProfileSetup";
+
 import { GenerateAndUpload } from "./GenerateAndUpload";
 import { ActualMenu } from "./ActualMenu";
 import { TextField } from "@material-ui/core";
@@ -150,8 +152,9 @@ function ProfileGatex({
 
     setFeedType,
     FeedType,
-    AiLock
-
+    AiLock,
+    PCZOOM,
+    setPCZOOM
 
 }: any): JSX.Element {
 
@@ -3231,7 +3234,7 @@ function ProfileGatex({
                                                 variant='outlined'
                                             /> :
                                             <TextField
-                                                className={loaderx ? "blinken" : ''}
+                                                className={loaderx ? "blinkenx" : ''}
                                                 size={sizex}
                                                 inputProps={{ style: { fontSize: font1 } }}
                                                 InputLabelProps={{ style: { fontSize: font2 } }}
@@ -3485,6 +3488,10 @@ function ProfileGatex({
 
                         }}>
                             <ProfileSetup
+
+
+                                PCZOOM={PCZOOM}
+                                setPCZOOM={setPCZOOM}
 
                                 FeedType={FeedType}
                                 setsnapallow={setsnapallow}

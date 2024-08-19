@@ -20,6 +20,7 @@ const unlinkFile = util.promisify(fs.unlink);
 const https = require("https");
 const FormData = require("form-data");
 const fetch = require("node-fetch");
+const axios_1 = __importDefault(require("axios"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const text_to_speech_1 = require("@google-cloud/text-to-speech");
 // Creates a client
@@ -40,6 +41,8 @@ const { APP_STATE_STABLE_KEY } = process.env;
 const DalleKey = process.env.DALLE_KEY;
 const openKey = process.env.OPEN_KEY;
 const GPTKey = process.env.DALLE_KEY;
+const API_URL = "https://api-inference.huggingface.co/models/";
+const HUGGING_FACE_API_KEY = process.env.HUGGING_KEY;
 // API key for Google Cloud Text-to-Speech
 const client = new text_to_speech_1.TextToSpeechClient();
 const openai = new openai_1.default({
@@ -66,6 +69,7 @@ if (process.env.APP_STATE === "dev") {
     var corsOptions = {
         ///origin: "http://192.168.0.39:3000",
         origin: [
+            "https://api-inference.huggingface.co/models/stabilityai/stable-diffusion-3-medium",
             "http://192.168.0.39:3000",
             "https://api.stability.ai/v2beta/stable-diffusion/generate", // Add your front-end origin
             "https://oaidalleapiprodscus.blob.core.windows.net", // Add your blob storage origin
@@ -103,7 +107,9 @@ app.use("/images", (req, res, next) => {
     res.set("Access-Control-Allow-Origin", [
         "https://clikbate.com",
         "https://www.clikbate.com",
-        "http://192.168.0.106:3000",
+        "http://192.168.0.39:3000",
+        "http://192.168.0.39:8000",
+        "http://192.168.0.39:3000",
     ]);
     res.set("Cache-Control", "public, max-age=0");
     next();
@@ -298,6 +304,10 @@ const updatebillboardPic2 = `UPDATE members SET billboard2 = ?, billboardthumb2 
 const createpost = `INSERT INTO posts (sender,post_count,topic,caption,item1,thumb1,itemtype1,interact1a,interact1ax,interact1ay,
   interact1b,interact1bx,interact1by,rad1,rad2,interacttype1,interacttype2,item2,vid1backup,vid2backup,time)
    VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`;
+const createpostX = `INSERT INTO posts (sender,post_count,topic,caption,item1,thumb1,itemtype1,interact1a,interact1ax,interact1ay,
+  interact1b,interact1bx,interact1by,rad1,rad2,interacttype1,interacttype2,item2,vid1backup,vid2backup,time, 
+  mode,x1,xt1,x2,xt2,x3,xt3,x4,xt4,x5,xt5,x6,xt6)
+   VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`;
 const y = `INSERT INTO audio (file,name,sender,post,backgroudAudio,time)
 VALUES (?,?,?,?,?,?)`;
 const createComment = `INSERT INTO comments (post,com,commented_by,date) VALUES (?,?,?,?)`;
@@ -847,6 +857,28 @@ app.post("/Create_comment", (req, res) => __awaiter(void 0, void 0, void 0, func
         return res.send({ message: "Comment Failed" });
     }
 }));
+app.post("/get_signed_url_4upload_Explain", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { values } = req.body;
+    // console.log(values.count);
+    if (!values || !values.count) {
+        return res.status(400).json({ error: "Invalid request payload" });
+    }
+    try {
+        // Use Promise.all to generate URLs concurrently
+        const holder = yield Promise.all(Array.from({ length: values.count }).map(() => __awaiter(void 0, void 0, void 0, function* () {
+            const [urlHD] = yield Promise.all([(0, ss3_1.generateUploadURL)()]);
+            /// console.log("good");
+            return {
+                urlHD,
+            };
+        })));
+        res.json({ holder });
+    }
+    catch (error) {
+        console.error("Error generating URLs:", error);
+        res.status(500).json({ error: "Failed to generate URLs" });
+    }
+}));
 app.post("/get_signed_url_4upload_post", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { values } = req.body;
     var holder = [];
@@ -1204,6 +1236,57 @@ app.post("/post_upload_data", (req, res, next) => __awaiter(void 0, void 0, void
             values.vid1backup ? values.vid1backup : null,
             values.vid2backup ? values.vid2backup : null,
             currentTime,
+        ]);
+        const insertedId = result.insertId;
+        return res.send({ go: insertedId, message: "images uploaded" });
+    }
+    catch (e) {
+        console.log(e);
+        return res.send({ message: "images upload failed" });
+    }
+}));
+app.post("/post_upload_dataX", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const { values } = req.body;
+    var currentTime = new Date();
+    var intx1 = null;
+    var intx2 = null;
+    ///console.log(values.rad1);
+    try {
+        const result = yield execPoolQuery(createpostX, [
+            values.id,
+            1,
+            values.topic,
+            values.caption,
+            values.all[0] ? values.all[0].imagedata : null,
+            values.all[0] ? values.all[0].imagedataThumb : null,
+            values.all[0] ? 1 : null,
+            values.all[0] ? intx1 : null,
+            values.I1x ? values.I1x : null,
+            values.I1y ? values.I1y : null,
+            values.all[0] ? intx2 : null,
+            values.I1bx ? values.I1bx : null,
+            values.I1by ? values.I1by : null,
+            values.rad1,
+            values.rad2,
+            values.interacttype1,
+            values.interacttype2,
+            values.all[0] ? values.all[0].imagedata2 : null,
+            values.vid1backup ? values.vid1backup : null,
+            values.vid2backup ? values.vid2backup : null,
+            currentTime,
+            values.mode,
+            values.x1,
+            values.xt1,
+            values.x2,
+            values.xt2,
+            values.x3,
+            values.xt3,
+            values.x4,
+            values.xt4,
+            values.x5,
+            values.xt5,
+            values.x6,
+            values.xt6,
         ]);
         const insertedId = result.insertId;
         return res.send({ go: insertedId, message: "images uploaded" });
@@ -1692,6 +1775,78 @@ app.post("/StableDiffusionApisd", (req, res) => __awaiter(void 0, void 0, void 0
         const imageBuffer = yield generateImageStableSDXL(prompt, model, height, width);
         // Save the generated image to a file
         const imagePath = path.join(__dirname, "output.png"); // Changed to .png
+        fs.writeFileSync(imagePath, imageBuffer);
+        // Send the generated image back to the client
+        res.sendFile(imagePath, {}, (err) => {
+            if (err) {
+                console.error("Failed to send image:", err);
+                res.status(500).send({ message: "Error sending the image" });
+            }
+            else {
+                // Optionally delete the image file after sending
+                fs.unlink(imagePath, (unlinkErr) => {
+                    if (unlinkErr) {
+                        console.error("Failed to delete image:", unlinkErr);
+                    }
+                });
+            }
+        });
+    }
+    catch (e) {
+        console.error("Error:", e.message);
+        res.status(500).send({ message: "Error in generating image" });
+    }
+}));
+// Function to generate images using Hugging Face
+function generateImageHuggingFace(prompt, height, width) {
+    return __awaiter(this, void 0, void 0, function* () {
+        var _a, _b, _c;
+        const apiHost = "https://api-inference.huggingface.co/models/stabilityai/stable-diffusion-3-medium";
+        const headers = {
+            Authorization: `Bearer ${HUGGING_FACE_API_KEY}`,
+            "Content-Type": "application/json",
+            Accept: "application/json", // Expecting JSON for error handling
+        };
+        const payload = {
+            inputs: prompt,
+            parameters: {
+                width: width,
+                height: height,
+                num_inference_steps: 30,
+                guidance_scale: 7.0,
+            },
+            options: {
+                wait_for_model: true, // Wait for the model to be ready
+            },
+        };
+        try {
+            const response = yield axios_1.default.post(apiHost, payload, { headers });
+            if (response.status !== 200) {
+                throw new Error(`Non-200 response: ${response.statusText}`);
+            }
+            const imageBuffer = response.data;
+            return Buffer.from(imageBuffer);
+        }
+        catch (error) {
+            console.error("Error details:", error);
+            // Extract more information from the error response
+            const errorDetails = ((_a = error.response) === null || _a === void 0 ? void 0 : _a.data) || "No additional error details provided";
+            const statusCode = ((_b = error.response) === null || _b === void 0 ? void 0 : _b.status) || "Unknown status code";
+            const statusText = ((_c = error.response) === null || _c === void 0 ? void 0 : _c.statusText) || "Unknown status text";
+            // Construct a detailed error message
+            const errorMessage = `Error generating image: ${error.message}\nStatus Code: ${statusCode}\nStatus Text: ${statusText}\nDetails: ${JSON.stringify(errorDetails, null, 2)}`;
+            throw new Error(errorMessage);
+        }
+    });
+}
+// Express route handler
+app.post("/StableDiffusionApiHF", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { prompt, height, width } = req.body.values;
+    try {
+        console.log("jjjjj");
+        const imageBuffer = yield generateImageHuggingFace(prompt, 512, 512);
+        // Save the generated image to a file
+        const imagePath = path.join(__dirname, "output.png");
         fs.writeFileSync(imagePath, imageBuffer);
         // Send the generated image back to the client
         res.sendFile(imagePath, {}, (err) => {

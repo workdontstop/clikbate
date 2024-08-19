@@ -362,7 +362,7 @@ function ProfileOutter({ CallLoggedProfile }: any) {
 
 
   const paperPostScrollRef = useRef<any>(null);
-  const [minimise, setminimise] = useState(false);
+  const [minimise, setminimise] = useState(true);
 
 
   ////true stops snap
@@ -402,6 +402,8 @@ function ProfileOutter({ CallLoggedProfile }: any) {
   const [getSliderWidth, setgetSliderWidth] = useState(0);
   const getSliderWidthRef = useRef<HTMLDivElement>(null);
   const [showProfiileData, setshowProfiileData] = useState<boolean>(false);
+
+  const [PCZOOM, setPCZOOM] = useState<boolean>(true);
 
 
   const [selectedImage, setselectedImage] = useState<Array<any>>([]);
@@ -1002,6 +1004,9 @@ function ProfileOutter({ CallLoggedProfile }: any) {
 
 
                           <ProfileGate
+                            PCZOOM={PCZOOM}
+                            setPCZOOM={setPCZOOM}
+
                             AiLock={AiLock}
                             setFeedType={setFeedType}
                             FeedType={FeedType}

@@ -97,7 +97,10 @@ function ProfileSetupx({
 
     snapallow,
     setsnapallow,
-    FeedType
+    FeedType,
+
+    PCZOOM,
+    setPCZOOM
 
 
 
@@ -337,6 +340,11 @@ function ProfileSetupx({
                     position: "relative", zIndex: 1, padding: "0px"
                 }}>
                     <Profile
+
+                        PCZOOM={PCZOOM}
+                        setPCZOOM={setPCZOOM}
+
+
                         FeedType={FeedType}
                         setsnapallow={setsnapallow}
                         snapallow={snapallow}
