@@ -99,7 +99,8 @@ function Sliderx({
   setminimiseSpecificScroll,
   divBox,
   Maximisefromcanvas,
-  setMaximisefromcanvas
+  setMaximisefromcanvas,
+  setinV
 
 
 }: any): JSX.Element {
@@ -113,6 +114,8 @@ function Sliderx({
 
 
 
+  const [viewPrev, setviewPrev] = useState(false);
+
 
   const [showSpinx, setshowSpinx] = useState(false);
 
@@ -122,9 +125,11 @@ function Sliderx({
 
   const [Unload, setUnload] = useState(false);
 
-
-
   const InteractTimerxxhyx = useRef<ReturnType<typeof setTimeout> | null>(
+    null
+  );
+
+  const InteractTimerxxhyx2 = useRef<ReturnType<typeof setTimeout> | null>(
     null
   );
   const InteractTimerxxhy = useRef<ReturnType<typeof setTimeout> | null>(
@@ -294,6 +299,9 @@ function Sliderx({
   );
 
 
+  const showcaptionwaitTimer2 = useRef<ReturnType<typeof setTimeout> | null>(
+    null
+  );
   const sTimercc = useRef<ReturnType<typeof setTimeout> | null>(null);
   const sTimerccxx = useRef<ReturnType<typeof setTimeout> | null>(null);
   const sTimerccxxhh = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -384,24 +392,56 @@ function Sliderx({
 
   const videoImRef = useRef<HTMLImageElement>(null);
 
+  const playVideo = async () => {
+    try {
+      if (videoRef.current) {
+        await videoRef.current.play();
+        setshow(true);
+      }
+    } catch (error) {
+      console.error("Video playback failed:", error);
+      // Fallback behavior, show some UI to prompt the user, etc.
+    }
+  };
+
+
   useEffect(() => {
     if (videoRef.current && inView) {
-      videoRef.current.play();
-      setshow(true);
 
-      sethidePrevVid(false);
-
-      if (InteractTimerxxhyx.current) {
-        clearTimeout(InteractTimerxxhyx.current);
+      if (InteractTimerxxhyx2.current) {
+        clearTimeout(InteractTimerxxhyx2.current);
       }
-      InteractTimerxxhyx.current = setTimeout(() => {
-        sethidePrevVid(true);
-        setxl(false);
-      }, 10000)
+
+
+      InteractTimerxxhyx2.current = setTimeout(() => {
+
+        if (videoRef.current) {
+
+          playVideo();
+
+          //setshow(true);
+
+          sethidePrevVid(false);
+
+          if (InteractTimerxxhyx.current) {
+            clearTimeout(InteractTimerxxhyx.current);
+          }
+          InteractTimerxxhyx.current = setTimeout(() => {
+            ///sethidePrevVid(true);
+            setxl(false);
+          }, 10000)
+
+        }
+
+
+      }, 500)
 
     } else {
       setshow(false)
     }
+
+
+
   }, [inView]);
 
 
@@ -416,7 +456,7 @@ function Sliderx({
         clearTimeout(InteractTimerxxhyx.current);
       }
       InteractTimerxxhyx.current = setTimeout(() => {
-        sethidePrevVid(true);
+        // sethidePrevVid(true);
         setxl(false);
       }, 14000)
 
@@ -435,6 +475,7 @@ function Sliderx({
     if (inView) {
 
 
+      setinV(true);
 
       if (minimise) {
 
@@ -482,6 +523,9 @@ function Sliderx({
           }
         }
       } else {
+
+
+
 
         setcanvasBorderH('auto');
         setcanvasBorderW('auto');
@@ -554,6 +598,7 @@ function Sliderx({
 
     } else {
 
+      setinV(false);
 
 
       setPlayAudio(false);
@@ -580,6 +625,32 @@ function Sliderx({
 
 
 
+
+
+  useEffect(() => {
+
+
+
+    if (showcaptionwaitTimer.current) {
+      clearTimeout(showcaptionwaitTimer.current);
+    }
+
+
+    if (inView) {
+
+
+      showcaptionwaitTimer2.current = setTimeout(function () {
+        setviewPrev(true);
+      }, 4000);
+
+    } else {
+
+      setviewPrev(false);
+    }
+
+
+
+  }, [inView]);
 
 
 
@@ -981,10 +1052,10 @@ function Sliderx({
   useEffect(() => {
     if (matchPc) {
       if (minimise) {
-        setinteractHeightResolution(window.innerHeight * 0.74);
+        setinteractHeightResolution(window.innerHeight * 0.54);
       }
       else {
-        setinteractHeightResolution(window.innerHeight * 0.85);
+        setinteractHeightResolution(window.innerHeight * 0.75);
       }
     }
   }, [matchPc, minimise])
@@ -994,10 +1065,10 @@ function Sliderx({
 
     if (matchMobile) {
       if (minimise) {
-        setinteractHeightResolution(window.innerHeight * 0.84);
+        setinteractHeightResolution(window.innerHeight * 0.44);
       }
       else {
-        setinteractHeightResolution(window.innerHeight * 0.94);
+        setinteractHeightResolution(window.innerHeight * 0.8);
       }
     }
 
@@ -1720,10 +1791,10 @@ function Sliderx({
           if (post.interact1a || post.interact1b) {
             //alert('jj');
 
-            var scaleFactor1 = matchMobile ? 1.025 : 1.015; // You can adjust this value to control the zoom level
+            var scaleFactor1 = matchMobile ? 1.15 : 1.15; // You can adjust this value to control the zoom level
 
 
-            var scaleFactor2 = matchMobile ? 1.025 : 1.015; // You can adjust this value to control the zoom level
+            var scaleFactor2 = matchMobile ? 1.15 : 1.15; // You can adjust this value to control the zoom level
 
             if (post.interact1a) {
               if (typex === 0 || typex === 3) {
@@ -1904,7 +1975,7 @@ function Sliderx({
                 } else {
                   drawInteraction(0, event, 0);
                 }
-              }, 500);
+              }, 1600);
             }
 
 
@@ -2872,7 +2943,7 @@ function Sliderx({
 
         {
           minimise ? null :
-            inView && HasInteractivity ?
+            viewPrev && HasInteractivity ?
               < VideoComponent
                 index={pey}
                 itemcroptype={itemcroptype}

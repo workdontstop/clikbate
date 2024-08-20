@@ -227,8 +227,9 @@ function ProfileGatex({
     const [ExtendBill, setExtendBill] = useState(false);
 
     const heightAnimation = useSpring({
-        height: ExtendBill ? (matchMobile ? '49vh' : '70vh') : (matchMobile ? '19vh' : '30vh'),
-        config: { duration: 300 }
+        height: ExtendBill ? (matchMobile ? '49vh' : '70vh') : (matchMobile ? '25vh' : '32vh'),
+        config: { duration: 300 },
+        marginTop: '-3vh'
     });
 
     useEffect(() => {
@@ -282,11 +283,11 @@ function ProfileGatex({
         };
 
         // Add an event listener for the popstate event
-        window.addEventListener('popstate', handlePopstate);
+        /// window.addEventListener('popstate', handlePopstate);
 
         // Clean up the event listener when the component unmounts
         return () => {
-            window.removeEventListener('popstate', handlePopstate);
+            /// window.removeEventListener('popstate', handlePopstate);
         };
     }, []); // This effect should only run once, so it has an empty dependency array
 
@@ -2596,7 +2597,7 @@ function ProfileGatex({
 
                     <Grid item className="zuperxyinfotext" xs={12} style={{
                         padding: '0px',
-                        top: matchMobile ? "3vh" : '7vh',
+                        top: matchMobile ? "5vh" : '7vh',
                         fontFamily: "Arial, Helvetica, sans-serif",
                         fontWeight: 'bold',
                         position: 'relative',
@@ -2605,7 +2606,7 @@ function ProfileGatex({
                         color: '#ffffff',
                         height: '0px'
                     }}>
-                        <span style={{ padding: '0px', marginLeft: matchMobile ? "10vw" : '20vw' }}>
+                        <span style={{ padding: '0px', marginLeft: matchMobile ? "10vw" : '20vw', height: '0px', }}>
 
 
                             {memeberPageidReducer === 0 ? null :
@@ -2616,7 +2617,8 @@ function ProfileGatex({
                                             <AddPhotoAlternateIcon
                                                 style={{
                                                     fontSize: matchMobile ? '3rem' : '5rem', cursor: 'pointer',
-                                                    marginTop: '2vh'
+                                                    marginTop: '2vh',
+
 
 
                                                 }}
@@ -2650,10 +2652,10 @@ function ProfileGatex({
 
                     <Grid item className="zuperxyinfotext" xs={6} style={{
                         padding: '0px',
-                        top: matchMobile ? "7.5vh" : '12vh',
+                        top: matchMobile ? "9.5vh" : '12vh',
                         fontFamily: "Arial, Helvetica, sans-serif",
                         fontWeight: 'bold',
-                        position: 'relative',
+                        position: 'absolute',
                         zIndex: 1,
                         fontSize: matchMobile ? "0.9rem" : "2.5vh",
                         color: '#ffffff',
@@ -2664,7 +2666,7 @@ function ProfileGatex({
 
 
 
-                            <span style={{ padding: '0px', marginLeft: matchMobile ? "7vw" : '0px' }}>
+                            <span style={{ padding: '0px', marginLeft: matchMobile ? "7vw" : '0px', height: '0px', }}>
                                 {quoteReducer ? quoteReducer : ''}
                             </span>
 
@@ -2675,7 +2677,7 @@ function ProfileGatex({
 
                     <Grid item className="zuperxyinfotext" xs={6} style={{
                         padding: '0px',
-                        top: matchMobile ? "7.5vh" : '12vh',
+                        top: matchMobile ? "4.5vh" : '9vh',
                         fontFamily: "Arial, Helvetica, sans-serif",
                         fontWeight: 'bold',
                         position: 'relative',
@@ -2695,7 +2697,7 @@ function ProfileGatex({
                                 style={{
                                     position: "relative",
                                     height: '0px',
-                                    top: matchMobile ? "-3.5vh" : '-1.5vh',
+                                    top: matchMobile ? "-1.5vh" : '-1.5vh',
                                     left: matchMobile ? "1vw" : '13vw',
                                     zIndex: 4,
                                     display: ExtendBill ? 'none' : 'block'
@@ -2735,7 +2737,7 @@ function ProfileGatex({
 
                     <Grid item className="zuperxyinfotext" xs={6} style={{
                         padding: '0px',
-                        top: matchMobile ? "7.5vh" : '12vh',
+                        top: matchMobile ? "6.5vh" : '9vh',
                         fontFamily: "Arial, Helvetica, sans-serif",
                         fontWeight: 'bold',
                         position: 'relative',

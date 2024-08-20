@@ -1449,9 +1449,9 @@ app.post("/post_upload_dataX", async (req: any, res: any, next: any) => {
       1,
       values.topic,
       values.caption,
-      values.all[0] ? values.all[0].imagedata : null,
-      values.all[0] ? values.all[0].imagedataThumb : null,
-      values.all[0] ? 1 : null,
+      values.x1,
+      values.im2,
+      1,
 
       values.all[0] ? intx1 : null,
       values.I1x ? values.I1x : null,
@@ -1467,7 +1467,7 @@ app.post("/post_upload_dataX", async (req: any, res: any, next: any) => {
       values.interacttype1,
       values.interacttype2,
 
-      values.all[0] ? values.all[0].imagedata2 : null,
+      values.im2,
 
       values.vid1backup ? values.vid1backup : null,
       values.vid2backup ? values.vid2backup : null,

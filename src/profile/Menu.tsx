@@ -745,8 +745,11 @@ function Menux({
                               }
                               else {
                                 if (CurrentPage === 'feeds') {
-                                  paperPostScrollRef.current.scrollTop = 0;
-                                  setZoom1(false);
+                                  ///  paperPostScrollRef.current.scrollTop = 0;
+                                  ///setZoom1(false);
+
+                                  GoToMemberLoaderUpP();
+
                                 } else {
                                   GoToMemberLoaderUpP();
                                 }

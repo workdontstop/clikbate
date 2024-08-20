@@ -27,6 +27,7 @@
     "@types/node": "^14.18.63",
     "@types/react-router-dom": "^5.3.3",
     "aws-sdk": "^2.1167.0",
+    "axios": "^1.7.4",
     "bcrypt": "^5.0.1",
     "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",

@@ -149,11 +149,11 @@ function ReactionPost2kx({ Ein,
                             cursor: "pointer",
                             bottom: matchMobile ? '21vh' : "0px",
                             top: matchMobile ? '' : "38vh",
-                            backgroundColor: 'orange',
+                            backgroundColor: darkmodeReducer ? 'red' : 'orange',
                             fontFamily: "Arial, Helvetica, sans-serif",
                             fontSize: '2.8rem',
                             fontWeight: "bolder",
-                            opacity: matchMobile ? 0.288 : 1,
+                            opacity: 1,
                             padding: "2px",
                             display: ShowAudioIcon ? 'block' : 'block'
                         }}

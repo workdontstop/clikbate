@@ -29,30 +29,66 @@ const VideoComponent: React.FC<VideoComponentProps> = ({ src, inView, setshow, v
     const isAppleDevice = /Mac|iPhone|iPad|iPod/.test(navigator.userAgent);
 
 
-
+    const [xl2, setxl2] = useState(false);
 
 
     const clik = () => {
 
-        if (xl) {
 
-            setxl(false);
+        if (matchMobile) {
 
-            setTimeout(() => {
+            if (xl2) {
+                if (xl) {
 
-                sethidePrevVid(true)
-            }, 1500)
+                    setxl(false);
 
-        }
-        else {
-            if (InteractTimerxxhyx.current) {
-                clearTimeout(InteractTimerxxhyx.current);
+
+                    setxl2(false);
+
+                    setTimeout(() => {
+
+                        sethidePrevVid(true)
+                    }, 1500)
+
+                }
+                else {
+                    if (InteractTimerxxhyx.current) {
+                        clearTimeout(InteractTimerxxhyx.current);
+                    }
+
+                    setxl(true);
+
+
+                }
+            } else {
+
+
+
+                setxl2(true);
             }
 
-            setxl(true);
         }
 
+        else {
+            if (xl) {
 
+                setxl(false);
+
+                setTimeout(() => {
+
+                    sethidePrevVid(true)
+                }, 1500)
+
+            }
+            else {
+                if (InteractTimerxxhyx.current) {
+                    clearTimeout(InteractTimerxxhyx.current);
+                }
+
+                setxl(true);
+            }
+
+        }
     }
 
     return (
@@ -129,27 +165,51 @@ const VideoComponent: React.FC<VideoComponentProps> = ({ src, inView, setshow, v
                                 src={`${REACT_APP_CLOUNDFRONT}videos/${src}`}
                             />
                             Your browser does not support the video tag.
-                        </video> : <video
-                            onClick={() => {
-                                clik();
-                            }
+                        </video> :
 
-                            }
-                            ref={videoRef}
-                            autoPlay
-                            muted
-                            playsInline
-                            loop
+                            xl2 ?
+                                <video
+                                    onClick={() => {
+                                        clik();
+                                    }
 
-                            className={"circular-video2"}
+                                    }
+                                    ref={videoRef}
+                                    autoPlay
+
+                                    playsInline
+                                    loop
+
+                                    className={"circular-video2"}
 
 
-                        >
-                            <source
-                                src={`${REACT_APP_CLOUNDFRONT}videos/${src}`}
-                            />
-                            Your browser does not support the video tag.
-                        </video>
+                                >
+                                    <source
+                                        src={`${REACT_APP_CLOUNDFRONT}videos/${src}`}
+                                    />
+                                    Your browser does not support the video tag.
+                                </video>
+                                : <video
+                                    onClick={() => {
+                                        clik();
+                                    }
+
+                                    }
+                                    ref={videoRef}
+                                    autoPlay
+                                    muted
+                                    playsInline
+                                    loop
+
+                                    className={"circular-video2"}
+
+
+                                >
+                                    <source
+                                        src={`${REACT_APP_CLOUNDFRONT}videos/${src}`}
+                                    />
+                                    Your browser does not support the video tag.
+                                </video>
                     ) : (
 
                         xl ? <video

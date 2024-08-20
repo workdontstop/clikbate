@@ -27,6 +27,7 @@ const ExplainItPreview: React.FC<ExplainItPreviewProps> = ({
         REACT_APP_CLOUNDFRONT,
         REACT_APP_APPX_STATE,
     } = process.env;
+
     const Timervv = useRef<ReturnType<typeof setTimeout> | null>(null);
     const Timervv2 = useRef<ReturnType<typeof setTimeout> | null>(null);
     const Timervv3 = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -121,23 +122,28 @@ const ExplainItPreview: React.FC<ExplainItPreviewProps> = ({
         interacttype1: 0,
         interacttype2: 0,
 
+        im2: '',
+
         mode: 1,
         x1: "",
-        xt1: "",
+        xt1: sanitizedSteps[0],
         x2: "",
-        xt2: "",
+        xt2: sanitizedSteps[1],
         x3: "",
-        xt3: "",
+        xt3: sanitizedSteps[2],
         x4: "",
-        xt4: "",
+        xt4: sanitizedSteps[3],
         x5: "",
-        xt5: "",
+        xt5: sanitizedSteps[4],
         x6: "",
-        xt6: "",
+        xt6: sanitizedSteps[5],
     });
 
     // Ref to hold blobs
     const hdBlobsRef = useRef<Blob[]>([]); // Using useRef to hold the blobs
+
+    // Refs to hold image elements
+    const imageRefs = useRef<HTMLImageElement[]>([]); // Create an array of refs
 
     // Function to split text into chunks
     const splitText = (text: string, chunkSize: number = 600) => {
@@ -186,12 +192,6 @@ const ExplainItPreview: React.FC<ExplainItPreviewProps> = ({
             text = text.replace(/\*\*.*?\*\*:/, "").trim();
             text = text.replace(/[^a-zA-Z0-9\s]/g, ""); // Retain letters, numbers, and spaces
 
-            if (matchMobile) {
-            } else {
-                document
-                    .querySelector(`[data-index='${index}']`)
-                    ?.scrollIntoView({ behavior: "smooth" });
-            }
             if ("speechSynthesis" in window) {
                 const chunks = splitText(text, 600);
                 let chunkIndex = 0;
@@ -414,6 +414,9 @@ const ExplainItPreview: React.FC<ExplainItPreviewProps> = ({
                 newState[i] = 1;
                 return newState;
             });
+
+            Save(i);
+
         } catch (error) {
             console.error('Error generating image:', error);
         } finally {
@@ -427,9 +430,6 @@ const ExplainItPreview: React.FC<ExplainItPreviewProps> = ({
         const width = 1024;
         GenerateImageStableSDXL(i, pp, model, height, width);
     };
-
-
-
 
     const handleGenerateImageSDXLHUGG = (i: any, pp: any) => {
         const model = "stable-diffusion-3-medium";
@@ -499,9 +499,6 @@ const ExplainItPreview: React.FC<ExplainItPreviewProps> = ({
         },
         []
     );
-
-
-
 
     const GenerateImageStable3 = useCallback(
         async (i: number, pp: any) => {
@@ -607,41 +604,53 @@ const ExplainItPreview: React.FC<ExplainItPreviewProps> = ({
     const screenHeightReducer = screenHeight;
     const darkmodeReducer = darkmode;
 
-    // Implement uploadImagesToS3 function
+    ///
     const uploadImagesToS3 = async () => {
-        console.log("All images are generated, uploading to S3...");
-        hdBlobsRef.current = []; // Reset the ref to collect new blobs
+        try {
+            console.log("All images are generated, uploading to S3...");
+            hdBlobsRef.current = []; // Reset the ref to collect new blobs
 
-        // Create blobs for each image
-        const blobPromises = ExplainItIMG.map((image, index) =>
-            fetch(image)
-                .then((res) => {
-                    if (!res.ok) {
-                        throw new Error(`Failed to fetch image ${index}: ${res.statusText}`);
-                    }
-                    return res.blob();
-                })
-                .then((blob) => {
-                    hdBlobsRef.current[index] = blob; // Store the blob in the ref
-                    return blob;
-                })
-                .catch((err) => {
-                    console.error("Error creating blob:", err);
-                    return null; // Return null for failed fetches
-                })
-        );
+            // Create blobs for each image from the refs
+            const blobPromises = imageRefs.current.map((img, index) => {
+                if (!img) {
+                    console.error(`Image ref at index ${index} is null.`);
+                    return null;
+                }
 
-        // Wait for all blob promises to resolve
-        const hdBlobs = await Promise.all(blobPromises);
+                return fetch(img.src)
+                    .then((res) => {
+                        if (!res.ok) {
+                            throw new Error(`Failed to fetch image ${index}: ${res.statusText}`);
+                        }
+                        return res.blob();
+                    })
+                    .then((blob) => {
+                        if (blob.size === 0) {
+                            throw new Error(`Blob is empty for image ${index}`);
+                        }
+                        hdBlobsRef.current[index] = blob; // Store the blob in the ref
+                        return blob;
+                    })
+                    .catch((err) => {
+                        console.error("Error creating blob:", err);
+                        return null; // Return null for failed fetches
+                    });
+            });
 
-        // Filter out any failed blobs (null) using a type guard
-        const validBlobs = hdBlobs.filter((blob): blob is Blob => blob !== null);
+            // Wait for all blob promises to resolve
+            const hdBlobs = await Promise.all(blobPromises);
 
-        if (validBlobs.length === ExplainItIMG.length) {
-            // All blobs are ready
-            GetSecureURL(validBlobs); // Pass blobs to GetSecureURL
-        } else {
-            console.error("Some images failed to fetch.");
+            // Filter out any failed blobs (null) using a type guard
+            const validBlobs = hdBlobs.filter((blob): blob is Blob => blob !== null);
+
+            if (validBlobs.length === imageRefs.current.length) {
+                // All blobs are ready
+                await GetSecureURL(validBlobs); // Pass blobs to GetSecureURL
+            } else {
+                console.error("Some images failed to fetch.");
+            }
+        } catch (error) {
+            console.error("Error during image upload process:", error);
         }
     };
 
@@ -673,67 +682,75 @@ const ExplainItPreview: React.FC<ExplainItPreviewProps> = ({
 
     const PutImageInS3WithURL = useCallback(
         (holder: any, blob: Blob, index: number) => {
-            const urlx = holder[index].urlHD; // Use the appropriate URL for your needs
+            try {
+                const urlx = holder[index].urlHD; // Use the appropriate URL for your needs
 
-            console.log(`Uploading image ${index + 1} to ${urlx} with content type ${blob.type}`);
+                console.log(`Uploading image ${index + 1} to ${urlx} with content type ${blob.type}`);
 
-            Axios.put(urlx, blob, {
-                headers: {
-                    "Content-Type": blob.type || 'application/octet-stream', // Fallback to generic binary if type is undefined
-                },
-            })
-                .then((response) => {
-                    console.log(`Image ${index + 1} uploaded successfully.`);
-
-                    // Check if the response status is 200
-                    if (response.status === 200) {
-                        // Extract the image URL from the urlx
-                        let imagelink = urlx.split("?")[0];
-                        let imagelinkjj = imagelink.split("/").pop();
-
-                        // Update state with image URLs based on index
-                        setDatall((prevState) => {
-                            const newState = { ...prevState };
-
-                            switch (index) {
-                                case 0:
-                                    newState.x1 = imagelink;
-                                    newState.xt1 = imagelinkjj;
-                                    break;
-                                case 1:
-                                    newState.x2 = imagelink;
-                                    newState.xt2 = imagelinkjj;
-                                    break;
-                                case 2:
-                                    newState.x3 = imagelink;
-                                    newState.xt3 = imagelinkjj;
-                                    break;
-                                case 3:
-                                    newState.x4 = imagelink;
-                                    newState.xt4 = imagelinkjj;
-                                    break;
-                                case 4:
-                                    newState.x5 = imagelink;
-                                    newState.xt5 = imagelinkjj;
-                                    break;
-                                case 5:
-                                    newState.x6 = imagelink;
-                                    newState.xt6 = imagelinkjj;
-                                    break;
-                                default:
-                                    break;
-                            }
-
-                            return newState;
-                        });
-                    }
+                Axios.put(urlx, blob, {
+                    headers: {
+                        "Content-Type": blob.type || 'application/octet-stream', // Fallback to generic binary if type is undefined
+                    },
                 })
-                .catch((error) => {
-                    console.error(`Error uploading image ${index + 1} to S3:`, error);
-                });
+                    .then((response) => {
+                        console.log(`Image ${index + 1} uploaded successfully.`);
+
+                        // Check if the response status is 200
+                        if (response.status === 200) {
+                            // Extract the image URL from the urlx
+                            let imagelink = urlx.split("?")[0];
+                            let imagelinkjj = imagelink.split("/").pop();
+
+                            // Update state with image URLs based on index
+                            setDatall((prevState) => {
+                                const newState = { ...prevState };
+
+                                switch (index) {
+                                    case 0:
+                                        newState.x1 = imagelink;
+                                        newState.xt1 = initialSteps[index];
+                                        newState.im2 = imagelinkjj;
+                                        break;
+                                    case 1:
+                                        newState.x2 = imagelink;
+                                        newState.xt2 = initialSteps[index];
+                                        break;
+                                    case 2:
+                                        newState.x3 = imagelink;
+                                        newState.xt3 = initialSteps[index];
+                                        break;
+                                    case 3:
+                                        newState.x4 = imagelink;
+                                        newState.xt4 = initialSteps[index];
+                                        break;
+                                    case 4:
+                                        newState.x5 = imagelink;
+                                        newState.xt5 = initialSteps[index];
+                                        break;
+                                    case 5:
+                                        newState.x6 = imagelink;
+                                        newState.xt6 = initialSteps[index];
+                                        break;
+                                    default:
+                                        break;
+                                }
+
+                                return newState;
+                            });
+                        } else {
+                            console.error(`Upload failed for image ${index + 1}:`, response.statusText);
+                        }
+                    })
+                    .catch((error) => {
+                        console.error(`Error uploading image ${index + 1} to S3:`, error);
+                    });
+            } catch (error) {
+                console.error(`Error in PutImageInS3WithURL for image ${index + 1}:`, error);
+            }
         },
-        []
+        [Datall, sanitizedSteps, setDatall, initialSteps] // Add dependencies here if needed
     );
+
 
     const calldatabase = useCallback(() => {
         Axios.post(`${process.env.REACT_APP_SUPERSTARZ_URL}/post_upload_dataX`, {
@@ -741,7 +758,7 @@ const ExplainItPreview: React.FC<ExplainItPreviewProps> = ({
         })
             .then((response) => {
                 console.log(response);
-                alert('Data saved successfully!');
+                //alert('Data saved successfully!');
             })
             .catch((error) => {
                 console.log(error);
@@ -833,7 +850,7 @@ const ExplainItPreview: React.FC<ExplainItPreviewProps> = ({
                         onClick={() => handleImageClick(index)}
                     >
                         <img
-
+                            ref={(el) => (imageRefs.current[index] = el!)} // Assign ref to the image element
                             className={loaderx ? "blinkenx" : ""}
                             src={ExplainItIMG[index] ? ExplainItIMG[index] : src}
                             onLoad={() => {

@@ -174,6 +174,7 @@ function Postx({
   const [Hideonload, setHideonload] = useState(true);
 
 
+  const [inV, setinV] = useState(false);
 
 
   const [Emo1Num, setEmo1Num] = useState(0);
@@ -1181,7 +1182,7 @@ function Postx({
 
 
   var profilewidth = matchPc
-    ? minimise ? '12%' : "9%"
+    ? minimise ? '12%' : "7%"
     : matchTablet
       ? minimise ? '5%' : "12.5%"
       : minimise ? '22%' : "15%";
@@ -1599,6 +1600,8 @@ function Postx({
             {/*///////////////////////////////////////////////////////////////////////////POST DATA*/}
 
             <Slider
+              setinV={setinV}
+
               Maximisefromcanvas={Maximisefromcanvas}
               setMaximisefromcanvas={setMaximisefromcanvas}
 
@@ -2431,7 +2434,9 @@ function Postx({
 
                   <div style={{
                     position: 'absolute', bottom: matchMobile ? '-10vh' : '56.5vh',
-                    left: '-60%'
+                    left: '-60%',
+                    visibility: matchMobile ? inV ? 'visible' : 'visible' : inV ? 'visible' : 'hidden',
+                    transition: "transform 0.1s",
                   }}>
 
                     {StopShowPad ? null :
@@ -2461,7 +2466,9 @@ function Postx({
                   <div style={{
                     position: 'absolute', bottom:
                       matchMobile ? Ein === null || Ein === 0 ? '-23.3vh' : '-23.2vh' :
-                        '42.3vh', left: matchMobile ? '-25%' : '-30%'
+                        '42.3vh', left: matchMobile ? '-25%' : '-30%',
+                    visibility: matchMobile ? inV ? 'visible' : 'visible' : inV ? 'visible' : 'hidden',
+                    transition: "transform 0.1s",
                   }}>
 
                     {StopShowPad ? null :
@@ -2511,7 +2518,10 @@ function Postx({
                       color: darkmodeReducer
                         ? "#ffffff"
                         : "#000000",
-                      display: minimise ? 'none' : 'flex'
+                      display: minimise ? 'none' : 'flex',
+                      visibility: matchMobile ? inV ? 'visible' : 'visible' : inV ? 'visible' : 'hidden',
+                      transition: "transform 0.1s",
+
                     }}
                   >
 

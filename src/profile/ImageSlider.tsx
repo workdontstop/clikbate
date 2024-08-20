@@ -33,9 +33,11 @@ const ImageSlider: React.FC<ImageSliderProps> = ({ RandomColor, FeedType, setFee
         `${REACT_APP_CLOUNDFRONT}0b5b23f942c2a6fa3cd88a77c5666bc2.jpg`,
     ];
 
-    const textArray = ['All Feeds', 'Explain IT', 'Friends Feed', 'Discover', 'Topics'];
+    const textArray = [' Feeds', 'Explain IT', 'Friends', 'Discover', 'Topics'];
 
     const [activeIndex, setActiveIndex] = useState<number | null>(FeedType);
+
+    const [activeIndex2, setActiveIndex2] = useState<number>(0);
 
     const refs = useRef<(HTMLDivElement | null)[]>([]);
 
@@ -104,34 +106,32 @@ const ImageSlider: React.FC<ImageSliderProps> = ({ RandomColor, FeedType, setFee
 
 
     const handleImageClick = (index: number) => {
-        if (activeIndex === index) {
-
-            console.log(`Image ${index + 1} clicked again`);
 
 
-            setFeedType(index);
+        console.log(`Image ${index + 1} clicked again`);
 
-        } else {
-
-            setFeedType(index);
-
-            setActiveIndex(index);
+        setActiveIndex(index);
 
 
-            const imageContainer = refs.current[index];
-            if (imageContainer) {
-                const parent = imageContainer.parentElement;
-                if (parent) {
-                    const parentRect = parent.getBoundingClientRect();
-                    const childRect = imageContainer.getBoundingClientRect();
-                    const offset = childRect.left - parentRect.left - (parentRect.width / 2) + (childRect.width / 2);
-                    parent.scrollTo({
-                        left: parent.scrollLeft + offset,
-                        behavior: 'smooth'
-                    });
-                }
+        setFeedType(index);
+
+
+
+
+        const imageContainer = refs.current[index];
+        if (imageContainer) {
+            const parent = imageContainer.parentElement;
+            if (parent) {
+                const parentRect = parent.getBoundingClientRect();
+                const childRect = imageContainer.getBoundingClientRect();
+                const offset = childRect.left - parentRect.left - (parentRect.width / 2) + (childRect.width / 2);
+                parent.scrollTo({
+                    left: parent.scrollLeft + offset,
+                    behavior: 'smooth'
+                });
             }
         }
+
     };
 
     return (
@@ -152,11 +152,14 @@ const ImageSlider: React.FC<ImageSliderProps> = ({ RandomColor, FeedType, setFee
                         <img src={image} alt={`Slide ${index + 1}`} className="image"
                             style={{
                                 transform: activeIndex === index ? 'scale(1)' : 'scale(0.8)',
-                                transition: "transform 0.1s",
+                                transition: "transform 0.09s",
 
                             }} />
 
-                        <div className={matchMobile ? "overlay-textx" : "overlay-text"}>
+                        <div className={matchMobile ? "overlay-textx" : "overlay-text"} style={{
+                            fontSize: activeIndex === index ?
+                                matchMobile ? '1rem' : '1.4rem' : matchMobile ? '0.76rem' : '0.92rem'
+                        }}>
 
                             {index === 1 ?
                                 <>

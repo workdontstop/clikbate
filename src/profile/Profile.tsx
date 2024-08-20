@@ -37,9 +37,7 @@ import { UpdateLoader } from ".././GlobalActions";
 
 function Profilex({
   OpenModalForm,
-
   postData,
-
   postDatainner,
   postDatainnerThumb,
   showProfiileData,
@@ -1533,7 +1531,7 @@ function Profilex({
                       style={{
 
                         height: matchMobile ? postData.length - 1 === i ? '10vh' : "30vh" :
-                          postData.length - 1 === i ? '0vh' : '33vh',
+                          postData.length - 1 === i ? '5vh' : '33vh',
                         display: minimise ? 'none' : 'block'
                       }}
                     ></Grid>
@@ -1573,7 +1571,7 @@ function Profilex({
             xs={12}
             style={{
               padding: '0px', margin: 'auto', textAlign: 'center',
-              marginTop: matchMobile ? minimise ? '2vh' : '-15vh' : '5vh'
+              marginTop: matchMobile ? minimise ? '2vh' : '1vh' : '5vh'
             }}
           >
             <ControlPointIcon
