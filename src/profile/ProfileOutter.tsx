@@ -68,6 +68,7 @@ import ProtectedRoute from "./ProtectedRoute";
 
 
 
+
 import {
   Paper,
   Grid,
@@ -88,7 +89,7 @@ function ProfileOutter({ CallLoggedProfile }: any) {
   const { REACT_APP_SUPERSTARZ_URL, REACT_APP_CLOUNDFRONT, REACT_APP_APPX_STATE } = process.env;
 
 
-  var AiLock = true;
+  var AiLock = false;
 
 
   const isAppleDevice = /Mac|iPhone|iPad|iPod/.test(navigator.userAgent);

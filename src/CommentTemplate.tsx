@@ -972,7 +972,7 @@ function CommentTemplatex({
               CommentTimer={CommentTimer}
             />
           </Grid>
-          (
+
           <ModalCommentLayout
 
             PostOwner={PostOwner}
@@ -1044,7 +1044,7 @@ function CommentTemplatex({
             showimage={DiscussionImage[0]}
             imageHeightoverflow={imageHeightoverflow}
           />
-          ){" "}
+
         </>
       ) : showModalForm ? (
         <ModalLogLayout

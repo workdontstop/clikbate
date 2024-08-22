@@ -79,10 +79,12 @@ if (process.env.APP_STATE === "dev") {
   var corsOptions = {
     ///origin: "http://192.168.0.39:3000",
     origin: [
-      "https://api-inference.huggingface.co/models/stabilityai/stable-diffusion-3-medium",
       "http://192.168.0.39:3000",
+
+      "https://api-inference.huggingface.co/models/stabilityai/stable-diffusion-3-medium",
       "https://api.stability.ai/v2beta/stable-diffusion/generate", // Add your front-end origin
       "https://oaidalleapiprodscus.blob.core.windows.net", // Add your blob storage origin
+      "https://oaidalleapiprodscus.blob.core.windows.net/private/",
     ],
     credentials: true, //access-control-allow-credentials:true
     optionsSuccessStatus: 200,
@@ -236,7 +238,8 @@ SELECT
 
   interacttype1, interacttype2, rad1, rad2, members.profile_image, members.username, members.color1, 
   posts.id, sender, post_count, topic, caption, item1, thumb1, itemtype1, interact1a, 
-  interact1ax, interact1ay, interact1b, interact1bx, interact1by, item2, vid1backup, vid2backup, time
+  interact1ax, interact1ay, interact1b, interact1bx, interact1by, item2, vid1backup, vid2backup, time, 
+  mode, x1,xt1, x2,xt2, x3,xt3, x4,xt4, x5,xt5, x6,xt6
 FROM posts
 
 INNER JOIN members ON posts.sender = members.id 
@@ -274,7 +277,9 @@ const posts_more = `SELECT
 
   interacttype1, interacttype2, rad1, rad2, members.profile_image, members.username, members.color1, 
   posts.id, sender, post_count, topic, caption, item1, thumb1, itemtype1, interact1a, 
-  interact1ax, interact1ay, interact1b, interact1bx, interact1by, item2, vid1backup, vid2backup, time
+  interact1ax, interact1ay, interact1b, interact1bx, interact1by, item2, vid1backup, vid2backup, time,
+    mode, x1,xt1, x2,xt2, x3,xt3, x4,xt4, x5,xt5, x6,xt6
+
 FROM posts
 
 INNER JOIN members ON posts.sender = members.id AND posts.id < ?  
@@ -467,7 +472,9 @@ SELECT
 
   interacttype1, interacttype2, rad1, rad2, members.profile_image, members.username, members.color1, 
   posts.id, sender, post_count, topic, caption, item1, thumb1, itemtype1, interact1a, 
-  interact1ax, interact1ay, interact1b, interact1bx, interact1by, item2, vid1backup, vid2backup, time
+  interact1ax, interact1ay, interact1b, interact1bx, interact1by, item2, vid1backup, vid2backup, time,
+    mode, x1,xt1, x2,xt2, x3,xt3, x4,xt4, x5,xt5, x6,xt6
+
 FROM posts
 
 INNER JOIN members ON posts.sender = members.id 
@@ -505,7 +512,9 @@ const profile_more = `SELECT
 
   interacttype1, interacttype2, rad1, rad2, members.profile_image, members.username, members.color1, 
   posts.id, sender, post_count, topic, caption, item1, thumb1, itemtype1, interact1a, 
-  interact1ax, interact1ay, interact1b, interact1bx, interact1by, item2, vid1backup, vid2backup, time
+  interact1ax, interact1ay, interact1b, interact1bx, interact1by, item2, vid1backup, vid2backup, time,
+    mode, x1,xt1, x2,xt2, x3,xt3, x4,xt4, x5,xt5, x6,xt6
+    
 FROM posts
 
 INNER JOIN members ON posts.sender = members.id 

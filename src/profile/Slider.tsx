@@ -21,6 +21,8 @@ import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import { InView, useInView } from "react-intersection-observer";
 
 import VideoComponent from "./VideoComponent";
+import { PostExplain } from "./PostExplain";
+
 
 function Sliderx({
   slides,
@@ -287,7 +289,7 @@ function Sliderx({
 
   const { ref, inView, entry } = useInView({
     /* Optional options */
-    threshold: matchMobile ? 0.50 : 0.55,
+    threshold: matchMobile ? 0.50 : 0.4,
 
 
   });
@@ -637,11 +639,11 @@ function Sliderx({
 
 
     if (inView) {
-
+      setviewPrev(false);
 
       showcaptionwaitTimer2.current = setTimeout(function () {
         setviewPrev(true);
-      }, 4000);
+      }, 7000);
 
     } else {
 
@@ -879,6 +881,7 @@ function Sliderx({
     }
   };
 
+  //item1
   const tiim = useRef<ReturnType<typeof setTimeout> | null>(null);
   const TouchTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -1052,10 +1055,10 @@ function Sliderx({
   useEffect(() => {
     if (matchPc) {
       if (minimise) {
-        setinteractHeightResolution(window.innerHeight * 0.54);
+        setinteractHeightResolution(window.innerHeight * 0.64);
       }
       else {
-        setinteractHeightResolution(window.innerHeight * 0.75);
+        setinteractHeightResolution(window.innerHeight * 0.85);
       }
     }
   }, [matchPc, minimise])
@@ -1068,7 +1071,7 @@ function Sliderx({
         setinteractHeightResolution(window.innerHeight * 0.44);
       }
       else {
-        setinteractHeightResolution(window.innerHeight * 0.8);
+        setinteractHeightResolution(window.innerHeight * 0.9);
       }
     }
 
@@ -1975,7 +1978,7 @@ function Sliderx({
                 } else {
                   drawInteraction(0, event, 0);
                 }
-              }, 1600);
+              }, 1900);
             }
 
 
@@ -2940,6 +2943,26 @@ function Sliderx({
             }}
           />
         ) : null}
+
+
+
+        {inView && post.mode === 1 ?
+          <PostExplain
+            index={pey}
+            itemcroptype={itemcroptype}
+            post={post}
+            postDivRef={postDivRef}
+            pey={pey}
+            minimise={minimise}
+            setMaximisefromcanvas={setMaximisefromcanvas}
+            setminimiseSpecificScroll={setminimiseSpecificScroll}
+            setminimise={setminimise}
+          />
+
+          : null}
+
+
+
 
         {
           minimise ? null :

@@ -707,28 +707,28 @@ const ExplainItPreview: React.FC<ExplainItPreviewProps> = ({
 
                                 switch (index) {
                                     case 0:
-                                        newState.x1 = imagelink;
+                                        newState.x1 = imagelinkjj;
                                         newState.xt1 = initialSteps[index];
                                         newState.im2 = imagelinkjj;
                                         break;
                                     case 1:
-                                        newState.x2 = imagelink;
+                                        newState.x2 = imagelinkjj;
                                         newState.xt2 = initialSteps[index];
                                         break;
                                     case 2:
-                                        newState.x3 = imagelink;
+                                        newState.x3 = imagelinkjj;
                                         newState.xt3 = initialSteps[index];
                                         break;
                                     case 3:
-                                        newState.x4 = imagelink;
+                                        newState.x4 = imagelinkjj;
                                         newState.xt4 = initialSteps[index];
                                         break;
                                     case 4:
-                                        newState.x5 = imagelink;
+                                        newState.x5 = imagelinkjj;
                                         newState.xt5 = initialSteps[index];
                                         break;
                                     case 5:
-                                        newState.x6 = imagelink;
+                                        newState.x6 = imagelinkjj;
                                         newState.xt6 = initialSteps[index];
                                         break;
                                     default:
