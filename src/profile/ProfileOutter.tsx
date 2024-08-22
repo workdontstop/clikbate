@@ -89,7 +89,7 @@ function ProfileOutter({ CallLoggedProfile }: any) {
   const { REACT_APP_SUPERSTARZ_URL, REACT_APP_CLOUNDFRONT, REACT_APP_APPX_STATE } = process.env;
 
 
-  var AiLock = false;
+  var AiLock = true;
 
 
   const isAppleDevice = /Mac|iPhone|iPad|iPod/.test(navigator.userAgent);

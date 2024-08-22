@@ -1883,6 +1883,7 @@ function Postx({
 
                     dispatch(UpdateSign(true));
 
+                    commentClickedNew();
                     // commentClickedNew();
                   } else {
                     commentClickedNew();
@@ -2577,7 +2578,7 @@ function Postx({
                         if (idReducer === GuestReducer) {
                           dispatch(UpdateSign(true));
 
-                          ///commentClickedNew();
+                          commentClickedNew();
                           //   //scale
                         } else {
                           commentClickedNew();
