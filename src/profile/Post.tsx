@@ -16,6 +16,10 @@ import BentoIcon from "@mui/icons-material/Bento";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import CommentIcon from "@mui/icons-material/Comment";
 import ChatBubbleOutlineIcon from '@material-ui/icons/ChatBubbleOutline';
+import VolumeOffIcon from '@material-ui/icons/VolumeOff';
+
+import VolumeUpIcon from '@material-ui/icons/VolumeUp';
+
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import AudiotrackIcon from '@material-ui/icons/Audiotrack';
 import FavoriteIcon from '@material-ui/icons/Favorite';
@@ -65,7 +69,8 @@ import {
   UpdatePostFromCom,
   UpdateReactType,
   Updatepagenum,
-  MuteAction
+  MuteAction,
+
 
 
 } from ".././GlobalActions";
@@ -201,10 +206,52 @@ function Postx({
 
   const [Ein, setEin] = useState(0);
 
+  const [LockCaption, setLockCaption] = useState('');
+
+  const [LockTopic, setLockTopic] = useState('');
+
+
+  useEffect(() => {
+    if (post) {
+      // Limits for topic and caption lengths
+      const topicLimit = 45;
+      const captionLimit = 78;
+
+      // Function to truncate text and add ellipsis if necessary
+      const truncateText = (text: any, limit: any) => {
+        return text.length > limit ? text.substring(0, limit - 2) + '..' : text;
+      };
+
+      // Apply the limits and set the state
+      setLockTopic(truncateText(post.topic, topicLimit));
+      setLockCaption(truncateText(post.caption, captionLimit));
+    }
+  }, [post]);
+
+
+
 
   const [ShowAudioIcon, setShowAudioIcon] = useState(true);
 
   const [maximiseFirst, setmaximiseFirst] = useState(false);
+
+  const [HideAudioicon, setHideAudioicon] = useState(true);
+
+
+  const [playXAudio, setplayXAudio] = useState(false);
+
+  const [playXAudioType, setplayXAudioType] = useState(false);
+
+  const [audionotify, setaudionotify] = useState(false);
+
+  useEffect(() => {
+
+
+    setplayXAudioType(playXAudio);
+    /// alert(playXAudio);
+
+  }, [playXAudio])
+
 
   const [Maximisefromcanvas, setMaximisefromcanvas] = useState(false);
 
@@ -1600,6 +1647,15 @@ function Postx({
             {/*///////////////////////////////////////////////////////////////////////////POST DATA*/}
 
             <Slider
+              audionotify={audionotify}
+              setaudionotify={setaudionotify}
+
+              playXAudio={playXAudio}
+              setplayXAudio={setplayXAudio}
+
+              setHideAudioicon={setHideAudioicon}
+              HideAudioicon={HideAudioicon}
+
               setinV={setinV}
 
               Maximisefromcanvas={Maximisefromcanvas}
@@ -1909,6 +1965,173 @@ function Postx({
 
 
 
+            {/*///////////////////////////////////////////////////////////////////////////EXPLAIN MUTE AUDIO*/}
+            <span
+              onMouseEnter={(e: any) => {
+                setZoomx(true);
+
+              }}
+              onMouseLeave={(e: any) => {
+                setZoomx(false);
+
+              }}
+
+              style={{
+                marginLeft: matchMobile ? minimise ? '80vw' : '90vw'
+                  : minimise ? '29vw' : "46vw",
+
+                top: matchMobile ? '14.8vh' : `20.2vh`,
+
+                marginTop: minimise ? '2vh' : '0px',
+
+                fontWeight: 'bold',
+                padding: "0px",
+                cursor: "pointer",
+                position: 'absolute',
+                visibility: HideAudioicon ? 'hidden' : 'visible',
+
+                display: matchMobile ? minimise ? 'none' : 'block'
+                  : minimise ? 'block' : "block",
+
+              }}
+            >
+
+
+
+
+              {playXAudio ? null :
+                <VolumeOffIcon
+                  className={
+                    darkmodeReducer
+                      ? " dontallowhighlighting zuperkingIcon  zuperkingIconPostDark blinken"
+                      : "  dontallowhighlighting zuperkingIcon  zuperkingIconPostLight blinken"
+                  }
+                  onClick={() => {
+
+                  }}
+                  style={{
+                    position: "relative",
+
+                    transform: matchMobile ? Zoomx ? "scale(2.1)" : "scale(1.6)" : Zoomx ? "scale(2)" : "scale(1.2)",
+                    transition: "transform 0.1s",
+                    zIndex: 20,
+                    verticalAlign: "middle",
+                    fontSize: postcommentfont,
+                    opacity: 1,
+                    color: darkmodeReducer ? "#000000" : "#dddddd",
+
+                  }}
+                />}
+
+
+
+
+            </span>
+            {/*///////////////////////////////////////////////////////////////////////////EXPLAIN MUTE AUDIO*/}
+
+
+
+            {/*///////////////////////////////////////////////////////////////////////////EXPLAIN PLAY PAUSE*/}
+            <span
+              onMouseEnter={(e: any) => {
+                setZoomx(true);
+
+              }}
+              onMouseLeave={(e: any) => {
+                setZoomx(false);
+
+              }}
+
+              style={{
+                marginLeft: matchMobile ? minimise ? '80vw' : '90vw'
+                  : minimise ? '29vw' : "46vw",
+
+                top: matchMobile ? '14.8vh' : `20.2vh`,
+
+                marginTop: minimise ? '2vh' : '0px',
+                visibility: audionotify ? 'visible' : 'hidden',
+
+                fontWeight: 'bold',
+                padding: "0px",
+                cursor: "pointer",
+                position: 'absolute',
+
+
+                display: matchMobile ? minimise ? 'none' : 'block'
+                  : minimise ? 'block' : "block",
+
+              }}
+            >
+
+
+
+              {
+
+                post.mode === 1 ?
+
+                  playXAudio ?
+
+                    <VolumeUpIcon
+                      className={
+                        darkmodeReducer
+                          ? " dontallowhighlighting zuperkingIcon  zuperkingIconPostDark blinken"
+                          : "  dontallowhighlighting zuperkingIcon  zuperkingIconPostLight blinken"
+                      }
+                      onClick={() => {
+
+
+                      }}
+
+                      style={{
+                        position: "relative",
+
+                        transform: matchMobile ? Zoomx ? "scale(2.1)" : "scale(1.6)" : Zoomx ? "scale(2)" : "scale(1.2)",
+                        transition: "transform 0.1s",
+                        zIndex: 20,
+                        verticalAlign: "middle",
+                        fontSize: postcommentfont,
+                        opacity: 1,
+                        color: darkmodeReducer ? "#000000" : "#dddddd",
+
+                      }}
+                    />
+                    :
+                    <VolumeOffIcon
+                      className={
+                        darkmodeReducer
+                          ? " dontallowhighlighting zuperkingIcon  zuperkingIconPostDark blinken"
+                          : "  dontallowhighlighting zuperkingIcon  zuperkingIconPostLight blinken"
+                      }
+                      onClick={() => {
+
+
+                      }}
+                      style={{
+                        position: "relative",
+
+                        transform: matchMobile ? Zoomx ? "scale(2.1)" : "scale(1.6)" : Zoomx ? "scale(2)" : "scale(1.2)",
+                        transition: "transform 0.1s",
+                        zIndex: 20,
+                        verticalAlign: "middle",
+                        fontSize: postcommentfont,
+                        opacity: 1,
+                        color: darkmodeReducer ? "#000000" : "#dddddd",
+
+                      }}
+                    />
+
+                  : playXAudio ? null : null}
+
+
+
+
+
+
+
+            </span>
+            {/*///////////////////////////////////////////////////////////////////////////EXPLAIN PLAY PAUSE*/}
+
+
 
             {/*///////////////////////////////////////////////////////////////////////////Profile pic minimise*/}
 
@@ -2185,7 +2408,7 @@ function Postx({
                             <span
                               style={{
                                 /// fontSize: matchMobile ? charCount > 28 ? '0.rem' : '' : charCount > 28 ? '' : '',
-                                fontSize: matchMobile ? '0.75rem' : '0.91rem',
+                                fontSize: matchMobile ? '0.75rem' : '0.9rem',
                                 padding: '0px',
                                 position: 'absolute',
                                 width: '100%',
@@ -2193,9 +2416,10 @@ function Postx({
 
                                 fontWeight: 'normal',
 
-                                marginTop: matchMobile ? '-1.2vh' : '-1.5vh',
+                                marginTop: matchMobile ? '-1.2vh' : '-2vh',
                               }}>
-                              {post.topic}</span>
+
+                              {LockTopic}</span>
 
                           </span>
                         </span>
@@ -2222,7 +2446,7 @@ function Postx({
                       style={{
                         width: "79%",
 
-                        top: matchMobile ? '-11.5vh' : '1vh',
+                        top: matchMobile ? '-11.5vh' : '1.3vh',
                         position: "relative",
 
                         alignItems: "center",
@@ -2248,7 +2472,7 @@ function Postx({
 
                             style={{
 
-                              fontSize: matchMobile ? '0.9rem' : '1.16rem',
+                              fontSize: matchMobile ? '0.85rem' : '1.16rem',
                               cursor: 'pointer',
                               fontFamily: "Roboto, Arial, Helvetica, sans-serif",
                               color: darkmodeReducer ? "#ffffff" : "#000000",
@@ -2256,7 +2480,8 @@ function Postx({
                             }}
                           >
 
-                            {post.caption}
+                            {LockCaption}
+
 
                             <span style={{ visibility: 'hidden' }}>.....</span>
 

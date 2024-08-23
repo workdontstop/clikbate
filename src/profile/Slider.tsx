@@ -102,7 +102,13 @@ function Sliderx({
   divBox,
   Maximisefromcanvas,
   setMaximisefromcanvas,
-  setinV
+  setinV,
+  setHideAudioicon,
+  HideAudioicon,
+  playXAudio,
+  setplayXAudio,
+  audionotify,
+  setaudionotify
 
 
 }: any): JSX.Element {
@@ -440,6 +446,7 @@ function Sliderx({
 
     } else {
       setshow(false)
+      setplayXAudio(false);
     }
 
 
@@ -1794,10 +1801,12 @@ function Sliderx({
           if (post.interact1a || post.interact1b) {
             //alert('jj');
 
-            var scaleFactor1 = matchMobile ? 1.15 : 1.15; // You can adjust this value to control the zoom level
+            var scaleFactor1 = matchMobile ? 1.08 : 1.05; // You can adjust this value to control the zoom level
 
 
-            var scaleFactor2 = matchMobile ? 1.15 : 1.15; // You can adjust this value to control the zoom level
+            var scaleFactor2 = matchMobile ? 1.08 : 1.05; // You can adjust this value to control the zoom level
+
+
 
             if (post.interact1a) {
               if (typex === 0 || typex === 3) {
@@ -1978,7 +1987,7 @@ function Sliderx({
                 } else {
                   drawInteraction(0, event, 0);
                 }
-              }, 1900);
+              }, 80);
             }
 
 
@@ -2948,6 +2957,14 @@ function Sliderx({
 
         {inView && post.mode === 1 ?
           <PostExplain
+            audionotify={audionotify}
+            setaudionotify={setaudionotify}
+
+            playXAudio={playXAudio}
+            setplayXAudio={setplayXAudio}
+
+            setHideAudioicon={setHideAudioicon}
+            HideAudioicon={HideAudioicon}
             index={pey}
             itemcroptype={itemcroptype}
             post={post}

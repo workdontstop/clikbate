@@ -1,53 +1,96 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useCallback } from "react";
 import { Grid } from "@material-ui/core";
 import { matchMobile } from "../DetectDevice";
 
-function PostExplainx({ post, postDivRef, pey, minimise, setMaximisefromcanvas, setminimiseSpecificScroll, setminimise }: any): JSX.Element {
+function PostExplainx({
+    post,
+    postDivRef,
+    pey,
+    minimise,
+    setMaximisefromcanvas,
+    setminimiseSpecificScroll,
+    setminimise,
+    setHideAudioicon,
+    HideAudioicon,
+    playXAudio,
+    setplayXAudio,
+    audionotify,
+    setaudionotify
+}: any): JSX.Element {
 
     const { REACT_APP_CLOUNDFRONT } = process.env;
 
-    // State to hold the images array
     const [images, setImages] = useState<string[]>([]);
+    const [texts, setTexts] = useState<string[]>([]);
     const [imageActive, setImageActive] = useState<boolean>(false);
     const [currentImage, setCurrentImage] = useState<number>(0);
-
-    // Ref to store the interval ID
+    const [currentImageView, setCurrentImageView] = useState<number>(0);
+    const [displayedText, setDisplayedText] = useState<string>("");
     const autoPlayRef = useRef<NodeJS.Timeout | null>(null);
+    const imageRefs = useRef<(HTMLDivElement | null)[]>([]);
+    const synthRef = useRef<SpeechSynthesisUtterance | null>(null); // Ref for speech synthesis
 
-    // useEffect to detect when the post prop updates and update the images array
+    // Sanitize steps from post
+    const sanitizeSteps = useCallback((steps: string[]) => {
+        return steps.map((step) => step.replace(/\*/g, ""));
+    }, []);
+
     useEffect(() => {
         const updatedImages = [post.x1, post.x2, post.x3, post.x4, post.x5, post.x6];
+        const updatedTexts = [post.xt1, post.xt2, post.xt3, post.xt4, post.xt5, post.xt6];
         setImages(updatedImages);
-        setCurrentImage(0); // Reset to the first image when post updates
-    }, [post]);
+        setTexts(sanitizeSteps(updatedTexts));
+        setCurrentImage(0);
+    }, [post, sanitizeSteps]);
 
+    useEffect(() => {
+        if (imageActive) {
+            const fullText = texts[currentImageView] || "";
+            let index = 0;
+            setDisplayedText("");
+
+            const typingInterval = setInterval(() => {
+                setDisplayedText((prev) => prev + fullText[index]);
+                index += 1;
+                if (index >= fullText.length) {
+                    clearInterval(typingInterval);
+                }
+            }, 70);
+
+            return () => {
+                clearInterval(typingInterval);
+            };
+        }
+    }, [currentImageView, texts, imageActive]);
 
     const [hid, sethid] = useState(false);
 
-    // useEffect to handle auto-play functionality
+    // Handle automatic scrolling and looping back
     useEffect(() => {
         if (!imageActive) {
             autoPlayRef.current = setInterval(() => {
                 if (currentImage === 5) {
-                    setCurrentImage((prev) => (prev + 1));
-
-
+                    // Stop the interval when the last image is reached
+                    if (autoPlayRef.current) {
+                        clearInterval(autoPlayRef.current);
+                    }
+                    // Loop back to the first image after a short delay
                     setTimeout(() => {
-                        sethid(true);
-                        setCurrentImage((prev) => (0));
+                        setCurrentImage(0);
+                        setCurrentImageView(0);
                         setImageActive(true);
-                    }, 500);
+                    }, 1200);
 
-
+                    // Stop the audio when the loop is completed
                     setTimeout(() => {
-                        sethid(false);
-                    }, 1000);
+                        setplayXAudio(false);
+                    }, 2000);
 
                 } else {
                     setCurrentImage((prev) => (prev + 1));
+                    setCurrentImageView((prev) => (prev + 1));
                 }
-
-            }, 2800); // Change image every 4 seconds
+            }, 3500);
         } else if (autoPlayRef.current) {
             clearInterval(autoPlayRef.current);
         }
@@ -59,33 +102,23 @@ function PostExplainx({ post, postDivRef, pey, minimise, setMaximisefromcanvas, 
         };
     }, [imageActive, images.length, currentImage]);
 
-    const wa = useRef<ReturnType<typeof setTimeout> | null>(
-        null
-    );
+    const wa = useRef<ReturnType<typeof setTimeout> | null>(null);
+    const waxc = useRef<ReturnType<typeof setTimeout> | null>(null);
+    const wax = useRef<ReturnType<typeof setTimeout> | null>(null);
+    const waxk = useRef<ReturnType<typeof setTimeout> | null>(null);
+    const wa22 = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-
-    const wa22 = useRef<ReturnType<typeof setTimeout> | null>(
-        null
-    );
-
-    // Handler for image click to stop auto-play and set the clicked image as active
     const handleImageClick = (index: number) => {
-
         if (minimise) {
             if (matchMobile) {
-
                 setMaximisefromcanvas(true);
                 if (wa22.current) {
                     clearTimeout(wa22.current);
                 }
                 wa22.current = setTimeout(() => {
                     setMaximisefromcanvas(false);
-                }, 4000)
-
-            }
-
-
-            else {
+                }, 4000);
+            } else {
                 setminimiseSpecificScroll(true);
                 setminimise(false);
                 if (wa.current) {
@@ -96,23 +129,156 @@ function PostExplainx({ post, postDivRef, pey, minimise, setMaximisefromcanvas, 
                         behavior: "smooth",
                         block: "start",
                     });
-                }, 1000)
-
+                }, 1000);
             }
-
         } else {
-
-            if (imageActive) {
-
-
-            } else {
+            if (!imageActive) {
                 setCurrentImage(0);
                 setImageActive(true);
-
+                setplayXAudio(true);
+            } else {
+                setaudionotify(true);
+                if (waxk.current) {
+                    clearTimeout(waxk.current);
+                }
+                waxk.current = setTimeout(() => {
+                    setaudionotify(false);
+                }, 7500);
+                setplayXAudio(!playXAudio);
             }
-
         }
     };
+
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        const index = Number(entry.target.getAttribute('data-index'));
+                        setTimeout(() => {
+                            setCurrentImageView(index);
+                        }, 500);
+                    }
+                });
+            },
+            {
+                threshold: 0.5, // Adjust this threshold to determine when the image is considered in view
+            }
+        );
+
+        imageRefs.current.forEach((ref) => {
+            if (ref) {
+                observer.observe(ref);
+            }
+        });
+
+        return () => {
+            imageRefs.current.forEach((ref) => {
+                if (ref) {
+                    observer.unobserve(ref);
+                }
+            });
+        };
+    }, [imageActive, post]);
+
+    // Handle speech synthesis and image transition
+    useEffect(() => {
+        const speakText = () => {
+            if (playXAudio && imageActive) {
+                const textToSpeak = texts[currentImageView];
+                if (textToSpeak && "speechSynthesis" in window) {
+                    if (synthRef.current) {
+                        window.speechSynthesis.cancel(); // Cancel any ongoing speech
+                    }
+
+                    const splitText = (text: any, maxLength: any) => {
+                        const regex = new RegExp(`.{1,${maxLength}}(\\s|$)`, 'g');
+                        return text.match(regex) || [];
+                    };
+
+                    const chunks = splitText(textToSpeak, 150);
+
+                    const voices = window.speechSynthesis.getVoices();
+                    if (!voices.length) {
+                        console.warn("No voices available, speech synthesis might not work as expected.");
+                        return;
+                    }
+
+                    const femaleVoice = voices.find(
+                        (voice) => voice.lang === "en-GB" && voice.name.includes("Female")
+                    );
+
+                    const selectedVoice = femaleVoice || voices.find((voice) => voice.lang === "en-GB");
+
+                    if (!selectedVoice) {
+                        console.warn("No en-GB voice found. Using default voice.");
+                    }
+
+                    const speakChunk = (chunk: any) => {
+                        return new Promise((resolve) => {
+                            const utterance = new SpeechSynthesisUtterance(chunk);
+                            utterance.rate = 0.83; // Set the speech rate to make it last longer
+                            utterance.pitch = 1;
+                            utterance.volume = 1;
+                            utterance.lang = "en-GB";
+
+                            if (selectedVoice) {
+                                utterance.voice = selectedVoice;
+                            }
+
+                            utterance.onend = resolve;
+                            window.speechSynthesis.speak(utterance);
+                        });
+                    };
+
+                    const speakAllChunks = async () => {
+                        for (const chunk of chunks) {
+                            await speakChunk(chunk);
+                        }
+
+                        // Move to the next image after speech ends and scroll to it
+                        setCurrentImageView((prev) => {
+                            const nextIndex = prev + 1;
+                            if (nextIndex > 5) {
+                                setplayXAudio(false); // Stop audio after the last image
+                                return 0; // Loop back to the first image
+                            }
+                            return nextIndex;
+                        });
+
+                        // Scroll to the next image
+                        if (imageRefs.current[currentImageView + 1]) {
+                            imageRefs.current[currentImageView + 1]!.scrollIntoView({ behavior: 'smooth' });
+                        }
+                    };
+
+                    speakAllChunks();
+                }
+            } else {
+                if (synthRef.current) {
+                    window.speechSynthesis.cancel(); // Stop speaking when playXAudio is false
+                }
+            }
+        };
+
+        const loadVoicesAndSpeak = () => {
+            const voices = window.speechSynthesis.getVoices();
+            if (voices.length > 0) {
+                speakText();
+            } else {
+                window.speechSynthesis.onvoiceschanged = () => {
+                    speakText();
+                };
+            }
+        };
+
+        loadVoicesAndSpeak();
+
+        return () => {
+            window.speechSynthesis.cancel(); // Stop any ongoing speech
+            window.speechSynthesis.onvoiceschanged = null;
+        };
+    }, [playXAudio, currentImageView, texts, imageActive]);
 
     return (
         <Grid
@@ -134,17 +300,19 @@ function PostExplainx({ post, postDivRef, pey, minimise, setMaximisefromcanvas, 
             {images.map((src, index) => (
                 <div
                     key={index}
+                    data-index={index}
+                    ref={(el) => (imageRefs.current[index] = el)}
                     style={{
                         minWidth: "100%",
                         height: "100%",
                         scrollSnapAlign: "start",
                         position: "relative",
                         backgroundColor: "#000",
-                        transform: `translateX(-${currentImage * 100}%)`, // Move the slider to the current image
-                        transition: "transform 0.5s ease-in-out", // Smooth transition
+                        transform: imageActive ? '' : `translateX(-${currentImage * 100}%)`,
+                        transition: "transform 0.5s ease-in-out",
                         cursor: 'pointer'
                     }}
-                    onClick={() => handleImageClick(index)} // Handle click on the image
+                    onClick={() => handleImageClick(index)}
                 >
                     <img
                         src={`${REACT_APP_CLOUNDFRONT}${src}`}
@@ -155,10 +323,31 @@ function PostExplainx({ post, postDivRef, pey, minimise, setMaximisefromcanvas, 
                             objectFit: "cover",
                         }}
                     />
+                    {imageActive && currentImageView === index && (
+                        <div
+                            style={{
+                                position: "absolute",
+                                top: matchMobile ? "" : "10px",
+                                bottom: matchMobile ? "5px" : "",
+                                left: "50%",
+                                transform: "translateX(-50%)",
+                                transition: "transform 0.1s",
+                                backgroundColor: "rgba(0, 0, 0, 0.5)",
+                                color: "white",
+                                padding: "5px 10px",
+                                borderRadius: "5px",
+                                textAlign: "center",
+                                width: matchMobile ? "90%" : "80%",
+                                height: 'auto',
+                                fontSize: matchMobile ? "0.8rem" : "1.1rem",
+                                fontFamily: "Arial, Helvetica, sans-serif",
+                            }}
+                        >
+                            {displayedText}
+                        </div>
+                    )}
                 </div>
             ))}
-
-
         </Grid>
     );
 }

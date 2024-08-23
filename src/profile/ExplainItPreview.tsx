@@ -181,6 +181,7 @@ const ExplainItPreview: React.FC<ExplainItPreviewProps> = ({
             setshowPla(true);
         }, 3000);
 
+
         // Sanitize initialSteps and set the sanitizedSteps state
         setSanitizedSteps(initialSteps.map((step) => step.replace(/\*/g, "")));
     }, [initialSteps, isPlaying]);
@@ -200,6 +201,7 @@ const ExplainItPreview: React.FC<ExplainItPreviewProps> = ({
                     if (chunkIndex < chunks.length) {
                         const utterance = new SpeechSynthesisUtterance(chunks[chunkIndex]);
                         utterance.lang = "en-GB";
+
                         utterance.rate = 0.83; // Set the speech rate to 0.75
 
                         const setVoice = () => {
