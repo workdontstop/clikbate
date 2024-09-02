@@ -305,6 +305,7 @@ function Postx({
   const profileImageref = useRef<any>();
 
 
+
   const divBox = useRef<HTMLDivElement>(null);
 
 
@@ -1856,7 +1857,7 @@ function Postx({
 
               style={{
                 marginLeft: matchMobile ? minimise ? '80vw' : '90vw'
-                  : minimise ? '29vw' : "46vw",
+                  : minimise ? '28vw' : "46vw",
 
                 top: WebsiteMode ? matchMobile ? '3.5vh' : `5.2vh` : matchMobile ? '2.8vh' : `5.2vh`,
 
@@ -2401,7 +2402,7 @@ function Postx({
                               fontSize: matchMobile ? '0.95rem' : '1.06rem',
                               cursor: 'pointer',
                               fontFamily: "Roboto, Arial, Helvetica, sans-serif",
-                              opacity: darkmodeReducer ? '0.4' : '1',
+                              opacity: darkmodeReducer ? '0.4' : '0.6',
                               fontWeight: "bold",
                             }}
                           >
@@ -2833,8 +2834,8 @@ function Postx({
                           inputProps={{ style: { fontSize: "20px" } }}
                           InputLabelProps={{ style: { fontSize: matchMobile ? "11.2px" : '15px' } }}
                           style={{
-                            width: matchMobile ? '90%' : "80%",
-                            marginLeft: '2vw',
+                            width: matchMobile ? '90%' : "100%",
+                            marginLeft: matchMobile ? '2vw' : "5vw",
                             marginTop: '-2vh',
                             zIndex: 100,
                             opacity: 8,

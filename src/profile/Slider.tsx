@@ -158,6 +158,7 @@ function Sliderx({
 
 
 
+
   useEffect(() => {
 
 
@@ -478,154 +479,159 @@ function Sliderx({
 
   const startinview = useCallback(() => {
 
+    if (divBox.current) {
 
 
 
-    if (inView) {
+      if (inView) {
 
 
-      setinV(true);
+        setinV(true);
 
-      if (minimise) {
+        if (minimise) {
 
-        if (pic.current) {
-          if (divBox.current) {
+          if (pic.current) {
+            if (divBox.current) {
 
-            const previewFileReadimage: any = new Image();
-            previewFileReadimage.crossOrigin = "anonymous";
-            previewFileReadimage.src = pic.current.src;
-            previewFileReadimage.onload = () => {
-              const naturalWidth = previewFileReadimage.naturalWidth;
-              const naturalHeight = previewFileReadimage.naturalHeight;
+              const previewFileReadimage: any = new Image();
+              previewFileReadimage.crossOrigin = "anonymous";
+              previewFileReadimage.src = pic.current.src;
+              previewFileReadimage.onload = () => {
+                const naturalWidth = previewFileReadimage.naturalWidth;
+                const naturalHeight = previewFileReadimage.naturalHeight;
 
-              var containerHeight = 0;
+                var containerHeight = 0;
 
-              if (divBox.current) {
-                containerHeight = divBox.current.clientHeight * DivBoxMultiple;
+                if (divBox.current) {
+                  containerHeight = divBox.current.clientHeight * DivBoxMultiple;
 
-              } else {
-                containerHeight = 0;
-              }
-
-              const aspectRatio = naturalWidth / naturalHeight;
-              const newWidth = containerHeight * aspectRatio;
-              const marginLeft = (divBox.current.clientWidth - newWidth) / 2;
-
-
-              if (InteractTimerxxhy.current) {
-                clearTimeout(InteractTimerxxhy.current);
-              }
-              InteractTimerxxhy.current = setTimeout(() => {
-
-                if (previewFileReadimage.naturalWidth > previewFileReadimage.naturalHeight) {
-                  setMarginLeftCanvas(marginLeft);
-                } else { setMarginLeftCanvas(0); }
-
-
-                if (divBox.current.clientHeight && divBox.current.clientWidth) {
-                  setcanvasBorderH(divBox.current.clientHeight * DivBoxMultiple);
-                  setcanvasBorderW(divBox.current.clientWidth);
+                } else {
+                  containerHeight = 0;
                 }
-              }, 1000);
 
+                const aspectRatio = naturalWidth / naturalHeight;
+                const newWidth = containerHeight * aspectRatio;
+                const marginLeft = (divBox.current.clientWidth - newWidth) / 2;
+
+
+                if (InteractTimerxxhy.current) {
+                  clearTimeout(InteractTimerxxhy.current);
+                }
+                InteractTimerxxhy.current = setTimeout(() => {
+
+                  if (previewFileReadimage.naturalWidth > previewFileReadimage.naturalHeight) {
+                    setMarginLeftCanvas(marginLeft);
+                  } else { setMarginLeftCanvas(0); }
+
+
+
+                  if (divBox.current.clientHeight && divBox.current.clientWidth) {
+                    setcanvasBorderH(divBox.current.clientHeight * DivBoxMultiple);
+                    setcanvasBorderW(divBox.current.clientWidth);
+                  }
+                }, 1000);
+
+              }
             }
           }
+        } else {
+
+
+
+
+          setcanvasBorderH('auto');
+          setcanvasBorderW('auto');
         }
+
+
+
+
+
+
+        setlatestInview(pey);
+
+        setShowPad(true);
+
+
+        ///setShowAudioIcon(true);
+        //setShowReactionsIcon(true);
+        //setShowEmoIcon(true);
+
+
+        if (sTimerccxxtt.current) {
+          clearTimeout(sTimerccxxtt.current);
+        }
+        sTimerccxxtt.current = setTimeout(() => {
+          //setShowReactionsIcon(false);
+
+        }, 7000)
+
+
+
+        if (sTimerccxxhh.current) {
+          clearTimeout(sTimerccxxhh.current);
+        }
+        sTimerccxxhh.current = setTimeout(() => {
+          /// setmaximiseFirst(false);
+          ///setShowAudioIcon(false);
+          //setShowEmoIcon(false);
+        }, 4000)
+
+
+        if (interactContent && interact && ActiveCanvas === pey) {
+
+        } else {
+
+
+          if (sTimerccxx.current) {
+            clearTimeout(sTimerccxx.current);
+          }
+
+          if (sTimercc.current) {
+            clearTimeout(sTimercc.current);
+          }
+          ///calls active post key without clicking on post
+          setActiveCanvas(pey);
+          InitializingAutoPlayIndex(pey);
+          ///calls active post key without clicking on post
+
+          if (minimise) { }
+
+          else {
+
+          }
+
+          startInteraction();
+
+        }
+
+
+
+
       } else {
 
+        setinV(false);
 
 
+        setPlayAudio(false);
 
-        setcanvasBorderH('auto');
-        setcanvasBorderW('auto');
-      }
+        setShowPost(false);
 
-
-
-
-
-
-      setlatestInview(pey);
-
-      setShowPad(true);
-
-
-      ///setShowAudioIcon(true);
-      //setShowReactionsIcon(true);
-      //setShowEmoIcon(true);
-
-
-      if (sTimerccxxtt.current) {
-        clearTimeout(sTimerccxxtt.current);
-      }
-      sTimerccxxtt.current = setTimeout(() => {
-        //setShowReactionsIcon(false);
-
-      }, 7000)
-
-
-
-      if (sTimerccxxhh.current) {
-        clearTimeout(sTimerccxxhh.current);
-      }
-      sTimerccxxhh.current = setTimeout(() => {
         /// setmaximiseFirst(false);
-        ///setShowAudioIcon(false);
-        //setShowEmoIcon(false);
-      }, 4000)
+
+        //setShowAudioIcon(true);
+        ///setShowReactionsIcon(true);
+        setShowPad(false);
+
+        dispatch(MuteIndexAudio(1000));
+
+        setActiveCanvas(-1);
+        stopInteraction();
 
 
-      if (interactContent && interact && ActiveCanvas === pey) {
 
-      } else {
-
-
-        if (sTimerccxx.current) {
-          clearTimeout(sTimerccxx.current);
-        }
-
-        if (sTimercc.current) {
-          clearTimeout(sTimercc.current);
-        }
-        ///calls active post key without clicking on post
-        setActiveCanvas(pey);
-        InitializingAutoPlayIndex(pey);
-        ///calls active post key without clicking on post
-
-        if (minimise) { }
-
-        else {
-
-        }
-
-        startInteraction();
 
       }
-
-
-
-
-    } else {
-
-      setinV(false);
-
-
-      setPlayAudio(false);
-
-      setShowPost(false);
-
-      /// setmaximiseFirst(false);
-
-      //setShowAudioIcon(true);
-      ///setShowReactionsIcon(true);
-      setShowPad(false);
-
-      dispatch(MuteIndexAudio(1000));
-
-      setActiveCanvas(-1);
-      stopInteraction();
-
-
 
 
     }

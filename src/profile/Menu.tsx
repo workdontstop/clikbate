@@ -187,7 +187,7 @@ function Menux({
 
   const Timervv = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-
+  const textArray = [' Feeds', 'Explain IT', 'Friends', 'Discover', 'Topics'];
 
 
 
@@ -795,14 +795,15 @@ function Menux({
                               }
                             }}
                             style={{
-                              transform: Zoom1 ? "scale(1.5)" : "scale(1)",
+                              transform: Zoom1 ? "scale(1.8)" : "scale(1.5)",
                               cursor: 'pointer',
                               transition: "transform 0.1s",
                               width: matchMobile ? '5.5vh' : '2.9vw',
                               height: matchMobile ? '5.5vh' : '2.9vw',
+                              marginLeft: matchMobile ? memeberPageidReducer === 0 ? '' : '1.5vh' : memeberPageidReducer === 0 ? '' : '',
                               borderRadius: '50%',
-                              marginTop: matchMobile ? '1vh' : '0px',
-                              border: `2px solid ${blendedColor}`, // Add this line for a round border
+                              marginTop: matchMobile ? '1.2vh' : '-1vh',
+                              border: `0.5px solid ${blendedColor}`, // Add this line for a round border
                             }}
                           />}
 
@@ -934,55 +935,90 @@ function Menux({
                         style={{
                           backgroundColor: '',
                           height: '5vh',
-                          textAlign: 'center'
+                          textAlign: 'center',
+                          marginTop: matchMobile ? memeberPageid === 0 ? '1.5vh' : '' : memeberPageid === 0 ? '' : '',
                         }}
                       >
 
-                        <HorizontalSplitIcon
 
-                          onMouseEnter={(e: any) => {
-                            setZoom4(true);
-                          }}
-                          onMouseLeave={(e: any) => {
-                            setZoom4(false);
-                          }}
+                        {memeberPageid === 0 ?
+                          <span className={'textx'} style={{
+                            fontSize: matchMobile ? '1.26rem' : '1.42rem',
 
-                          onClick={() => {
-                            GoToMemberLoaderUpF();
-                            setZoom4(false);
-                          }}
+                            color: darkmodeReducer ? '#ffffff' : '#000000'
+                          }}>
 
+                            {FeedType === 1 ?
+                              <>
+                                <span style={{
+                                  fontSize: matchMobile ? '1rem' : '',
+                                  color: darkmodeReducer ? '#ffffff' : '#000000'
+                                }}>
+                                  Explain
+                                </span>
 
-                          className={
-                            darkmodeReducer
-                              ? "make-small-icons-clickable-lightCrop dontallowhighlighting "
-                              : "make-small-icons-clickable-darkCrop dontallowhighlighting  "
-                          }
-                          style={{
-                            transform: matchMobile ? Zoom4 ? "scale(3)" : "scale(3)" :
-                              Zoom4 ? "scale(6)" : "scale(3.7)",
-                            fontSize: matchMobile ? Zoom4 ? '2rem' : '' : Zoom4 ? '' : '',
+                                <span style={{ visibility: 'hidden' }}>
+                                  ..
+                                </span>
 
-                            transition: "transform 0.1s",
-                            color: memeberPageidReducer === 0 ? blendedColor :
-                              Zoom4 ? blendedColor : darkmodeReducer
-                                ? "#ffffff"
-                                : "#000000",
-                            zIndex: 30,
-                            backgroundColor: darkmodeReducer
-                              ? "rgba(41,41,41,0)"
-                              : "rgba(205,205,205,0) ",
-                            cursor: "pointer",
-                            fontFamily: "Arial, Helvetica, sans-serif",
-                            fontWeight: "bolder",
-                            opacity: 1,
-                            padding: "4px",
-                            marginTop: matchMobile ? '2.1vh' : '0px',
+                                <span style={{ color: '#00ccff', fontSize: '1rem' }}>
+                                  IT
+                                </span> </> : textArray[FeedType]
+                            }
 
 
 
-                          }}
-                        />
+
+                          </span>
+
+                          :
+                          <HorizontalSplitIcon
+
+                            onMouseEnter={(e: any) => {
+                              setZoom4(true);
+                            }}
+                            onMouseLeave={(e: any) => {
+                              setZoom4(false);
+                            }}
+
+                            onClick={() => {
+                              GoToMemberLoaderUpF();
+                              setZoom4(false);
+                            }}
+
+
+                            className={
+                              darkmodeReducer
+                                ? "make-small-icons-clickable-lightCrop dontallowhighlighting "
+                                : "make-small-icons-clickable-darkCrop dontallowhighlighting  "
+                            }
+                            style={{
+                              transform: matchMobile ? Zoom4 ? "scale(3)" : "scale(3)" :
+                                Zoom4 ? "scale(3.7)" : "scale(3.7)",
+                              fontSize: matchMobile ? Zoom4 ? '2rem' : '' : Zoom4 ? '' : '',
+
+                              transition: "transform 0.1s",
+                              color:
+                                darkmodeReducer
+                                  ? "#ffffff"
+                                  : "#000000",
+                              zIndex: 30,
+                              backgroundColor: darkmodeReducer
+                                ? "rgba(41,41,41,0)"
+                                : "rgba(205,205,205,0) ",
+                              cursor: "pointer",
+                              fontFamily: "Arial, Helvetica, sans-serif",
+                              fontWeight: "bolder",
+                              opacity: 1,
+                              padding: "4px",
+                              marginTop: matchMobile ? '2.1vh' : '0px',
+
+
+
+                            }}
+                          />
+
+                        }
                       </Grid>
 
                       <Grid

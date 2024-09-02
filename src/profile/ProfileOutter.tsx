@@ -1295,7 +1295,7 @@ function ProfileOutter({ CallLoggedProfile }: any) {
 
                     <Route
                       path="/"
-                      element={<Navigate to={`/Feeds/${encodeBase64('0')}/${encodeBase64('0')}/${encodeBase64('0')}/${encodeBase64('1')}`} />}
+                      element={<Navigate to={`/Feeds/${encodeBase64('0')}/${encodeBase64('0')}/${encodeBase64('0')}/${encodeBase64('0')}`} />}
                     />
                   </Routes>
                 </div>

@@ -1,11 +1,20 @@
 import { Grid } from "@mui/material";
 import React, { useRef, useState, useEffect, useCallback } from "react";
-import { useSelector } from "react-redux";
+import { RootStateOrAny, useSelector, useDispatch } from "react-redux";
 import Axios from "axios";
 import { matchMobile } from "../DetectDevice";
 import ZoomOutIcon from "@mui/icons-material/ZoomOut";
 import PlayArrowIcon from "@material-ui/icons/PlayArrow";
 import PauseIcon from "@material-ui/icons/Pause";
+import {
+    UpdateLoader,
+    Updatepagenum
+} from ".././GlobalActions";
+import { UserInfoUpdateMEMBER } from "../log/actions/UserdataAction";
+import SlowMotionVideoIcon from '@material-ui/icons/SlowMotionVideo';
+import { useNavigate } from 'react-router-dom';
+import { encodeBase64 } from './utils'; // Ensure this is the correct path to your utils
+import { useLocation } from 'react-router-dom';
 
 interface ExplainItPreviewProps {
     initialSteps: any[];
@@ -13,7 +22,10 @@ interface ExplainItPreviewProps {
     promptx: any;
     setloader: any;
     loaderx: any;
+    setInitialSteps: any
 }
+
+
 
 const ExplainItPreview: React.FC<ExplainItPreviewProps> = ({
     initialSteps,
@@ -21,12 +33,23 @@ const ExplainItPreview: React.FC<ExplainItPreviewProps> = ({
     promptx,
     setloader,
     loaderx,
+    setInitialSteps
 }) => {
     const {
         REACT_APP_SUPERSTARZ_URL,
         REACT_APP_CLOUNDFRONT,
         REACT_APP_APPX_STATE,
     } = process.env;
+
+
+
+
+
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+
+    const location = useLocation();
+
 
     const Timervv = useRef<ReturnType<typeof setTimeout> | null>(null);
     const Timervv2 = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -51,8 +74,12 @@ const ExplainItPreview: React.FC<ExplainItPreviewProps> = ({
 
     const delay = (ms: any) => new Promise((res) => setTimeout(res, ms));
 
+
+
     const [Total, setTotal] = useState(1);
     const [pxResolution, setpxResolution] = useState("");
+
+
 
     // GET LOGGED USER DATA FROM REDUX STORE
     interface RootStateReducerImage {
@@ -94,7 +121,16 @@ const ExplainItPreview: React.FC<ExplainItPreviewProps> = ({
         ...state.UserdataReducer,
     }));
 
+    const imageReducer = image;
     const idReducer = id;
+    const usernameReducer = username;
+    const memeberPageidReducer = memeberPageid;
+    const MemberProfileDataReducer = MemberProfileData;
+
+
+
+
+
 
     const [Datall, setDatall] = useState({
         topic: 'Explain It',
@@ -589,6 +625,9 @@ const ExplainItPreview: React.FC<ExplainItPreviewProps> = ({
 
     const dummyImages = Array.from({ length: initialSteps.length }, (_, index) => `${REACT_APP_CLOUNDFRONT}${image}`);
 
+
+
+
     interface RootStateGlobalReducer {
         GlobalReducer: {
             snapStart: boolean;
@@ -596,15 +635,21 @@ const ExplainItPreview: React.FC<ExplainItPreviewProps> = ({
             screenHeight: number;
             muteaudio: boolean;
             ActiveAudioIndex: number;
+            MenuData: String;
+            Guest: number,
+
         };
     }
 
-    const { screenHeight, darkmode, snapStart, muteaudio, ActiveAudioIndex } =
+    const { screenHeight, darkmode, snapStart, muteaudio, ActiveAudioIndex, MenuData, Guest } =
         useSelector((state: RootStateGlobalReducer) => ({
             ...state.GlobalReducer,
         }));
     const screenHeightReducer = screenHeight;
     const darkmodeReducer = darkmode;
+    const MenuDataReducer = MenuData;
+    const GuestReducer = Guest;
+
 
     ///
     const uploadImagesToS3 = async () => {
@@ -754,13 +799,64 @@ const ExplainItPreview: React.FC<ExplainItPreviewProps> = ({
     );
 
 
+
+    const GoToMemberP = () => {
+
+
+        dispatch(UserInfoUpdateMEMBER(-1));
+        const id = idReducer; // Replace with the actual ID you want to navigate to
+        const encodedId = encodeBase64(id.toString());
+
+        // Update the current URL with the scroll position
+        //updateCurrentURLWithScrollPosition();
+        // Update the current URL with the scroll position
+
+        /// if (CurrentPage === 'feeds') {
+        /// updateCurrentURLWithScrollPosition();
+        // }
+
+
+        // Navigate to the new URL with the new ID
+        navigate(`/Feeds/${encodedId}/${encodeBase64('0')}/${encodeBase64('0')}/${encodeBase64('1')}`);
+
+        dispatch(UserInfoUpdateMEMBER(idReducer));
+        ///setIdReactRouterAsInt(idReducer);
+        //setScrollReactRouter(0)
+
+    };
+
+
+
+    const GoToMemberLoaderUpP = () => {
+        ///setshowModalFormMenu(false);
+        if (Timervv.current) {
+            clearTimeout(Timervv.current);
+        }
+        dispatch(UpdateLoader(true));
+        Timervv.current = setTimeout(function () {
+            GoToMemberP();
+        }, 100);
+    };
+
+
+
+
     const calldatabase = useCallback(() => {
         Axios.post(`${process.env.REACT_APP_SUPERSTARZ_URL}/post_upload_dataX`, {
             values: Datall,
         })
             .then((response) => {
                 console.log(response);
-                //alert('Data saved successfully!');
+
+                ////alert('Data saved successfully!');
+
+
+                setInitialSteps([]);
+
+                GoToMemberLoaderUpP();
+
+
+
             })
             .catch((error) => {
                 console.log(error);

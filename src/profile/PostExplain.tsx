@@ -23,6 +23,9 @@ function PostExplainx({
     const [images, setImages] = useState<string[]>([]);
     const [texts, setTexts] = useState<string[]>([]);
     const [imageActive, setImageActive] = useState<boolean>(false);
+
+    const [AllowAudio, setAllowAudio] = useState<boolean>(false);
+
     const [currentImage, setCurrentImage] = useState<number>(0);
     const [currentImageView, setCurrentImageView] = useState<number>(0);
     const [displayedText, setDisplayedText] = useState<string>("");
@@ -55,7 +58,7 @@ function PostExplainx({
                 if (index >= fullText.length) {
                     clearInterval(typingInterval);
                 }
-            }, 70);
+            }, 50);
 
             return () => {
                 clearInterval(typingInterval);
@@ -135,8 +138,10 @@ function PostExplainx({
             if (!imageActive) {
                 setCurrentImage(0);
                 setImageActive(true);
+                setAllowAudio(true);
                 setplayXAudio(true);
             } else {
+                setAllowAudio(true);
                 setaudionotify(true);
                 if (waxk.current) {
                     clearTimeout(waxk.current);
@@ -181,104 +186,113 @@ function PostExplainx({
         };
     }, [imageActive, post]);
 
-    // Handle speech synthesis and image transition
     useEffect(() => {
-        const speakText = () => {
-            if (playXAudio && imageActive) {
-                const textToSpeak = texts[currentImageView];
-                if (textToSpeak && "speechSynthesis" in window) {
+        if (AllowAudio) {
+
+            const speakText = async () => {
+                // Cancel any ongoing speech
+                window.speechSynthesis.cancel();
+
+                if (playXAudio && imageActive) {
+                    const textToSpeak = texts[currentImageView];
+                    if (textToSpeak && "speechSynthesis" in window) {
+
+                        const splitText = (text: string, maxLength: number) => {
+                            const regex = new RegExp(`.{1,${maxLength}}(\\s|$)`, 'g');
+                            return text.match(regex) || [];
+                        };
+
+                        const chunks = splitText(textToSpeak, 260);
+
+                        const voices = window.speechSynthesis.getVoices();
+                        if (!voices.length) {
+                            console.warn("No voices available, speech synthesis might not work as expected.");
+                            return;
+                        }
+
+                        // Try to find a female voice first
+                        const femaleVoice = voices.find(
+                            (voice) => voice.lang === "en-GB" && voice.name.includes("Female")
+                        );
+
+
+
+                        // Default to any en-GB voice if no specific male or female voice is found
+                        const selectedVoice = femaleVoice || voices.find((voice) => voice.lang === "en-CA");
+
+                        if (!selectedVoice) {
+                            console.warn("No en-GB voice found. Using default voice.");
+                        }
+
+                        const speakChunk = (chunk: string) => {
+                            return new Promise<void>((resolve) => {
+                                const utterance = new SpeechSynthesisUtterance(chunk);
+                                utterance.rate = 1; // Set the speech rate to make it last longer
+                                utterance.pitch = 1;
+                                utterance.volume = 1;
+                                utterance.lang = "en-GB";
+
+                                if (selectedVoice) {
+                                    utterance.voice = selectedVoice;
+                                }
+
+                                utterance.onend = () => resolve();
+                                window.speechSynthesis.speak(utterance);
+                            });
+                        };
+
+                        const speakAllChunks = async () => {
+                            for (const chunk of chunks) {
+                                await speakChunk(chunk);
+                            }
+
+                            // Move to the next image after speech ends and scroll to it
+                            setCurrentImageView((prev) => {
+                                const nextIndex = prev + 1;
+                                if (nextIndex >= texts.length) {
+                                    setplayXAudio(false); // Stop audio after the last image
+                                    return 0; // Loop back to the first image
+                                }
+                                return nextIndex;
+                            });
+
+                            // Scroll to the next image
+                            if (imageRefs.current[currentImageView + 1]) {
+                                imageRefs.current[currentImageView + 1]!.scrollIntoView({ behavior: 'smooth' });
+                            }
+                        };
+
+                        speakAllChunks();
+                    }
+                } else {
                     if (synthRef.current) {
-                        window.speechSynthesis.cancel(); // Cancel any ongoing speech
+                        window.speechSynthesis.cancel(); // Stop speaking when playXAudio is false
                     }
-
-                    const splitText = (text: any, maxLength: any) => {
-                        const regex = new RegExp(`.{1,${maxLength}}(\\s|$)`, 'g');
-                        return text.match(regex) || [];
-                    };
-
-                    const chunks = splitText(textToSpeak, 150);
-
-                    const voices = window.speechSynthesis.getVoices();
-                    if (!voices.length) {
-                        console.warn("No voices available, speech synthesis might not work as expected.");
-                        return;
-                    }
-
-                    const femaleVoice = voices.find(
-                        (voice) => voice.lang === "en-GB" && voice.name.includes("Female")
-                    );
-
-                    const selectedVoice = femaleVoice || voices.find((voice) => voice.lang === "en-GB");
-
-                    if (!selectedVoice) {
-                        console.warn("No en-GB voice found. Using default voice.");
-                    }
-
-                    const speakChunk = (chunk: any) => {
-                        return new Promise((resolve) => {
-                            const utterance = new SpeechSynthesisUtterance(chunk);
-                            utterance.rate = 0.83; // Set the speech rate to make it last longer
-                            utterance.pitch = 1;
-                            utterance.volume = 1;
-                            utterance.lang = "en-GB";
-
-                            if (selectedVoice) {
-                                utterance.voice = selectedVoice;
-                            }
-
-                            utterance.onend = resolve;
-                            window.speechSynthesis.speak(utterance);
-                        });
-                    };
-
-                    const speakAllChunks = async () => {
-                        for (const chunk of chunks) {
-                            await speakChunk(chunk);
-                        }
-
-                        // Move to the next image after speech ends and scroll to it
-                        setCurrentImageView((prev) => {
-                            const nextIndex = prev + 1;
-                            if (nextIndex > 5) {
-                                setplayXAudio(false); // Stop audio after the last image
-                                return 0; // Loop back to the first image
-                            }
-                            return nextIndex;
-                        });
-
-                        // Scroll to the next image
-                        if (imageRefs.current[currentImageView + 1]) {
-                            imageRefs.current[currentImageView + 1]!.scrollIntoView({ behavior: 'smooth' });
-                        }
-                    };
-
-                    speakAllChunks();
                 }
-            } else {
-                if (synthRef.current) {
-                    window.speechSynthesis.cancel(); // Stop speaking when playXAudio is false
-                }
-            }
-        };
+            };
 
-        const loadVoicesAndSpeak = () => {
-            const voices = window.speechSynthesis.getVoices();
-            if (voices.length > 0) {
-                speakText();
-            } else {
-                window.speechSynthesis.onvoiceschanged = () => {
+            const loadVoicesAndSpeak = () => {
+                const voices = window.speechSynthesis.getVoices();
+                if (voices.length > 0) {
                     speakText();
-                };
-            }
-        };
+                } else {
+                    window.speechSynthesis.onvoiceschanged = () => {
+                        speakText();
+                    };
+                }
+            };
 
-        loadVoicesAndSpeak();
+            loadVoicesAndSpeak();
 
-        return () => {
-            window.speechSynthesis.cancel(); // Stop any ongoing speech
-            window.speechSynthesis.onvoiceschanged = null;
-        };
-    }, [playXAudio, currentImageView, texts, imageActive]);
+            return () => {
+                window.speechSynthesis.cancel(); // Stop any ongoing speech
+                window.speechSynthesis.onvoiceschanged = null;
+            };
+
+        }
+    }, [playXAudio, currentImageView, texts, imageActive, AllowAudio]);
+
+
 
     return (
         <Grid

@@ -183,6 +183,37 @@ const getstickers = `SELECT stickname FROM stickers  ORDER BY id DESC  LIMIT 30 
 const CommentImage = `SELECT item2,sender,item1,thumb1,interact1a,interact1b FROM posts WHERE  posts.id=?`;
 const ProfileImage = `SELECT profile_image,biography,username  FROM members WHERE  members.id=?`;
 ///checkIsLogged
+const postsxExplain = `
+SELECT
+  (SELECT COUNT(*) FROM fan WHERE favid = posts.sender AND userid = ?) AS favCount,
+  (SELECT type FROM emotions WHERE post = posts.id AND user = ?) AS EmoIn,
+  (SELECT COUNT(*) FROM comments WHERE post = posts.id) AS commentCount,
+  (SELECT com FROM comments WHERE post = posts.id ORDER BY date DESC LIMIT 1) AS commentPost,
+  (SELECT commented_by FROM comments WHERE post = posts.id ORDER BY date DESC LIMIT 1) AS commentPostUser,
+  m.profile_image AS commentorProfileImage,
+  m.username AS commentorUsername,
+  m.color1 AS commentorColor,
+  (SELECT COUNT(*) FROM emotions WHERE post = posts.id AND type = 1) AS lovely,
+  (SELECT COUNT(*) FROM emotions WHERE post = posts.id AND type = 2) AS cool,
+  (SELECT COUNT(*) FROM emotions WHERE post = posts.id AND type = 3) AS care,
+  (SELECT COUNT(*) FROM emotions WHERE post = posts.id AND type = 4) AS funny,
+  (SELECT file FROM audio WHERE post = posts.id) AS audioData,
+  (SELECT name FROM audio WHERE post = posts.id) AS audioDataName,
+  (SELECT backgroudaudio FROM audio WHERE post = posts.id) AS backgroudaudio,
+  interacttype1, interacttype2, rad1, rad2, 
+  members.profile_image, members.username, members.color1, 
+  posts.id, sender, post_count, topic, caption, item1, thumb1, itemtype1, interact1a, 
+  interact1ax, interact1ay, interact1b, interact1bx, interact1by, item2, vid1backup, vid2backup, time, 
+  mode, x1, xt1, x2, xt2, x3, xt3, x4, xt4, x5, xt5, x6, xt6
+FROM posts 
+INNER JOIN members ON posts.sender = members.id 
+LEFT JOIN members AS m ON m.id = (SELECT commented_by FROM comments WHERE post = posts.id ORDER BY date DESC LIMIT 1)
+WHERE posts.mode = 1
+ORDER BY posts.id DESC
+LIMIT 21;
+
+
+`;
 const postsx = `
 SELECT
   (SELECT COUNT(*) FROM fan WHERE favid = posts.sender AND userid = ?) AS favCount,
@@ -221,6 +252,34 @@ LIMIT 21;
 
 
 
+`;
+const posts_moreExplain = `SELECT
+  (SELECT COUNT(*) FROM fan WHERE favid = posts.sender AND userid = ?) AS favCount,
+  (SELECT type FROM emotions WHERE post = posts.id AND user = ?) AS EmoIn,
+  (SELECT COUNT(*) FROM comments WHERE post = posts.id) AS commentCount,
+  (SELECT com FROM comments WHERE post = posts.id ORDER BY date DESC LIMIT 1) AS commentPost,
+  (SELECT commented_by FROM comments WHERE post = posts.id ORDER BY date DESC LIMIT 1) AS commentPostUser,
+  m.profile_image AS commentorProfileImage,
+  m.username AS commentorUsername,
+  m.color1 AS commentorColor,
+  (SELECT COUNT(*) FROM emotions WHERE post = posts.id AND type = 1) AS lovely,
+  (SELECT COUNT(*) FROM emotions WHERE post = posts.id AND type = 2) AS cool,
+  (SELECT COUNT(*) FROM emotions WHERE post = posts.id AND type = 3) AS care,
+  (SELECT COUNT(*) FROM emotions WHERE post = posts.id AND type = 4) AS funny,
+  (SELECT file FROM audio WHERE post = posts.id) AS audioData,
+  (SELECT name FROM audio WHERE post = posts.id) AS audioDataName,
+  (SELECT backgroudaudio FROM audio WHERE post = posts.id) AS backgroudaudio,
+  interacttype1, interacttype2, rad1, rad2,
+  members.profile_image, members.username, members.color1,
+  posts.id, sender, post_count, topic, caption, item1, thumb1, itemtype1, interact1a,
+  interact1ax, interact1ay, interact1b, interact1bx, interact1by, item2, vid1backup, vid2backup, time,
+  mode, x1, xt1, x2, xt2, x3, xt3, x4, xt4, x5, xt5, x6, xt6
+FROM posts
+INNER JOIN members ON posts.sender = members.id 
+LEFT JOIN members AS m ON m.id = (SELECT commented_by FROM comments WHERE post = posts.id ORDER BY date DESC LIMIT 1)
+WHERE posts.mode = 1 AND posts.id < ?
+ORDER BY posts.id DESC
+LIMIT 21;
 `;
 const posts_more = `SELECT
   (SELECT COUNT(*) FROM fan WHERE favid = posts.sender AND userid = ?) AS favCount,
@@ -388,6 +447,37 @@ WHERE favid = members.id and userid = ?)favCount,
  
  fan.id,members.id AS reactId,members.profile_image,members.username,color1,members.quote  FROM fan inner join members on
  fan.userid = members.id WHERE  fan.favid = ?  AND fan.id < ? ORDER BY fan.id DESC  LIMIT 90  `;
+const profileExplain = `
+
+SELECT
+  (SELECT COUNT(*) FROM fan WHERE favid = posts.sender AND userid = ?) AS favCount,
+  (SELECT type FROM emotions WHERE post = posts.id AND user = ?) AS EmoIn,
+  (SELECT COUNT(*) FROM comments WHERE post = posts.id) AS commentCount,
+  (SELECT com FROM comments WHERE post = posts.id ORDER BY date DESC LIMIT 1) AS commentPost,
+  (SELECT commented_by FROM comments WHERE post = posts.id ORDER BY date DESC LIMIT 1) AS commentPostUser,
+  m.profile_image AS commentorProfileImage,
+  m.username AS commentorUsername,
+  m.color1 AS commentorColor,
+  (SELECT COUNT(*) FROM emotions WHERE post = posts.id AND type = 1) AS lovely,
+  (SELECT COUNT(*) FROM emotions WHERE post = posts.id AND type = 2) AS cool,
+  (SELECT COUNT(*) FROM emotions WHERE post = posts.id AND type = 3) AS care,
+  (SELECT COUNT(*) FROM emotions WHERE post = posts.id AND type = 4) AS funny,
+  (SELECT file FROM audio WHERE post = posts.id) AS audioData,
+  (SELECT name FROM audio WHERE post = posts.id) AS audioDataName,
+  (SELECT backgroudaudio FROM audio WHERE post = posts.id) AS backgroudaudio,
+  interacttype1, interacttype2, rad1, rad2,
+  members.profile_image, members.username, members.color1,
+  posts.id, sender, post_count, topic, caption, item1, thumb1, itemtype1, interact1a,
+  interact1ax, interact1ay, interact1b, interact1bx, interact1by, item2, vid1backup, vid2backup, time,
+  mode, x1, xt1, x2, xt2, x3, xt3, x4, xt4, x5, xt5, x6, xt6
+FROM posts
+INNER JOIN members ON posts.sender = members.id
+LEFT JOIN members AS m ON m.id = (SELECT commented_by FROM comments WHERE post = posts.id ORDER BY date DESC LIMIT 1)
+WHERE posts.mode = 1 AND posts.sender = ?
+ORDER BY posts.id DESC
+LIMIT 21;
+
+`;
 const profile = `
 
 SELECT
@@ -424,6 +514,36 @@ LEFT JOIN members AS m ON m.id = (SELECT commented_by FROM comments WHERE post =
 
 WHERE posts.sender = ?
 
+ORDER BY posts.id DESC
+LIMIT 21;
+
+
+`;
+const profile_moreExplain = `SELECT
+  (SELECT COUNT(*) FROM fan WHERE favid = posts.sender AND userid = ?) AS favCount,
+  (SELECT type FROM emotions WHERE post = posts.id AND user = ?) AS EmoIn,
+  (SELECT COUNT(*) FROM comments WHERE post = posts.id) AS commentCount,
+  (SELECT com FROM comments WHERE post = posts.id ORDER BY date DESC LIMIT 1) AS commentPost,
+  (SELECT commented_by FROM comments WHERE post = posts.id ORDER BY date DESC LIMIT 1) AS commentPostUser,
+  m.profile_image AS commentorProfileImage,
+  m.username AS commentorUsername,
+  m.color1 AS commentorColor,
+  (SELECT COUNT(*) FROM emotions WHERE post = posts.id AND type = 1) AS lovely,
+  (SELECT COUNT(*) FROM emotions WHERE post = posts.id AND type = 2) AS cool,
+  (SELECT COUNT(*) FROM emotions WHERE post = posts.id AND type = 3) AS care,
+  (SELECT COUNT(*) FROM emotions WHERE post = posts.id AND type = 4) AS funny,
+  (SELECT file FROM audio WHERE post = posts.id) AS audioData,
+  (SELECT name FROM audio WHERE post = posts.id) AS audioDataName,
+  (SELECT backgroudaudio FROM audio WHERE post = posts.id) AS backgroudaudio,
+  interacttype1, interacttype2, rad1, rad2,
+  members.profile_image, members.username, members.color1,
+  posts.id, sender, post_count, topic, caption, item1, thumb1, itemtype1, interact1a,
+  interact1ax, interact1ay, interact1b, interact1bx, interact1by, item2, vid1backup, vid2backup, time,
+  mode, x1, xt1, x2, xt2, x3, xt3, x4, xt4, x5, xt5, x6, xt6
+FROM posts
+INNER JOIN members ON posts.sender = members.id 
+LEFT JOIN members AS m ON m.id = (SELECT commented_by FROM comments WHERE post = posts.id ORDER BY date DESC LIMIT 1)
+WHERE posts.mode = 1 AND posts.sender = ? AND posts.id < ?
 ORDER BY posts.id DESC
 LIMIT 21;
 
@@ -515,6 +635,50 @@ app.post("/comments_image", (req, res) => __awaiter(void 0, void 0, void 0, func
     catch (e) {
         console.log(e);
         return res.send({ message: "error in fetching feeds" });
+    }
+}));
+app.post("/profileExplain", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { values } = req.body;
+    if (values.postPageLimit == 0) {
+        try {
+            const chronologicaldata = yield execPoolQuery(profileExplain, [
+                values.id,
+                values.id2,
+                values.id3,
+            ]);
+            ///console.log(chronologicaldata[7].favCount);
+            return res.send({
+                ///gettingcookie: userSessionData,
+                message: "feeds fetched",
+                payload: chronologicaldata,
+                postPageLimit: values.postPageLimit,
+            });
+        }
+        catch (e) {
+            console.log(e);
+            return res.send({ message: "error in fetching feeds" });
+        }
+    }
+    else {
+        try {
+            const chronologicaldata = yield execPoolQuery(profile_moreExplain, [
+                values.id,
+                values.id2,
+                values.id3,
+                values.postPageLimit,
+            ]);
+            ///console.log(chronologicaldata[7].favCount);
+            return res.send({
+                ///gettingcookie: userSessionData,
+                message: "feeds fetched",
+                payload: chronologicaldata,
+                postPageLimit: values.postPageLimit,
+            });
+        }
+        catch (e) {
+            console.log(e);
+            return res.send({ message: "error in fetching feeds" });
+        }
     }
 }));
 app.post("/profile", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -1368,6 +1532,48 @@ app.post("/OptionsPic", (req, res) => __awaiter(void 0, void 0, void 0, function
         return res.send({ message: "error in fetching feeds" });
     }
 }));
+app.post("/feeds_chronologicalExplain", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { values } = req.body;
+    if (values.postPageLimit == 0) {
+        try {
+            const chronologicaldata = yield execPoolQuery(postsxExplain, [
+                values.id,
+                values.id2,
+            ]);
+            ///console.log(chronologicaldata[7].favCount);
+            return res.send({
+                ///gettingcookie: userSessionData,
+                message: "feeds fetched",
+                payload: chronologicaldata,
+                postPageLimit: values.postPageLimit,
+            });
+        }
+        catch (e) {
+            //console.log(e)
+            return res.send({ message: "error in fetching feeds" });
+        }
+    }
+    else {
+        try {
+            const chronologicaldata = yield execPoolQuery(posts_moreExplain, [
+                values.id,
+                values.id2,
+                values.postPageLimit,
+            ]);
+            ///console.log(chronologicaldata[7].favCount);
+            return res.send({
+                ///gettingcookie: userSessionData,
+                message: "feeds fetched",
+                payload: chronologicaldata,
+                postPageLimit: values.postPageLimit,
+            });
+        }
+        catch (e) {
+            //console.log(e)
+            return res.send({ message: "error in fetching feeds" });
+        }
+    }
+}));
 app.post("/feeds_chronological", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { values } = req.body;
     if (values.postPageLimit == 0) {
@@ -1488,7 +1694,7 @@ function generateGPT4oPrompt(messages) {
         const completion = yield openai.chat.completions.create({
             messages,
             model: "gpt-4o", // Change to GPT-4o
-            max_tokens: 300,
+            max_tokens: 3000,
             n: 1,
         });
         if (!completion ||
@@ -1566,7 +1772,7 @@ function generateGPT35Prompt(messages) {
         const completion = yield openai.chat.completions.create({
             messages,
             model: "gpt-4o-mini-2024-07-18", // Change to GPT-3.5 Turbo 0125
-            max_tokens: 300,
+            max_tokens: 3000,
             n: 1,
         });
         if (!completion ||

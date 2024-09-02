@@ -7,10 +7,12 @@ interface ImageSliderProps {
     RandomColor: string;
     FeedType: number
     setFeedType: any;
+    Explainx: any;
+    callPaginationx: any;
 
 }
 
-const ImageSlider: React.FC<ImageSliderProps> = ({ RandomColor, FeedType, setFeedType }) => {
+const ImageSlider: React.FC<ImageSliderProps> = ({ RandomColor, FeedType, setFeedType, Explainx, callPaginationx }) => {
     const { REACT_APP_CLOUNDFRONT } = process.env;
 
     interface RootStateReducerImage {
@@ -107,16 +109,9 @@ const ImageSlider: React.FC<ImageSliderProps> = ({ RandomColor, FeedType, setFee
 
     const handleImageClick = (index: number) => {
 
-
         console.log(`Image ${index + 1} clicked again`);
-
         setActiveIndex(index);
-
-
         setFeedType(index);
-
-
-
 
         const imageContainer = refs.current[index];
         if (imageContainer) {
@@ -131,6 +126,25 @@ const ImageSlider: React.FC<ImageSliderProps> = ({ RandomColor, FeedType, setFee
                 });
             }
         }
+
+
+
+        if (index === 0) {
+
+            callPaginationx();
+        }
+        else if (index === 1) {
+
+
+
+            Explainx();
+
+        } else {
+
+
+        }
+
+
 
     };
 
@@ -171,7 +185,7 @@ const ImageSlider: React.FC<ImageSliderProps> = ({ RandomColor, FeedType, setFee
                                         .
                                     </span>
 
-                                    <span style={{ color: '#00ccff' }}>
+                                    <span style={{ color: '#00ccff', fontSize: '1rem' }}>
                                         IT
                                     </span> </> : textArray[index]}
 

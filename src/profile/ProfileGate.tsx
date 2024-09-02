@@ -283,11 +283,11 @@ function ProfileGatex({
         };
 
         // Add an event listener for the popstate event
-        /// window.addEventListener('popstate', handlePopstate);
+        window.addEventListener('popstate', handlePopstate);
 
         // Clean up the event listener when the component unmounts
         return () => {
-            /// window.removeEventListener('popstate', handlePopstate);
+            window.removeEventListener('popstate', handlePopstate);
         };
     }, []); // This effect should only run once, so it has an empty dependency array
 
@@ -1280,9 +1280,9 @@ function ProfileGatex({
                         ///alert(pagenumReducer);
                         setShowLoader2(false);
                         if (IdReactRouterAsInt === 0) {
-                            callfeeds(0, PagenumReactRouter, 0);
+                            callfeeds(0, PagenumReactRouter, 0, false);
                         } else {
-                            callfeeds(response.data.payload.id, PagenumReactRouter, 0);
+                            callfeeds(response.data.payload.id, PagenumReactRouter, 0, false);
                         }
                     } else if (response.data.message === "logged out") {
                         alert("Ongoing Security Updates Or You Are Logged Out, Please Try Again Later");
@@ -1778,7 +1778,7 @@ function ProfileGatex({
             ///Replace modal history state with previous history state
             window.history.back();
             setshowProfiileData(false);
-            callfeeds(0, 0, 0);
+            callfeeds(0, 0, 0, false);
         } else if (DeviceBackButtonClicked === 3) {
             window.history.back();
             setbillboardserverswitch(true);
@@ -1955,12 +1955,12 @@ function ProfileGatex({
 
 
     const callfeeds = useCallback(
-        (aa: number, postPageLimitx: any, fromPagination: number) => {
+        (aa: number, postPageLimitx: any, fromPagination: number, Explain: boolean) => {
             var cboy = {
                 id: idReducer,
                 id2: idReducer,
                 id3: aa,
-                postPageLimit: postPageLimitx
+                postPageLimit: postPageLimitx,
             };
 
 
@@ -1976,9 +1976,26 @@ function ProfileGatex({
 
             if (aa === 0) {
 
-                tt = "feeds_chronological";
+                if (Explain || FeedType === 1) {
+
+                    tt = "feeds_chronologicalExplain";
+                }
+                else {
+                    tt = "feeds_chronological";
+                }
+
+
+
             } else {
-                tt = "profile";
+
+
+                if (Explain || FeedType === 1) {
+                    tt = "profileExplain";
+                }
+                else {
+                    tt = "profile";
+                }
+
 
                 ////alert('kkk');
 
@@ -2039,7 +2056,7 @@ function ProfileGatex({
 
 
         },
-        [idReducer, REACT_APP_SUPERSTARZ_URL, memeberPageidReducer, postPageLimit, historyDataPost, PostLocalNav]
+        [idReducer, REACT_APP_SUPERSTARZ_URL, memeberPageidReducer, postPageLimit, historyDataPost, PostLocalNav, FeedType]
     );
 
     //// scrollSnapAlign
@@ -2105,7 +2122,7 @@ function ProfileGatex({
     }, [FeedType]);
 
 
-    const callPagination = useCallback(() => {
+    const callPagination = useCallback((explain: boolean) => {
 
         updateCurrentURLWithScrollPosition();
         setScrollReactRouter(0);
@@ -2145,12 +2162,25 @@ function ProfileGatex({
 
             setTimeout(() => {
 
+                if (explain) {
+                    callfeeds(0, xx, 1, true);
+                } else {
+
+                    callfeeds(0, xx, 1, false);
+                }
                 /// alert('lkkk');
-                callfeeds(0, xx, 1);
+
             }, time);
         } else {
+
+
             setTimeout(() => {
-                callfeeds(memeberPageidReducer, xx, 1);
+
+                if (explain) {
+                    callfeeds(memeberPageidReducer, xx, 1, true);
+                } else {
+                    callfeeds(memeberPageidReducer, xx, 1, false);
+                }
             }, time);
 
         }
@@ -2161,23 +2191,36 @@ function ProfileGatex({
 
 
 
+    const Explainx = useCallback(() => {
+        var time = 100;
+        if (memeberPageidReducer === 0) {
+
+            setTimeout(() => {
+                callfeeds(0, 0, 1, true);
+            }, time);
+        } else {
+            setTimeout(() => {
+                callfeeds(memeberPageidReducer, 0, 1, true);
+            }, time);
+        }
+    }, [postPageLimit, memeberPageidReducer, FeedType]);
+
+
+
+
     const callPaginationx = useCallback(() => {
         var time = 100;
         if (memeberPageidReducer === 0) {
 
             setTimeout(() => {
-                callfeeds(0, 0, 1);
+                callfeeds(0, 0, 1, false);
             }, time);
         } else {
             setTimeout(() => {
-                callfeeds(memeberPageidReducer, 0, 1);
+                callfeeds(memeberPageidReducer, 0, 1, false);
             }, time);
-
         }
-
-
-
-    }, [postPageLimit, memeberPageidReducer])
+    }, [postPageLimit, memeberPageidReducer, FeedType])
 
     ///
     ///
@@ -3073,6 +3116,8 @@ function ProfileGatex({
 
                     <ImageSlider
 
+                        Explainx={Explainx}
+                        callPaginationx={callPaginationx}
                         RandomColor={RandomColor} FeedType={FeedType} setFeedType={setFeedType} />
 
                     <Grid xs={12}
@@ -3087,287 +3132,212 @@ function ProfileGatex({
                             zIndex: 2
                         }} item>
 
-                        {FeedType === 1 ?
-                            <Grid container alignItems="center" justifyContent="center" spacing={matchMobile ? 0 : 1}>
-                                <Grid item>
+
+                        <Grid container alignItems="center" justifyContent="center" spacing={matchMobile ? 0 : 1}>
+                            <Grid item>
 
 
-                                    {AImodel === 0 ?
+                                {AImodel === 0 ?
+
+                                    <Button
+
+
+
+                                        style={{
+                                            fontSize: matchMobile ? '1.4vh' : '0.5vw',
+                                            transform: buttonTransform,
+                                            padding: '1.4vh',
+                                            borderRadius: "50px",
+
+
+
+                                            MozBoxShadow: MozBoxShadowReducerSign,
+                                            WebkitBoxShadow: WebkitBoxShadowReducerSign,
+                                            boxShadow: boxShadowReducerSign,
+                                            left: '-2vw',
+                                            opacity: AiLock ? '0.3' : '1'
+                                        }}
+
+
+                                        variant="contained"
+                                        size="large"
+                                        color="secondary"
+                                        onClick={() => {
+                                            setAImodel(1);
+                                        }}
+                                    >
+                                        DIFFUSION
+
+
+                                    </Button> : AImodel == 1 ?
+
 
                                         <Button
-
-
-
                                             style={{
                                                 fontSize: matchMobile ? '1.4vh' : '0.5vw',
                                                 transform: buttonTransform,
                                                 padding: '1.4vh',
                                                 borderRadius: "50px",
-
-
-
-                                                MozBoxShadow: MozBoxShadowReducerSign,
-                                                WebkitBoxShadow: WebkitBoxShadowReducerSign,
-                                                boxShadow: boxShadowReducerSign,
+                                                MozBoxShadow: MozBoxShadowReducerLogin,
+                                                WebkitBoxShadow: WebkitBoxShadowReducerLogin,
+                                                boxShadow: boxShadowReducerLogin,
                                                 left: '-2vw',
                                                 opacity: AiLock ? '0.3' : '1'
                                             }}
 
-
-                                            variant="contained"
+                                            variant="outlined"
                                             size="large"
-                                            color="secondary"
+                                            color="primary"
                                             onClick={() => {
-                                                setAImodel(1);
+                                                setAImodel(2);
                                             }}
                                         >
-                                            DIFFUSION
+                                            DALLE
 
 
-                                        </Button> : AImodel == 1 ?
+                                        </Button> :
 
+                                        AImodel == 2 ?
 
                                             <Button
+
+
+
                                                 style={{
                                                     fontSize: matchMobile ? '1.4vh' : '0.5vw',
                                                     transform: buttonTransform,
                                                     padding: '1.4vh',
                                                     borderRadius: "50px",
+
                                                     MozBoxShadow: MozBoxShadowReducerLogin,
                                                     WebkitBoxShadow: WebkitBoxShadowReducerLogin,
                                                     boxShadow: boxShadowReducerLogin,
                                                     left: '-2vw',
-                                                    opacity: AiLock ? '0.3' : '1'
                                                 }}
-
                                                 variant="outlined"
                                                 size="large"
                                                 color="primary"
                                                 onClick={() => {
-                                                    setAImodel(2);
+                                                    setAImodel(3);
                                                 }}
                                             >
-                                                DALLE
+                                                SDXL
 
 
                                             </Button> :
 
-                                            AImodel == 2 ?
-
-                                                <Button
-
-
-
-                                                    style={{
-                                                        fontSize: matchMobile ? '1.4vh' : '0.5vw',
-                                                        transform: buttonTransform,
-                                                        padding: '1.4vh',
-                                                        borderRadius: "50px",
-
-                                                        MozBoxShadow: MozBoxShadowReducerLogin,
-                                                        WebkitBoxShadow: WebkitBoxShadowReducerLogin,
-                                                        boxShadow: boxShadowReducerLogin,
-                                                        left: '-2vw',
-                                                    }}
-                                                    variant="outlined"
-                                                    size="large"
-                                                    color="primary"
-                                                    onClick={() => {
-                                                        setAImodel(3);
-                                                    }}
-                                                >
-                                                    SDXL
-
-
-                                                </Button> :
-
-                                                <Button
-                                                    style={{
-                                                        fontSize: buttonFont,
-                                                        transform: buttonTransform,
-                                                        padding: pad,
-                                                        borderRadius: "50px",
-                                                        MozBoxShadow: MozBoxShadowReducerLogin,
-                                                        WebkitBoxShadow: WebkitBoxShadowReducerLogin,
-                                                        boxShadow: boxShadowReducerLogin,
-                                                        left: '-2vw',
-                                                    }}
-                                                    variant="outlined"
-                                                    size="large"
-                                                    color="primary"
-                                                    onClick={() => {
-                                                        setAImodel(0);
-                                                    }}
-                                                >
-                                                    <SearchIcon />
-
-
-                                                </Button>}
-
-                                </Grid>
-                                <Grid item>
-
-                                    {
-
-
-                                        AImodel == 3 ?
-                                            <TextField
-                                                size={sizex}
-                                                inputProps={{ style: { fontSize: font1 } }}
-                                                InputLabelProps={{ style: { fontSize: font2 } }}
-                                                onChange={(e) => {
-                                                    setPrompt(e.target.value)
-                                                }}
+                                            <Button
                                                 style={{
-                                                    transform: transform,
-                                                    width: matchMobile ? '58vw' : '30vw',
-                                                    paddingBottom: "0px",
-                                                    paddingTop: "6vh",
-                                                    position: "relative",
-                                                    top: "0vh",
-                                                    left: "0vw",
-                                                    padding: '0vh',
-                                                    borderRadius: '10vw',
-                                                    backgroundImage: 'rgb(255,255,255,0.2)',
+                                                    fontSize: buttonFont,
+                                                    transform: buttonTransform,
+                                                    padding: pad,
+                                                    borderRadius: "50px",
+                                                    MozBoxShadow: MozBoxShadowReducerLogin,
+                                                    WebkitBoxShadow: WebkitBoxShadowReducerLogin,
+                                                    boxShadow: boxShadowReducerLogin,
+                                                    left: '-2vw',
                                                 }}
-                                                label={'Search Explain IT'}
-                                                type="text"
-                                                name="caption"
-                                                variant='outlined'
-                                            /> :
-                                            <TextField
-                                                className={loaderx ? "blinkenx" : ''}
-                                                size={sizex}
-                                                inputProps={{ style: { fontSize: font1 } }}
-                                                InputLabelProps={{ style: { fontSize: font2 } }}
-                                                onChange={(e) => {
-                                                    setPrompt(e.target.value)
+                                                variant="outlined"
+                                                size="large"
+                                                color="primary"
+                                                onClick={() => {
+                                                    setAImodel(0);
                                                 }}
-                                                style={{
-                                                    transform: transform,
-                                                    width: matchMobile ? '58vw' : '30vw',
-                                                    paddingBottom: "0px",
-                                                    paddingTop: "6vh",
-                                                    position: "relative",
-                                                    top: "0vh",
-                                                    left: "0vw",
-                                                    padding: '0vh',
-                                                    borderRadius: '10vw',
-                                                    backgroundImage: 'rgb(255,255,255,0.2)',
-                                                }}
-                                                label="Ask &#129302; to explain in video"
-                                                type="text"
-                                                name="caption"
-                                                variant='outlined'
-                                            />
-                                    }
+                                            >
+                                                <SearchIcon />
 
-                                </Grid>
-                                <Grid item>
-                                    <Button
-                                        onClick={(e: any) => {
-                                            handleSubmit(e, AImodel);
-                                        }}
-                                        style={{
-                                            fontSize: buttonFont,
-                                            transform: buttonTransform,
-                                            padding: pad,
-                                            borderRadius: "50px",
-                                            MozBoxShadow: MozBoxShadowReducerLogin,
-                                            WebkitBoxShadow: WebkitBoxShadowReducerLogin,
-                                            boxShadow: boxShadowReducerLogin,
-                                            right: '-2vw'
-                                        }}
-                                        variant="outlined"
-                                        size="large"
-                                        color="primary"
 
-                                    >
+                                            </Button>}
 
-                                        {AImodel == 1 || AImodel == 0 ?
-
-                                            AiLock ? <LockIcon /> : <CheckIcon />
-                                            : <CheckIcon />}
-
-                                    </Button>
-                                </Grid>
                             </Grid>
-                            :
-                            <Grid container alignItems="center" justifyContent="center" spacing={matchMobile ? 0 : 1}>
-                                <Grid item>
-                                    <Button
-                                        style={{
-                                            fontSize: buttonFont,
-                                            transform: buttonTransform,
-                                            padding: pad,
-                                            borderRadius: "50px",
-                                            MozBoxShadow: MozBoxShadowReducerLogin,
-                                            WebkitBoxShadow: WebkitBoxShadowReducerLogin,
-                                            boxShadow: boxShadowReducerLogin,
-                                            left: '-2vw'
-                                        }}
-                                        variant="outlined"
-                                        size="large"
-                                        color="primary"
-                                        onClick={() => {
-                                            // Add your search function here
-                                        }}
-                                    >
+                            <Grid item>
 
-                                        <FilterListIcon />
-                                    </Button>
-                                </Grid>
-                                <Grid item>
-                                    <TextField
+                                {
 
-                                        size={sizex}
-                                        inputProps={{ style: { fontSize: font1 } }}
-                                        InputLabelProps={{ style: { fontSize: font2 } }}
-                                        onChange={(e) => {
-                                            //setpromptx(e.target.value)
-                                        }}
-                                        style={{
-                                            transform: transform,
-                                            width: matchMobile ? '58vw' : '30vw',
-                                            paddingBottom: "0px",
-                                            paddingTop: "6vh",
-                                            position: "relative",
-                                            top: "0vh",
-                                            left: "0vw",
-                                            padding: '0vh',
-                                            borderRadius: '10vw',
-                                            backgroundImage: 'rgb(255,255,255,0.2)',
-                                        }}
-                                        label={memeberPageid === 0 ? "Search All Feeds" : `Search ${MemberProfileData.username}'s Page  `}
-                                        type="text"
-                                        name="caption"
-                                        variant='outlined'
-                                    />
-                                </Grid>
-                                <Grid item>
-                                    <Button
-                                        style={{
-                                            fontSize: buttonFont,
-                                            transform: buttonTransform,
-                                            padding: pad,
-                                            borderRadius: "50px",
-                                            MozBoxShadow: MozBoxShadowReducerLogin,
-                                            WebkitBoxShadow: WebkitBoxShadowReducerLogin,
-                                            boxShadow: boxShadowReducerLogin,
-                                            right: '-2vw'
-                                        }}
-                                        variant="outlined"
-                                        size="large"
-                                        color="primary"
-                                        onClick={() => {
-                                            // Add your check function here
-                                        }}
-                                    >
-                                        <CheckIcon />
-                                    </Button>
-                                </Grid>
+
+                                    AImodel == 3 ?
+                                        <TextField
+                                            size={sizex}
+                                            inputProps={{ style: { fontSize: font1 } }}
+                                            InputLabelProps={{ style: { fontSize: font2 } }}
+                                            onChange={(e) => {
+                                                setPrompt(e.target.value)
+                                            }}
+                                            style={{
+                                                transform: transform,
+                                                width: matchMobile ? '58vw' : '30vw',
+                                                paddingBottom: "0px",
+                                                paddingTop: "6vh",
+                                                position: "relative",
+                                                top: "0vh",
+                                                left: "0vw",
+                                                padding: '0vh',
+                                                borderRadius: '10vw',
+                                                backgroundImage: 'rgb(255,255,255,0.2)',
+                                            }}
+                                            label={'Search Explain IT'}
+                                            type="text"
+                                            name="caption"
+                                            variant='outlined'
+                                        /> :
+                                        <TextField
+                                            className={loaderx ? "blinkenx" : ''}
+                                            size={sizex}
+                                            inputProps={{ style: { fontSize: font1 } }}
+                                            InputLabelProps={{ style: { fontSize: font2 } }}
+                                            onChange={(e) => {
+                                                setPrompt(e.target.value)
+                                            }}
+                                            style={{
+                                                transform: transform,
+                                                width: matchMobile ? '58vw' : '30vw',
+                                                paddingBottom: "0px",
+                                                paddingTop: "6vh",
+                                                position: "relative",
+                                                top: "0vh",
+                                                left: "0vw",
+                                                padding: '0vh',
+                                                borderRadius: '10vw',
+                                                backgroundImage: 'rgb(255,255,255,0.2)',
+                                            }}
+                                            label="Ask &#129302; to explain in video"
+                                            type="text"
+                                            name="caption"
+                                            variant='outlined'
+                                        />
+                                }
+
                             </Grid>
-                        }
+                            <Grid item>
+                                <Button
+                                    onClick={(e: any) => {
+                                        handleSubmit(e, AImodel);
+                                    }}
+                                    style={{
+                                        fontSize: buttonFont,
+                                        transform: buttonTransform,
+                                        padding: pad,
+                                        borderRadius: "50px",
+                                        MozBoxShadow: MozBoxShadowReducerLogin,
+                                        WebkitBoxShadow: WebkitBoxShadowReducerLogin,
+                                        boxShadow: boxShadowReducerLogin,
+                                        right: '-2vw'
+                                    }}
+                                    variant="outlined"
+                                    size="large"
+                                    color="primary"
+
+                                >
+
+                                    {AImodel == 1 || AImodel == 0 ?
+
+                                        AiLock ? <LockIcon /> : <CheckIcon />
+                                        : <CheckIcon />}
+
+                                </Button>
+                            </Grid>
+                        </Grid>
+
                     </Grid>
 
 
@@ -3387,7 +3357,8 @@ function ProfileGatex({
                             style={{
                                 padding: '0px'
                             }}>
-                            <ExplainItPreview initialSteps={initialSteps} AImodel={AImodel} promptx={promptx}
+                            <ExplainItPreview
+                                setInitialSteps={setInitialSteps} initialSteps={initialSteps} AImodel={AImodel} promptx={promptx}
                                 setloader={setloader} loaderx={loaderx} />
                         </Grid>
                     </>

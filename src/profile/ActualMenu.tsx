@@ -35,6 +35,8 @@ import TheatersIcon from '@material-ui/icons/Theaters';
 
 import QueueMusicIcon from '@material-ui/icons/QueueMusic';
 
+import PlayArrowIcon from '@material-ui/icons/PlayArrow';
+
 
 import PhotoAlbumIcon from '@material-ui/icons/PhotoAlbum';
 import SettingsIcon from '@material-ui/icons/Settings';
@@ -652,7 +654,7 @@ function ActualMenux({ showModalFormMenu,
         style={{
           width: '100%',
           height: '100vh',
-          backgroundColor: darkmodeReducer ? 'rgb(20, 20, 20, 0.5)' : 'rgb(140, 140, 140, 0.43)',
+          backgroundColor: darkmodeReducer ? 'rgb(20, 20, 20, 0)' : 'rgb(140, 140, 140, 0)',
           position: 'fixed',
           cursor: 'pointer',
           top: 0,
@@ -667,7 +669,7 @@ function ActualMenux({ showModalFormMenu,
       <animated.div
         style={{
           ...styles,
-          width: matchMobile ? '54%' : '20%',
+          width: matchMobile ? '54%' : '17%',
           height: '100vh',
           backgroundImage: darkmodeReducer ? PaperStyleDark : PaperStyleLight,
           position: 'fixed',
@@ -808,7 +810,7 @@ function ActualMenux({ showModalFormMenu,
                 INSTALL WEB APP
               </button>
               :
-              <QueueMusicIcon
+              <PlayArrowIcon
                 onClick={() => {
                   /// setMovePlay(true);
                   ///setshowModalFormMenu(false);
@@ -829,7 +831,7 @@ function ActualMenux({ showModalFormMenu,
 
                   color: darkmodeReducer
                     ? '#ffffff' : '#000000',
-                  marginLeft: '-1.47vw'
+                  marginLeft: '-1.8vw'
 
 
 
@@ -857,7 +859,7 @@ function ActualMenux({ showModalFormMenu,
             >
 
 
-              <QueueMusicIcon
+              <PlayArrowIcon
 
                 onClick={() => {
                   alert('Audio Player , Coming Soon');
@@ -966,198 +968,12 @@ function ActualMenux({ showModalFormMenu,
 
 
 
-                    {i === 0 ? <span>
-                      <SearchIcon
-                        className={
-                          darkmodeReducer
-                            ? "make-small-icons-clickable-darkab dontallowhighlighting zuperkingIcon "
-                            : "make-small-icons-clickable-lightab  dontallowhighlighting zuperking"
-                        }
-                        style={{
-                          color: colr,
-                          fontSize: menufont,
-                          marginLeft: pushh,
-                          paddingTop: matchMobile ? '11px' : '',
-                          transform: 'scale(1.9)', opacity: '0.3',
-
-                        }}
-                      />
-                    </span> : null}
-
-
-                    {i === 1 ? <span>
-                      <AdjustIcon
-                        className={
-                          darkmodeReducer
-                            ? "make-small-icons-clickable-darkab dontallowhighlighting zuperkingIcon "
-                            : "make-small-icons-clickable-lightab  dontallowhighlighting zuperking"
-                        }
-                        style={{
-                          color: blendedColor,
-                          opacity: 1,
-                          fontSize: menufont,
-                          marginLeft: pushh,
-                          paddingTop: matchMobile ? '11px' : '',
-                          transform: 'scale(1.9)',
-
-                        }}
-                      />
-                    </span> : null}
-
-
-
-                    {i === 2 ? <span>
-                      <FaceIcon
-                        className={
-                          darkmodeReducer
-                            ? "make-small-icons-clickable-darkab dontallowhighlighting zuperkingIcon "
-                            : "make-small-icons-clickable-lightab  dontallowhighlighting zuperking"
-                        }
-                        style={{
-                          color: colr,
-                          fontSize: menufont,
-                          marginLeft: pushh,
-                          paddingTop: matchMobile ? '11px' : '',
-                          transform: 'scale(1.9)', opacity: '0.3',
-
-                        }}
-                      />
-                    </span> : null}
-
-
-
-                    {i === 3 ?
-                      <span>
-                        <HorizontalSplitIcon
-
-                          className={
-                            darkmodeReducer
-                              ? "make-small-icons-clickable-darkab dontallowhighlighting zuperkingIcon "
-                              : "make-small-icons-clickable-lightab  dontallowhighlighting zuperking"
-                          }
-                          style={{
-                            color: colr,
-                            fontSize: menufont,
-                            marginLeft: pushh,
-                            paddingTop: matchMobile ? '11px' : '',
-                            transform: 'scale(1.9)', opacity: '0.3',
-
-                          }}
-                        />
-                      </span>
-                      : null}
-
-
-
-
-                    {i === 4 ? <span>
-                      <NotificationsIcon
-                        className={
-                          darkmodeReducer
-                            ? "make-small-icons-clickable-darkab dontallowhighlighting zuperkingIcon "
-                            : "make-small-icons-clickable-lightab  dontallowhighlighting zuperking"
-                        }
-                        style={{
-                          color: colr,
-                          fontSize: menufont,
-                          marginLeft: pushh,
-                          paddingTop: matchMobile ? '11px' : '',
-                          transform: 'scale(1.9)', opacity: '0.3'
-                        }}
-                      />
-                    </span>
-
-                      : null}
-
-
-
-                    {i === 8 ? <span>
-                      <TheatersIcon
-                        className={
-                          darkmodeReducer
-                            ? "make-small-icons-clickable-darkab dontallowhighlighting zuperkingIcon "
-                            : "make-small-icons-clickable-lightab  dontallowhighlighting zuperking"
-                        }
-                        style={{
-                          color: colr,
-                          fontSize: menufont,
-                          marginLeft: pushh,
-                          paddingTop: matchMobile ? '11px' : '',
-                          transform: 'scale(1.9)', opacity: '0.3'
-                        }}
-                      />
-                    </span> : null}
-
-
-
-                    {i === 6 ? <span>
-                      <QueueMusicIcon
-                        className={
-                          darkmodeReducer
-                            ? "make-small-icons-clickable-darkab dontallowhighlighting zuperkingIcon "
-                            : "make-small-icons-clickable-lightab  dontallowhighlighting zuperking"
-                        }
-                        style={{
-                          color: colr,
-                          fontSize: menufont,
-                          marginLeft: pushh,
-                          paddingTop: matchMobile ? '11px' : '',
-                          transform: 'scale(1.9)', opacity: '0.3'
-                        }}
-                      />
-                    </span> : null}
-
-
-
-
-                    {i === 7 ? <span>
-                      <PhotoAlbumIcon
-                        className={
-                          darkmodeReducer
-                            ? "make-small-icons-clickable-darkab dontallowhighlighting zuperkingIcon "
-                            : "make-small-icons-clickable-lightab  dontallowhighlighting zuperking"
-                        }
-                        style={{
-                          color: darkmodeReducer ? "#ffffff" : '#777777',
-                          fontSize: menufont,
-                          marginLeft: pushh,
-                          paddingTop: matchMobile ? '11px' : '',
-                          transform: 'scale(1.9)', opacity: '0.3'
-
-                        }}
-                      />
-                    </span> : null}
-
-
-
-                    {i === 5 ? <span>
-                      <SettingsIcon
-                        className={
-                          darkmodeReducer
-                            ? "make-small-icons-clickable-darkab dontallowhighlighting zuperkingIcon "
-                            : "make-small-icons-clickable-lightab  dontallowhighlighting zuperking"
-                        }
-                        style={{
-                          color: colr,
-                          fontSize: menufont,
-                          marginLeft: pushh,
-                          paddingTop: matchMobile ? '11px' : '',
-                          transform: 'scale(1.9)', opacity: '0.3',
-
-
-
-
-
-                        }}
-                      />
-                    </span> : null}
-
 
 
                     <span
                       style={{
                         color: colr,
-                        fontSize: matchMobile ? '1.1rem' : "1.1rem",
+                        fontSize: matchMobile ? '1rem' : "1.1rem",
                         marginLeft: matchMobile ? '13vw' : '5vw',
                         fontFamily: "Roboto, Arial, Helvetica, sans-serif",
 
@@ -1168,18 +984,20 @@ function ActualMenux({ showModalFormMenu,
 
 
                     {CurrentPage === 'feeds' ?
-                      <Grid item xs={12} style={{
-                        height: '5px',
+                      <Grid container>
+                        <Grid item xs={1} style={{}}></Grid>
+                        <Grid item xs={10} style={{
+                          height: '5px',
 
-                        padding: '0px',
-                        backgroundImage: PadIndex === i ? `linear-gradient(45deg, ${RandomColor}, ${colorReducer})` :
-                          PadIndex !== -1 ? '' :
-                            memeberPageidReducer === 0 && i === 3 ? darkmodeReducer ? `linear-gradient(45deg, ${RandomColor}, ${colorReducer})` :
-                              `linear-gradient(45deg, ${RandomColor}, ${colorReducer})` :
-                              memeberPageidReducer !== 0 && i === 2 && idReducer === memeberPageidReducer ? darkmodeReducer ? `linear-gradient(45deg, ${RandomColor}, ${colorReducer})` :
-                                `linear-gradient(45deg, ${RandomColor}, ${colorReducer})` : 'none',
+                          padding: '0px',
+                          backgroundImage: PadIndex === i ? `linear-gradient(45deg, ${RandomColor}, ${colorReducer})` :
+                            PadIndex !== -1 ? '' :
+                              memeberPageidReducer === 0 && i === 3 ? darkmodeReducer ? `linear-gradient(45deg, ${RandomColor}, ${colorReducer})` :
+                                `linear-gradient(45deg, ${RandomColor}, ${colorReducer})` :
+                                memeberPageidReducer !== 0 && i === 2 && idReducer === memeberPageidReducer ? darkmodeReducer ? `linear-gradient(45deg, ${RandomColor}, ${colorReducer})` :
+                                  `linear-gradient(45deg, ${RandomColor}, ${colorReducer})` : 'none',
 
-                      }}></Grid> : null}
+                        }}></Grid></Grid> : null}
 
                   </span>
                 ))

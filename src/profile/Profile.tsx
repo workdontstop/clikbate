@@ -34,6 +34,7 @@ import AddIcon from "@mui/icons-material/Add";
 import { Upload } from "../upload/Upload";
 import { SnapToggleAction } from ".././GlobalActions";
 import { UpdateLoader } from ".././GlobalActions";
+import { Scale } from "@mui/icons-material";
 
 function Profilex({
   OpenModalForm,
@@ -303,7 +304,7 @@ function Profilex({
                       setShowBar(false);
 
 
-                      callPagination();
+                      // callPagination();
 
                       if (sTimer3.current) {
                         clearTimeout(sTimer3.current);
@@ -1326,11 +1327,12 @@ function Profilex({
           item
           xs={12}
           style={{
-            padding: matchMobile ? minimise ? '0px' : "0px" :
-              minimise ? '0vh' : '0px',
 
-            paddingLeft: matchPc ? "0vw" : '0vw',
-            paddingRight: matchPc ? "0vw" : '0vw',
+
+
+
+            padding: matchMobile ? minimise ? '2vh' : "0px" :
+              minimise ? '7vh' : '0px',
             height: "auto",
             marginTop: matchMobile ?
               minimise ? '8.4vh' : '40vh' :
@@ -1367,7 +1369,9 @@ function Profilex({
 
 
               style={{
-                padding: "0px",
+
+                padding: '0px',
+
 
               }}
             >
@@ -1580,7 +1584,15 @@ function Profilex({
 
 
                 setminiProfile(false);
-                callPagination();
+
+                if (FeedType === 1) {
+                  callPagination(true);
+                } else {
+                  callPagination(false);
+
+                }
+
+
                 if (sTimer3.current) {
                   clearTimeout(sTimer3.current);
                 }
