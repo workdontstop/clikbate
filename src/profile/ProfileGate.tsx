@@ -232,8 +232,13 @@ function ProfileGatex({
         marginTop: '-3vh'
     });
 
+
+    const [NavUsed, setNavUsed] = useState(false);
+
     useEffect(() => {
+
         const handlePopstate = () => {
+
             // Extract IDs from the pathname
             const pathSegments = window.location.pathname.split('/');
             const idRoute1 = pathSegments[pathSegments.length - 4]; // Adjust index based on your route structure
@@ -242,6 +247,10 @@ function ProfileGatex({
             const idRoute4 = pathSegments[pathSegments.length - 1]; // Adjust index based on your route structure
 
             if (idRoute1) {
+
+
+
+
                 const decodedId1 = decodeBase64(idRoute1);
                 if (decodedId1) {
                     const parsedInt1 = parseInt(decodedId1, 10);
@@ -297,6 +306,7 @@ function ProfileGatex({
     const [loaderx, setloader] = useState(false);
 
     useEffect(() => {
+
         if (idRoute1) {
             const decodedId1 = decodeBase64(idRoute1);
             if (decodedId1) {
@@ -1739,7 +1749,6 @@ function ProfileGatex({
 
 
 
-
     ///
     ///
     /////
@@ -2534,65 +2543,6 @@ function ProfileGatex({
 
 
 
-
-    const scrollToRef = useCallback(() => {
-
-
-
-        if (StopMini) { } else {
-
-
-
-            setShowBigPlay(true);
-            var Limit: number = postData.length;
-
-            var Time = 0;
-
-            var indd = indexRoll;
-            if (miniProfile) { indd = 0; }
-
-
-            for (let i = 0; i <= Limit; i++) {  // <= 20 to include the reset to the first post
-                if (i > indd) {
-                    Time = Time + 5000;
-                    setShowBigPlay(true);
-
-                    tyTimer.current[i] = setTimeout(() => {
-
-                        if (i === Limit) {
-                            // Reset to the first post after reaching the last post
-                            postDivRefx.current[Limit < 3 ? Limit - 1 : Limit - 3].scrollIntoView({
-                                behavior: "smooth",
-                                block: "start",
-                            });
-                            //
-                            postDivRefRoll.current[Limit < 3 ? Limit - 1 : Limit - 3].scrollIntoView({
-                                behavior: "smooth",
-                                block: "start",
-                            });
-                            setShowBigPlay(false);
-                        } else {
-
-
-                            postDivRefx.current[i].scrollIntoView({
-                                behavior: "smooth",
-                                block: "start",
-                            });
-                            //
-                            postDivRefRoll.current[i].scrollIntoView({
-                                behavior: "smooth",
-                                block: "start",
-                            });
-                        }
-
-
-                    }, Time - 8000);
-                }
-            }
-
-        }
-
-    }, [AllowRoll, indexRoll, postData, StopMini, miniProfile]);
 
 
     return (
@@ -3461,6 +3411,8 @@ function ProfileGatex({
 
                         }}>
                             <ProfileSetup
+
+                                NavUsed={NavUsed}
 
 
                                 PCZOOM={PCZOOM}

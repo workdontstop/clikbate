@@ -167,7 +167,9 @@ function Postx({
 
   snapallow,
   setsnapallow,
-  FeedType
+  FeedType,
+  autoplayAll,
+  setShowBigPlay
 
 
 
@@ -308,6 +310,8 @@ function Postx({
 
   const divBox = useRef<HTMLDivElement>(null);
 
+
+  const divBox2 = useRef<HTMLDivElement>(null);
 
   var allow4dev = "";
 
@@ -926,6 +930,13 @@ function Postx({
   const waitChangeIndexTimer2 = useRef<ReturnType<typeof setTimeout> | null>(
     null
   );
+  const waitChangeIndexTimer2x = useRef<ReturnType<typeof setTimeout> | null>(
+    null
+  );
+
+
+
+
 
   useEffect(() => {
     if (onLoadDataOnce[pey]) {
@@ -937,6 +948,8 @@ function Postx({
         setLImiter(true);
       }
     }
+
+
   }, [onLoadDataOnce, LImiter]);
 
   const flashBlackAndWhite = () => {
@@ -1581,11 +1594,14 @@ function Postx({
 
         <div
 
+
+
           style={{
             padding: "0px",
             width: "100%",
             height: '0px',
-            position: 'absolute'
+            position: 'absolute',
+            marginTop: '-20%'
 
 
           }}
@@ -1595,6 +1611,7 @@ function Postx({
 
 
         <div
+
           style={{
             padding: "0px",
             width: "auto",
@@ -1608,6 +1625,8 @@ function Postx({
 
 
         <div
+
+          ref={addpostDivRef}
 
           style={{
             padding: "0px",
@@ -2137,6 +2156,8 @@ function Postx({
             {/*///////////////////////////////////////////////////////////////////////////Profile pic minimise*/}
 
             <div
+
+
               onMouseEnter={(e: any) => {
                 setZoomx(true);
 
@@ -2221,25 +2242,12 @@ function Postx({
 
 
 
-                  <animated.div
-                    ref={addpostDivRef}
-
-
-                    style={{
-
-                      height: '0px',
-                      top: matchMobile ? `-14vh` : `-13vh`,
-                      position: "absolute",
-                      backgroundColor: '',
-                      transition: "all 350ms ease",
-                      zIndex: 5,
-                    }}
-                  >
-                  </animated.div>
 
 
 
                   <animated.div
+
+
                     className='post-background-dark'
                     style={{
 
@@ -2267,17 +2275,17 @@ function Postx({
 
                     <div
 
+                      ref={divBox2}
+
                       style={{
                         padding: "0px",
                         width: "100%",
                         zIndex: 0,
                         height: '1px',
-                        marginTop: matchMobile ? '-24%' : '-4%',
+                        marginTop: matchMobile ? '-34%' : '-160%',
                         position: 'absolute',
-                        scrollSnapAlign: snapallow ? 'none' : 'start',
                         backgroundColor: '',
 
-                        display: minimise ? 'none' : 'block'
 
 
                       }}
@@ -2308,8 +2316,12 @@ function Postx({
 
 
 
+
                     {/*///////////////////////////////////////////////////////////////////////////USERNAME   */}
                     <div
+
+
+
                       className={
                         darkmodeReducer
                           ? "zuperxy"
@@ -2662,7 +2674,7 @@ function Postx({
                   <div style={{
                     position: 'absolute', bottom: matchMobile ? '-10vh' : '56.5vh',
                     left: '-60%',
-                    visibility: matchMobile ? inV ? 'visible' : 'visible' : inV ? 'visible' : 'hidden',
+                    visibility: inV ? 'visible' : 'hidden',
                     transition: "transform 0.1s",
                   }}>
 
@@ -2694,7 +2706,7 @@ function Postx({
                     position: 'absolute', bottom:
                       matchMobile ? Ein === null || Ein === 0 ? '-23.3vh' : '-23.2vh' :
                         '42.3vh', left: matchMobile ? '-25%' : '-30%',
-                    visibility: matchMobile ? inV ? 'visible' : 'visible' : inV ? 'visible' : 'hidden',
+                    visibility: inV ? 'visible' : 'hidden',
                     transition: "transform 0.1s",
                   }}>
 

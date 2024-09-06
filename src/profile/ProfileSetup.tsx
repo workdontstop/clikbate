@@ -100,7 +100,10 @@ function ProfileSetupx({
     FeedType,
 
     PCZOOM,
-    setPCZOOM
+    setPCZOOM,
+
+    postDivRef,
+    NavUsed
 
 
 
@@ -340,6 +343,9 @@ function ProfileSetupx({
                     position: "relative", zIndex: 1, padding: "0px"
                 }}>
                     <Profile
+                        postDivRef={postDivRef}
+
+                        NavUsed={NavUsed}
 
                         PCZOOM={PCZOOM}
                         setPCZOOM={setPCZOOM}

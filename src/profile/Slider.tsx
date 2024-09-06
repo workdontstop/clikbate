@@ -108,7 +108,8 @@ function Sliderx({
   playXAudio,
   setplayXAudio,
   audionotify,
-  setaudionotify
+  setaudionotify,
+
 
 
 }: any): JSX.Element {
@@ -140,6 +141,9 @@ function Sliderx({
   const InteractTimerxxhyx2 = useRef<ReturnType<typeof setTimeout> | null>(
     null
   );
+  const InteractTimerxxhyl = useRef<ReturnType<typeof setTimeout> | null>(
+    null
+  );
   const InteractTimerxxhy = useRef<ReturnType<typeof setTimeout> | null>(
     null
   );
@@ -167,6 +171,7 @@ function Sliderx({
     if (minimise) {
 
       var marginLeft = 0;
+      var containerHeight = 0;
 
       if (pic.current) {
         if (divBox.current) {
@@ -176,15 +181,23 @@ function Sliderx({
           previewFileReadimage.onload = () => {
             const naturalWidth = previewFileReadimage.naturalWidth;
             const naturalHeight = previewFileReadimage.naturalHeight;
-            const containerHeight = divBox.current.clientHeight * DivBoxMultiple;
+
+            if (divBox.current) {
+              containerHeight = divBox.current.clientHeight * DivBoxMultiple;
+            }
             const aspectRatio = naturalWidth / naturalHeight;
             const newWidth = containerHeight * aspectRatio;
-            marginLeft = (divBox.current.clientWidth - newWidth) / 2;
+
+            if (divBox.current) {
+              marginLeft = (divBox.current.clientWidth - newWidth) / 2;
+            }
 
 
-            if (divBox.current.clientHeight && divBox.current.clientWidth) {
-              setcanvasBorderH(divBox.current.clientHeight * DivBoxMultiple);
-              setcanvasBorderW(divBox.current.clientWidth);
+            if (divBox.current) {
+              if (divBox.current.clientHeight && divBox.current.clientWidth) {
+                setcanvasBorderH(divBox.current.clientHeight * DivBoxMultiple);
+                setcanvasBorderW(divBox.current.clientWidth);
+              }
             }
 
 
@@ -196,11 +209,14 @@ function Sliderx({
                 setMarginLeftCanvas(marginLeft);
               } else { setMarginLeftCanvas(0); }
 
-              if (divBox.current.clientHeight && divBox.current.clientWidth) {
-                setcanvasBorderH(divBox.current.clientHeight * DivBoxMultiple);
-                setcanvasBorderW(divBox.current.clientWidth);
+              if (divBox.current) {
+                if (divBox.current.clientHeight && divBox.current.clientWidth) {
+                  setcanvasBorderH(divBox.current.clientHeight * DivBoxMultiple);
+                  setcanvasBorderW(divBox.current.clientWidth);
+                }
               }
-            }, 1000)
+
+            }, 500)
           }
         }
       }
@@ -236,7 +252,7 @@ function Sliderx({
       setUnload(false);
 
       // startinviewCanvas(1);
-    }, 10)
+    }, 50)
 
 
 
@@ -486,7 +502,13 @@ function Sliderx({
       if (inView) {
 
 
-        setinV(true);
+        if (InteractTimerxxhyl.current) {
+          clearTimeout(InteractTimerxxhyl.current);
+        }
+        InteractTimerxxhyl.current = setTimeout(() => {
+          setinV(true);
+        }, 7000)
+
 
         if (minimise) {
 
@@ -524,10 +546,11 @@ function Sliderx({
                   } else { setMarginLeftCanvas(0); }
 
 
-
-                  if (divBox.current.clientHeight && divBox.current.clientWidth) {
-                    setcanvasBorderH(divBox.current.clientHeight * DivBoxMultiple);
-                    setcanvasBorderW(divBox.current.clientWidth);
+                  if (divBox.current) {
+                    if (divBox.current.clientHeight && divBox.current.clientWidth) {
+                      setcanvasBorderH(divBox.current.clientHeight * DivBoxMultiple);
+                      setcanvasBorderW(divBox.current.clientWidth);
+                    }
                   }
                 }, 1000);
 
@@ -609,6 +632,12 @@ function Sliderx({
 
 
       } else {
+
+
+
+        if (InteractTimerxxhyl.current) {
+          clearTimeout(InteractTimerxxhyl.current);
+        }
 
         setinV(false);
 
@@ -1123,10 +1152,11 @@ function Sliderx({
 
       if (minimise && divBox.current) {
 
-
-        if (divBox.current.clientHeight && divBox.current.clientWidth) {
-          setcanvasBorderH(divBox.current.clientHeight * DivBoxMultiple);
-          setcanvasBorderW(divBox.current.clientWidth);
+        if (divBox.current) {
+          if (divBox.current.clientHeight && divBox.current.clientWidth) {
+            setcanvasBorderH(divBox.current.clientHeight * DivBoxMultiple);
+            setcanvasBorderW(divBox.current.clientWidth);
+          }
         }
 
         if (pic.current) {
@@ -2362,6 +2392,8 @@ function Sliderx({
           </Grid>
         ) : null}
       </Grid>
+
+
 
 
 

@@ -42,6 +42,7 @@ import AdjustIcon from '@material-ui/icons/Adjust';
 
 
 import { UpdateMenuNav } from "../GlobalActions";
+import { setTimeout } from "timers";
 
 function Menux({
   paperPostScrollRef,
@@ -200,12 +201,13 @@ function Menux({
     const currentIdRoute3 = currentPath[currentPath.length - 2]; // Assuming idRoute3 is the second last segment
     const currentIdRoute4 = currentPath[currentPath.length - 1]; // Assuming idRoute4 is the last segment
 
+    const p = encodeBase64(memeberPageidReducer.toString());
     const encodedScrollIndex = encodeBase64(indexplus1.toString());
     const encodedPageNumber = encodeBase64(PostPagenumPusher.toString());
     const encodedFeedtype = encodeBase64(FeedType.toString());
 
-    navigate(`/Feeds/${currentIdRoute1}/${encodedScrollIndex}/${encodedPageNumber}/${encodedFeedtype}`, { replace: true });
-  }, [FeedType, PostPagenumPusher, ScrollIndexPusher]);
+    navigate(`/Feeds/${p}/${encodedScrollIndex}/${encodedPageNumber}/${encodedFeedtype}`, { replace: true });
+  }, [FeedType, PostPagenumPusher, ScrollIndexPusher, memeberPageidReducer]);
 
 
 
@@ -222,11 +224,15 @@ function Menux({
       updateCurrentURLWithScrollPosition();
     }
 
-    // Navigate to the new URL with the new ID
-    navigate(`/Feeds/${encodedId}/${encodeBase64('0')}/${encodeBase64('0')}/${encodeBase64('0')}`);
-    dispatch(UserInfoUpdateMEMBER(0));
-    setIdReactRouterAsInt(0);
-    setScrollReactRouter(0)
+    setTimeout(() => {
+
+      // Navigate to the new URL with the new ID
+      navigate(`/Feeds/${encodedId}/${encodeBase64('0')}/${encodeBase64('0')}/${encodeBase64('0')}`);
+      dispatch(UserInfoUpdateMEMBER(0));
+      setIdReactRouterAsInt(0);
+      setScrollReactRouter(0)
+    }, 400)
+
 
   };
 
@@ -406,7 +412,7 @@ function Menux({
 
     Timervv.current = setTimeout(function () {
       GoToMemberF();
-    }, 100);
+    }, 200);
   };
 
 
@@ -889,13 +895,10 @@ function Menux({
                             setZoom3(false);
 
 
-                            if (matchMobile) {
 
-                              alert('coming soon to Mobile ');
-                            } else {
-                              setUploadGPT(true);
+                            setUploadGPT(true);
 
-                            }
+
                           }}
 
 
@@ -982,8 +985,9 @@ function Menux({
                             }}
 
                             onClick={() => {
-                              GoToMemberLoaderUpF();
                               setZoom4(false);
+                              GoToMemberLoaderUpF();
+
                             }}
 
 

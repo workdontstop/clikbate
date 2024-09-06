@@ -363,7 +363,7 @@ function ProfileOutter({ CallLoggedProfile }: any) {
 
 
   const paperPostScrollRef = useRef<any>(null);
-  const [minimise, setminimise] = useState(true);
+  const [minimise, setminimise] = useState(false);
 
 
   ////true stops snap
@@ -1655,7 +1655,7 @@ function ProfileOutter({ CallLoggedProfile }: any) {
                           backgroundColor: darkmodeReducer
                             ? "rgba(50,50,50,0.65)"
                             : "rgba(130,130,130,0.55)",
-                          display: 'none',
+
                         }}
                       >
                       </Grid>
@@ -1663,21 +1663,28 @@ function ProfileOutter({ CallLoggedProfile }: any) {
                       <Grid
                         item
                         style={{
-                          height: "80vh",
-                          width: '50%',
-                          marginLeft: '25vw',
+                          height: "73vh",
+                          width: '100%',
+                          marginLeft: '0vw',
                           zIndex: 5,
                           position: 'fixed',
-                          top: '15vh',
+                          top: '1vh',
                           backgroundColor: darkmodeReducer
                             ? "rgba(50,50,50,0.95)"
                             : "rgba(220,220,220,0.9)",
 
                           borderRadius: '5vh',
 
-                          display: 'none',
+
                         }}
                       >
+                        <GenerateAndUpload
+                          AiLock={AiLock}
+
+                          setUploadGPT={setUploadGPT}
+                          Loader={Loaderx}
+                          setLoader={setLoaderx}
+                          OpenUploadModal={OpenUploadModal} />
                       </Grid>
 
                     </> :

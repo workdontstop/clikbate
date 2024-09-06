@@ -111,13 +111,15 @@ function Profilex({
 
   setScrollIndexPusher,
   setshowProfiileData,
-
+  NavUsed,
   snapallow,
   setsnapallow,
   FeedType,
 
   PCZOOM,
-  setPCZOOM
+  setPCZOOM,
+
+
 
 
 }: any) {
@@ -494,6 +496,48 @@ function Profilex({
     ////console.log(postItemsRef.current[1]);
   };
 
+
+  const [autoplayAll, setAutoplayAll] = useState<null | boolean>(null);
+
+
+  const scrollToRef = useCallback(() => {
+
+    setShowBigPlay(true);
+
+    ///alert(ActualpostDataAll.length);
+    var Limit: number = ActualpostDataAll.length;
+
+    var Time = 0;
+
+    var indd = 0;
+    if (miniProfile) { indd = 0; }
+
+
+
+    for (let i = 0; i <= Limit; i++) {  // <= 20 to include the reset to the first post
+      if (i > indd) {
+        Time = Time + 4000;
+        setShowBigPlay(true);
+
+        tyTimer.current[i] = setTimeout(() => {
+
+          ///alert(i);
+
+          postDivRef.current[i].scrollIntoView({
+            behavior: "smooth",
+            block: "start",
+          });
+
+
+        }, Time);
+      }
+    }
+
+
+
+  }, [ActualpostDataAll, StopMini, miniProfile]);
+
+
   useEffect(() => {
     if (postData.length > 0 && showProfiileData) {
       const initialItemheight = postData.map((obj: any) => obj.itemheight);
@@ -544,9 +588,15 @@ function Profilex({
       );
       setActiveAutoPost(initialsetsetActiveAutoPost);
 
-      setminimise(true);
+
       if (memeberPageidReducer === 0) { } else {
-        ///setminimise(true);
+
+        if (ScrollReactRouter === 0) {
+
+        } else {
+
+          ///setminimise(true);
+        }
       }
 
 
@@ -574,7 +624,7 @@ function Profilex({
             });
           }
 
-        }, 10)
+        }, 500)
       }
 
     }
@@ -615,6 +665,11 @@ function Profilex({
 
       if (itemnum === 0) {
         if (postItemsRef.current[index]) {
+
+
+
+
+
 
           clearAllTimers();
 
@@ -758,6 +813,8 @@ function Profilex({
 
           if (postData.length - 1 === index) {
 
+            ///scrollToRef();
+
 
             if (postTimer6x.current) {
               clearTimeout(postTimer6x.current);
@@ -791,7 +848,7 @@ function Profilex({
                   });
                 }
 
-              }, 10)
+              }, 1000)
             }
 
 
@@ -1409,6 +1466,9 @@ function Profilex({
 
 
                     <Post
+
+                      setShowBigPlay={setShowBigPlay}
+                      autoplayAll={autoplayAll}
 
                       FeedType={FeedType}
                       setsnapallow={setsnapallow}

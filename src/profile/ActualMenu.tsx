@@ -945,13 +945,13 @@ function ActualMenux({ showModalFormMenu,
 
                     if (i === 1) {
 
-                      if (matchMobile) {
 
-                        alert('coming soon to Mobile ');
-                      } else {
-                        setUploadGPT(true);
-                        setshowModalFormMenu(false);
-                      }
+
+
+
+                      setUploadGPT(true);
+                      setshowModalFormMenu(false);
+
                     }
 
                   }} key={i}
