@@ -169,7 +169,11 @@ function Postx({
   setsnapallow,
   FeedType,
   autoplayAll,
-  setShowBigPlay
+  setShowBigPlay,
+
+  AutoGo,
+  setAutoGo,
+  TopRef
 
 
 
@@ -273,6 +277,7 @@ function Postx({
 
   const updateCurrentURLWithScrollPosition = useCallback(() => {
     var indexplus1 = pey + 1;
+
 
 
     const currentPath = location.pathname.split('/');
@@ -2674,7 +2679,7 @@ function Postx({
                   <div style={{
                     position: 'absolute', bottom: matchMobile ? '-10vh' : '56.5vh',
                     left: '-60%',
-                    visibility: inV ? 'visible' : 'hidden',
+                    visibility: inV ? AutoGo ? 'hidden' : 'visible' : 'hidden',
                     transition: "transform 0.1s",
                   }}>
 
@@ -2706,7 +2711,7 @@ function Postx({
                     position: 'absolute', bottom:
                       matchMobile ? Ein === null || Ein === 0 ? '-23.3vh' : '-23.2vh' :
                         '42.3vh', left: matchMobile ? '-25%' : '-30%',
-                    visibility: inV ? 'visible' : 'hidden',
+                    visibility: inV ? AutoGo ? 'hidden' : 'visible' : 'hidden',
                     transition: "transform 0.1s",
                   }}>
 
@@ -2758,7 +2763,9 @@ function Postx({
                         ? "#ffffff"
                         : "#000000",
                       display: minimise ? 'none' : 'flex',
-                      visibility: matchMobile ? inV ? 'visible' : 'visible' : inV ? 'visible' : 'hidden',
+                      visibility: matchMobile ? inV ? 'visible' : 'visible' :
+                        inV ? AutoGo ? 'hidden' : 'visible' : 'hidden',
+
                       transition: "transform 0.1s",
 
                     }}

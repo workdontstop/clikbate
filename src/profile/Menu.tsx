@@ -6,6 +6,7 @@ import { useSpring, animated } from "react-spring";
 import DynamicFeedIcon from "@mui/icons-material/DynamicFeed";
 import CloseFullscreenIcon from "@mui/icons-material/CloseFullscreen";
 import AllOutIcon from "@mui/icons-material/AllOut";
+import PauseCircleOutlineIcon from '@material-ui/icons/PauseCircleOutline';
 import ZoomInOutlinedIcon from "@mui/icons-material/ZoomInOutlined";
 import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 import OpenInFullIcon from "@mui/icons-material/OpenInFull";
@@ -92,7 +93,9 @@ function Menux({
   setMobileZoom,
   zoomedModal,
   mobileZoom,
-  FeedType
+  FeedType,
+  AutoGo,
+  setAutoGo
 
 
 
@@ -881,53 +884,105 @@ function Menux({
                         }}
                       >
 
-                        <AdjustIcon
-                          onMouseEnter={(e: any) => {
-                            setZoom3(true);
-                          }}
-                          onMouseLeave={(e: any) => {
-                            setZoom3(false);
-                          }}
-
-                          onClick=
-                          {() => {
-
-                            setZoom3(false);
+                        {AutoGo ?
 
 
+                          < PauseCircleOutlineIcon
 
-                            setUploadGPT(true);
+                            onMouseEnter={(e: any) => {
+                              setZoom3(true);
+                            }}
+                            onMouseLeave={(e: any) => {
+                              setZoom3(false);
+                            }}
 
 
-                          }}
+
+                            onClick=
+                            {() => {
 
 
-                          className={
-                            darkmodeReducer
-                              ? "make-small-icons-clickable-lightCrop dontallowhighlighting "
-                              : "make-small-icons-clickable-darkCrop dontallowhighlighting  "
-                          }
-                          style={{
-                            transform: matchMobile ? Zoom3 ? "scale(3)" : "scale(3)" :
-                              Zoom3 ? "scale(6)" : "scale(3.7)",
-                            fontSize: matchMobile ? Zoom3 ? '2rem' : '' : Zoom3 ? '' : '',
-                            transition: "transform 0.1s",
-                            color: Zoom3 ? blendedColor : darkmodeReducer
-                              ? "#ffffff"
-                              : "#000000",
-                            zIndex: 30,
-                            backgroundColor: darkmodeReducer
-                              ? "rgba(41,41,41,0)"
-                              : "rgba(205,205,205,0) ",
-                            cursor: "pointer",
-                            fontFamily: "Arial, Helvetica, sans-serif",
-                            fontWeight: "bolder",
-                            opacity: 1,
-                            padding: "4px",
-                            marginTop: matchMobile ? '2.1vh' : '0px',
 
-                          }}
-                        />
+                              setAutoGo(false);
+
+
+
+
+                            }}
+
+
+                            className={
+                              darkmodeReducer
+                                ? "make-small-icons-clickable-lightCrop dontallowhighlighting blinken "
+                                : "make-small-icons-clickable-darkCrop dontallowhighlighting  blinken "
+                            }
+                            style={{
+                              transform: matchMobile ? Zoom3 ? "scale(3)" : "scale(3)" :
+                                Zoom3 ? "scale(6)" : "scale(3.7)",
+                              fontSize: matchMobile ? Zoom3 ? '2rem' : '' : Zoom3 ? '' : '',
+                              transition: "transform 0.1s",
+                              color: Zoom3 ? blendedColor : darkmodeReducer
+                                ? "#ffffff"
+                                : "#000000",
+                              zIndex: 30,
+                              backgroundColor: darkmodeReducer
+                                ? "rgba(41,41,41,0)"
+                                : "rgba(205,205,205,0) ",
+                              cursor: "pointer",
+                              fontFamily: "Arial, Helvetica, sans-serif",
+                              fontWeight: "bolder",
+                              opacity: 1,
+                              padding: "4px",
+                              marginTop: matchMobile ? '2.1vh' : '0px',
+
+                            }} /> : <AdjustIcon
+                            onMouseEnter={(e: any) => {
+                              setZoom3(true);
+                            }}
+                            onMouseLeave={(e: any) => {
+                              setZoom3(false);
+                            }}
+
+                            onClick=
+                            {() => {
+
+                              setZoom3(false);
+
+
+
+                              setUploadGPT(true);
+
+
+                            }}
+
+
+                            className={
+                              darkmodeReducer
+                                ? "make-small-icons-clickable-lightCrop dontallowhighlighting "
+                                : "make-small-icons-clickable-darkCrop dontallowhighlighting  "
+                            }
+                            style={{
+                              transform: matchMobile ? Zoom3 ? "scale(3)" : "scale(3)" :
+                                Zoom3 ? "scale(6)" : "scale(3.7)",
+                              fontSize: matchMobile ? Zoom3 ? '2rem' : '' : Zoom3 ? '' : '',
+                              transition: "transform 0.1s",
+                              color: Zoom3 ? blendedColor : darkmodeReducer
+                                ? "#ffffff"
+                                : "#000000",
+                              zIndex: 30,
+                              backgroundColor: darkmodeReducer
+                                ? "rgba(41,41,41,0)"
+                                : "rgba(205,205,205,0) ",
+                              cursor: "pointer",
+                              fontFamily: "Arial, Helvetica, sans-serif",
+                              fontWeight: "bolder",
+                              opacity: 1,
+                              padding: "4px",
+                              marginTop: matchMobile ? '2.1vh' : '0px',
+
+                            }}
+                          />
+                        }
 
                       </Grid>
 

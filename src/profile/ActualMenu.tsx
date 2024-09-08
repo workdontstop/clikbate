@@ -748,7 +748,7 @@ function ActualMenux({ showModalFormMenu,
                 marginLeft: Signup ? '3.5vw' : '6vw'
               }}>
 
-                {Signup ? 'ClikBate Beta v2.5' : 'Beta'}
+                {Signup ? 'Clik Bate' : 'Beta'}
 
               </h6></p>
 
@@ -779,123 +779,6 @@ function ActualMenux({ showModalFormMenu,
 
 
 
-          {matchMobile ? null : <animated.div
-
-            style={{
-              ...stylesxx,
-              position: 'fixed',
-              top: '21vh',
-              marginLeft: '15.6vw',
-              height: 'auto',
-              cursor: 'pointer'
-            }}
-          >
-
-            {showDownloadButton ?
-              <button onClick={() => {
-                handleInstallClick();
-              }} style={{
-                borderRadius: '20px',
-                marginLeft: '-2.35vw',
-                top: '-0.45vw',
-                position: 'relative',
-                fontSize: '0.18rem',
-                padding: '0.7vh', cursor: 'pointer', backgroundColor: darkmodeReducer ? '#333333' : '#0b1728',
-                color: darkmodeReducer ? '#ffffff' : '#ffffff'
-              }}>
-
-
-
-
-                INSTALL WEB APP
-              </button>
-              :
-              <PlayArrowIcon
-                onClick={() => {
-                  /// setMovePlay(true);
-                  ///setshowModalFormMenu(false);
-                  ///scrollToRef();
-
-                  alert('Audio Player , Coming Soon');
-
-                }}
-                className={
-
-                  darkmodeReducer
-                    ? " dontallowhighlighting zuperkingIcon  zuperkingIconPostDark"
-                    : "  dontallowhighlighting   zuperkingIconPostLight"
-                }
-
-                style={{
-                  fontSize: '0.7vw',
-
-                  color: darkmodeReducer
-                    ? '#ffffff' : '#000000',
-                  marginLeft: '-1.8vw'
-
-
-
-                }}
-              />}
-          </animated.div >}
-
-
-
-
-
-
-
-          {matchMobile ?
-
-
-            <div
-              style={{
-
-                position: 'fixed',
-                bottom: '13.5%',
-                marginLeft: '22vw',
-                height: 'auto'
-              }}
-            >
-
-
-              <PlayArrowIcon
-
-                onClick={() => {
-                  alert('Audio Player , Coming Soon');
-
-
-
-                }}
-
-                className={
-
-                  darkmodeReducer
-                    ? " dontallowhighlighting zuperkingIcon  zuperkingIconPostDark"
-                    : "  dontallowhighlighting  zuperkingIconPostLight"
-                }
-
-                style={{
-                  fontSize: '6vh',
-
-                  color: darkmodeReducer
-                    ? '#ffffff' : '#000000',
-                  position: 'relative',
-
-
-                }}
-              />
-
-
-
-
-            </div >
-
-
-
-            : null}
-
-
 
 
 
@@ -907,8 +790,8 @@ function ActualMenux({ showModalFormMenu,
 
           <Grid
             xs={12} style={{
-              position: 'fixed', top: matchMobile ? '16vh' : '36vh', zIndex: 20, right: '0px',
-              width: '100%', height: matchMobile ? '58.2%' : '59%', overflow: 'auto',
+              position: 'fixed', top: matchMobile ? '16vh' : '25vh', zIndex: 20, right: '0px',
+              width: '100%', height: matchMobile ? '68.2%' : '69%', overflow: 'auto',
             }}>
 
             <Grid

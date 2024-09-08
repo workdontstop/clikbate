@@ -154,7 +154,10 @@ function ProfileGatex({
     FeedType,
     AiLock,
     PCZOOM,
-    setPCZOOM
+    setPCZOOM,
+
+    setAutoGo,
+    AutoGo
 
 }: any): JSX.Element {
 
@@ -3411,6 +3414,9 @@ function ProfileGatex({
 
                         }}>
                             <ProfileSetup
+
+                                setAutoGo={setAutoGo}
+                                AutoGo={AutoGo}
 
                                 NavUsed={NavUsed}
 

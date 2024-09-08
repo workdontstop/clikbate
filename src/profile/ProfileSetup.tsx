@@ -103,7 +103,10 @@ function ProfileSetupx({
     setPCZOOM,
 
     postDivRef,
-    NavUsed
+    NavUsed,
+
+    setAutoGo,
+    AutoGo
 
 
 
@@ -343,6 +346,9 @@ function ProfileSetupx({
                     position: "relative", zIndex: 1, padding: "0px"
                 }}>
                     <Profile
+                        setAutoGo={setAutoGo}
+                        AutoGo={AutoGo}
+
                         postDivRef={postDivRef}
 
                         NavUsed={NavUsed}

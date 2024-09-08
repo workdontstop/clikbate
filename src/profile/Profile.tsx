@@ -118,6 +118,8 @@ function Profilex({
 
   PCZOOM,
   setPCZOOM,
+  setAutoGo,
+  AutoGo
 
 
 
@@ -410,6 +412,7 @@ function Profilex({
   const postTimer4 = useRef<ReturnType<typeof setTimeout> | null>(null);
   const postTimer5 = useRef<ReturnType<typeof setTimeout> | null>(null);
   const postTimer6 = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const postTimer6y = useRef<ReturnType<typeof setTimeout> | null>(null);
   const postTimer6x = useRef<ReturnType<typeof setTimeout> | null>(null);
   const postTimer7 = useRef<ReturnType<typeof setTimeout> | null>(null);
   const cloudTimer2 = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -624,7 +627,7 @@ function Profilex({
             });
           }
 
-        }, 500)
+        }, 1000)
       }
 
     }
@@ -657,6 +660,8 @@ function Profilex({
 
 
   const [StopRouterScroll, setStopRouterScroll] = useState(0);
+
+  const [callonce, setcallonce] = useState(false);
 
 
 
@@ -811,7 +816,31 @@ function Profilex({
 
 
 
+
+
           if (postData.length - 1 === index) {
+
+
+            if (ScrollReactRouter === 0) {
+
+
+
+
+              if (callonce) {
+
+
+              } else {
+
+                setAutoGo(true); // Enable autoplay initially
+
+                setcallonce(true);
+              }
+
+
+            } else {
+              setAutoGo(false);
+            }
+
 
             ///scrollToRef();
 
@@ -848,7 +877,7 @@ function Profilex({
                   });
                 }
 
-              }, 1000)
+              }, 2000)
             }
 
 
@@ -1005,7 +1034,8 @@ function Profilex({
       setuptype,
       historyScrollonload,
       ScrollReactRouter,
-      StopRouterScroll
+      StopRouterScroll,
+      callonce
 
     ]
   );
@@ -1357,409 +1387,385 @@ function Profilex({
   const [minimiseSpecificScroll, setminimiseSpecificScroll] = useState(false);
 
 
+
+
+  const postRefs = useRef<(HTMLDivElement | null)[]>([]);
+
+  const postRefs2 = useRef<(HTMLDivElement | null)[]>([]);
+
+  const scrollInterval = 6000; // 6 seconds
+
+
+  let intervalId: NodeJS.Timeout;
+
+  // Function to stop autoplay
+  const stopAutoplay = () => {
+    setAutoGo(false); // Disable autoplay
+    clearInterval(intervalId); // Clear the interval when autoplay is stopped
+  };
+
+  useEffect(() => {
+
+
+    if (postData.length > 0) {
+
+      if (AutoGo) {
+
+
+
+        let index = 0;
+
+        const scrollToPost = () => {
+          if (!AutoGo) return; // Stop execution if autoplay is disabled
+
+          if (matchMobile) {
+            if (postRefs2.current[index]) {
+              postRefs2.current[index]?.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start',
+              });
+            }
+          } else {
+            if (postRefs.current[index]) {
+              postRefs.current[index]?.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start',
+              });
+            }
+          }
+
+          // Increment index, and reset to 0 if it exceeds the postData length
+          index = (index + 1) % postData.length;
+        };
+
+        // Scroll to each post every 6 seconds if autoGo is enabled
+        if (AutoGo) {
+          ///alert('kk');
+          intervalId = setInterval(scrollToPost, scrollInterval);
+        }
+
+        // Clean up interval on component unmount
+        return () => clearInterval(intervalId);
+
+
+      } else {
+        // Clean up interval on component unmount
+        return () => clearInterval(intervalId);
+
+      }
+
+
+
+
+
+
+
+    }
+  }, [postData, AutoGo]); // Add autoGo to the dependency array
+
+
   return (
     <>
-      <Grid container className="dontallowhighlighting">
+      <Grid container className="dontallowhighlighting" style={{ backgroundColor: '', padding: '0px' }}>
         <Grid
           item
+
           xs={12}
           style={{
-            position: "fixed",
-            width: "100%",
-            padding: "0px",
-            height: "0px",
+            position: 'fixed',
+            width: '100%',
+            padding: '0px',
+            height: '0px',
             zIndex: 20000,
-            top: "0px",
-            cursor: "pointer",
+            top: '0px',
+            cursor: 'pointer',
           }}
         ></Grid>
 
-
-
-
-
         <Grid
           ref={TopRef}
-          className="parent-containerEffect  effect"
+          className="parent-containerEffect effect"
           item
           xs={12}
           style={{
-
-
-
-
-            padding: matchMobile ? minimise ? '2vh' : "0px" :
-              minimise ? '7vh' : '0px',
-            height: "auto",
-            marginTop: matchMobile ?
-              minimise ? '8.4vh' : '40vh' :
-
-              minimise ? '0vh' : '35vh',
+            padding: matchMobile ? (minimise ? '2vh' : '0px') : minimise ? '7vh' : '0px',
+            height: 'auto',
+            marginTop: matchMobile ? (minimise ? '8.4vh' : '40vh') : minimise ? '0vh' : '35vh',
             transform: 'scale(1)',
-            transition: "transform 0.1s",
+            transition: 'transform 0.1s',
             marginLeft: miniProfile && matchPc ? '1.5vw' : '0px',
+
           }}
         >
-          <Grid
-            item
-            className=''
-            ///darkmodeReducer ? 'post-background-darkx' : 'post-background-lightx'}
-            xs={12}
-            style={{
+          <div className="scroll-container">
+            {postData.length > 0 ? (
+              <Masonry
+                columns={matchPc ? (minimise ? 3 : 2) : minimise ? 2 : 1}
+                spacing={matchPc ? (minimise ? 1 : 0) : minimise ? 0.2 : 0}
+                style={{
+                  padding: '0px',
+                }}
+              >
+                {postData.map((post: any, i: any) => (
+                  <div
+                    key={i}
+                    className="scroll-item"
 
-              height: '100%',
-              width: '100%',
-              position: 'absolute',
-              top: '0vh',
-              zIndex: 10,
+                    style={{
+                      position: 'relative',
+                      padding: '0px'
+                    }}
+                  >
+                    <div
+                      ref={(el) => (postRefs2.current[i] = el)} // Set ref for each post
+                      style={{
+                        position: 'absolute',
+                        width: '100%',
+                        zIndex: 20000,
+                        backgroundColor: '#00ccff',
+                        height: '0vh',
+                        marginTop: matchMobile ? '-20vh' : ''
+                      }}
+                    ></div>
 
-              display: CloudPost ? miniProfile ? 'none' : 'block' : 'none'
-            }}
-          ></Grid>
-          {postData.length > 0 ? (
-            <Masonry
-              columns={matchPc ? minimise ? 3 : 2
-                : minimise ? 2 : 1}
 
-              spacing={matchPc ? minimise ? 1 : 0 :
-                minimise ? 0.2 : 0}
+                    <div
+                      ref={(el) => (postRefs.current[i] = el)} // Set ref for each post
+                      style={{
+                        width: '100%',
+                        padding: '0px'
+
+                      }}
+                    >
+                      <div
+                        key={i}
+                        style={{
+                          display: 'block',
+                          transition: 'transform 0.1s',
+                          padding: '0px'
+                        }}
+                      >
+                        <Post
+                          TopRef={TopRef}
+                          AutoGo={AutoGo}
+                          setAutoGo={setAutoGo}
+                          setShowBigPlay={setShowBigPlay}
+                          autoplayAll={autoplayAll}
+                          FeedType={FeedType}
+                          setsnapallow={setsnapallow}
+                          snapallow={snapallow}
+                          setminimiseSpecificScroll={setminimiseSpecificScroll}
+                          minimiseSpecificScroll={minimiseSpecificScroll}
+                          StopRouterScroll={StopRouterScroll}
+                          setStopRouterScroll={setStopRouterScroll}
+                          setScrollIndexPusher={setScrollIndexPusher}
+                          PostPagenumPusher={PostPagenumPusher}
+                          setScrollReactRouter={setScrollReactRouter}
+                          setIdReactRouterAsInt={setIdReactRouterAsInt}
+                          setminimise={setminimise}
+                          RandomColor={RandomColor}
+                          postDivRefRoll={postDivRefRoll}
+                          minimise={minimise}
+                          profileDataHold={profileDataHold}
+                          setuptype={setuptype}
+                          ActualpostDataAll={ActualpostDataAll}
+                          setlatestInview={setlatestInview}
+                          WebsiteMode={WebsiteMode}
+                          setkeypost={setkeypost}
+                          currentClicked={currentClicked}
+                          InitializingAutoPlayIndex={InitializingAutoPlayIndex}
+                          ActiveAutoPost={ActiveAutoPost}
+                          setActiveAutoPost={setActiveAutoPost}
+                          AllowAllHdImagesShow={AllowAllHdImagesShow}
+                          clearAllTimers={clearAllTimers}
+                          ShowBigPlay={ShowBigPlay}
+                          setAdded={setAdded}
+                          Added={Added}
+                          addpostDivRefRoll={addpostDivRefRoll}
+                          canvasRefIn={canvasRefIn}
+                          postItemsRef={postItemsRef}
+                          postDatainnerInteraction2={postDatainnerInteraction2}
+                          postDatainnerInteraction1={postDatainnerInteraction1}
+                          setscrollLocation={setscrollLocation}
+                          paperPostScrollRef={paperPostScrollRef}
+                          settypeEmo={settypeEmo}
+                          setconnectTemplateGo={setconnectTemplateGo}
+                          sliderIndexMini={sliderIndexMini}
+                          setsliderIndexMini={setSliderIndexMini}
+                          zoomClickedIndex={zoomClickedIndex}
+                          setzoomClickedIndex={setzoomClickedIndex}
+                          miniProfile={miniProfile}
+                          setminiProfile={setminiProfile}
+                          setStopBodyScroll={setStopBodyScroll}
+                          setx={setx}
+                          setCommentPostid={setCommentPostid}
+                          postData={postData}
+                          setDiscussionImage={setDiscussionImage}
+                          OpenModalForm={OpenModalForm}
+                          second={second}
+                          setsecond={setsecond}
+                          secondgo={secondgo}
+                          setsecondgo={setsecondgo}
+                          setcountAutoplay={setcountAutoplay}
+                          countAutoplay={countAutoplay}
+                          onLoadDataOnce={onLoadDataOnce}
+                          pey={i}
+                          addPostItemsRef={addPostItemsRef}
+                          postDivRef={postDivRef}
+                          onPostsItemload={onPostsItemload}
+                          post={post}
+                          itemheight={itemheight}
+                          itemheighthold={itemheighthold}
+                          postbackheight={postbackheight}
+                          itemcroptype={itemcroptype}
+                          length={postData.length}
+                          itemFinalPostHeight={itemFinalPostHeight}
+                          onPostsItemClicked={onPostsItemClicked}
+                          itemCLICKED={itemCLICKED}
+                          addpostDivRef={addpostDivRef}
+                          postDatainner={postDatainner}
+                          postDatainnerThumb={postDatainnerThumb}
+                          itemOriginalPostHeight={itemOriginalPostHeight}
+                          ActiveAutoPlay={ActiveAutoPlay}
+                          setActiveAutoPlay={setActiveAutoPlay}
+                          AUTOSlideLongImages={AUTOSlideLongImages}
+                          scrollToPost={scrollToPost}
+                        />
 
 
+                        <Grid
+                          item
+                          xs={12}
+                          style={{}}
+
+                        >
+
+
+
+                          <div
+
+                            style={{
+                              margin: 'auto',
+                              width: '10%',
+                              marginTop: minimise ? '0px' : matchMobile ? '15vh' : '15vh',
+                              backgroundColor: darkmodeReducer ? 'rgb(200,200,200,0.1)' : 'rgb(20,20,20,0.15)',
+                              height: matchMobile ? "0vh" : '0vh',
+                              display: minimise ? 'none' : 'block'
+
+                            }}
+                          ></div>
+
+                        </Grid>
+
+
+
+
+
+                        <Grid
+                          item
+                          xs={12}
+                          style={{
+
+                            height: matchMobile ? postData.length - 1 === i ? '10vh' : "30vh" :
+                              postData.length - 1 === i ? '5vh' : '33vh',
+                            display: minimise ? 'none' : 'block'
+                          }}
+                        ></Grid>
+
+
+
+                        <Grid
+                          item
+                          xs={12}
+                          style={{
+                            marginTop: matchMobile ? postData.length - 1 === i ? '0vh' : "-4vh" :
+                              postData.length - 1 === i ? '0vh' : '-3.5vh',
+
+                            height: matchMobile ? postData.length - 1 === i ? '10vh' : "0vh" :
+                              postData.length - 1 === i ? '0vh' : '0vh',
+                            display: minimise ? 'block' : 'none'
+                          }}
+                        ></Grid>
+
+                      </div>
+                    </div>
+
+                  </div>
+                ))}
+              </Masonry>
+            ) : null}
+
+            <Grid
+              item
+              xs={12}
               style={{
+                padding: '0px', margin: 'auto', textAlign: 'center',
+                marginTop: matchMobile ? minimise ? '2vh' : '1vh' : '5vh'
+              }}
+            >
+              <ControlPointIcon
 
-                padding: '0px',
+                onClick={(e: any) => {
 
 
+                  setminiProfile(false);
+
+                  if (FeedType === 1) {
+                    callPagination(true);
+                  } else {
+                    callPagination(false);
+
+                  }
+
+
+                  if (sTimer3.current) {
+                    clearTimeout(sTimer3.current);
+                  }
+                  ///paperPostScrollRef.current.scrollTop = 20;
+
+                }}
+
+
+                onMouseEnter={(e) => {
+                  setZoom1(true);
+                }}
+                onMouseLeave={(e) => {
+                  setZoom1(false);
+                }}
+                style={{
+                  cursor: 'pointer',
+                  transition: "transform 0.1s",
+                  transform: Zoom1 ? "scale(1.5)" : "scale(1)",
+                  fontSize: matchMobile ? '3rem' : '4rem', position: 'relative', color: blendedColor,
+                  visibility: postData.length > 0 ? postData.length === sqlQUERYlIMIT ? 'visible' : 'hidden' : 'hidden'
+                }} />
+
+            </Grid>
+
+
+
+            <Grid
+              item
+              xs={12}
+              style={{
+                padding: '0px', margin: 'auto', textAlign: 'center',
+                marginTop: matchMobile ? '20vh' : '25vh',
+                scrollSnapAlign: 'end',
+                visibility: postData.length > 0 ? postData.length === sqlQUERYlIMIT ? 'visible' : 'hidden' : 'hidden'
               }}
             >
 
-              {postData.map((post: any, i: any) => (
-                <div
-                  key={i}
-                  style={{
-                    position: "relative",
 
-                  }}
-                >
+            </Grid>
 
 
-                  <div
 
-                    style={{
-                      position: "relative",
-                      display: AllowMore ? 'none' : 'block',
-                      backgroundColor: '#00ccff',
-                      height: '0vh'
-                    }}
-                  >  </div>
-
-
-
-
-
-                  <div
-                    key={i} style={{
-                      display: "block",
-                      transition: "transform 0.1s",
-                    }}>
-
-
-
-                    <Post
-
-                      setShowBigPlay={setShowBigPlay}
-                      autoplayAll={autoplayAll}
-
-                      FeedType={FeedType}
-                      setsnapallow={setsnapallow}
-                      snapallow={snapallow}
-
-                      setminimiseSpecificScroll={setminimiseSpecificScroll}
-                      minimiseSpecificScroll={minimiseSpecificScroll}
-
-                      StopRouterScroll={StopRouterScroll}
-                      setStopRouterScroll={setStopRouterScroll}
-
-                      setScrollIndexPusher={setScrollIndexPusher}
-                      PostPagenumPusher={PostPagenumPusher}
-                      setScrollReactRouter={setScrollReactRouter}
-                      setIdReactRouterAsInt={setIdReactRouterAsInt}
-                      setminimise={setminimise}
-                      RandomColor={RandomColor}
-                      postDivRefRoll={postDivRefRoll}
-                      minimise={minimise}
-                      profileDataHold={profileDataHold}
-                      setuptype={setuptype}
-                      ActualpostDataAll={ActualpostDataAll}
-                      setlatestInview={setlatestInview}
-                      WebsiteMode={WebsiteMode}
-                      setkeypost={setkeypost}
-                      currentClicked={currentClicked}
-                      InitializingAutoPlayIndex={InitializingAutoPlayIndex}
-                      ActiveAutoPost={ActiveAutoPost}
-                      setActiveAutoPost={setActiveAutoPost}
-
-
-                      AllowAllHdImagesShow={AllowAllHdImagesShow}
-                      clearAllTimers={clearAllTimers}
-
-                      ShowBigPlay={ShowBigPlay}
-                      setAdded={setAdded}
-                      Added={Added}
-                      addpostDivRefRoll={addpostDivRefRoll}
-                      canvasRefIn={canvasRefIn}
-
-                      postItemsRef={postItemsRef}
-                      postDatainnerInteraction2={postDatainnerInteraction2}
-                      postDatainnerInteraction1={postDatainnerInteraction1}
-                      setscrollLocation={setscrollLocation}
-                      paperPostScrollRef={paperPostScrollRef}
-                      settypeEmo={settypeEmo}
-                      setconnectTemplateGo={setconnectTemplateGo}
-                      sliderIndexMini={sliderIndexMini}
-                      setsliderIndexMini={setSliderIndexMini}
-                      zoomClickedIndex={zoomClickedIndex}
-                      setzoomClickedIndex={setzoomClickedIndex}
-                      miniProfile={miniProfile}
-                      setminiProfile={setminiProfile}
-                      setStopBodyScroll={setStopBodyScroll}
-                      setx={setx}
-
-                      setCommentPostid={setCommentPostid}
-                      postData={postData}
-                      setDiscussionImage={setDiscussionImage}
-                      OpenModalForm={OpenModalForm}
-                      second={second}
-                      setsecond={setsecond}
-                      secondgo={secondgo}
-                      setsecondgo={setsecondgo}
-                      setcountAutoplay={setcountAutoplay}
-                      countAutoplay={countAutoplay}
-                      onLoadDataOnce={onLoadDataOnce}
-                      pey={i}
-                      addPostItemsRef={addPostItemsRef}
-                      postDivRef={postDivRef}
-                      onPostsItemload={onPostsItemload}
-                      post={post}
-                      itemheight={itemheight}
-                      itemheighthold={itemheighthold}
-                      postbackheight={postbackheight}
-                      itemcroptype={itemcroptype}
-                      length={postData.length}
-                      itemFinalPostHeight={itemFinalPostHeight}
-                      onPostsItemClicked={onPostsItemClicked}
-                      itemCLICKED={itemCLICKED}
-                      addpostDivRef={addpostDivRef}
-                      postDatainner={postDatainner}
-                      postDatainnerThumb={postDatainnerThumb}
-                      itemOriginalPostHeight={itemOriginalPostHeight}
-                      ActiveAutoPlay={ActiveAutoPlay}
-                      setActiveAutoPlay={setActiveAutoPlay}
-                      AUTOSlideLongImages={AUTOSlideLongImages}
-                      scrollToPost={scrollToPost}
-                    />
-
-
-
-                    <Grid
-                      item
-                      xs={12}
-                      style={{}}
-
-                    >
-
-
-
-                      <div
-
-                        style={{
-                          margin: 'auto',
-                          width: '10%',
-                          marginTop: minimise ? '0px' : matchMobile ? '15vh' : '15vh',
-                          backgroundColor: darkmodeReducer ? 'rgb(200,200,200,0.1)' : 'rgb(20,20,20,0.15)',
-                          height: matchMobile ? "0vh" : '0vh',
-                          display: minimise ? 'none' : 'block'
-
-                        }}
-                      ></div>
-
-                    </Grid>
-
-
-
-
-
-                    <Grid
-                      item
-                      xs={12}
-                      style={{
-
-                        height: matchMobile ? postData.length - 1 === i ? '10vh' : "30vh" :
-                          postData.length - 1 === i ? '5vh' : '33vh',
-                        display: minimise ? 'none' : 'block'
-                      }}
-                    ></Grid>
-
-
-
-                    <Grid
-                      item
-                      xs={12}
-                      style={{
-                        marginTop: matchMobile ? postData.length - 1 === i ? '0vh' : "-4vh" :
-                          postData.length - 1 === i ? '0vh' : '-3.5vh',
-
-                        height: matchMobile ? postData.length - 1 === i ? '10vh' : "0vh" :
-                          postData.length - 1 === i ? '0vh' : '0vh',
-                        display: minimise ? 'block' : 'none'
-                      }}
-                    ></Grid>
-
-
-                  </div>
-
-
-
-
-
-                </div>
-              ))}
-            </Masonry>
-          ) : null}
-
-
-
-
-          <Grid
-            item
-            xs={12}
-            style={{
-              padding: '0px', margin: 'auto', textAlign: 'center',
-              marginTop: matchMobile ? minimise ? '2vh' : '1vh' : '5vh'
-            }}
-          >
-            <ControlPointIcon
-
-              onClick={(e: any) => {
-
-
-                setminiProfile(false);
-
-                if (FeedType === 1) {
-                  callPagination(true);
-                } else {
-                  callPagination(false);
-
-                }
-
-
-                if (sTimer3.current) {
-                  clearTimeout(sTimer3.current);
-                }
-                ///paperPostScrollRef.current.scrollTop = 20;
-
-              }}
-
-
-              onMouseEnter={(e) => {
-                setZoom1(true);
-              }}
-              onMouseLeave={(e) => {
-                setZoom1(false);
-              }}
-              style={{
-                cursor: 'pointer',
-                transition: "transform 0.1s",
-                transform: Zoom1 ? "scale(1.5)" : "scale(1)",
-                fontSize: matchMobile ? '3rem' : '4rem', position: 'relative', color: blendedColor,
-                visibility: postData.length > 0 ? postData.length === sqlQUERYlIMIT ? 'visible' : 'hidden' : 'hidden'
-              }} />
-
-          </Grid>
-
-
-
-          <Grid
-            item
-            xs={12}
-            style={{
-              padding: '0px', margin: 'auto', textAlign: 'center',
-              marginTop: matchMobile ? '20vh' : '25vh',
-              scrollSnapAlign: 'end',
-              visibility: postData.length > 0 ? postData.length === sqlQUERYlIMIT ? 'visible' : 'hidden' : 'hidden'
-            }}
-          >
-
-
-          </Grid>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+          </div>
         </Grid>
-
-
-
-
-
-
-
-        <Grid
-          onClick={() => {
-            clearAllTimers();
-          }}
-          container
-
-          className={darkmodeReducer ? "post-background-darkPlay" : 'post-background-lightPlay'}
-          xs={12}
-          style={{
-            height: "100%",
-            width: '100%',
-            display: ShowBigPlay ? 'block' : 'none',
-            position: 'fixed',
-            top: '0vh',
-            textAlign: 'center',
-            padding: '0px',
-            cursor: 'pointer'
-          }}
-
-        >
-
-          <Grid
-            item
-            xs={12}
-            style={{ padding: '0px' }}
-          >
-
-
-
-
-
-          </Grid>
-
-
-
-
-        </Grid>
-
-
-
-
-      </Grid >
+      </Grid>
     </>
   );
+
 }
 
 export const Profile = React.memo(Profilex);

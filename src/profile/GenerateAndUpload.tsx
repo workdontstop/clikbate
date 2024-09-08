@@ -503,6 +503,7 @@ function GenerateAndUploadx({ setUploadGPT, OpenUploadModal, Loader, setLoader, 
           <Grid
             item
             xs={5}
+
             style={{
               padding: '0px',
               textAlign: 'center'
@@ -675,7 +676,8 @@ function GenerateAndUploadx({ setUploadGPT, OpenUploadModal, Loader, setLoader, 
 
           <Grid
             item
-            xs={5}
+            xs={4}
+            sm={5}
             style={{
               padding: '0px',
               textAlign: 'center'
@@ -683,7 +685,8 @@ function GenerateAndUploadx({ setUploadGPT, OpenUploadModal, Loader, setLoader, 
           ></Grid>
           <Grid
             item
-            xs={2}
+            xs={4}
+            sm={2}
             style={{
               padding: '0px',
 
@@ -761,8 +764,8 @@ function GenerateAndUploadx({ setUploadGPT, OpenUploadModal, Loader, setLoader, 
                 padding: '0px',
                 textAlign: 'center',
                 position: 'fixed',
-                top: '42vh',
-                left: '45.5vw',
+                top: matchMobile ? '33vh' : '42vh',
+                left: matchMobile ? '40.5vw' : '45.5vw',
               }}
             >
 
@@ -866,7 +869,7 @@ function GenerateAndUploadx({ setUploadGPT, OpenUploadModal, Loader, setLoader, 
             item
             xs={12}
             style={{
-              marginTop: '4vh',
+              marginTop: matchMobile ? '-9vh' : '4vh',
               padding: '0.04px',
               textAlign: 'center',
               opacity: '0.7',
@@ -892,12 +895,12 @@ function GenerateAndUploadx({ setUploadGPT, OpenUploadModal, Loader, setLoader, 
             /// value={captionvalues.caption}
             style={{
               transform: transform,
-              width: width,
+              width: matchMobile ? '90vw' : width,
               paddingBottom: "0px",
               paddingTop: "6vh",
               position: "fixed",
-              top: "55vh",
-              left: "34.1vw",
+              top: matchMobile ? '45vh' : "55vh",
+              left: matchMobile ? '5vw' : "34.1vw",
               zIndex: 26,
               padding: '0vh',
               borderRadius: '4%',
@@ -910,7 +913,8 @@ function GenerateAndUploadx({ setUploadGPT, OpenUploadModal, Loader, setLoader, 
           />{" "}
           <Grid
             item
-            xs={5}
+            xs={4}
+            sm={5}
             style={{
               padding: '0px',
               textAlign: 'center'
@@ -920,11 +924,12 @@ function GenerateAndUploadx({ setUploadGPT, OpenUploadModal, Loader, setLoader, 
 
           <Grid
             item
-            xs={2}
+            xs={4}
+            sm={2}
             style={{
               padding: '0px',
               textAlign: 'center',
-              marginTop: '40vh',
+              marginTop: matchMobile ? '26vh' : '40vh',
             }}
           >
 

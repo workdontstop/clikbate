@@ -381,6 +381,8 @@ function ProfileOutter({ CallLoggedProfile }: any) {
   const [zoomedModal, setZoomedModal] = useState<boolean>(false);
   const [mobileZoom, setMobileZoom] = useState<boolean>(false);
 
+  const [AutoGo, setAutoGo] = useState(false);
+
 
   const [postData, setPostData] = useState<Array<any>>([]);
   const [profileDataHold, setprofileDataHold] = useState<Array<any>>([]);
@@ -839,6 +841,9 @@ function ProfileOutter({ CallLoggedProfile }: any) {
 
                     <Menu
 
+
+                      setAutoGo={setAutoGo}
+                      AutoGo={AutoGo}
                       FeedType={FeedType}
                       zoomedModal={zoomedModal}
                       mobileZoom={mobileZoom}
@@ -1005,6 +1010,8 @@ function ProfileOutter({ CallLoggedProfile }: any) {
 
 
                           <ProfileGate
+                            setAutoGo={setAutoGo}
+                            AutoGo={AutoGo}
                             PCZOOM={PCZOOM}
                             setPCZOOM={setPCZOOM}
 
@@ -1311,6 +1318,44 @@ function ProfileOutter({ CallLoggedProfile }: any) {
 
 
 
+
+              <Grid
+                onClick={() => {
+                  setAutoGo(false)
+                }}
+                container
+
+                className={darkmodeReducer ? "post-background-darkPlay" : 'post-background-lightPlay'}
+                xs={12}
+                style={{
+                  height: "100%",
+                  width: '100%',
+                  display: AutoGo ? 'block' : 'none',
+                  position: 'fixed',
+                  top: '0vh',
+                  textAlign: 'center',
+                  padding: '0px',
+                  cursor: 'pointer'
+                }}
+
+              >
+
+                <Grid
+                  item
+                  xs={12}
+                  style={{ padding: '0px' }}
+                >
+
+
+
+
+
+                </Grid>
+
+
+
+
+              </Grid>
 
 
 
@@ -1663,12 +1708,12 @@ function ProfileOutter({ CallLoggedProfile }: any) {
                       <Grid
                         item
                         style={{
-                          height: "73vh",
+                          height: "62vh",
                           width: '100%',
                           marginLeft: '0vw',
                           zIndex: 5,
                           position: 'fixed',
-                          top: '1vh',
+                          top: '7vh',
                           backgroundColor: darkmodeReducer
                             ? "rgba(50,50,50,0.95)"
                             : "rgba(220,220,220,0.9)",
