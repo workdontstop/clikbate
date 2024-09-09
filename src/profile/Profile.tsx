@@ -1492,8 +1492,12 @@ function Profilex({
             height: 'auto',
             marginTop: matchMobile ? (minimise ? '8.4vh' : '40vh') : minimise ? '0vh' : '35vh',
             transform: 'scale(1)',
+
             transition: 'transform 0.1s',
             marginLeft: miniProfile && matchPc ? '1.5vw' : '0px',
+            overflowX: 'hidden',
+            overflowY: 'auto',
+            overflow: 'visible'
 
           }}
         >

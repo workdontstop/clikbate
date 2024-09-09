@@ -1883,7 +1883,7 @@ function Postx({
                 marginLeft: matchMobile ? minimise ? '80vw' : '90vw'
                   : minimise ? '28vw' : "46vw",
 
-                top: WebsiteMode ? matchMobile ? '3.5vh' : `5.2vh` : matchMobile ? '2.8vh' : `5.2vh`,
+                top: minimise ? matchMobile ? '2.8vh' : `5.2vh` : matchMobile ? '-15.05vh' : `-12vh`,
 
                 marginTop: minimise ? '2vh' : '0px',
 
@@ -1891,7 +1891,7 @@ function Postx({
                 padding: "0px",
                 cursor: "pointer",
                 position: 'absolute',
-                visibility: interactContentx ? 'hidden' : 'visible',
+                visibility: interactContentx ? 'visible' : 'visible',
 
                 display: matchMobile ? minimise ? 'none' : 'block'
                   : minimise ? 'block' : "block",
@@ -1915,8 +1915,8 @@ function Postx({
                   Emo2Num === 0 || Emo2Num === null
                     ? ""
                     : darkmodeReducer
-                      ? "turdark"
-                      : "turlight"
+                      ? "turlight"
+                      : " turdark"
                 }
                 style={{
                   position: 'absolute',
@@ -1932,11 +1932,11 @@ function Postx({
                     post.commentCount === 0
                       ? ""
                       : darkmodeReducer
-                        ? "rgba(51,51,51,0.76)"
-                        : "rgba(255,255,255,0.7) ",
+                        ? "rgba(255,255,255,0.7)"
+                        : " rgba(51,51,51,0.76)",
                   borderRadius: "50%",
                   fontSize: matchMobile ? '1vh' : Emofontcom,
-                  color: darkmodeReducer ? "#ffffff" : "#000000",
+                  color: darkmodeReducer ? "#000000" : "#ffffff",
                   fontFamily: "Arial, Helvetica, sans-seri",
                   visibility:
                     post.commentCount === 0 ? "hidden" : "visible",
@@ -1955,8 +1955,8 @@ function Postx({
               <ChatBubbleOutlineIcon
                 className={
                   darkmodeReducer
-                    ? " dontallowhighlighting zuperkingIcon  zuperkingIconPostDark"
-                    : "  dontallowhighlighting zuperkingIcon  zuperkingIconPostLight"
+                    ? "dontallowhighlighting zuperkingIcon  zuperkingIconPostLight "
+                    : "   dontallowhighlighting zuperkingIcon  zuperkingIconPostDark"
                 }
                 onClick={() => {
 
@@ -1974,14 +1974,13 @@ function Postx({
                 }}
                 style={{
                   position: "relative",
-
                   transform: matchMobile ? Zoomx ? "scale(2)" : "scale(1.4)" : Zoomx ? "scale(2)" : "scale(1.2)",
                   transition: "transform 0.1s",
                   zIndex: 20,
                   verticalAlign: "middle",
                   fontSize: postcommentfont,
                   opacity: 1,
-                  color: darkmodeReducer ? "#000000" : "#dddddd",
+                  color: darkmodeReducer ? "#dddddd" : "#000000",
 
                 }}
               />
@@ -2395,7 +2394,7 @@ function Postx({
                           : "zuperxy"
                       }
                       style={{
-                        width: "100%",
+                        width: matchMobile ? '65%' : "85%",
 
                         top: topV,
                         position: "relative",
@@ -2437,7 +2436,7 @@ function Postx({
                                 marginTop: matchMobile ? '-1.2vh' : '-2vh',
                               }}>
 
-                              {LockTopic}</span>
+                              {LockTopic}  </span>
 
                           </span>
                         </span>

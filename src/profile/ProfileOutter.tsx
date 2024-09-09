@@ -1708,15 +1708,15 @@ function ProfileOutter({ CallLoggedProfile }: any) {
                       <Grid
                         item
                         style={{
-                          height: "62vh",
+                          height: "64vh",
                           width: '100%',
                           marginLeft: '0vw',
                           zIndex: 5,
                           position: 'fixed',
-                          top: '7vh',
+                          top: '1vh',
                           backgroundColor: darkmodeReducer
                             ? "rgba(50,50,50,0.95)"
-                            : "rgba(220,220,220,0.9)",
+                            : "rgba(250,250,250,0.9)",
 
                           borderRadius: '5vh',
 

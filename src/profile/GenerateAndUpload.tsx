@@ -351,8 +351,8 @@ function GenerateAndUploadx({ setUploadGPT, OpenUploadModal, Loader, setLoader, 
     sizex = "small";
     width = "100%";
     transform = "scale(0.94)";
-    font1 = "";
-    font2 = "";
+    font1 = "2.5vh";
+    font2 = "1.9vh";
     paddingbutU = "80px";
   }
 
@@ -389,7 +389,7 @@ function GenerateAndUploadx({ setUploadGPT, OpenUploadModal, Loader, setLoader, 
     buttonTransform = " ";
     ///
   } else {
-    buttonFont = "";
+    buttonFont = "2.2vh";
     buttonTransform = "scale(0.95)";
     pad = "25px";
   }
@@ -497,12 +497,15 @@ function GenerateAndUploadx({ setUploadGPT, OpenUploadModal, Loader, setLoader, 
 
             style={{
               borderRadius: '5vh', padding: '4px', marginTop: '-1vh',
-              position: 'relative', width: '100%', height: '80vh', objectFit: 'cover'
+              position: 'relative',
+              width: '100%',
+              height: matchMobile ? '64vh' : '80vh', objectFit: 'cover'
             }} />
 
           <Grid
             item
-            xs={5}
+            xs={4}
+            sm={5}
 
             style={{
               padding: '0px',
@@ -511,7 +514,8 @@ function GenerateAndUploadx({ setUploadGPT, OpenUploadModal, Loader, setLoader, 
           ></Grid>
           <Grid
             item
-            xs={2}
+            xs={4}
+            sm={2}
             style={{
               padding: '0px',
 
@@ -638,6 +642,9 @@ function GenerateAndUploadx({ setUploadGPT, OpenUploadModal, Loader, setLoader, 
             style={{ visibility: "hidden", display: "none" }}
           />
 
+
+
+
           <Grid
             item
             xs={11}
@@ -689,6 +696,8 @@ function GenerateAndUploadx({ setUploadGPT, OpenUploadModal, Loader, setLoader, 
             sm={2}
             style={{
               padding: '0px',
+              position: 'relative',
+              zIndex: 400
 
             }}
           >
@@ -718,7 +727,7 @@ function GenerateAndUploadx({ setUploadGPT, OpenUploadModal, Loader, setLoader, 
               >
                 {" "}
 
-                <label htmlFor="fileoo" style={{ padding: '0px' }}>
+                <label htmlFor="fileoo" style={{ padding: '0px', cursor: 'pointer' }}>
 
                   <PublishIcon
                     className={
@@ -730,17 +739,21 @@ function GenerateAndUploadx({ setUploadGPT, OpenUploadModal, Loader, setLoader, 
 
                       fontSize:
                         matchTablet || matchMobile ? "4.8vh" : "2vw",
+                      position: 'absolute',
+                      marginLeft: matchMobile ? '-0vw' : '0.2vw',
+                      marginTop: matchMobile ? '-2.5vh' : '-2vh'
                     }}
                   />
                 </label>
 
+                <label htmlFor="fileoo" style={{ padding: '0px', cursor: 'pointer' }}>
 
-                <span style={{ marginLeft: '1vw' }}>
-                  <label htmlFor="fileoo" style={{
-                    padding: '0px', cursor: 'pointer'
-                  }}>
-                    IMPORT   </label>
-                </span>
+                  <span style={{ marginLeft: matchMobile ? '10vw' : '3vw', }}>
+
+                    IMPORT
+                  </span>
+
+                </label>
               </Button>
 
 
@@ -764,7 +777,7 @@ function GenerateAndUploadx({ setUploadGPT, OpenUploadModal, Loader, setLoader, 
                 padding: '0px',
                 textAlign: 'center',
                 position: 'fixed',
-                top: matchMobile ? '33vh' : '42vh',
+                top: matchMobile ? '28vh' : '42vh',
                 left: matchMobile ? '40.5vw' : '45.5vw',
               }}
             >
@@ -899,7 +912,7 @@ function GenerateAndUploadx({ setUploadGPT, OpenUploadModal, Loader, setLoader, 
               paddingBottom: "0px",
               paddingTop: "6vh",
               position: "fixed",
-              top: matchMobile ? '45vh' : "55vh",
+              top: matchMobile ? '39vh' : "55vh",
               left: matchMobile ? '5vw' : "34.1vw",
               zIndex: 26,
               padding: '0vh',
@@ -929,7 +942,7 @@ function GenerateAndUploadx({ setUploadGPT, OpenUploadModal, Loader, setLoader, 
             style={{
               padding: '0px',
               textAlign: 'center',
-              marginTop: matchMobile ? '26vh' : '40vh',
+              marginTop: matchMobile ? '28vh' : '40vh',
             }}
           >
 

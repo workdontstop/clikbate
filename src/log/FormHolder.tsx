@@ -215,7 +215,7 @@ function FormHolderx({
 
 
     // Navigate to the new URL with the new ID
-    navigate(`/Feeds/${encodedId}/${encodeBase64('0')}/${encodeBase64('0')}/${encodeBase64('1')}`);
+    navigate(`/Feeds/${encodedId}/${encodeBase64('0')}/${encodeBase64('0')}/${encodeBase64('0')}`);
     //dispatch(UserInfoUpdateMEMBER(post.sender));
     //setScrollReactRouter(0);
 
