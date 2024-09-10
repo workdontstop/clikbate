@@ -583,21 +583,9 @@ function GenerateAndUploadx({ setUploadGPT, OpenUploadModal, Loader, setLoader, 
               >
                 {" "}
 
-                <PublishIcon
-                  className={
-                    darkmodeReducer
-                      ? "make-small-icons-clickable-lightCrop turdark dontallowhighlighting zuperkingIcon "
-                      : "make-small-icons-clickable-darkCrop  turdark dontallowhighlighting zuperkingIcon  "
-                  }
-                  style={{
-
-                    fontSize:
-                      matchTablet || matchMobile ? "4.8vh" : "2vw",
-                  }}
-                />
 
 
-                <span style={{ marginLeft: '1vw' }}>
+                <span style={{ marginLeft: '0vw' }}>
                   IMPORT
                 </span>
               </Button>
@@ -727,28 +715,10 @@ function GenerateAndUploadx({ setUploadGPT, OpenUploadModal, Loader, setLoader, 
               >
                 {" "}
 
-                <label htmlFor="fileoo" style={{ padding: '0px', cursor: 'pointer' }}>
-
-                  <PublishIcon
-                    className={
-                      darkmodeReducer
-                        ? "make-small-icons-clickable-lightCrop turdark dontallowhighlighting zuperkingIcon "
-                        : "make-small-icons-clickable-darkCrop  turdark dontallowhighlighting zuperkingIcon  "
-                    }
-                    style={{
-
-                      fontSize:
-                        matchTablet || matchMobile ? "4.8vh" : "2vw",
-                      position: 'absolute',
-                      marginLeft: matchMobile ? '-0vw' : '0.2vw',
-                      marginTop: matchMobile ? '-2.5vh' : '-2vh'
-                    }}
-                  />
-                </label>
 
                 <label htmlFor="fileoo" style={{ padding: '0px', cursor: 'pointer' }}>
 
-                  <span style={{ marginLeft: matchMobile ? '10vw' : '3vw', }}>
+                  <span style={{ marginLeft: matchMobile ? '0vw' : '0vw', }}>
 
                     IMPORT
                   </span>
@@ -908,12 +878,12 @@ function GenerateAndUploadx({ setUploadGPT, OpenUploadModal, Loader, setLoader, 
             /// value={captionvalues.caption}
             style={{
               transform: transform,
-              width: matchMobile ? '90vw' : width,
+              width: matchMobile ? '100vw' : width,
               paddingBottom: "0px",
               paddingTop: "6vh",
               position: "fixed",
               top: matchMobile ? '39vh' : "55vh",
-              left: matchMobile ? '5vw' : "34.1vw",
+              left: matchMobile ? '0vw' : "34.1vw",
               zIndex: 26,
               padding: '0vh',
               borderRadius: '4%',
@@ -942,7 +912,7 @@ function GenerateAndUploadx({ setUploadGPT, OpenUploadModal, Loader, setLoader, 
             style={{
               padding: '0px',
               textAlign: 'center',
-              marginTop: matchMobile ? '28vh' : '40vh',
+              marginTop: matchMobile ? '32vh' : '40vh',
             }}
           >
 
@@ -989,23 +959,11 @@ function GenerateAndUploadx({ setUploadGPT, OpenUploadModal, Loader, setLoader, 
                 size="large"
                 color="secondary"
               >
-                <ImageSearchIcon
-                  className={
-                    darkmodeReducer
-                      ? "make-small-icons-clickable-lightCrop turdark dontallowhighlighting zuperkingIcon "
-                      : "make-small-icons-clickable-darkCrop  turdark dontallowhighlighting zuperkingIcon  "
-                  }
-                  style={{
 
-
-                    fontSize:
-                      matchTablet || matchMobile ? "4.8vh" : "2vw",
-                  }}
-                />
 
                 {" "}
 
-                <span style={{ marginLeft: '1vw' }}>
+                <span style={{ marginLeft: '0vw' }}>
                   CREATE
                 </span>
 

@@ -77,7 +77,7 @@ function ImageFilterinnerx({
   const Timer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   var addedwidth: number;
-  addedwidth = matchTablet || matchMobile ? 10.6 : 25;
+  addedwidth = matchTablet || matchMobile ? 80 : 80;
 
   const thumbsLength = 13;
 
@@ -484,8 +484,8 @@ function ImageFilterinnerx({
           previewFileReadimage.naturalWidth > previewFileReadimage.naturalHeight
         ) {
           if (method === "thumb") {
-            widthx = matchMobile ? 155 : 250;
-            width = matchMobile ? 155 : 250;
+            widthx = matchMobile ? 400 : 600;
+            width = matchMobile ? 400 : 600;
           } else {
             if (resolution === "hd") {
               ////////
@@ -510,8 +510,8 @@ function ImageFilterinnerx({
           height = previewFileReadimage.naturalHeight * scale;
         } else {
           if (method === "thumb") {
-            heightx = matchMobile ? 150 : 250;
-            height = matchMobile ? 150 : 250;
+            heightx = matchMobile ? 400 : 600;
+            height = matchMobile ? 400 : 600;
           } else {
             if (resolution === "hd") {
               ////////
@@ -545,40 +545,42 @@ function ImageFilterinnerx({
           //////////////////CSS EDIT IMAGE WITH CTX.FILTER
 
 
-
-          if (type === "lift") {
-            ctx.filter =
-              "contrast(0.99) brightness(1.04) blur(0px) saturate(146%)";
-          } else if (type === "sahara") {
-            ctx.filter = "contrast(1.1) brightness(0.9) saturate(104%)";
-          } else if (type === "jentle") {
-            ctx.filter =
-              "contrast(1.25) brightness(0.74) hue-rotate(20deg) saturate(90%) ";
-          } else if (type === "mint") {
-            ctx.filter = "contrast(1.25) brightness(0.9)  saturate(135%)  ";
-          } else if (type === "nebula") {
-            ctx.filter = "contrast(1.1) brightness(1.04)";
-          } else if (type === "juice") {
-            if (method === "thumb" && matchMobile) {
+          if (matchMobile) { }
+          else {
+            if (type === "lift") {
               ctx.filter =
-                "contrast(1.15) brightness(0.1.01) saturate(185%) blur(0px)";
+                "contrast(0.99) brightness(1) blur(0px) saturate(146%)";
+            } else if (type === "sahara") {
+              ctx.filter = "contrast(1.1) brightness(0.9) saturate(104%)";
+            } else if (type === "jentle") {
+              ctx.filter =
+                "contrast(1) brightness(0.74) hue-rotate(17deg) saturate(80%) ";
+            } else if (type === "mint") {
+              ctx.filter = "contrast(1) brightness(0.8)  saturate(130%)  ";
+            } else if (type === "nebula") {
+              ctx.filter = "contrast(1.1) brightness(1.04)";
+            } else if (type === "juice") {
+              if (method === "thumb" && matchMobile) {
+                ctx.filter =
+                  "contrast(1.15) brightness(0.1.01) saturate(185%) blur(0px)";
+              } else {
+                ctx.filter =
+                  "contrast(0.96) brightness(1) saturate(185%) blur(0.55px)";
+              }
+            } else if (type === "rainbow") {
+              ctx.filter = "contrast(1.17) brightness(0.92) saturate(145%) ";
+            } else if (type === "superstar") {
+              ctx.filter =
+                "contrast(1.07) brightness(0.93) saturate(130%)  hue-rotate(1.4deg)";
+            } else if (type === "fog") {
+              ctx.filter = "contrast(1.2) brightness(0.95) saturate(137%)";
+            } else if (type === "moonshine") {
+              ctx.filter =
+                "contrast(0.95) brightness(1.05.2) saturate(45%) blur(0px)";
+            } else if (type === "vintage") {
+              ctx.filter = " contrast(1.2)  brightness(0.77.6)  saturate(38%)";
             } else {
-              ctx.filter =
-                "contrast(0.96) brightness(1) saturate(185%) blur(0.55px)";
             }
-          } else if (type === "rainbow") {
-            ctx.filter = "contrast(1.17) brightness(0.92) saturate(145%) ";
-          } else if (type === "superstar") {
-            ctx.filter =
-              "contrast(1.07) brightness(0.93) saturate(130%)  hue-rotate(1.4deg)";
-          } else if (type === "fog") {
-            ctx.filter = "contrast(1.2) brightness(0.95) saturate(137%)";
-          } else if (type === "moonshine") {
-            ctx.filter =
-              "contrast(0.95) brightness(1.05.2) saturate(45%) blur(0px)";
-          } else if (type === "vintage") {
-            ctx.filter = " contrast(1.2)  brightness(0.77.6)  saturate(38%)";
-          } else {
           }
 
 
@@ -610,27 +612,24 @@ function ImageFilterinnerx({
               w * 8.65
             );
 
+            // Add original color stops for desktop
             gradient.addColorStop(0, "rgba(80, 111, 32, 0.01)");
-            gradient.addColorStop(1, "rgba(10,10,10,0.001)");
+            gradient.addColorStop(1, "rgba(10, 10, 10, 0.001)");
+
+            if (matchMobile) {
+              // Modify gradient stops for mobile to simulate contrast, brightness, and saturation
+
+              // Slightly darker for reduced brightness
+              gradient.addColorStop(0.3, "rgba(90, 130, 40, 0.02)");  // Darker and more saturated
+              gradient.addColorStop(0.7, "rgba(50, 50, 20, 0.015)");  // More contrast between stops
+              gradient.addColorStop(1, "rgba(10, 10, 10, 0.01)");     // Deeper, maintaining darkness
+            }
 
             ctx.fillStyle = gradient;
             ctx.fillRect(0, 0, width, height);
           } else if (type === "mint") {
-            var gradient = ctx.createRadialGradient(
-              w / 2,
-              h / 2,
-              0,
-              w / 2,
-              h / 2,
-              w * 0.65
-            );
 
-            gradient.addColorStop(0, "rgba(255, 255, 255,0.000001)");
-            gradient.addColorStop(1, "rgba(0,0,0,0.000001)");
-
-            ctx.fillStyle = gradient;
-            ctx.fillRect(0, 0, width, height);
-          } else if (type === "lift" || type === "juice") {
+          } else if (type === "lift") {
             var gradient = ctx.createRadialGradient(
               w / 2,
               h / 3,
@@ -640,8 +639,54 @@ function ImageFilterinnerx({
               w * 0.66
             );
 
+
+
+
+            // Add original color stops (unchanged for PC)
+            gradient.addColorStop(0, "rgba(205, 205, 205,0.0001)");
+            gradient.addColorStop(1, "rgba(255, 255, 255,0.03)");
+
+            if (matchMobile) {
+              // Modify gradient for mobile to simulate brightness, contrast, and saturation
+
+              // Brighter color stop to simulate brightness
+              gradient.addColorStop(0.3, "rgba(255, 255, 200, 0.1)");  // Bright yellowish tone for brightness
+
+              // Darker contrast at the edge, more contrast effect
+              gradient.addColorStop(0.7, "rgba(100, 100, 100, 0.3)");  // Darker to simulate contrast
+
+              // More intense saturation with a bit of color
+              gradient.addColorStop(1, "rgba(200, 180, 180, 0.6)");    // Slight color tint for saturation
+            }
+
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, width, height);
+          } else if (type === "juice") {
+            var gradient = ctx.createRadialGradient(
+              w / 2,
+              h / 3,
+              0,
+              w / 2,
+              h / 3,
+              w * 0.66
+            );
+
+            // Add original color stops for desktop
             gradient.addColorStop(0, "rgba(255, 255, 255,0.01)");
             gradient.addColorStop(1, "rgba(255, 255, 255,0.001)");
+
+            if (matchMobile) {
+              // Modify gradient stops for mobile to simulate contrast, brightness, saturation, and blur
+
+              // Slight reduction in contrast, hence making the colors less distinct
+              gradient.addColorStop(0.8, "rgba(240, 240, 240, 0.1)");  // Slightly less contrast
+
+              // Increased saturation with more intense tones
+              gradient.addColorStop(0.75, "rgba(240, 240, 240, 0.1)"); // More saturation, richer tones
+
+              // Subtle blur effect can’t be directly simulated in gradient, but we use softer transitions
+              gradient.addColorStop(1, 'rgba(250, 200, 200, 0.1)');    // Softer transition for blur effect
+            }
 
             ctx.fillStyle = gradient;
             ctx.fillRect(0, 0, width, height);
@@ -655,12 +700,16 @@ function ImageFilterinnerx({
               w * 0.4
             );
 
-            gradient.addColorStop(0, " rgba(255, 255, 255,0.011)");
+
+            // Add original color stops for desktop
+            gradient.addColorStop(0, "rgba(255, 255, 255, 0.011)");
             gradient.addColorStop(1, "#403d6149");
+
 
             ctx.fillStyle = gradient;
             ctx.fillRect(0, 0, width, height);
 
+            // Second radial gradient
             var gradient = ctx.createRadialGradient(
               w / 2,
               h / 2,
@@ -670,11 +719,19 @@ function ImageFilterinnerx({
               w * 0.3
             );
 
-            gradient.addColorStop(0, "rgba(0,0,0,0.02)");
-            gradient.addColorStop(1, " rgba(255, 255, 255,0.001)");
+            // Add original color stops for desktop
+            gradient.addColorStop(0, "rgba(0, 0, 0, 0.02)");
+            gradient.addColorStop(1, "rgba(255, 255, 255, 0.001)");
+
+            if (matchMobile) {
+              // Further reduction in saturation and brightness simulation
+              gradient.addColorStop(0.3, "rgba(50, 50, 50, 0.02)");   // Slightly brighter center for brightness
+              gradient.addColorStop(1, "rgba(200, 200, 200, 0.02)");  // Desaturated outer region
+            }
 
             ctx.fillStyle = gradient;
             ctx.fillRect(0, 0, width, height);
+
           } else if (type === "vintage") {
 
           } else if (type === "nebula") {
@@ -687,12 +744,25 @@ function ImageFilterinnerx({
               w * 0.65
             );
 
+            // Add original color stops for desktop
             gradient.addColorStop(0, "rgba(255, 255, 255, 0.01)");
             gradient.addColorStop(1, "rgba(0, 0, 0, 0.08)");
 
+            if (matchMobile) {
+              // Modify gradient stops for mobile to simulate increased contrast and brightness
+
+              // Slight increase in brightness
+              gradient.addColorStop(0.3, "rgba(255, 255, 255, 0.02)"); // Slightly brighter center
+
+              // More distinct dark areas for increased contrast
+              gradient.addColorStop(0.7, "rgba(30, 30, 30, 0.1)");     // More intense dark area
+              gradient.addColorStop(1, "rgba(0, 0, 0, 0.12)");         // Darker outer region for contrast
+            }
+
             ctx.fillStyle = gradient;
             ctx.fillRect(0, 0, width, height);
-          } else if (type === "rainbow") {
+          }
+          else if (type === "rainbow") {
             var gradient = ctx.createRadialGradient(
               w / 2,
               h / 2,
@@ -702,12 +772,25 @@ function ImageFilterinnerx({
               w * 0.68
             );
 
-            gradient.addColorStop(0, "rgb(163, 218, 37,0.004)");
-            gradient.addColorStop(1, "rgb(27, 194, 236,0.004)");
+            // Add original color stops for desktop
+            gradient.addColorStop(0, "rgba(163, 218, 37,0.004)");
+            gradient.addColorStop(1, "rgba(27, 194, 236,0.004)");
+
+            if (matchMobile) {
+              // Modify gradient stops for mobile to simulate contrast, brightness, and saturation
+
+              // Slightly more distinct colors to simulate increased contrast
+              gradient.addColorStop(0.3, "rgba(163, 218, 37, 0.05)"); // Brighter, more vibrant green
+              gradient.addColorStop(0.7, "rgba(27, 194, 236, 0.05)"); // More intense cyan for saturation
+
+              // Darker outer area to simulate reduced brightness
+              gradient.addColorStop(1, "rgba(10, 70, 130, 0.08)");   // Darker blue for contrast and brightness
+            }
 
             ctx.fillStyle = gradient;
             ctx.fillRect(0, 0, width, height);
-          } else if (type === "fog") {
+          }
+          else if (type === "fog") {
             var gradient = ctx.createLinearGradient(
               w / 2,
               h / 71,
@@ -717,12 +800,30 @@ function ImageFilterinnerx({
               w * 0.4
             );
 
-            gradient.addColorStop(0, "rgba(255, 255, 255,0)");
-            gradient.addColorStop(1, "#20422e5a");
+
+            if (matchMobile) {
+              // Modify gradient stops for mobile to simulate contrast, brightness, and saturation
+
+              // More intense light and dark areas to simulate increased contrast
+              gradient.addColorStop(0.3, "rgba(255, 255, 255, 0.02)"); // Slightly more noticeable light area
+
+              // Darker and more vibrant colors for saturation
+              gradient.addColorStop(0.7, "rgba(22, 36, 86, 0.2)");    // Darker and more saturated greenish tone
+
+              // Increased darkness for the end color stop to simulate reduced brightness
+              gradient.addColorStop(1, "rgba(20, 50, 30, 0.4)");      // Darker end point for reduced brightness
+            } else {
+
+              // Add original color stops for desktop
+              gradient.addColorStop(0, "rgba(255, 255, 255, 0)");
+              gradient.addColorStop(1, "#20422e5a");
+
+            }
 
             ctx.fillStyle = gradient;
             ctx.fillRect(0, 0, width, height);
-          } else {
+          }
+          else {
           }
           //////////////////////VIGNETTE
 
@@ -739,8 +840,8 @@ function ImageFilterinnerx({
               w * 0.6
             );
             if (type === "lift") {
-              gradient.addColorStop(0, "#dcecdf16");
-              gradient.addColorStop(1, "#dceaec1a");
+              gradient.addColorStop(0, "rgba(255, 255, 255,0.001)");
+              gradient.addColorStop(1, "rgba(255, 255, 255,0.05)");
             } else if (type === "fog") {
               gradient.addColorStop(0, "#c9d6df11");
               gradient.addColorStop(1, "#bef0ce13");
@@ -779,13 +880,32 @@ function ImageFilterinnerx({
 
             ////////////composition
           } else if (type === "jentle") {
-            ////////////composition
-            ctx.globalCompositeOperation = "overlay";
-            ctx.fillStyle = "#d3b5b5";
-            ctx.fillRect(0, 0, width, height);
-            ctx.globalCompositeOperation = "soft-light";
-            ctx.fillStyle = "#d3b5b5";
-            ctx.fillRect(0, 0, width, height);
+
+
+            // Softer composition for mobile
+            if (matchMobile) {
+
+
+              ctx.globalCompositeOperation = "soft-light";
+              ctx.fillStyle = "#d3b5b5";  // Original color
+              ctx.fillRect(0, 0, width, height);
+
+              ctx.globalCompositeOperation = "soft-light";  // 'screen' for a more delicate blend
+              ctx.fillStyle = "rgba(211, 181, 181, 0.3)";  // Further reduce opacity
+              ctx.fillRect(0, 0, width, height);
+            } else {
+
+              // Default composition for desktop
+              ctx.globalCompositeOperation = "overlay";
+              ctx.fillStyle = "#d3b5b5";  // Original color
+              ctx.fillRect(0, 0, width, height);
+
+              ctx.globalCompositeOperation = "soft-light";
+              ctx.fillStyle = "#d3b5b5";  // Original color
+              ctx.fillRect(0, 0, width, height);
+
+            }
+
 
             ////////////composition
           } else if (type === "mint") {

@@ -7,26 +7,14 @@ import React, {
 } from "react";
 
 import { Grid } from "@material-ui/core";
-import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
+
 import { RootStateOrAny, useSelector, useDispatch } from "react-redux";
-import { useSpring, animated } from "react-spring";
-import Masonry from "@mui/lab/Masonry";
-import CircleIcon from "@mui/icons-material/Circle";
-import Cropper from "react-easy-crop";
-import MusicNoteIcon from "@mui/icons-material/MusicNote";
-import PhotoIcon from "@mui/icons-material/Photo";
+
 import CloseIcon from "@mui/icons-material/Close";
-import GifIcon from "@mui/icons-material/Gif";
-import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import Slider from "@mui/material/Slider";
-import { AnySoaRecord } from "dns";
-import { PreviewCanvasCropAll } from "./PreviewCanvasCropAll";
-import CropIcon from "@mui/icons-material/Crop";
-import CheckIcon from "@mui/icons-material/Check";
+
 import { matchPc, matchTablet, matchMobile } from "../DetectDevice";
 import AdjustIcon from '@material-ui/icons/Adjust';
-import { FFmpeg } from '@ffmpeg/ffmpeg';
-import { fetchFile, toBlobURL } from '@ffmpeg/util';
+
 
 interface HTMLVideoElementWithCapture extends HTMLVideoElement {
   captureStream(): MediaStream;

@@ -16,20 +16,11 @@ function Uploadx({
   setShowModalUpload,
   setStopBodyScroll,
   selectedImage,
-  setselectedImage
+  setselectedImage,
 }: any): JSX.Element {
-  //
-
-
-  //
-  //
-
   const [allowOverflow, setallowOverflow] = useState(true);
 
-  //
-  //
-  //
-  //USE SLIDE DOWN ANIMATION FROM REACT SPRING
+  // Use slide-down animation from react-spring
   const animation = useSpring({
     config: {
       duration: 600,
@@ -39,10 +30,7 @@ function Uploadx({
     padding: "0px",
   });
 
-  ///
-  ///
-  ///
-  /// GET DARKMODE FROM REDUX STORE
+  // Get darkmode from Redux store
   interface RootStateGlobalReducer {
     GlobalReducer: {
       darkmode: boolean;
@@ -54,33 +42,14 @@ function Uploadx({
 
   const darkmodeReducer = darkmode;
 
-  ///
-  ///
-  ///
-  /// GET GLOBAL INNER NAVIGATION VARIABLE
+  // Get global inner navigation variable
   const { activatecropImage } = useSelector((state: RootStateOrAny) => ({
     ...state.GlobalNavuploadReducer,
   }));
   const activatecropImageReducer = activatecropImage;
 
-  const blank = () => { };
-
-  const { REACT_APP_SUPERSTARZ_URL } = process.env;
-
   const cropTOPLEVELScrollRef: any = useRef(null);
-
   const refWithimageData = useRef<any>([]);
-
-  ///
-  ///
-  ///
-  ///CREATE REFS FROM POSTS AND ADD THEM TO ARRAY
-  const addfinishedCropRef = (itemsRef: any) => {
-    if (itemsRef && !refWithimageData.current.includes(itemsRef)) {
-      refWithimageData.current.push(itemsRef);
-    }
-    ////console.log(postItemsRef.current[1]);
-  };
 
   const cropscrollRef = useRef<any>(null);
 
@@ -92,18 +61,29 @@ function Uploadx({
     },
     [showModalUpload, closeUploadModal]
   );
+
   useEffect(() => {
     document.addEventListener("keydown", escapePress);
     return () => document.removeEventListener("keydown", escapePress);
   }, [escapePress]);
 
+  // Prevent scrolling on the body when OptionsSlider is open
+  useEffect(() => {
+    if (showModalUpload) {
+      document.body.style.overflow = "hidden"; // Prevent body scroll
+    } else {
+      document.body.style.overflow = "auto"; // Allow body scroll
+    }
+    return () => {
+      document.body.style.overflow = "auto"; // Clean up on unmount
+    };
+  }, [showModalUpload]);
 
-
-
-
-
-
-
+  // Prevent browser reload on specific actions
+  const handlePreventReload = (event: React.MouseEvent | React.FormEvent) => {
+    event.preventDefault();
+    // handle logic without reloading the page
+  };
 
   return (
     <>
@@ -141,24 +121,28 @@ function Uploadx({
                 overflow: allowOverflow ? "auto" : "hidden",
               }}
             >
-              <OptionsSlider
-                selectedImage={selectedImage}
-                setselectedImage={setselectedImage}
-                setShowModalUpload={setShowModalUpload}
-                setStopBodyScroll={setStopBodyScroll}
-                closeUploadModal={closeUploadModal}
-                allowOverflow={allowOverflow}
-                cropscrollRef={cropscrollRef}
-                typeUpload={1}
-                showModalUpload={showModalUpload}
-                OpenUploadModal={OpenUploadModal}
-                sethaltedTop={blank}
-                typeTop={false}
-                getSliderWidth={getSliderWidth}
-                cropTOPLEVELScrollRef={cropTOPLEVELScrollRef}
-                refWithimageData={refWithimageData}
-                setallowOverflow={setallowOverflow}
-              />
+              <form onSubmit={handlePreventReload}>
+                <OptionsSlider
+                  selectedImage={selectedImage}
+                  setselectedImage={setselectedImage}
+                  setShowModalUpload={setShowModalUpload}
+                  setStopBodyScroll={setStopBodyScroll}
+                  closeUploadModal={closeUploadModal}
+                  allowOverflow={allowOverflow}
+                  cropscrollRef={cropscrollRef}
+                  typeUpload={1}
+                  showModalUpload={showModalUpload}
+                  OpenUploadModal={OpenUploadModal}
+                  sethaltedTop={() => { }}
+                  typeTop={false}
+                  getSliderWidth={getSliderWidth}
+                  cropTOPLEVELScrollRef={cropTOPLEVELScrollRef}
+                  refWithimageData={refWithimageData}
+                  setallowOverflow={setallowOverflow}
+                />
+                {/* Button with preventDefault to avoid reload */}
+                <button onClick={handlePreventReload}>Submit</button>
+              </form>
             </DialogContent>
           </animated.div>
         </DialogContent>

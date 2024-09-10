@@ -1490,7 +1490,7 @@ function Profilex({
           style={{
             padding: matchMobile ? (minimise ? '2vh' : '0px') : minimise ? '7vh' : '0px',
             height: 'auto',
-            marginTop: matchMobile ? (minimise ? '8.4vh' : '40vh') : minimise ? '0vh' : '35vh',
+            marginTop: matchMobile ? (minimise ? '8.4vh' : '33vh') : minimise ? '0vh' : '18vh',
             transform: 'scale(1)',
 
             transition: 'transform 0.1s',

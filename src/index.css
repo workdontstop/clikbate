@@ -12,8 +12,9 @@
 
 @import url("https://fonts.googleapis.com/css2?family=Big+Shoulders+Display&family=Dancing+Script&family=Loved+by+the+King&family=Oleo+Script&display=swap");
 
+/* Default styles for desktop (PC) */
 body::-webkit-scrollbar {
-  display: none;
+  display: block; /* Show scrollbar on PC */
   scroll-behavior: smooth;
 }
 
@@ -27,6 +28,25 @@ html {
   padding: 0;
   box-sizing: border-box;
   overscroll-behavior: smooth;
+}
+
+/* Media query for mobile */
+@media (max-width: 1024px) {
+  body::-webkit-scrollbar {
+    display: none; /* Hide scrollbar on mobile */
+    scroll-behavior: smooth;
+    overscroll-behavior: none; /* Prevent pull-to-refresh on mobile */
+  }
+
+  html {
+    scroll-behavior: smooth;
+    overscroll-behavior: none;
+  }
+
+  * {
+    scroll-behavior: smooth;
+    overscroll-behavior: none;
+  }
 }
 
 @keyframes colorAndPaddingAnimation {

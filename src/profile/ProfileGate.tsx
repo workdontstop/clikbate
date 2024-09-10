@@ -230,7 +230,7 @@ function ProfileGatex({
     const [ExtendBill, setExtendBill] = useState(false);
 
     const heightAnimation = useSpring({
-        height: ExtendBill ? (matchMobile ? '49vh' : '70vh') : (matchMobile ? '25vh' : '32vh'),
+        height: ExtendBill ? (matchMobile ? '49vh' : '70vh') : (matchMobile ? '30vh' : '47vh'),
         config: { duration: 300 },
         marginTop: '-3vh'
     });
@@ -2559,21 +2559,9 @@ function ProfileGatex({
 
             <LoaderPost RandomColor={RandomColor} autoSlideDisplay={autoSlideDisplay} sliderLoader={sliderLoader} />
 
-            <Grid container className="dontallowhighlighting" style={{}}>
+            <Grid container className="dontallowhighlighting" style={{ padding: '0px' }}>
 
 
-
-
-                <Grid item xs={12} style={{
-                    padding: '0px',
-                    display: matchMobile ? 'block' : 'block',
-                    position: 'relative',
-                    height: matchMobile ? '4vh' : '10vh',
-                    scrollSnapAlign: snapallow ? 'none' : "start",
-
-                }}>
-
-                </Grid>
 
 
 
@@ -2581,8 +2569,8 @@ function ProfileGatex({
 
                 <Grid item ref={pagePostScroll} xs={12} style={{
                     padding: '0px',
-                    top: '0vh',
-                    marginTop: matchMobile ? '6vh' : '0vh',
+
+                    marginTop: matchMobile ? '-3vh' : '-2.6vh',
                     position: 'relative',
                     paddingBottom: miniProfile ? matchMobile ? '1vh' : '5vh' : matchMobile ? '5vh' : '15vh',
                     textAlign: 'left',
@@ -2797,7 +2785,7 @@ function ProfileGatex({
                                 position: "relative",
                                 width: widthProfilePic,
                                 height: "auto",
-                                top: matchMobile ? ShowImageSlider ? '0.8vh' : "11vh" :
+                                top: matchMobile ? ShowImageSlider ? '1.8vh' : "11vh" :
                                     ShowImageSlider ? '4vh' : '4vh',
 
                                 marginLeft: matchMobile ? "65vw" : '70vw',
@@ -3080,7 +3068,7 @@ function ProfileGatex({
                             width: '100%',
                             transition: "transform 0.1s",
                             textAlign: 'center',
-                            marginTop: matchMobile ? '10vh' : '9vh',
+                            marginTop: matchMobile ? '7vh' : '4vh',
 
                             zIndex: 2
                         }} item>
