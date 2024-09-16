@@ -949,7 +949,7 @@ function InteractMenux({
 
 
                     <Grid item xs={12} style={{ bottom: '-20vh', position: 'relative', }}>
-                        <Grid item xs={3} style={{
+                        <Grid item xs={12} sm={3} style={{
                             height: '15vh', border: darkmodeReducer ? '2px solid white' : '2px solid black', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '24px',
                             fontFamily: 'Helvetica, Arial, sans-serif', color: darkmodeReducer ? '#ffffff' : '#000000'
                         }}>

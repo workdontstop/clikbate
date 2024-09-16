@@ -76,8 +76,10 @@ function ImageFilterinnerx({
 
   const Timer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
+  const Timerf = useRef<ReturnType<typeof setTimeout> | null>(null);
+
   var addedwidth: number;
-  addedwidth = matchTablet || matchMobile ? 80 : 80;
+  addedwidth = matchTablet || matchMobile ? 77 : 78;
 
   const thumbsLength = 13;
 
@@ -467,676 +469,681 @@ function ImageFilterinnerx({
       var height: number;
       /////////////////////////////////////////adjust resolution canvas filter mode//////////////////////////////////////////////
       var dynamicDimensions = matchMobile
-        ? window.innerHeight * 4.5
-        : window.innerHeight * 1.45;
+        ? window.innerHeight * 6.5
+        : window.innerHeight * 1.95;
       var dynamicDimensionsx = matchMobile
-        ? window.innerWidth * 4.5
-        : window.innerWidth * 1;
+        ? window.innerWidth * 6.5
+        : window.innerWidth * 1.5;
       ////////
       /////////////////////////////////////////adjust resolution canvas filter mode//////////////////////////////////////////////
+      if (canvasRef.current) {
 
+        previewFileReadimage.onload = function () {
 
-      previewFileReadimage.onload = function () {
-        const ctx = canvasRef.current.getContext("2d");
-        const qualityValue = 0.88;
 
-        if (
-          previewFileReadimage.naturalWidth > previewFileReadimage.naturalHeight
-        ) {
-          if (method === "thumb") {
-            widthx = matchMobile ? 400 : 600;
-            width = matchMobile ? 400 : 600;
-          } else {
-            if (resolution === "hd") {
-              ////////
-              /////////////////////////////////////////adjust resolution final result image//////////////////////////////////////////////
-              widthx = previewFileReadimage.naturalWidth * qualityValue;
-              width = previewFileReadimage.naturalWidth * qualityValue;
-              ////////
-              /////////////////////////////////////////adjust resolution final result image//////////////////////////////////////////////
-            } else {
-              widthx = matchMobile
-                ? dynamicDimensionsx * 0.7
-                : dynamicDimensionsx * 0.8;
-              width = matchMobile
-                ? dynamicDimensionsx * 0.7
-                : dynamicDimensionsx * 0.8;
-            }
-          }
 
-          var scalex = widthx / previewFileReadimage.naturalWidth;
-          heightx = previewFileReadimage.naturalHeight * scalex;
-          var scale = width / previewFileReadimage.naturalWidth;
-          height = previewFileReadimage.naturalHeight * scale;
-        } else {
-          if (method === "thumb") {
-            heightx = matchMobile ? 400 : 600;
-            height = matchMobile ? 400 : 600;
-          } else {
-            if (resolution === "hd") {
-              ////////
-              /////////////////////////////////////////adjust resolution final result image//////////////////////////////////////////////
-              heightx = previewFileReadimage.naturalHeight * qualityValue;
-              height = previewFileReadimage.naturalHeight * qualityValue;
-              ////////
-              /////////////////////////////////////////adjust resolution final result image//////////////////////////////////////////////
-            } else {
-              heightx = matchMobile
-                ? dynamicDimensions * 0.6
-                : dynamicDimensions * 0.9;
-              height = matchMobile
-                ? dynamicDimensions * 0.6
-                : dynamicDimensions * 0.9;
-            }
-          }
+          const ctx = canvasRef.current.getContext("2d");
+          const qualityValue = matchMobile ? 0.92 : 0.92;
 
-          var scalex = heightx / previewFileReadimage.naturalHeight;
-          widthx = previewFileReadimage.naturalWidth * scalex;
-
-          var scale = height / previewFileReadimage.naturalHeight;
-          width = previewFileReadimage.naturalWidth * scale;
-        }
-
-        canvasRef.current.height = height;
-        canvasRef.current.width = width;
-        //////////////////INITIALIZE  CANVAS
-
-        requestAnimationFrame(async () => {
-          //////////////////CSS EDIT IMAGE WITH CTX.FILTER
-
-
-          if (matchMobile) { }
-          else {
-            if (type === "lift") {
-              ctx.filter =
-                "contrast(0.99) brightness(1) blur(0px) saturate(146%)";
-            } else if (type === "sahara") {
-              ctx.filter = "contrast(1.1) brightness(0.9) saturate(104%)";
-            } else if (type === "jentle") {
-              ctx.filter =
-                "contrast(1) brightness(0.74) hue-rotate(17deg) saturate(80%) ";
-            } else if (type === "mint") {
-              ctx.filter = "contrast(1) brightness(0.8)  saturate(130%)  ";
-            } else if (type === "nebula") {
-              ctx.filter = "contrast(1.1) brightness(1.04)";
-            } else if (type === "juice") {
-              if (method === "thumb" && matchMobile) {
-                ctx.filter =
-                  "contrast(1.15) brightness(0.1.01) saturate(185%) blur(0px)";
-              } else {
-                ctx.filter =
-                  "contrast(0.96) brightness(1) saturate(185%) blur(0.55px)";
-              }
-            } else if (type === "rainbow") {
-              ctx.filter = "contrast(1.17) brightness(0.92) saturate(145%) ";
-            } else if (type === "superstar") {
-              ctx.filter =
-                "contrast(1.07) brightness(0.93) saturate(130%)  hue-rotate(1.4deg)";
-            } else if (type === "fog") {
-              ctx.filter = "contrast(1.2) brightness(0.95) saturate(137%)";
-            } else if (type === "moonshine") {
-              ctx.filter =
-                "contrast(0.95) brightness(1.05.2) saturate(45%) blur(0px)";
-            } else if (type === "vintage") {
-              ctx.filter = " contrast(1.2)  brightness(0.77.6)  saturate(38%)";
-            } else {
-            }
-          }
-
-
-          //////////////////CSS EDIT IMAGE WITH CTX.FILTER
-
-          ctx.drawImage(
-            previewFileReadimage,
-            0,
-            0,
-            canvasRef.current.width,
-            canvasRef.current.height
-          );
-
-          //////////////////////VIGNETTE
-          var w = canvasRef.current.width;
-          var h = canvasRef.current.height;
-
-
-          //////////////////////VIGNETTE
-          var width = w;
-          var height = h;
-          if (type === "sahara") {
-            var gradient = ctx.createLinearGradient(
-              w / 2.7,
-              h / 2,
-              0,
-              w / 4.8,
-              h / 2,
-              w * 8.65
-            );
-
-            // Add original color stops for desktop
-            gradient.addColorStop(0, "rgba(80, 111, 32, 0.01)");
-            gradient.addColorStop(1, "rgba(10, 10, 10, 0.001)");
-
-            if (matchMobile) {
-              // Modify gradient stops for mobile to simulate contrast, brightness, and saturation
-
-              // Slightly darker for reduced brightness
-              gradient.addColorStop(0.3, "rgba(90, 130, 40, 0.02)");  // Darker and more saturated
-              gradient.addColorStop(0.7, "rgba(50, 50, 20, 0.015)");  // More contrast between stops
-              gradient.addColorStop(1, "rgba(10, 10, 10, 0.01)");     // Deeper, maintaining darkness
-            }
-
-            ctx.fillStyle = gradient;
-            ctx.fillRect(0, 0, width, height);
-          } else if (type === "mint") {
-
-          } else if (type === "lift") {
-            var gradient = ctx.createRadialGradient(
-              w / 2,
-              h / 3,
-              0,
-              w / 2,
-              h / 3,
-              w * 0.66
-            );
-
-
-
-
-            // Add original color stops (unchanged for PC)
-            gradient.addColorStop(0, "rgba(205, 205, 205,0.0001)");
-            gradient.addColorStop(1, "rgba(255, 255, 255,0.03)");
-
-            if (matchMobile) {
-              // Modify gradient for mobile to simulate brightness, contrast, and saturation
-
-              // Brighter color stop to simulate brightness
-              gradient.addColorStop(0.3, "rgba(255, 255, 200, 0.1)");  // Bright yellowish tone for brightness
-
-              // Darker contrast at the edge, more contrast effect
-              gradient.addColorStop(0.7, "rgba(100, 100, 100, 0.3)");  // Darker to simulate contrast
-
-              // More intense saturation with a bit of color
-              gradient.addColorStop(1, "rgba(200, 180, 180, 0.6)");    // Slight color tint for saturation
-            }
-
-            ctx.fillStyle = gradient;
-            ctx.fillRect(0, 0, width, height);
-          } else if (type === "juice") {
-            var gradient = ctx.createRadialGradient(
-              w / 2,
-              h / 3,
-              0,
-              w / 2,
-              h / 3,
-              w * 0.66
-            );
-
-            // Add original color stops for desktop
-            gradient.addColorStop(0, "rgba(255, 255, 255,0.01)");
-            gradient.addColorStop(1, "rgba(255, 255, 255,0.001)");
-
-            if (matchMobile) {
-              // Modify gradient stops for mobile to simulate contrast, brightness, saturation, and blur
-
-              // Slight reduction in contrast, hence making the colors less distinct
-              gradient.addColorStop(0.8, "rgba(240, 240, 240, 0.1)");  // Slightly less contrast
-
-              // Increased saturation with more intense tones
-              gradient.addColorStop(0.75, "rgba(240, 240, 240, 0.1)"); // More saturation, richer tones
-
-              // Subtle blur effect can’t be directly simulated in gradient, but we use softer transitions
-              gradient.addColorStop(1, 'rgba(250, 200, 200, 0.1)');    // Softer transition for blur effect
-            }
-
-            ctx.fillStyle = gradient;
-            ctx.fillRect(0, 0, width, height);
-          } else if (type === "moonshine") {
-            var gradient = ctx.createLinearGradient(
-              w / 2,
-              h / 3,
-              0,
-              w / 2,
-              h / 3,
-              w * 0.4
-            );
-
-
-            // Add original color stops for desktop
-            gradient.addColorStop(0, "rgba(255, 255, 255, 0.011)");
-            gradient.addColorStop(1, "#403d6149");
-
-
-            ctx.fillStyle = gradient;
-            ctx.fillRect(0, 0, width, height);
-
-            // Second radial gradient
-            var gradient = ctx.createRadialGradient(
-              w / 2,
-              h / 2,
-              0,
-              w / 2,
-              h / 2,
-              w * 0.3
-            );
-
-            // Add original color stops for desktop
-            gradient.addColorStop(0, "rgba(0, 0, 0, 0.02)");
-            gradient.addColorStop(1, "rgba(255, 255, 255, 0.001)");
-
-            if (matchMobile) {
-              // Further reduction in saturation and brightness simulation
-              gradient.addColorStop(0.3, "rgba(50, 50, 50, 0.02)");   // Slightly brighter center for brightness
-              gradient.addColorStop(1, "rgba(200, 200, 200, 0.02)");  // Desaturated outer region
-            }
-
-            ctx.fillStyle = gradient;
-            ctx.fillRect(0, 0, width, height);
-
-          } else if (type === "vintage") {
-
-          } else if (type === "nebula") {
-            var gradient = ctx.createRadialGradient(
-              w / 2,
-              h / 2,
-              0,
-              w / 2,
-              h / 2,
-              w * 0.65
-            );
-
-            // Add original color stops for desktop
-            gradient.addColorStop(0, "rgba(255, 255, 255, 0.01)");
-            gradient.addColorStop(1, "rgba(0, 0, 0, 0.08)");
-
-            if (matchMobile) {
-              // Modify gradient stops for mobile to simulate increased contrast and brightness
-
-              // Slight increase in brightness
-              gradient.addColorStop(0.3, "rgba(255, 255, 255, 0.02)"); // Slightly brighter center
-
-              // More distinct dark areas for increased contrast
-              gradient.addColorStop(0.7, "rgba(30, 30, 30, 0.1)");     // More intense dark area
-              gradient.addColorStop(1, "rgba(0, 0, 0, 0.12)");         // Darker outer region for contrast
-            }
-
-            ctx.fillStyle = gradient;
-            ctx.fillRect(0, 0, width, height);
-          }
-          else if (type === "rainbow") {
-            var gradient = ctx.createRadialGradient(
-              w / 2,
-              h / 2,
-              0,
-              w / 2,
-              h / 2,
-              w * 0.68
-            );
-
-            // Add original color stops for desktop
-            gradient.addColorStop(0, "rgba(163, 218, 37,0.004)");
-            gradient.addColorStop(1, "rgba(27, 194, 236,0.004)");
-
-            if (matchMobile) {
-              // Modify gradient stops for mobile to simulate contrast, brightness, and saturation
-
-              // Slightly more distinct colors to simulate increased contrast
-              gradient.addColorStop(0.3, "rgba(163, 218, 37, 0.05)"); // Brighter, more vibrant green
-              gradient.addColorStop(0.7, "rgba(27, 194, 236, 0.05)"); // More intense cyan for saturation
-
-              // Darker outer area to simulate reduced brightness
-              gradient.addColorStop(1, "rgba(10, 70, 130, 0.08)");   // Darker blue for contrast and brightness
-            }
-
-            ctx.fillStyle = gradient;
-            ctx.fillRect(0, 0, width, height);
-          }
-          else if (type === "fog") {
-            var gradient = ctx.createLinearGradient(
-              w / 2,
-              h / 71,
-              0,
-              w / 19,
-              h / 2,
-              w * 0.4
-            );
-
-
-            if (matchMobile) {
-              // Modify gradient stops for mobile to simulate contrast, brightness, and saturation
-
-              // More intense light and dark areas to simulate increased contrast
-              gradient.addColorStop(0.3, "rgba(255, 255, 255, 0.02)"); // Slightly more noticeable light area
-
-              // Darker and more vibrant colors for saturation
-              gradient.addColorStop(0.7, "rgba(22, 36, 86, 0.2)");    // Darker and more saturated greenish tone
-
-              // Increased darkness for the end color stop to simulate reduced brightness
-              gradient.addColorStop(1, "rgba(20, 50, 30, 0.4)");      // Darker end point for reduced brightness
-            } else {
-
-              // Add original color stops for desktop
-              gradient.addColorStop(0, "rgba(255, 255, 255, 0)");
-              gradient.addColorStop(1, "#20422e5a");
-
-            }
-
-            ctx.fillStyle = gradient;
-            ctx.fillRect(0, 0, width, height);
-          }
-          else {
-          }
-          //////////////////////VIGNETTE
-
-          //////////////////////GRADIENT BRIGHTNESS
-
-          if (type === "normal") {
-          } else {
-            var gradient = ctx.createRadialGradient(
-              w / 2,
-              h / 2,
-              0,
-              w / 2,
-              h / 2,
-              w * 0.6
-            );
-            if (type === "lift") {
-              gradient.addColorStop(0, "rgba(255, 255, 255,0.001)");
-              gradient.addColorStop(1, "rgba(255, 255, 255,0.05)");
-            } else if (type === "fog") {
-              gradient.addColorStop(0, "#c9d6df11");
-              gradient.addColorStop(1, "#bef0ce13");
-            } else if (type === "jentle") {
-              gradient.addColorStop(0, "rgba(255, 255, 255,0.001)");
-              gradient.addColorStop(1, "rgba(255, 255, 255,0.001)");
-            } else if (type === "vintage") {
-
-            } else if (
-              type === "superstar" ||
-              type === "rainbow" ||
-              type === "sahara"
-            ) {
-              gradient.addColorStop(0, "rgba(255, 255, 255,0.002)");
-              gradient.addColorStop(1, "rgba(255, 255, 255,0.001)");
-            } else {
-              gradient.addColorStop(0, "rgba(255, 255, 255,0.002)");
-              gradient.addColorStop(1, "rgba(255, 255, 255,0.001)");
-            }
-
-            ctx.fillStyle = gradient;
-            ctx.fillRect(0, 0, width, height);
-          }
-
-          //////////////////////GRADIENT BRIGHTNESS
-
-          ////////////////// /////// GLOBALCOMPOSITEOPERATION
-          if (type === "sahara") {
-            ////////////composition
-            ctx.globalCompositeOperation = "overlay";
-            ctx.fillStyle = "#a58e89cc";
-            ctx.fillRect(0, 0, width, height);
-            ctx.globalCompositeOperation = "overlay";
-            ctx.fillStyle = "#a58e89cc";
-            ctx.fillRect(0, 0, width, height);
-
-            ////////////composition
-          } else if (type === "jentle") {
-
-
-            // Softer composition for mobile
-            if (matchMobile) {
-
-
-              ctx.globalCompositeOperation = "soft-light";
-              ctx.fillStyle = "#d3b5b5";  // Original color
-              ctx.fillRect(0, 0, width, height);
-
-              ctx.globalCompositeOperation = "soft-light";  // 'screen' for a more delicate blend
-              ctx.fillStyle = "rgba(211, 181, 181, 0.3)";  // Further reduce opacity
-              ctx.fillRect(0, 0, width, height);
-            } else {
-
-              // Default composition for desktop
-              ctx.globalCompositeOperation = "overlay";
-              ctx.fillStyle = "#d3b5b5";  // Original color
-              ctx.fillRect(0, 0, width, height);
-
-              ctx.globalCompositeOperation = "soft-light";
-              ctx.fillStyle = "#d3b5b5";  // Original color
-              ctx.fillRect(0, 0, width, height);
-
-            }
-
-
-            ////////////composition
-          } else if (type === "mint") {
-
-          } else if (type === "nebula") {
-            ////////////composition
-            ctx.globalCompositeOperation = "soft-light";
-            ctx.fillStyle = "#6e6b72cc";
-            ctx.fillRect(0, 0, width, height);
-            ctx.globalCompositeOperation = "soft-light";
-            ctx.fillStyle = "#6c6971cc";
-            ctx.fillRect(0, 0, width, height);
-
-            ////////////composition
-          } else if (type === "moonshine") {
-            ////////////composition
-            ctx.globalCompositeOperation = "soft-light";
-            ctx.fillStyle = "#77479f68";
-            ctx.fillRect(0, 0, width, height);
-            ctx.globalCompositeOperation = "overlay";
-            ctx.fillStyle = "#69359368";
-            ctx.fillRect(0, 0, width, height);
-
-            ////////////composition
-          } else if (type === "juice") {
-            ////////////composition
-            ctx.globalCompositeOperation = "soft-light";
-            ctx.fillStyle = "#5b6c7014";
-            ctx.fillRect(0, 0, width, height);
-            ctx.globalCompositeOperation = "overlay";
-            ctx.fillStyle = "#5b6c7014";
-            ctx.fillRect(0, 0, width, height);
-            ctx.globalCompositeOperation = "overlay";
-            ctx.fillStyle = "#5b6c7014";
-            ctx.fillRect(0, 0, width, height);
-            ////////////composition
-          } else if (type === "rainbow") {
-            ////////////composition
-            ctx.globalCompositeOperation = "overlay";
-            ctx.fillStyle = "#3950681f";
-            ctx.fillRect(0, 0, width, height);
-            ctx.globalCompositeOperation = "soft-light";
-            ctx.fillStyle = "#42806c1f";
-            ctx.fillRect(0, 0, width, height);
-
-            ////////////composition
-          } else if (type === "superstar") {
-            ////////////composition
-            ctx.globalCompositeOperation = "overlay";
-            ctx.fillStyle = "#69758113";
-            ctx.fillRect(0, 0, width, height);
-            ctx.globalCompositeOperation = "overlay";
-            ctx.fillStyle = "#69758113";
-            ctx.fillRect(0, 0, width, height);
-
-            ////////////composition
-          } else if (type === "fog") {
-            ////////////composition
-            ctx.globalCompositeOperation = "soft-light";
-            ctx.fillStyle = "#2c2b2937";
-            ctx.fillRect(0, 0, width, height);
-            ctx.globalCompositeOperation = "soft-light";
-            ctx.fillStyle = "#2c2b2937";
-            ctx.fillRect(0, 0, width, height);
-
-            ////////////composition
-          } else if (type === "vintage") {
-            ////////////composition
-
-            ctx.globalCompositeOperation = "soft-light";
-            ctx.fillStyle = "#8888b14e";
-            ctx.fillRect(0, 0, width, height);
-            ctx.globalCompositeOperation = "overlay";
-            ctx.fillStyle = "#5c83944e";
-            ctx.fillRect(0, 0, width, height);
-            ctx.globalCompositeOperation = "soft-light";
-            ctx.fillStyle = "#8888b14e";
-            ctx.fillRect(0, 0, width, height);
-            ////////////composition
-            ////////////composition
-          } else {
-          }
-          ////////////////// /////// GLOBALCOMPOSITEOPERATION
-
-          ////////////////////GRADIENT BLENDING
           if (
-            type === "jentle" ||
-            type === "mint" ||
-            type === "nebula" ||
-            type === "juice" ||
-            type === "rainbow" ||
-            type === "superstar" ||
-            type === "fog" ||
-            type === "moonshine" ||
-            type === "vintage" ||
-            type === "sahara"
+            previewFileReadimage.naturalWidth > previewFileReadimage.naturalHeight
           ) {
-            var gradient = FilterGradient(width, height, type);
-            var screen = blend(
-              ctx,
-              gradient,
-              width,
-              height,
-              function (bottomPixel: any, topPixel: any) {
-                return 255 - ((255 - topPixel) * (255 - bottomPixel)) / 255;
+            if (method === "thumb") {
+              widthx = matchMobile ? 400 : 650;
+              width = matchMobile ? 400 : 650;
+            } else {
+              if (resolution === "hd") {
+                ////////
+                /////////////////////////////////////////adjust resolution final result image//////////////////////////////////////////////
+                widthx = previewFileReadimage.naturalWidth * qualityValue;
+                width = previewFileReadimage.naturalWidth * qualityValue;
+                ////////
+                /////////////////////////////////////////adjust resolution final result image//////////////////////////////////////////////
+              } else {
+                widthx = matchMobile
+                  ? dynamicDimensionsx * 0.65
+                  : dynamicDimensionsx * 0.8;
+                width = matchMobile
+                  ? dynamicDimensionsx * 0.65
+                  : dynamicDimensionsx * 0.8;
               }
-            );
-            ctx.putImageData(screen, 0, 0);
+            }
+
+            var scalex = widthx / previewFileReadimage.naturalWidth;
+            heightx = previewFileReadimage.naturalHeight * scalex;
+            var scale = width / previewFileReadimage.naturalWidth;
+            height = previewFileReadimage.naturalHeight * scale;
+          } else {
+            if (method === "thumb") {
+              heightx = matchMobile ? 400 : 650;
+              height = matchMobile ? 400 : 650;
+            } else {
+              if (resolution === "hd") {
+                ////////
+                /////////////////////////////////////////adjust resolution final result image//////////////////////////////////////////////
+                heightx = previewFileReadimage.naturalHeight * qualityValue;
+                height = previewFileReadimage.naturalHeight * qualityValue;
+                ////////
+                /////////////////////////////////////////adjust resolution final result image//////////////////////////////////////////////
+              } else {
+                heightx = matchMobile
+                  ? dynamicDimensions * 0.7
+                  : dynamicDimensions * 0.9;
+                height = matchMobile
+                  ? dynamicDimensions * 0.7
+                  : dynamicDimensions * 0.9;
+              }
+            }
+
+            var scalex = heightx / previewFileReadimage.naturalHeight;
+            widthx = previewFileReadimage.naturalWidth * scalex;
+
+            var scale = height / previewFileReadimage.naturalHeight;
+            width = previewFileReadimage.naturalWidth * scale;
           }
 
-          ////////////////////GRADIENT BLENDING
+          canvasRef.current.height = height;
+          canvasRef.current.width = width;
+          //////////////////INITIALIZE  CANVAS
 
-          try {
-            KeepCallingThumbnail4Filters(Ref, ctx, index2, method);
+          requestAnimationFrame(async () => {
+            //////////////////CSS EDIT IMAGE WITH CTX.FILTER
 
-            if (
-              method === "image" ||
-              method === "imageHD" ||
-              method === "imageHDall"
-            ) {
-              var data = canvasRef.current.toDataURL();
 
-              Ref.current[index].src = data;
-
-              if (method === "imageHDall") {
-
-                //var data = canvasRef.current.toDataURL("image/png");
-                var data = canvasRef.current.toDataURL("image/jpeg", 0.95);
-                var datathumb = canvasRef.current.toDataURL("image/jpeg", 0.05);
-
-                const res = await fetch(data);
-                const datax = await res.blob();
-
-                const resdatathumb = await fetch(datathumb);
-                const datathumbx = await resdatathumb.blob();
-
-                var base64String = await blobToBase64(datax);
-
-                finalImageDataxx[index] = datax;
-                finalImageDataxxSD[index] = datathumbx;
-                finalImageDataxxBASE64[index] = base64String;
+            if (matchMobile) { }
+            else {
+              if (type === "lift") {
+                ctx.filter =
+                  "contrast(0.99) brightness(1) blur(0px) saturate(146%)";
+              } else if (type === "sahara") {
+                ctx.filter = "contrast(1.1) brightness(0.9) saturate(104%)";
+              } else if (type === "jentle") {
+                ctx.filter =
+                  "contrast(1) brightness(0.74) hue-rotate(17deg) saturate(80%) ";
+              } else if (type === "mint") {
+                ctx.filter = "contrast(1) brightness(0.8)  saturate(130%)  ";
+              } else if (type === "nebula") {
+                ctx.filter = "contrast(1.1) brightness(1.04)";
+              } else if (type === "juice") {
+                if (method === "thumb" && matchMobile) {
+                  ctx.filter =
+                    "contrast(1.15) brightness(0.1.01) saturate(185%) blur(0px)";
+                } else {
+                  ctx.filter =
+                    "contrast(0.96) brightness(1) saturate(185%) blur(0.55px)";
+                }
+              } else if (type === "rainbow") {
+                ctx.filter = "contrast(1.17) brightness(0.92) saturate(145%) ";
+              } else if (type === "superstar") {
+                ctx.filter =
+                  "contrast(1.07) brightness(0.93) saturate(130%)  hue-rotate(1.4deg)";
+              } else if (type === "fog") {
+                ctx.filter = "contrast(1.2) brightness(0.95) saturate(137%)";
+              } else if (type === "moonshine") {
+                ctx.filter =
+                  "contrast(0.95) brightness(1.05.2) saturate(45%) blur(0px)";
+              } else if (type === "vintage") {
+                ctx.filter = " contrast(1.2)  brightness(0.77.6)  saturate(38%)";
+              } else {
               }
+            }
 
-              regimageholdfilterxx[index] = data;
-              effectModexx[index] = type;
 
-              ctx.clearRect(
+            //////////////////CSS EDIT IMAGE WITH CTX.FILTER
+
+            ctx.drawImage(
+              previewFileReadimage,
+              0,
+              0,
+              canvasRef.current.width,
+              canvasRef.current.height
+            );
+
+            //////////////////////VIGNETTE
+            var w = canvasRef.current.width;
+            var h = canvasRef.current.height;
+
+
+            //////////////////////VIGNETTE
+            var width = w;
+            var height = h;
+            if (type === "sahara") {
+              var gradient = ctx.createLinearGradient(
+                w / 2.7,
+                h / 2,
                 0,
-                0,
-                canvasRef.current.width,
-                canvasRef.current.height
+                w / 4.8,
+                h / 2,
+                w * 8.65
               );
 
-              if (method === "imageHD") {
-                sethdfilter(false);
-                setblink(false);
-                seteffectMode(effectModexx);
-                setregimageholdfilter(regimageholdfilterxx);
+              // Add original color stops for desktop
+              gradient.addColorStop(0, "rgba(80, 111, 32, 0.01)");
+              gradient.addColorStop(1, "rgba(10, 10, 10, 0.001)");
+
+              if (matchMobile) {
+                // Modify gradient stops for mobile to simulate contrast, brightness, and saturation
+
+                // Slightly darker for reduced brightness
+                gradient.addColorStop(0.3, "rgba(90, 130, 40, 0.02)");  // Darker and more saturated
+                gradient.addColorStop(0.7, "rgba(50, 50, 20, 0.015)");  // More contrast between stops
+                gradient.addColorStop(1, "rgba(10, 10, 10, 0.01)");     // Deeper, maintaining darkness
+              }
+
+              ctx.fillStyle = gradient;
+              ctx.fillRect(0, 0, width, height);
+            } else if (type === "mint") {
+
+            } else if (type === "lift") {
+              var gradient = ctx.createRadialGradient(
+                w / 2,
+                h / 3,
+                0,
+                w / 2,
+                h / 3,
+                w * 0.66
+              );
+
+
+
+
+              // Add original color stops (unchanged for PC)
+              gradient.addColorStop(0, "rgba(205, 205, 205,0.0001)");
+              gradient.addColorStop(1, "rgba(255, 255, 255,0.03)");
+
+              if (matchMobile) {
+                // Modify gradient for mobile to simulate brightness, contrast, and saturation
+
+                // Brighter color stop to simulate brightness
+                gradient.addColorStop(0.3, "rgba(255, 255, 200, 0.1)");  // Bright yellowish tone for brightness
+
+                // Darker contrast at the edge, more contrast effect
+                gradient.addColorStop(0.7, "rgba(100, 100, 100, 0.3)");  // Darker to simulate contrast
+
+                // More intense saturation with a bit of color
+                gradient.addColorStop(1, "rgba(200, 180, 180, 0.6)");    // Slight color tint for saturation
+              }
+
+              ctx.fillStyle = gradient;
+              ctx.fillRect(0, 0, width, height);
+            } else if (type === "juice") {
+              var gradient = ctx.createRadialGradient(
+                w / 2,
+                h / 3,
+                0,
+                w / 2,
+                h / 3,
+                w * 0.66
+              );
+
+              // Add original color stops for desktop
+              gradient.addColorStop(0, "rgba(255, 255, 255,0.01)");
+              gradient.addColorStop(1, "rgba(255, 255, 255,0.001)");
+
+              if (matchMobile) {
+                // Modify gradient stops for mobile to simulate contrast, brightness, saturation, and blur
+
+                // Slight reduction in contrast, hence making the colors less distinct
+                gradient.addColorStop(0.8, "rgba(240, 240, 240, 0.1)");  // Slightly less contrast
+
+                // Increased saturation with more intense tones
+                gradient.addColorStop(0.75, "rgba(240, 240, 240, 0.1)"); // More saturation, richer tones
+
+                // Subtle blur effect can’t be directly simulated in gradient, but we use softer transitions
+                gradient.addColorStop(1, 'rgba(250, 200, 200, 0.1)');    // Softer transition for blur effect
+              }
+
+              ctx.fillStyle = gradient;
+              ctx.fillRect(0, 0, width, height);
+            } else if (type === "moonshine") {
+              var gradient = ctx.createLinearGradient(
+                w / 2,
+                h / 3,
+                0,
+                w / 2,
+                h / 3,
+                w * 0.4
+              );
+
+
+              // Add original color stops for desktop
+              gradient.addColorStop(0, "rgba(255, 255, 255, 0.011)");
+              gradient.addColorStop(1, "#403d6149");
+
+
+              ctx.fillStyle = gradient;
+              ctx.fillRect(0, 0, width, height);
+
+              // Second radial gradient
+              var gradient = ctx.createRadialGradient(
+                w / 2,
+                h / 2,
+                0,
+                w / 2,
+                h / 2,
+                w * 0.3
+              );
+
+              // Add original color stops for desktop
+              gradient.addColorStop(0, "rgba(0, 0, 0, 0.02)");
+              gradient.addColorStop(1, "rgba(255, 255, 255, 0.001)");
+
+              if (matchMobile) {
+                // Further reduction in saturation and brightness simulation
+                gradient.addColorStop(0.3, "rgba(50, 50, 50, 0.02)");   // Slightly brighter center for brightness
+                gradient.addColorStop(1, "rgba(200, 200, 200, 0.02)");  // Desaturated outer region
+              }
+
+              ctx.fillStyle = gradient;
+              ctx.fillRect(0, 0, width, height);
+
+            } else if (type === "vintage") {
+
+            } else if (type === "nebula") {
+              var gradient = ctx.createRadialGradient(
+                w / 2,
+                h / 2,
+                0,
+                w / 2,
+                h / 2,
+                w * 0.65
+              );
+
+              // Add original color stops for desktop
+              gradient.addColorStop(0, "rgba(255, 255, 255, 0.01)");
+              gradient.addColorStop(1, "rgba(0, 0, 0, 0.08)");
+
+              if (matchMobile) {
+                // Modify gradient stops for mobile to simulate increased contrast and brightness
+
+                // Slight increase in brightness
+                gradient.addColorStop(0.3, "rgba(255, 255, 255, 0.02)"); // Slightly brighter center
+
+                // More distinct dark areas for increased contrast
+                gradient.addColorStop(0.7, "rgba(30, 30, 30, 0.1)");     // More intense dark area
+                gradient.addColorStop(1, "rgba(0, 0, 0, 0.12)");         // Darker outer region for contrast
+              }
+
+              ctx.fillStyle = gradient;
+              ctx.fillRect(0, 0, width, height);
+            }
+            else if (type === "rainbow") {
+              var gradient = ctx.createRadialGradient(
+                w / 2,
+                h / 2,
+                0,
+                w / 2,
+                h / 2,
+                w * 0.68
+              );
+
+              // Add original color stops for desktop
+              gradient.addColorStop(0, "rgba(163, 218, 37,0.004)");
+              gradient.addColorStop(1, "rgba(27, 194, 236,0.004)");
+
+              if (matchMobile) {
+                // Modify gradient stops for mobile to simulate contrast, brightness, and saturation
+
+                // Slightly more distinct colors to simulate increased contrast
+                gradient.addColorStop(0.3, "rgba(163, 218, 37, 0.05)"); // Brighter, more vibrant green
+                gradient.addColorStop(0.7, "rgba(27, 194, 236, 0.05)"); // More intense cyan for saturation
+
+                // Darker outer area to simulate reduced brightness
+                gradient.addColorStop(1, "rgba(10, 70, 130, 0.08)");   // Darker blue for contrast and brightness
+              }
+
+              ctx.fillStyle = gradient;
+              ctx.fillRect(0, 0, width, height);
+            }
+            else if (type === "fog") {
+              var gradient = ctx.createLinearGradient(
+                w / 2,
+                h / 71,
+                0,
+                w / 19,
+                h / 2,
+                w * 0.4
+              );
+
+
+              if (matchMobile) {
+                // Modify gradient stops for mobile to simulate contrast, brightness, and saturation
+
+                // More intense light and dark areas to simulate increased contrast
+                gradient.addColorStop(0.3, "rgba(255, 255, 255, 0.02)"); // Slightly more noticeable light area
+
+                // Darker and more vibrant colors for saturation
+                gradient.addColorStop(0.7, "rgba(22, 36, 86, 0.2)");    // Darker and more saturated greenish tone
+
+                // Increased darkness for the end color stop to simulate reduced brightness
+                gradient.addColorStop(1, "rgba(20, 50, 30, 0.4)");      // Darker end point for reduced brightness
               } else {
 
-                if (index + 1 > selectedImage.length - 1) {
-                  setblink(false);
-                  if (method === "imageHDall") {
-                    setfinalImageData(finalImageDataxx);
-                    setfinalImageDataSD(finalImageDataxxSD);
-                    setfinalImageDataBASE64(finalImageDataxxBASE64);
+                // Add original color stops for desktop
+                gradient.addColorStop(0, "rgba(255, 255, 255, 0)");
+                gradient.addColorStop(1, "#20422e5a");
 
-                    setsupeFilterLoadFade(false);
-                    setstartTopicCap(true);
-                  }
+              }
+
+              ctx.fillStyle = gradient;
+              ctx.fillRect(0, 0, width, height);
+            }
+            else {
+            }
+            //////////////////////VIGNETTE
+
+            //////////////////////GRADIENT BRIGHTNESS
+
+            if (type === "normal") {
+            } else {
+              var gradient = ctx.createRadialGradient(
+                w / 2,
+                h / 2,
+                0,
+                w / 2,
+                h / 2,
+                w * 0.6
+              );
+              if (type === "lift") {
+                gradient.addColorStop(0, "rgba(255, 255, 255,0.001)");
+                gradient.addColorStop(1, "rgba(255, 255, 255,0.05)");
+              } else if (type === "fog") {
+                gradient.addColorStop(0, "#c9d6df11");
+                gradient.addColorStop(1, "#bef0ce13");
+              } else if (type === "jentle") {
+                gradient.addColorStop(0, "rgba(255, 255, 255,0.001)");
+                gradient.addColorStop(1, "rgba(255, 255, 255,0.001)");
+              } else if (type === "vintage") {
+
+              } else if (
+                type === "superstar" ||
+                type === "rainbow" ||
+                type === "sahara"
+              ) {
+                gradient.addColorStop(0, "rgba(255, 255, 255,0.002)");
+                gradient.addColorStop(1, "rgba(255, 255, 255,0.001)");
+              } else {
+                gradient.addColorStop(0, "rgba(255, 255, 255,0.002)");
+                gradient.addColorStop(1, "rgba(255, 255, 255,0.001)");
+              }
+
+              ctx.fillStyle = gradient;
+              ctx.fillRect(0, 0, width, height);
+            }
+
+            //////////////////////GRADIENT BRIGHTNESS
+
+            ////////////////// /////// GLOBALCOMPOSITEOPERATION
+            if (type === "sahara") {
+              ////////////composition
+              ctx.globalCompositeOperation = "overlay";
+              ctx.fillStyle = "#a58e89cc";
+              ctx.fillRect(0, 0, width, height);
+              ctx.globalCompositeOperation = "overlay";
+              ctx.fillStyle = "#a58e89cc";
+              ctx.fillRect(0, 0, width, height);
+
+              ////////////composition
+            } else if (type === "jentle") {
+
+
+              // Softer composition for mobile
+              if (matchMobile) {
+
+
+                ctx.globalCompositeOperation = "soft-light";
+                ctx.fillStyle = "#d3b5b5";  // Original color
+                ctx.fillRect(0, 0, width, height);
+
+                ctx.globalCompositeOperation = "soft-light";  // 'screen' for a more delicate blend
+                ctx.fillStyle = "rgba(211, 181, 181, 0.3)";  // Further reduce opacity
+                ctx.fillRect(0, 0, width, height);
+              } else {
+
+                // Default composition for desktop
+                ctx.globalCompositeOperation = "overlay";
+                ctx.fillStyle = "#d3b5b5";  // Original color
+                ctx.fillRect(0, 0, width, height);
+
+                ctx.globalCompositeOperation = "soft-light";
+                ctx.fillStyle = "#d3b5b5";  // Original color
+                ctx.fillRect(0, 0, width, height);
+
+              }
+
+
+              ////////////composition
+            } else if (type === "mint") {
+
+            } else if (type === "nebula") {
+              ////////////composition
+              ctx.globalCompositeOperation = "soft-light";
+              ctx.fillStyle = "#6e6b72cc";
+              ctx.fillRect(0, 0, width, height);
+              ctx.globalCompositeOperation = "soft-light";
+              ctx.fillStyle = "#6c6971cc";
+              ctx.fillRect(0, 0, width, height);
+
+              ////////////composition
+            } else if (type === "moonshine") {
+              ////////////composition
+              ctx.globalCompositeOperation = "soft-light";
+              ctx.fillStyle = "#77479f68";
+              ctx.fillRect(0, 0, width, height);
+              ctx.globalCompositeOperation = "overlay";
+              ctx.fillStyle = "#69359368";
+              ctx.fillRect(0, 0, width, height);
+
+              ////////////composition
+            } else if (type === "juice") {
+              ////////////composition
+              ctx.globalCompositeOperation = "soft-light";
+              ctx.fillStyle = "#5b6c7014";
+              ctx.fillRect(0, 0, width, height);
+              ctx.globalCompositeOperation = "overlay";
+              ctx.fillStyle = "#5b6c7014";
+              ctx.fillRect(0, 0, width, height);
+              ctx.globalCompositeOperation = "overlay";
+              ctx.fillStyle = "#5b6c7014";
+              ctx.fillRect(0, 0, width, height);
+              ////////////composition
+            } else if (type === "rainbow") {
+              ////////////composition
+              ctx.globalCompositeOperation = "overlay";
+              ctx.fillStyle = "#3950681f";
+              ctx.fillRect(0, 0, width, height);
+              ctx.globalCompositeOperation = "soft-light";
+              ctx.fillStyle = "#42806c1f";
+              ctx.fillRect(0, 0, width, height);
+
+              ////////////composition
+            } else if (type === "superstar") {
+              ////////////composition
+              ctx.globalCompositeOperation = "overlay";
+              ctx.fillStyle = "#69758113";
+              ctx.fillRect(0, 0, width, height);
+              ctx.globalCompositeOperation = "overlay";
+              ctx.fillStyle = "#69758113";
+              ctx.fillRect(0, 0, width, height);
+
+              ////////////composition
+            } else if (type === "fog") {
+              ////////////composition
+              ctx.globalCompositeOperation = "soft-light";
+              ctx.fillStyle = "#2c2b2937";
+              ctx.fillRect(0, 0, width, height);
+              ctx.globalCompositeOperation = "soft-light";
+              ctx.fillStyle = "#2c2b2937";
+              ctx.fillRect(0, 0, width, height);
+
+              ////////////composition
+            } else if (type === "vintage") {
+              ////////////composition
+
+              ctx.globalCompositeOperation = "soft-light";
+              ctx.fillStyle = "#8888b14e";
+              ctx.fillRect(0, 0, width, height);
+              ctx.globalCompositeOperation = "overlay";
+              ctx.fillStyle = "#5c83944e";
+              ctx.fillRect(0, 0, width, height);
+              ctx.globalCompositeOperation = "soft-light";
+              ctx.fillStyle = "#8888b14e";
+              ctx.fillRect(0, 0, width, height);
+              ////////////composition
+              ////////////composition
+            } else {
+            }
+            ////////////////// /////// GLOBALCOMPOSITEOPERATION
+
+            ////////////////////GRADIENT BLENDING
+            if (
+              type === "jentle" ||
+              type === "mint" ||
+              type === "nebula" ||
+              type === "juice" ||
+              type === "rainbow" ||
+              type === "superstar" ||
+              type === "fog" ||
+              type === "moonshine" ||
+              type === "vintage" ||
+              type === "sahara"
+            ) {
+              var gradient = FilterGradient(width, height, type);
+              var screen = blend(
+                ctx,
+                gradient,
+                width,
+                height,
+                function (bottomPixel: any, topPixel: any) {
+                  return 255 - ((255 - topPixel) * (255 - bottomPixel)) / 255;
+                }
+              );
+              ctx.putImageData(screen, 0, 0);
+            }
+
+            ////////////////////GRADIENT BLENDING
+
+            try {
+              KeepCallingThumbnail4Filters(Ref, ctx, index2, method);
+
+              if (
+                method === "image" ||
+                method === "imageHD" ||
+                method === "imageHDall"
+              ) {
+                var data = canvasRef.current.toDataURL();
+
+                Ref.current[index].src = data;
+
+                if (method === "imageHDall") {
+
+                  //var data = canvasRef.current.toDataURL("image/png");
+                  var data = canvasRef.current.toDataURL("image/jpeg", 0.95);
+                  var datathumb = canvasRef.current.toDataURL("image/jpeg", 0.05);
+
+                  const res = await fetch(data);
+                  const datax = await res.blob();
+
+                  const resdatathumb = await fetch(datathumb);
+                  const datathumbx = await resdatathumb.blob();
+
+                  var base64String = await blobToBase64(datax);
+
+                  finalImageDataxx[index] = datax;
+                  finalImageDataxxSD[index] = datathumbx;
+                  finalImageDataxxBASE64[index] = base64String;
+                }
+
+                regimageholdfilterxx[index] = data;
+                effectModexx[index] = type;
+
+                ctx.clearRect(
+                  0,
+                  0,
+                  canvasRef.current.width,
+                  canvasRef.current.height
+                );
+
+                if (method === "imageHD") {
+                  sethdfilter(false);
+                  setblink(false);
                   seteffectMode(effectModexx);
                   setregimageholdfilter(regimageholdfilterxx);
                 } else {
-                  if (method === "imageHDall") {
-                    ApplyImageFilter(
-                      effectMode[index + 1],
-                      index + 1,
-                      index2 + 1,
-                      getImageWidth,
-                      "imageHDall",
-                      "hd"
-                    );
+
+                  if (index + 1 > selectedImage.length - 1) {
+                    setblink(false);
+                    if (method === "imageHDall") {
+                      setfinalImageData(finalImageDataxx);
+                      setfinalImageDataSD(finalImageDataxxSD);
+                      setfinalImageDataBASE64(finalImageDataxxBASE64);
+
+                      setsupeFilterLoadFade(false);
+                      setstartTopicCap(true);
+                    }
+                    seteffectMode(effectModexx);
+                    setregimageholdfilter(regimageholdfilterxx);
                   } else {
-                    ApplyImageFilter(
-                      typex,
-                      index + 1,
-                      index2 + 1,
-                      getImageWidth,
-                      "image",
-                      "sd"
-                    );
+                    if (method === "imageHDall") {
+                      ApplyImageFilter(
+                        effectMode[index + 1],
+                        index + 1,
+                        index2 + 1,
+                        getImageWidth,
+                        "imageHDall",
+                        "hd"
+                      );
+                    } else {
+                      ApplyImageFilter(
+                        typex,
+                        index + 1,
+                        index2 + 1,
+                        getImageWidth,
+                        "image",
+                        "sd"
+                      );
+                    }
                   }
                 }
               }
-            }
 
-            if (method === "supersticker") {
-              if (FilterUnderStickerStopFiltering) {
-                trapfiltersxx[index] = true;
-                settrapfilters(trapfiltersxx);
-              } else {
-                trapfiltersxx[index] = false;
-                settrapfilters(trapfiltersxx);
-              }
-
-              var data = canvasRef.current.toDataURL();
-              Ref.current[index].src = data;
-
-              if (effectMode[index] !== "normal") {
-                if (duplicateItemupload[index]) {
+              if (method === "supersticker") {
+                if (FilterUnderStickerStopFiltering) {
+                  trapfiltersxx[index] = true;
+                  settrapfilters(trapfiltersxx);
                 } else {
-                  regimageholdfilterxx[index] = data;
-                  setregimageholdfilter(regimageholdfilterxx);
+                  trapfiltersxx[index] = false;
+                  settrapfilters(trapfiltersxx);
                 }
-              }
-              ctx.clearRect(
-                0,
-                0,
-                canvasRef.current.width,
-                canvasRef.current.height
-              );
-              setactiveSticker(100);
-            }
-          } catch {
-            console.log("filtermode  filter error");
-          }
-        });
 
-        canvasRef.current.style.width = `${widthx}px`;
-        canvasRef.current.style.height = `${heightx}px`;
-      };
+                var data = canvasRef.current.toDataURL();
+                Ref.current[index].src = data;
+
+                if (effectMode[index] !== "normal") {
+                  if (duplicateItemupload[index]) {
+                  } else {
+                    regimageholdfilterxx[index] = data;
+                    setregimageholdfilter(regimageholdfilterxx);
+                  }
+                }
+                ctx.clearRect(
+                  0,
+                  0,
+                  canvasRef.current.width,
+                  canvasRef.current.height
+                );
+                setactiveSticker(100);
+              }
+            } catch {
+              console.log("filtermode  filter error");
+            }
+          });
+
+          canvasRef.current.style.width = `${widthx}px`;
+          canvasRef.current.style.height = `${heightx}px`;
+        };
+
+      }
     }
   }
 
@@ -1292,11 +1299,36 @@ function ImageFilterinnerx({
     }
   }, [activatefilterImageReducer]);
 
+
+
+  useEffect(() => {
+
+
+    if (Timerf.current) {
+      clearTimeout(Timerf.current);
+    }
+    Timerf.current = setTimeout(() => {
+
+      if (ActiveSlide === 12) { } else {
+        startImageFilter(ActiveSlide);
+      }
+
+
+    }, 800)
+
+
+  }, [ActiveSlide])
+
   const startImageFilter = (i: number) => {
+    if (Timerf.current) {
+      clearTimeout(Timerf.current);
+    }
+
     if (i === 12 && ActiveSlide === i) {
       setsupeFilterLoadFade(true);
       ApplyImageFilter(effectMode[0], 0, 0, getImageWidth, "imageHDall", "hd");
     } else {
+
       clickOptions(i, optionsClickType, "filter");
 
       if (Timer.current) {
@@ -1313,6 +1345,11 @@ function ImageFilterinnerx({
           "sd"
         );
       } else {
+
+
+
+
+
         if (i === 12) {
         } else {
           Timer.current = setTimeout(function () {
@@ -1516,13 +1553,14 @@ function ImageFilterinnerx({
                           margin: "auto",
                           marginLeft: "2vw",
                           paddingBottom: "0px",
-                          fontFamily: "Roboto Condensed",
+                          ///  fontFamily: "Arial, Helvetica, sans-serif",
+                          fontFamily: "kaushan_scriptregular",
                           fontSize: matchPc
                             ? "1.5vw"
                             : matchTablet
                               ? "2.08vh"
                               : "2.4vh",
-                          fontWeight: "bolder",
+                          fontWeight: "normal",
                           visibility: ActiveSlide === i ? "visible" : "hidden",
                           filter: darkmodeReducer
                             ? "drop-shadow(1.2px 0.1px 1.92px rgba(255, 255, 255, 0.6))"

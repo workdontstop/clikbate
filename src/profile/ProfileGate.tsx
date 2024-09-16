@@ -171,6 +171,9 @@ function ProfileGatex({
     const navigate = useNavigate();
 
 
+
+
+
     /////
     ///////
     /////////////
@@ -230,13 +233,16 @@ function ProfileGatex({
     const [ExtendBill, setExtendBill] = useState(false);
 
     const heightAnimation = useSpring({
-        height: ExtendBill ? (matchMobile ? '49vh' : '70vh') : (matchMobile ? '30vh' : '47vh'),
+        height: ExtendBill ? (matchMobile ? '50vh' : '100vh') :
+            (matchMobile ? '30vh' : '47vh'),
         config: { duration: 300 },
         marginTop: '-3vh'
     });
 
 
     const [NavUsed, setNavUsed] = useState(false);
+
+
 
     useEffect(() => {
 
@@ -983,6 +989,7 @@ function ProfileGatex({
 
 
     const [StopMini, setStopMini] = useState(false);
+
 
 
 
@@ -2551,15 +2558,29 @@ function ProfileGatex({
     return (
         <>
 
-            <Grid ref={getSliderWidthRef} item xs={1} style={{
-                height: '0px',
-            }}>
+            <Grid ref={getSliderWidthRef} item xs={1}
+
+
+
+                style={{
+                    height: '0px',
+                }}>
             </Grid>
 
 
             <LoaderPost RandomColor={RandomColor} autoSlideDisplay={autoSlideDisplay} sliderLoader={sliderLoader} />
 
-            <Grid container className="dontallowhighlighting" style={{ padding: '0px' }}>
+            <Grid container
+
+
+                onClick={() => {
+
+                    if (AutoGo) {
+                        setAutoGo(false);
+                    }
+                }}
+
+                className="dontallowhighlighting" style={{ padding: '0px' }}>
 
 
 
@@ -2785,7 +2806,7 @@ function ProfileGatex({
                                 position: "relative",
                                 width: widthProfilePic,
                                 height: "auto",
-                                top: matchMobile ? ShowImageSlider ? '1.8vh' : "11vh" :
+                                top: matchMobile ? ShowImageSlider ? '5.8vh' : "11vh" :
                                     ShowImageSlider ? '4vh' : '4vh',
 
                                 marginLeft: matchMobile ? "65vw" : '70vw',

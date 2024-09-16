@@ -275,7 +275,7 @@ function AudioEditorx({
           src={`${REACT_APP_CLOUNDFRONT}${imageThumb}`}
 
           style={{
-            width: "20%",
+            width: matchMobile ? '100%' : "20%",
             height: "auto",
             position: 'absolute',
             zIndex: 1
@@ -285,7 +285,7 @@ function AudioEditorx({
         <img
           src={`${REACT_APP_CLOUNDFRONT}${image}`}
           style={{
-            width: "20%",
+            width: matchMobile ? '100%' : "20%",
             height: "auto",
             position: 'relative',
             zIndex: 2
@@ -293,20 +293,31 @@ function AudioEditorx({
         />
         {
 
-          p && recordedAudioUrl ? <audio
+          recordedAudioUrl ? <audio
             ref={audioPreviewRef}
             src={recordedAudioUrl}
             controls
-            style={{ width: "50%", margin: "auto", textAlign: "center" }}
+            style={{
+              width: matchMobile ? '100%' : "50%", margin: "auto", textAlign: "center",
+              visibility: p ? 'visible' : 'hidden'
+            }}
           ></audio> :
 
-            AudioUrl ?
-              <audio
-                ref={audioPlayerRef}
-                src={AudioUrl}
-                controls
-                style={{ width: "50%", margin: "auto", textAlign: "center" }}
-              ></audio> : null}
+            null}
+
+
+
+
+        <audio
+          ref={audioPlayerRef}
+          src={AudioUrl}
+          controls
+          style={{
+            width: matchMobile ? '100%' : "50%", margin: "auto", textAlign: "center",
+            visibility: p ? 'hidden' : 'visible'
+          }}
+        ></audio>
+
 
 
 
@@ -315,7 +326,7 @@ function AudioEditorx({
           bottom: '-7vh', position: 'relative', display: 'flex', alignItems: 'center',
           justifyContent: 'center', fontSize: '24px', fontFamily: 'Helvetica, Arial, sans-serif', color: darkmodeReducer ? "#ffffff" : '#000000',
         }}>
-          <Grid item xs={1}
+          <Grid item xs={3} sm={1}
             onClick={() => {
               setp(false)
             }}
@@ -351,7 +362,7 @@ function AudioEditorx({
           justifyContent: 'center', fontSize: '24px', fontFamily: 'Helvetica, Arial, sans-serif',
           color: darkmodeReducer ? "#ffffff" : '#000000',
         }}>
-          <Grid item xs={2}
+          <Grid item xs={4} sm={1}
 
             onClick={
               () => {
@@ -361,6 +372,7 @@ function AudioEditorx({
             style={{
               cursor: recording ? 'default' : 'pointer',
               opacity: recording ? 0.25 : 1,
+
               height: '15vh', border: darkmodeReducer ? '2px solid white' : '2px solid black',
 
               borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -370,7 +382,7 @@ function AudioEditorx({
           </Grid>
 
 
-          {recording ? <Grid className="blinking" item xs={2} style={{
+          {recording ? <Grid className="blinking" item xs={4} sm={1} style={{
             height: '15vh', border: '0px solid white', borderRadius: '8px',
             display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '24px', visibility: 'visible'
           }}>
@@ -386,12 +398,13 @@ function AudioEditorx({
                 fontSize: matchMobile
                   ? `3vh`
                   : `2.5vw`,
-                color: 'red'
+                color: 'red',
+                marginTop: matchMobile ? '2vh' : ''
 
               }}
             />
           </Grid> :
-            <Grid item xs={2}
+            <Grid item xs={4} sm={1}
               onClick={() => {
                 /// onClick={saveRecording}
                 setp(true)
@@ -410,7 +423,7 @@ function AudioEditorx({
                 stopRecording();
               }}
 
-            xs={2} style={{
+            xs={4} sm={1} style={{
               cursor: recording ? 'pointer' : 'default',
               opacity: recording ? 1 : 0.25,
 
@@ -479,7 +492,7 @@ function AudioEditorx({
             style={{ margin: "auto", color: darkmodeReducer ? "#ffffff" : '#000000', fontSize: "2.5vw" }}
           />
         </Grid>
-      </Grid>
+      </Grid >
 
 
     </>

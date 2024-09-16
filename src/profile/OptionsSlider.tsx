@@ -129,7 +129,7 @@ function OptionsSliderx({
 
   if (typeUpload === 2) {
     var addedwidth;
-    addedwidth = matchTablet || matchMobile ? 80 : 25;
+    addedwidth = matchTablet || matchMobile ? 77 : 78;
     getSliderWidthNew = getSliderWidthA + marginadd + addedwidth;
   } else {
     getSliderWidthNew = matchPc

@@ -12,20 +12,30 @@ interface ImageSliderProps {
 
 }
 
+
+
+
 const ImageSlider: React.FC<ImageSliderProps> = ({ RandomColor, FeedType, setFeedType, Explainx, callPaginationx }) => {
     const { REACT_APP_CLOUNDFRONT } = process.env;
 
     interface RootStateReducerImage {
         UserdataReducer: {
             billboard1: string;
+            memeberPageid: number;
         };
     }
 
     const {
-        billboard1,
+        billboard1, memeberPageid
     } = useSelector((state: RootStateReducerImage) => ({
         ...state.UserdataReducer,
     }));
+
+
+
+
+
+
 
     const images = [
         `${REACT_APP_CLOUNDFRONT}lisa-blackpink-v0-vat3v3pubew91.webp`,
@@ -35,7 +45,11 @@ const ImageSlider: React.FC<ImageSliderProps> = ({ RandomColor, FeedType, setFee
         `${REACT_APP_CLOUNDFRONT}0b5b23f942c2a6fa3cd88a77c5666bc2.jpg`,
     ];
 
-    const textArray = [' Feeds', 'Explain IT', 'Friends', 'Discover', 'Topics'];
+
+
+    const textArray = memeberPageid ?
+        ['Posts', 'Explain IT', 'Friends', 'Discover', 'Topics']
+        : [' Feeds', 'Explain IT', 'Friends', 'Discover', 'Topics'];
 
     const [activeIndex, setActiveIndex] = useState<number | null>(FeedType);
 

@@ -52,6 +52,11 @@ import UploadIcon from "@mui/icons-material/Upload";
 import { readFileContent } from './FileReader';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { InteractMenu } from "./InteractMenu";
+
+import { InteractCreate } from "./InteractCreate";
+
+
+
 import { VideoEditor } from "./VideoEditor";
 import { Tutorial } from "../Tutorial";
 
@@ -479,17 +484,39 @@ function Superstickersx({
   ///
   ///
   ///GET OPTIONS SLIDER IMAGE WIDTH FROM MATERIAL UI GRID
+
+  const [mobWide, setmobWide] = useState(false);
+
   useEffect(() => {
-    if (matchTabletMobile && longmobileimage === 0) {
-      seticonpositionY(window.innerHeight - heightx);
-      seticonpositionX(window.innerWidth - window.innerWidth);
-      seticonpositionBottom(heightx);
-    } else {
+
+    if (matchTabletMobile) {
+
+      if (OriginalImageWidth > OriginalImageHeight) {
+        seticonpositionY(window.innerHeight / 15);
+        seticonpositionX(window.innerWidth / 1.25);
+        seticonpositionBottom(window.innerHeight / 1.5);
+
+        setmobWide(true);
+      } else {
+
+        seticonpositionY(window.innerHeight / 15);
+        seticonpositionX(window.innerWidth / 1.25);
+        seticonpositionBottom(window.innerHeight / 1.15);
+
+        setmobWide(false);
+      }
+
+
+
+
+
+    }
+    else {
       var xtra;
       if (OriginalImageWidth > OriginalImageHeight) {
         xtra = 140;
       } else {
-        xtra = 134;
+        xtra = 100;
       }
       seticonpositionY(window.innerHeight - window.innerHeight + 5);
       var qq = window.innerWidth - widthx;
@@ -920,7 +947,9 @@ function Superstickersx({
 
 
 
-  const [interactHeightResolution, setinteractHeightResolution] = useState(window.innerHeight);
+  const [interactHeightResolution, setinteractHeightResolution] = useState(window.innerHeight * 1);
+
+
 
   const [canvasInteractWidth, setcanvasInteractWidth] = useState(0);
 
@@ -955,171 +984,6 @@ function Superstickersx({
   const [adjustinteract1, setadjustinteract1] = useState(false);
   const [adjustinteract2, setadjustinteract2] = useState(false);
 
-  const handleTouchStartIn = useCallback((e: any, type: any) => {
-    ////mouseover(0);
-
-    if (StopTouch) { }
-    else {
-
-
-
-      var zx = type === 0 ? e.clientX : e.touches[0].clientX;
-      var zy = type === 0 ? e.clientY : e.touches[0].clientY;
-
-      const canvasWidth = canvasRefIn.current.width; // Get the canvas width
-      const xCoordinate = zx; // The current X coordinate of the arc
-      const xTravelPercentage = (xCoordinate / canvasWidth) * 100;
-
-
-      const canvasHeight = canvasRefIn.current.height; // Get the canvas height
-      const yCoordinate = zy; // The current Y coordinate of the arc
-      const yTravelPercentage = (yCoordinate / canvasHeight) * 100;
-
-
-      const newCropInitialIn = {
-        x: xTravelPercentage,
-        y: yTravelPercentage,
-      };
-
-
-      const newCropInitialIn2 = {
-        x: xTravelPercentage,
-        y: yTravelPercentage,
-      };
-
-
-
-      // console.log(e.clientX);
-      if (interactContent[index] || interactContent2[index]) {
-
-
-        var context = canvasRefIn.current.getContext("2d");
-        const pictureWidth = canvasInteractWidth;
-
-        const offsetX = (screenWidth - pictureWidth) / 2;
-
-
-
-
-        if (context.isPointInPath(e.clientX, e.clientY)) {
-
-          if (Touched === 1 || Touched === 2) { } else {
-            //calldraw(3, e.clientX, e.clientY, 0); 
-          }
-
-
-        } else {
-
-          if (interactContent[index]) {
-
-            if (adjustinteract1) {
-              // Update the array at the specified index or add a new element if the index is not present
-              setcropInitialIn((prevArray: any) => {
-                const newArray: any = [...prevArray];
-                newArray[index] = newCropInitialIn;
-                return newArray;
-              });
-              if (showBorder) { } else { setshowBorder(true); }
-              if (canxxtim.current) {
-                clearTimeout(canxxtim.current);
-              }
-              canxxtim.current = setTimeout(() => {
-                setshowBorder(false);
-              }, canxxTime);
-
-            }
-
-          } else {
-
-
-
-            // Update the array at the specified index or add a new element if the index is not present
-            setcropInitialIn((prevArray: any) => {
-              const newArray: any = [...prevArray];
-              newArray[index] = newCropInitialIn;
-              return newArray;
-            });
-
-            if (e.target) {
-
-              triggerFileInput(1);
-
-
-              // Other logic here...
-            }
-          }
-
-          if (interactContent2[index]) {
-            if (adjustinteract2) {
-              // Update the array at the specified index or add a new element if the index is not present
-              setcropInitialIn2((prevArray: any) => {
-                const newArray: any = [...prevArray];
-                newArray[index] = newCropInitialIn2;
-                return newArray;
-              });
-              if (showBorder) { } else { setshowBorder(true); }
-              if (canxxtim.current) {
-                clearTimeout(canxxtim.current);
-              }
-              canxxtim.current = setTimeout(() => {
-                setshowBorder(false);
-              }, canxxTime);
-
-
-            }
-            if (Touched === 1 || Touched === 2) { } else { //calldraw(3, e.clientX, e.clientY, 0);
-            }
-          } else {
-
-
-
-
-            // Update the array at the specified index or add a new element if the index is not present
-            setcropInitialIn2((prevArray: any) => {
-              const newArray: any = [...prevArray];
-              newArray[index] = newCropInitialIn2;
-              return newArray;
-            });
-            if (e.target) {
-              triggerFileInput(2);
-              // Other logic here...
-            }
-          }
-
-        }
-
-
-
-      } else {
-
-
-
-        // Update the array at the specified index or add a new element if the index is not present
-        setcropInitialIn((prevArray: any) => {
-          const newArray: any = [...prevArray];
-          newArray[index] = newCropInitialIn;
-          return newArray;
-        });
-
-        if (e.target) {
-
-
-          triggerFileInput(1);
-
-
-          // Other logic here...
-        }
-
-      }
-
-      ///BREAK
-      ///
-    }
-
-
-
-  }, [interactContent[index], interactContent2[index], Touched, canvasRefIn, canvasInteractWidth, StopTouch, interactHeightResolution, adjustinteract1, adjustinteract2])
-
 
   const fileInputRef2 = useRef<HTMLInputElement | null>(null);
 
@@ -1145,6 +1009,18 @@ function Superstickersx({
 
 
 
+  const [postData, setPostData] = useState<Array<any>>([]);
+
+  const [dateint2, setdateint2] = useState<any>(null);
+
+
+  useEffect(() => {
+    if (startmerge) {
+      setdateint2(new Date().getTime());
+    }
+  }, [startmerge]);
+
+
 
 
   const callInteract = useCallback((interMode: any) => {
@@ -1167,18 +1043,26 @@ function Superstickersx({
     }
 
     previewFileReadimage.onload = function () {
+
+
       if (dat === previewFileReadimage) {
       } else {
         setdat(previewFileReadimage)
       }
+
+
+
+
+
       var ratio =
         previewFileReadimage.naturalHeight / previewFileReadimage.naturalWidth;
       var width = interactHeightResolution / ratio;
       setcanvasInteractWidth(width);
 
-      var ratiox = previewFileReadimage.naturalHeight / previewFileReadimage.naturalWidth;
-      var widthCss = window.innerHeight / ratiox;
-      setcanvasInteractWidthCss(widthCss);
+      /// var ratiox = previewFileReadimage.naturalHeight / previewFileReadimage.naturalWidth;
+      ///var widthCss = matchMobile ? window.innerHeight / ratiox : window.innerHeight / ratiox;
+      /// setcanvasInteractWidthCss(widthCss);
+
 
       ///use this
     };
@@ -1304,443 +1188,10 @@ function Superstickersx({
 
 
 
-  // Bilinear interpolation function
-  function interpolate(imageData: any, x: any, y: any) {
-    var x_floor = Math.floor(x);
-    var y_floor = Math.floor(y);
 
-    // Ensure bounds are within the source image
-    x_floor = Math.max(0, Math.min(imageData.width - 2, x_floor));
-    y_floor = Math.max(0, Math.min(imageData.height - 2, y_floor));
-
-    var x_frac = x - x_floor;
-    var y_frac = y - y_floor;
-
-    var p1 = getPixel(imageData, x_floor, y_floor);
-    var p2 = getPixel(imageData, x_floor + 1, y_floor);
-    var p3 = getPixel(imageData, x_floor, y_floor + 1);
-    var p4 = getPixel(imageData, x_floor + 1, y_floor + 1);
-
-    var topInterpolation = interpolatePixelValues(p1, p2, x_frac);
-    var bottomInterpolation = interpolatePixelValues(p3, p4, x_frac);
-
-    return interpolatePixelValues(topInterpolation, bottomInterpolation, y_frac);
-  }
-
-  // Helper function to get a pixel from image data
-  function getPixel(imageData: any, x: any, y: any) {
-    var index = (y * imageData.width + x) * 4;
-    return [
-      imageData.data[index],
-      imageData.data[index + 1],
-      imageData.data[index + 2],
-      imageData.data[index + 3]
-    ];
-  }
-
-  // Helper function to interpolate between pixel values
-  function interpolatePixelValues(p1: any, p2: any, t: any) {
-    return [
-      (1 - t) * p1[0] + t * p2[0],
-      (1 - t) * p1[1] + t * p2[1],
-      (1 - t) * p1[2] + t * p2[2],
-      (1 - t) * p1[3] + t * p2[3]
-    ];
-  }
 
 
   const [showBorder, setshowBorder] = useState(false);
-
-  const calldraw = useCallback((typex: number, x: number, y: number, mode: number) => {
-
-    if (canvasRefIn.current) {
-      var context = canvasRefIn.current.getContext("2d");
-
-
-
-      canvasRefIn.current.height = interactHeightResolution;
-      canvasRefIn.current.width = canvasInteractWidth;
-
-
-      requestAnimationFrame(() => {
-        context.drawImage(dat, 0, 0, canvasInteractWidth, interactHeightResolution);
-        // Get the screen width
-
-        function adjustBrightness(imageData: any, factor: any) {
-          var data = imageData.data;
-          for (var i = 0; i < data.length; i += 4) {
-            // Adjust brightness for each RGB component
-            data[i] *= factor;     // Red
-            data[i + 1] *= factor; // Green
-            data[i + 2] *= factor; // Blue
-          }
-        }
-
-
-        // Get the picture width (adjust this according to your specific scenario)
-        const pictureWidth = canvasInteractWidth;
-
-        // Calculate the offsetX based on the combination of screen width and picture width
-        const offsetX = (screenWidth - pictureWidth) / 2;
-
-        // Use cropInitialIn.y directly for offsetY as it works perfectly
-
-
-
-        // Adjust the coordinates of ctx.arc() based on the offset
-        const xx = cropInitialIn[index].x;
-        const xx2 = cropInitialIn2[index].x;
-
-
-        var yy = cropInitialIn[index].y;
-        var yy2 = cropInitialIn2[index].y;
-
-        ////////////////////
-
-
-
-        /////////////////////////////
-
-
-
-
-
-        // Calculate the X-coordinate
-        const xCoordinate = (xx / 100) * canvasInteractWidth;
-        var x2 = xCoordinate;
-
-
-
-        const yCoordinate = (yy / 100) * interactHeightResolution;
-        var y2 = yCoordinate;
-
-
-
-
-        // Calculate the X-coordinate
-        const xCoordinateb = (xx2 / 100) * canvasInteractWidth;
-        var x2b = xCoordinateb;
-
-
-
-        const yCoordinateb = (yy2 / 100) * interactHeightResolution;
-        var y2b = yCoordinateb;
-
-
-
-
-
-
-        var scaleFactor = 1.02; // You can adjust this value to control the zoom level
-
-
-
-        if (interactContent[index] && mode === 0 || interactContent2[index] && mode === 0) {
-
-
-          if (interactContent[index]) {
-            var r = valuex;
-            // Assuming canvasWidth is the width of your canvas and r is the radius of the arc
-            const canvasWidth = canvasInteractWidth /* your canvas width */;
-            // Calculate the percentage coverage
-            const percentageCoverage1 = (2 * r / canvasWidth) * 100;
-            ///setpercentageCoveragex(percentageCoverage);
-            setradius1(percentageCoverage1);
-
-
-            if (typex === 0 || typex === 3) {
-
-
-              var valuexx = valuex - 0.5;
-              var imageData = context.getImageData(x2 - 1 - r, y2 - 0.5 - r, 2.1 * r, 2.1 * r); // (x, y, width, height)
-
-
-              // Create a larger image data for the zoom effect
-              var zoomedImageData = context.createImageData(imageData.width * scaleFactor, imageData.height * scaleFactor);
-
-              // Copy pixels from the original image data to the larger image data with bilinear interpolation
-              for (var ybb = 0; ybb < zoomedImageData.height; ybb++) {
-                for (var xbb = 0; xbb < zoomedImageData.width; xbb++) {
-                  var sourceX = xbb / scaleFactor;
-                  var sourceY = ybb / scaleFactor;
-
-                  // Get the interpolated pixel value
-                  var interpolatedPixel = interpolate(imageData, sourceX, sourceY);
-
-                  // Set the pixel values in the zoomed image data
-                  var destIndex = (ybb * zoomedImageData.width + xbb) * 4;
-                  zoomedImageData.data[destIndex] = interpolatedPixel[0];
-                  zoomedImageData.data[destIndex + 1] = interpolatedPixel[1];
-                  zoomedImageData.data[destIndex + 2] = interpolatedPixel[2];
-                  zoomedImageData.data[destIndex + 3] = interpolatedPixel[3];
-                }
-              }
-
-              // Apply a light white border at the borders
-              var borderWidth = showBorder ? 1 : 0; // Adjust the width of the border
-              for (var ybb = 0; ybb < zoomedImageData.height; ybb++) {
-                for (var xbb = 0; xbb < zoomedImageData.width; xbb++) {
-                  if (
-                    xbb < borderWidth ||
-                    xbb >= zoomedImageData.width - borderWidth ||
-                    ybb < borderWidth ||
-                    ybb >= zoomedImageData.height - borderWidth
-                  ) {
-                    // Apply a light white color to the border
-                    var destIndex = (ybb * zoomedImageData.width + xbb) * 4;
-                    zoomedImageData.data[destIndex] = 230; // Red channel
-                    zoomedImageData.data[destIndex + 1] = 20; // Green channel
-                    zoomedImageData.data[destIndex + 2] = 2; // Blue channel
-                    zoomedImageData.data[destIndex + 3] = 0.8; // Alpha channel
-                  }
-                }
-              }
-
-              // Put the modified pixel data back onto the canvas
-              context.putImageData(zoomedImageData, x2 - r * scaleFactor, y2 - r * scaleFactor);
-            }
-
-            ////////////////////////////////////////////////////////////////////////////////////
-            /////typex filps between zero and one for blinking efect
-
-
-            if (typex === 0 || typex === 3) {
-
-
-
-              context.beginPath();
-              context.arc(x2, y2, r + 14, 0, Math.PI * 2);
-              var clikarc1 = context.isPointInPath(x, y);
-              context.fillStyle = `rgba(250, 250,250,0.0)`;
-              ///context.fillStyle = `rgba(250, 250,250,0)`;
-              context.closePath();
-              context.fill();
-
-              ///context.lineWidth = 2;
-              ///context.strokeStyle = "#333333";
-              ////context.stroke();
-            }
-            else if (typex === 1) {
-              context.beginPath();
-              context.arc(x2, y2, r + 14, 0, Math.PI * 2);
-              var clikarc1 = context.isPointInPath(x, y);
-              context.fillStyle = `rgba(250, 250,250,0.0)`;
-              context.closePath();
-              context.fill();
-
-
-            } else {
-
-
-            }
-          }
-
-          if (interactContent2[index]) {
-
-            var r = valuex2;
-            // Assuming canvasWidth is the width of your canvas and r is the radius of the arc
-            const canvasWidth = canvasInteractWidth /* your canvas width */;
-            // Calculate the percentage coverage
-            const percentageCoverage2 = (2 * r / canvasWidth) * 100;
-            ///setpercentageCoveragex(percentageCoverage);
-            setradius2(percentageCoverage2);
-
-            if (typex === 0 || typex === 3) {
-
-              var valuexx2 = valuex2 - 0.5;
-
-              var imageData2 = context.getImageData(x2b - 1 - r, y2b - 0.5 - r, 2.1 * r, 2.1 * r); // (x, y, width, height)
-
-
-              // Create a larger image data for the zoom effect
-              var zoomedImageData2 = context.createImageData(imageData2.width * scaleFactor, imageData2.height * scaleFactor);
-
-              // Copy pixels from the original image data to the larger image data with bilinear interpolation
-              for (var ybb = 0; ybb < zoomedImageData2.height; ybb++) {
-                for (var xbb = 0; xbb < zoomedImageData2.width; xbb++) {
-                  var sourceX = xbb / scaleFactor;
-                  var sourceY = ybb / scaleFactor;
-
-                  // Get the interpolated pixel value
-                  var interpolatedPixel = interpolate(imageData2, sourceX, sourceY);
-
-                  // Set the pixel values in the zoomed image data
-                  var destIndex = (ybb * zoomedImageData2.width + xbb) * 4;
-                  zoomedImageData2.data[destIndex] = interpolatedPixel[0];
-                  zoomedImageData2.data[destIndex + 1] = interpolatedPixel[1];
-                  zoomedImageData2.data[destIndex + 2] = interpolatedPixel[2];
-                  zoomedImageData2.data[destIndex + 3] = interpolatedPixel[3];
-                }
-              }
-
-              // Apply a light white border at the borders
-              var borderWidth = showBorder ? 1 : 0;  // Adjust the width of the border
-              for (var ybb = 0; ybb < zoomedImageData2.height; ybb++) {
-                for (var xbb = 0; xbb < zoomedImageData2.width; xbb++) {
-                  if (
-                    xbb < borderWidth ||
-                    xbb >= zoomedImageData2.width - borderWidth ||
-                    ybb < borderWidth ||
-                    ybb >= zoomedImageData2.height - borderWidth
-                  ) {
-                    // Apply a light white color to the border
-                    var destIndex = (ybb * zoomedImageData2.width + xbb) * 4;
-                    zoomedImageData2.data[destIndex] = 230; // Red channel
-                    zoomedImageData2.data[destIndex + 1] = 20; // Green channel
-                    zoomedImageData2.data[destIndex + 2] = 2; // Blue channel
-                    zoomedImageData2.data[destIndex + 3] = 0.8; // Alpha channel
-                  }
-                }
-              }
-
-              // Put the modified pixel data back onto the canvas
-              context.putImageData(zoomedImageData2, x2b - r * scaleFactor, y2b - r * scaleFactor);
-            }
-
-            /////typex filps between zero and one for blinking efect
-            if (typex === 0 || typex === 3) {
-              context.beginPath();
-              context.arc(x2b, y2b, r + 14, 0, Math.PI * 2);
-              var clikarc2 = context.isPointInPath(x, y);
-              context.fillStyle = `rgba(250, 250,250,0.0)`;
-              context.closePath();
-              context.fill();
-
-              /***
-               * 
-               * context.lineWidth = 2;
-              context.strokeStyle = "#333333";
-              context.stroke();
-              
-              **/
-            }
-            else if (typex === 1) {
-              context.beginPath();
-              context.arc(x2b, y2b, r + 14, 0, Math.PI * 2);
-              var clikarc2 = context.isPointInPath(x, y);
-              context.fillStyle = `rgba(250, 250,250,0.0)`;
-              context.closePath();
-              context.fill();
-
-
-            } else {
-
-
-            }
-          }
-
-
-          if (typex === 3) { } else {
-
-            if (tiim.current) {
-              clearTimeout(tiim.current);
-            }
-            tiim.current = setTimeout(() => {
-
-              if (Touched === 1 || Touched === 2) { } else {
-
-                if (typex === 0 || typex === 3) {
-                  calldraw(1, 0, 0, 0);
-                } else { calldraw(0, 0, 0, 0); }
-              }
-            }, 170)
-
-          }
-
-
-
-
-
-
-          if (typex === 3) {
-            if (clikarc1) {
-              ///  calldraw(0, 0, 0, 1);
-
-              if (tiim.current) {
-                clearTimeout(tiim.current);
-              }
-              callInteract(1);
-              setTouched(1);
-
-
-              if (TouchTimer.current) {
-                clearTimeout(TouchTimer.current);
-              }
-
-
-              TouchTimer.current = setTimeout(() => {
-
-                setTouched(0);
-                callInteract(0);
-
-                if (TouchTimer.current) {
-                  clearTimeout(TouchTimer.current);
-                }
-
-
-              }, 5000);
-
-              /// context.clearRect(0, 0, canvasRefIn.current.width, canvasRefIn.current.height);
-              ///callInteract(00, 0, 0, 1)
-              // Stop the spinning animation
-            } else if (clikarc2) {
-              ///  calldraw(0, 0, 0, 1);
-
-              if (tiim.current) {
-                clearTimeout(tiim.current);
-              }
-              callInteract(2);
-              setTouched(2);
-
-
-              if (TouchTimer.current) {
-                clearTimeout(TouchTimer.current);
-              }
-
-
-              TouchTimer.current = setTimeout(() => {
-
-                setTouched(0);
-                callInteract(0);
-
-                if (TouchTimer.current) {
-                  clearTimeout(TouchTimer.current);
-                }
-
-
-              }, 5000);
-
-              /// context.clearRect(0, 0, canvasRefIn.current.width, canvasRefIn.current.height);
-              ///callInteract(00, 0, 0, 1)
-              // Stop the spinning animation
-            } else {
-
-            }
-            ///////////////
-          }
-
-
-
-        }
-
-
-        if (interactContent[index] || interactContent2[index]) {
-          if (cropInitialIn.x === 0) {
-          } else {
-            ///canvasRefIn.current.style.width = `${canvasInteractWidthCss}px`;
-            /// canvasRefIn.current.style.height = `${window.innerHeight}px`;
-          }
-        }
-
-
-
-
-      });
-      ///use this
-    }
-
-  }, [showBorder, valuex2, valuex, dat, cropInitialIn, cropInitialIn2, interactContent2, interactContent, canvasRefIn,
-    showArc, canvasInteractWidth, interactHeightResolution, Touched, canvasInteractWidthCss]);
 
 
 
@@ -1748,17 +1199,6 @@ function Superstickersx({
   useLayoutEffect(() => {
     if (stickerOPtionsDefault === 4) callInteract(0);
   }, [stickerOPtionsDefault, cropInitialIn, cropInitialIn2]);
-
-
-  useLayoutEffect(() => {
-    if (dat) {
-
-      if (Touched === 1 || Touched === 2) {
-        calldraw(0, 0, 0, 1);
-      } else { calldraw(0, 0, 0, 0); }
-
-    }
-  }, [showBorder, dat, Touched, canvasInteractWidth, interactHeightResolution, interactContent, interactContent2, cropInitialIn, cropInitialIn2, valuex, valuex2]);
 
 
 
@@ -1831,37 +1271,53 @@ function Superstickersx({
           var qq = rrw * widthx;
 
           if (matchTabletMobile) {
+            // Calculate the aspect ratio for mobile
+            const aspectRatio = canvasRefstickerimage.current.width / canvasRefstickerimage.current.height;
+
+            // Start with a smaller size based on the stickersizezoom factor
+            let initialWidth = window.innerWidth / stickersizezoom;
+            let initialHeight = initialWidth / aspectRatio;
+
             ctx.drawImage(
               canvasRefstickerimage.current,
               0,
               0,
-              window.innerWidth,
-              heightx,
+              canvasRefstickerimage.current.width,
+              canvasRefstickerimage.current.height,
               crop.x,
               crop.y,
-              window.innerWidth,
-              heightx
+              initialWidth,  // Smaller initial width based on stickersizezoom
+              initialHeight  // Smaller initial height based on stickersizezoom
             );
           } else {
+            // PC or larger screen logic
+            const aspectRatio = OriginalImageWidth / OriginalImageHeight;
+
             if (OriginalImageWidth > OriginalImageHeight) {
+              const newHeight = (canvasRefstickerimage.current.height * 3) / stickersizezoom;
+              const newWidth = (qq * 3) / stickersizezoom;
+
               ctx.drawImage(
                 canvasRefstickerimage.current,
                 0,
                 0,
-                (qq * 3) / stickersizezoom,
-                (canvasRefstickerimage.current.height * 3) / stickersizezoom,
+                newWidth,
+                newHeight,
                 crop.x,
                 crop.y,
                 widthx * 2,
                 window.innerHeight * 2
               );
             } else {
+              const newHeight = (tt * 2) / stickersizezoom;
+              const newWidth = (canvasRefstickerimage.current.width * 2) / stickersizezoom;
+
               ctx.drawImage(
                 canvasRefstickerimage.current,
                 0,
                 0,
-                (canvasRefstickerimage.current.width * 2) / stickersizezoom,
-                (tt * 2) / stickersizezoom,
+                newWidth,
+                newHeight,
                 crop.x,
                 crop.y,
                 widthx * 2,
@@ -1869,6 +1325,8 @@ function Superstickersx({
               );
             }
           }
+
+
         }
       }
 
@@ -1955,6 +1413,8 @@ function Superstickersx({
 
             let imagelink = url.split("?")[0];
 
+            /// let imagelink = imagelinka.split("/").pop();
+
             var datak = {
               imagedata: imagelink,
               id: idReducer,
@@ -2036,7 +1496,9 @@ function Superstickersx({
   const collectSticker = async (x: any) => {
     const Newstickfilterx: any = new Image();
 
+
     const res = await fetch(x);
+    //alert('kk');
     const datax = await res.blob();
 
     var bx = await blobToBase64(datax);
@@ -2045,6 +1507,7 @@ function Superstickersx({
     Newstickfilterx.origin = "anonymous";
 
     Newstickfilterx.onload = function () {
+
       aaRef.current.width = Newstickfilterx.naturalWidth;
       aaRef.current.height = Newstickfilterx.naturalHeight;
 
@@ -2178,7 +1641,7 @@ function Superstickersx({
 
   };
 
-  const [postData, setPostData] = useState<Array<any>>([]);
+
 
   const callfeedsx = () => {
     Axios.post(`${REACT_APP_SUPERSTARZ_URL}/feeds_stickers`, {
@@ -2379,7 +1842,12 @@ function Superstickersx({
   const triggerFileInput = useCallback((type: any) => {
 
 
-    if (adjustinteract1 || adjustinteract2) { } else {
+    if (adjustinteract1 || adjustinteract2) {
+
+
+    } else {
+
+
 
       setStopTouch(true)
 
@@ -2394,8 +1862,10 @@ function Superstickersx({
 
 
       if (type == 1) {
+
         if (fileInputRef.current) {
           fileInputRef.current.click();
+
         }
       } else {
         if (fileInputRef2.current) {
@@ -2411,7 +1881,7 @@ function Superstickersx({
 
   return (
     <>
-      <Grid container>
+      <Grid container style={{ position: 'relative', padding: '0px' }}>
 
         <input
           type="file"
@@ -2475,11 +1945,12 @@ function Superstickersx({
               xs={12}
               style={{
                 width: "100%",
-                height: "46%",
+                height: matchMobile ? mobWide ? '50%' : '45%' : "46%",
                 position: "fixed",
                 bottom: "0vh",
                 zIndex: 100,
                 overflow: "auto",
+                paddingBottom: matchMobile ? mobWide ? '28vh' : '16vh' : ''
               }}
             >
               {startmerge ? (
@@ -2489,12 +1960,13 @@ function Superstickersx({
                     xs={12}
                     style={{
                       padding: "0px",
-                      height: "90px",
+                      height: matchMobile ? 'auto' : "90px",
                       textAlign: "center",
                       margin: "auto",
                       width: "100%",
-                      marginTop: "15px",
+                      marginTop: matchMobile ? '5vh' : "15px",
                       marginRight: "10vw",
+
                     }}
                   >
                     <label htmlFor="filewwyxx" style={{ padding: "0px" }}>
@@ -2577,13 +2049,17 @@ function Superstickersx({
                           onClick={() => {
                             collectSticker(postData[i].stickname);
                           }}
-                          src={postData[i].stickname}
+
+
+                          src={`${postData[i].stickname}?v=${dateint2}`}
+
                           alt="a superstarz post "
                           style={{
                             width: "60%",
                             height: "auto",
                             padding: "0px",
                             objectFit: "contain",
+                            cursor: 'pointer'
                           }}
                           crossOrigin="anonymous"
                         />
@@ -2620,13 +2096,13 @@ function Superstickersx({
                   width: "100%",
                   padding: "0px",
                   position: "fixed",
-                  top: "2vh",
+                  top: matchMobile ? '-6vh' : "2vh",
                   zIndex: 16,
                 }}
               >
                 <Grid
                   item
-                  xs={12}
+                  xs={1}
                   md={5}
                   style={{
                     padding: "0px",
@@ -2638,7 +2114,7 @@ function Superstickersx({
                 ></Grid>
                 <Grid
                   item
-                  xs={12}
+                  xs={10}
                   md={2}
                   style={{
                     paddingLeft: "2vw",
@@ -2835,16 +2311,20 @@ function Superstickersx({
                 height: "0px",
                 padding: "0px",
                 position: "fixed",
-                bottom: "42vh",
+                bottom: matchMobile ? '40vh' : "42vh",
                 zIndex: 26,
-                left: `${iconpositionX - 7}px`,
+                left: matchMobile ? `${iconpositionX - 20}px` : `${iconpositionX - 7}px`,
+                visibility: showTextField ? 'hidden' : 'visible'
               }}
             >
               <HexColorPicker
                 className=""
                 color={usecolorstroke ? colorstroke : colorx}
                 onChange={usecolorstroke ? setColorstroke : setColorx}
-                style={{ opacity: 1, width: '6%' }}
+                style={{
+                  opacity: 1, width: matchMobile ? '24%' : '6%',
+                  height: matchMobile ? '20vh' : ''
+                }}
               />
             </Grid>
           </>
@@ -2898,7 +2378,7 @@ function Superstickersx({
                       fontSize: matchTabletMobile
                         ? `${mobilefont}vh`
                         : `${pcfont}vw`,
-                      marginRight: "5vw",
+                      marginRight: matchMobile ? '10vw' : "5vw",
                     }}
                   />
                   <EditIcon
@@ -2916,7 +2396,7 @@ function Superstickersx({
                       fontSize: matchTabletMobile
                         ? `${mobilefont}vh`
                         : `${pcfont}vw`,
-                      marginLeft: "5vw",
+                      marginLeft: matchMobile ? '10vw' : "5vw",
                     }}
                   />
                 </Grid>
@@ -3261,7 +2741,8 @@ function Superstickersx({
               {" "}
               <Grid
                 item
-                xs={2}
+                xs={5}
+                sm={2}
                 style={{
                   margin: "auto",
                   textAlign: "left",
@@ -3292,7 +2773,8 @@ function Superstickersx({
 
               <Grid
                 item
-                xs={2}
+                xs={5}
+                sm={2}
                 style={{
                   margin: "auto",
                   textAlign: superundoArray.length === 0 && restoreswitcher === 0 ? 'center' : "right",
@@ -3328,72 +2810,7 @@ function Superstickersx({
           }
 
 
-          {stickerOPtionsDefault === 4 ?
-            interactContent[index] || interactContent2[index] ? <>
 
-              <Grid
-                item
-                xs={2}
-                style={{
-                  margin: "auto",
-                  textAlign: 'center',
-                  left: '0px',
-                  height: "20px",
-                }}
-              >
-                {Touched === 1 || Touched === 2 ? <DeleteIcon
-                  onClick={() => {
-
-                    /////
-                    ////callDelInteract();
-
-                  }}
-                  className={
-                    darkmodeReducer
-                      ? "make-small-icons-clickable-lightCrop dontallowhighlighting zuperkingIcon "
-                      : "make-small-icons-clickable-darkCrop dontallowhighlighting zuperkingIcon  "
-                  }
-                  style={{
-                    margin: "auto",
-                    color: "#ffffff",
-                    fontSize: matchTabletMobile
-                      ? `${mobilefont}vh`
-                      : `${pcfont}vw`,
-                  }}
-                /> : <CheckIcon
-                  onClick={() => {
-
-                    if (tiim.current) {
-                      clearTimeout(tiim.current);
-                    }
-                    if (TouchTimer.current) {
-                      clearTimeout(TouchTimer.current);
-                    }
-
-                    calldraw(0, 0, 0, 1);
-
-                    setstickerOPtionsDefault(0);
-
-
-                  }}
-                  className={
-                    darkmodeReducer
-                      ? "make-small-icons-clickable-lightCrop dontallowhighlighting zuperkingIcon "
-                      : "make-small-icons-clickable-darkCrop dontallowhighlighting zuperkingIcon  "
-                  }
-                  style={{
-                    margin: "auto",
-                    color: "#ffffff",
-                    fontSize: matchTabletMobile
-                      ? `${mobilefont}vh`
-                      : `${pcfont}vw`,
-                    display: adjustinteract1 || adjustinteract2 ? 'none' : 'block',
-                  }}
-                />}
-
-
-              </Grid>
-            </> : null : null}
 
         </Grid>
 
@@ -3658,6 +3075,7 @@ function Superstickersx({
                 xs={12}
                 style={{
                   padding: "20px",
+
                 }}
               >
                 <CloseIcon
@@ -3675,6 +3093,8 @@ function Superstickersx({
                     fontSize: matchTabletMobile
                       ? `${mobilefont}vh`
                       : `${pcfont}vw`,
+                    position: 'relative',
+                    right: '0vh'
                   }}
                 />
               </Grid>
@@ -3927,41 +3347,30 @@ function Superstickersx({
 
 
 
-        <canvas
-          className={TouchedOpacity ? 'changeOpacityEdit' : ""}
-          onMouseDown={(e: any) => {
-            // handleTouchStart(e, 0);
-          }}
-          onTouchStart={(e: any) => {
-            // handleTouchStart(e, 1);
-          }}
-          onMouseMove={(e: any) => {
-            //handleTouchDrag(e, 0);
-          }}
-          onTouchMove={(e: any) => {
-            // handleTouchDrag(e, 1);
-          }}
-          onMouseUp={(e: any) => {
-            handleTouchStartIn(e, 0);
-          }}
-          onTouchEnd={(e: any) => {
-            handleTouchStartIn(e, 1);
-          }}
-          ref={canvasRefIn}
-          style={{
-            padding: "0px",
-            position: 'relative',
-            zIndex: 11,
-            top: '0vh',
-            margin: 'left',
-            backgroundColor: 'rgb(0,0,0,0)',
-            display: stickerOPtionsDefault === 4 ? 'block' : 'none',
 
-          }}
-        />
+        <InteractCreate
+
+          dat={dat}
+          cropInitialIn={cropInitialIn}
+          cropInitialIn2={cropInitialIn2}
+          setradius1={setradius1}
+          setradius2={setradius2}
+          callInteract={callInteract}
+          setTouched={setTouched}
+          showArc={showArc}
+          canvasInteractWidthCss={canvasInteractWidthCss}
+          setstickerOPtionsDefault={setstickerOPtionsDefault}
 
 
-        <InteractMenu
+
+          interactHeightResolution={interactHeightResolution}
+          triggerFileInput={triggerFileInput}
+          Touched={Touched}
+          screenWidth={screenWidth}
+          canvasInteractWidth={canvasInteractWidth}
+          canvasRefIn={canvasRefIn}
+          StopTouch={StopTouch}
+          TouchedOpacity={TouchedOpacity}
           interactContenttype={interactContenttype}
           interactContentvideo={interactContentvideo}
           interactContenttype2={interactContenttype2}
@@ -3975,7 +3384,9 @@ function Superstickersx({
           stickerOPtionsDefault={stickerOPtionsDefault}
           setcropInitialIn={setcropInitialIn} index={index}
           moveCordinatesMultiple={moveCordinatesMultiple}
-          showBorder={showBorder} setshowBorder={setshowBorder} canxxtim={canxxtim}
+          showBorder={showBorder}
+          setshowBorder={setshowBorder}
+          canxxtim={canxxtim}
           canxxTime={canxxTime}
           valuex={valuex}
           valuex2={valuex2}
@@ -3992,6 +3403,7 @@ function Superstickersx({
 
         <canvas
           onClick={() => {
+
             if (showTextField) {
               setshowTextOptions(true);
               setshowTextField(false);
@@ -4004,9 +3416,16 @@ function Superstickersx({
             /// mouseover(0);
           }}
           onMouseDown={(e: any) => {
+
+
             handleTouchStart(e, 0);
           }}
           onTouchStart={(e: any) => {
+            if (showTextField) {
+              setshowTextOptions(true);
+              setshowTextField(false);
+            }
+
             handleTouchStart(e, 1);
           }}
           onMouseMove={(e: any) => {
@@ -4030,7 +3449,7 @@ function Superstickersx({
 
         <Grid item
           xs={12}
-          style={{ position: 'relative', bottom: '60vh', zIndex: 20000000 }}>
+          style={{ position: 'relative', bottom: '60vh', zIndex: 20000000, height: '0px' }}>
 
 
 
@@ -4121,8 +3540,8 @@ function Superstickersx({
                 width: "100%",
                 padding: "0px",
                 position: "fixed",
-                height: "13vh",
-                bottom: "0vh",
+                height: matchMobile ? '20vh' : "13vh",
+                bottom: matchMobile ? '10vh' : "0vh",
                 zIndex: 20,
               }}
             ></Grid>
@@ -4137,8 +3556,8 @@ function Superstickersx({
                 width: width,
                 paddingBottom: "0px",
                 position: "fixed",
-                bottom: "3.5vh",
-                left: "40vw",
+                bottom: matchMobile ? '17vh' : "3.5vh",
+                left: matchMobile ? '' : "40vw",
                 zIndex: 26,
               }}
               label="Input Text"
@@ -4149,47 +3568,7 @@ function Superstickersx({
           </>
         ) : null}
 
-        {stickerOPtionsDefault === 4 ?
-          interactContent[index] || interactContent2[index] ? null : < Grid
-            item
-            xs={12}
-            style={{
-              padding: "20px",
-              position: 'fixed',
-              zIndex: 200000000,
-              top: '2vh',
-              right: '27vw'
-            }}
-          >
-            <CloseIcon
-              onClick={() => {
-                if (tiim.current) {
-                  clearTimeout(tiim.current);
-                }
-                if (TouchTimer.current) {
-                  clearTimeout(TouchTimer.current);
-                }
 
-                calldraw(0, 0, 0, 1);
-                setstickerOPtionsDefault(0);
-                //setStopCollectInteractData1(false);
-              }}
-              className={
-                darkmodeReducer
-                  ? "make-small-icons-clickable-dark dontallowhighlighting  "
-                  : "make-small-icons-clickable-light  dontallowhighlighting   "
-              }
-              style={{
-                margin: "auto",
-                color: "#ffffff",
-                fontSize: matchTabletMobile
-                  ? `${mobilefont}vh`
-                  : `${pcfont}vw`,
-
-              }}
-            />
-          </Grid>
-          : null}
 
 
         {stickerOPtionsDefault === 4 ? <Tutorial type={6} index={0} /> : null}

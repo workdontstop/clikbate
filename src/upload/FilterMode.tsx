@@ -55,7 +55,10 @@ function FilterModex({
   closeUploadModal,
   itemUploadRefThumb,
   showAlll,
-  ratiox
+  ratiox,
+
+
+
 }: any): JSX.Element {
   var newitemUploadRef = useRef<any>(null);
 
@@ -63,6 +66,12 @@ function FilterModex({
     caption: "",
     topic: "",
   };
+
+
+
+  const [radius1, setradius1] = useState(0);
+
+  const [radius2, setradius2] = useState(0);
 
 
 
@@ -183,9 +192,6 @@ function FilterModex({
   const [interactContenttype, setinteractContenttype] = useState(0);
   const [interactContenttype2, setinteractContenttype2] = useState(0);
 
-  const [radius1, setradius1] = useState(0);
-
-  const [radius2, setradius2] = useState(0);
 
 
   const [interactContentBlob, setinteractContentBlob] = useState<any>([]);
@@ -270,6 +276,23 @@ function FilterModex({
   const [callInnerButton, setcallInnerButton] = useState(0);
 
   const [backgroudAudio, setbackgroudAudio] = useState<number>(0);
+
+  const [showpdi, setshowpdi] = useState(false);
+
+
+  useEffect(() => {
+
+    if (matchMobile) {
+
+      setshowpdi(true);
+      setTimeout(() => {
+        setshowpdi(false);
+
+      }, 2000)
+    }
+
+  }, [backgroudAudio]);
+
 
   const [audioStart, setaudioStart] = useState(0);
   const [audioEnd, setaudioEnd] = useState(0);
@@ -875,100 +898,9 @@ function FilterModex({
         </>
       ) : null}
 
-      <Grid
-        container
-        style={{
-          padding: "0px",
-          position: "relative",
-          margin: "0 auto",
-          overflow: "hidden",
-          left: "0px",
-          height: "auto",
-          paddingBottom: "0px",
-          filter: startSuperStickerblur ? "blur(45px)" : "blur(0px)",
-        }}
-      >
-        <Grid
-          item
-          xs={12}
-          md={2}
-          style={{
-            padding: "0px",
-          }}
-        ></Grid>
-        <Grid
-          item
-          xs={12}
-          md={8}
-          style={{
-            padding: matchTabletMobile ? "4px" : "0px",
-            marginTop: matchMobile
-              ? wideimagepushMobile
-                ? "-0.8vh"
-                : "-2.8vh"
-              : wideimage
-                ? "2.5vh"
-                : "-0.5vh",
-            height: `${FilterSliderHeight2}px`,
-          }}
-        >
-          <OptionsSlider
-            setConfirmUpload={setConfirmUpload}
-            AllowCaption={AllowCaption}
-            setstartTopicCap={setstartTopicCap}
-            finalImageData={finalImageData}
-            setfinalImageData={setfinalImageData}
-            finalImageDataSD={finalImageDataSD}
-            setfinalImageDataSD={setfinalImageDataSD}
-            finalImageDataBASE64={finalImageDataBASE64}
-            setfinalImageDataBASE64={setfinalImageDataBASE64}
-            superzeroeffect={superzeroeffect}
-            superstickerIndex={superstickerIndex}
-            sethdfilter={sethdfilter}
-            hdfilter={hdfilter}
-            trapfilters={trapfilters}
-            settrapfilters={settrapfilters}
-            FilterUnderStickerStopFiltering={FilterUnderStickerStopFiltering}
-            regimageholdfilter={regimageholdfilter}
-            setregimageholdfilter={setregimageholdfilter}
-            setcallfilter={setcallfilter}
-            callfilter={callfilter}
-            seteffectMode={seteffectMode}
-            effectMode={effectMode}
-            setactiveSticker={setactiveSticker}
-            activeSticker={activeSticker}
-            startSuperSticker={startSuperSticker}
-            duplicateItemupload={duplicateItemupload}
-            selectedImage={selectedImage}
-            length={selectedImage.length}
-            getImageWidth={getImageWidth}
-            imageFiltersRef={imageFiltersRef}
-            typeUpload={2}
-            typeTop={false}
-            getSliderWidthA={getSliderWidthNew}
-            itemUploadRef={itemUploadRef}
-            itemUploadRefThumb={itemUploadRefThumb}
-            itemUploadRefSD={itemUploadRefSD}
-            setsupeFilterLoadFade={setsupeFilterLoadFade}
-          />
-        </Grid>
 
-        <Grid
-          item
-          xs={12}
-          style={{
-            height: matchMobile
-              ? wideimagepushMobile
-                ? "7.5vh"
-                : "0.5vh"
-              : wideimage
-                ? "3vh"
-                : screenWidth > FilterSliderContainerWidth
-                  ? "1.8vh"
-                  : "1vh",
-          }}
-        ></Grid>
-      </Grid>
+
+
       {selectedImage.length > 0 ? (
         <>
           {hideArrow ? null : (
@@ -991,6 +923,7 @@ function FilterModex({
               height: "auto",
               paddingBottom: "0px",
               filter: startSuperStickerblur ? "blur(45px)" : "blur(0px)",
+              marginTop: matchMobile ? '-2vh' : '-6vh'
             }}
           >
             <Grid container>
@@ -1087,30 +1020,7 @@ function FilterModex({
                         position: "relative",
                         margin: "auto",
                         padding: "0px",
-                        borderTopLeftRadius:
-                          screenWidth > FilterSliderContainerWidth
-                            ? index === 0
-                              ? "0px"
-                              : "0px"
-                            : "0px",
-                        borderTopRightRadius:
-                          screenWidth > FilterSliderContainerWidth
-                            ? index === selectedImage.length - 1
-                              ? "0px"
-                              : "0px"
-                            : "0px",
-                        borderBottomLeftRadius:
-                          screenWidth > FilterSliderContainerWidth
-                            ? index === 0 && wideimage
-                              ? "0px"
-                              : "0px"
-                            : "0px",
-                        borderBottomRightRadius:
-                          screenWidth > FilterSliderContainerWidth
-                            ? index === selectedImage.length - 1 && wideimage
-                              ? "0px"
-                              : "0px"
-                            : "0px",
+
                         display: pop ? 'block' : 'none',
                         cursor: 'pointer'
                       }}
@@ -1148,30 +1058,7 @@ function FilterModex({
                         position: "relative",
                         margin: "auto",
                         padding: "0px",
-                        borderTopLeftRadius:
-                          screenWidth > FilterSliderContainerWidth
-                            ? index === 0
-                              ? "0px"
-                              : "0px"
-                            : "0px",
-                        borderTopRightRadius:
-                          screenWidth > FilterSliderContainerWidth
-                            ? index === selectedImage.length - 1
-                              ? "0px"
-                              : "0px"
-                            : "0px",
-                        borderBottomLeftRadius:
-                          screenWidth > FilterSliderContainerWidth
-                            ? index === 0 && wideimage
-                              ? "0px"
-                              : "0px"
-                            : "0px",
-                        borderBottomRightRadius:
-                          screenWidth > FilterSliderContainerWidth
-                            ? index === selectedImage.length - 1 && wideimage
-                              ? "0px"
-                              : "0px"
-                            : "0px",
+
                         display: pop ? 'none' : 'block',
                         cursor: 'pointer'
                       }}
@@ -1183,6 +1070,102 @@ function FilterModex({
           </Grid>
         </>
       ) : null}
+
+
+      <Grid
+        container
+        style={{
+          padding: "0px",
+          position: "relative",
+          margin: "0 auto",
+          overflow: "visible",
+          left: "0px",
+          height: "auto",
+          paddingBottom: "0px",
+          filter: startSuperStickerblur ? "blur(45px)" : "blur(0px)",
+        }}
+      >
+        <Grid
+          item
+          xs={12}
+          md={2}
+          style={{
+            padding: "0px",
+          }}
+        ></Grid>
+        <Grid
+          item
+          xs={12}
+          md={8}
+          style={{
+            padding: matchTabletMobile ? "4px" : "0px",
+            marginTop: matchMobile
+              ? wideimagepushMobile
+                ? "-1vh"
+                : "-2.8vh"
+              : wideimage
+                ? "1vh"
+                : "0vh",
+            height: `${FilterSliderHeight2}px`,
+          }}
+        >
+          <OptionsSlider
+            setConfirmUpload={setConfirmUpload}
+            AllowCaption={AllowCaption}
+            setstartTopicCap={setstartTopicCap}
+            finalImageData={finalImageData}
+            setfinalImageData={setfinalImageData}
+            finalImageDataSD={finalImageDataSD}
+            setfinalImageDataSD={setfinalImageDataSD}
+            finalImageDataBASE64={finalImageDataBASE64}
+            setfinalImageDataBASE64={setfinalImageDataBASE64}
+            superzeroeffect={superzeroeffect}
+            superstickerIndex={superstickerIndex}
+            sethdfilter={sethdfilter}
+            hdfilter={hdfilter}
+            trapfilters={trapfilters}
+            settrapfilters={settrapfilters}
+            FilterUnderStickerStopFiltering={FilterUnderStickerStopFiltering}
+            regimageholdfilter={regimageholdfilter}
+            setregimageholdfilter={setregimageholdfilter}
+            setcallfilter={setcallfilter}
+            callfilter={callfilter}
+            seteffectMode={seteffectMode}
+            effectMode={effectMode}
+            setactiveSticker={setactiveSticker}
+            activeSticker={activeSticker}
+            startSuperSticker={startSuperSticker}
+            duplicateItemupload={duplicateItemupload}
+            selectedImage={selectedImage}
+            length={selectedImage.length}
+            getImageWidth={getImageWidth}
+            imageFiltersRef={imageFiltersRef}
+            typeUpload={2}
+            typeTop={false}
+            getSliderWidthA={getSliderWidthNew}
+            itemUploadRef={itemUploadRef}
+            itemUploadRefThumb={itemUploadRefThumb}
+            itemUploadRefSD={itemUploadRefSD}
+            setsupeFilterLoadFade={setsupeFilterLoadFade}
+          />
+        </Grid>
+
+        <Grid
+          item
+          xs={12}
+          style={{
+            height: matchMobile
+              ? wideimagepushMobile
+                ? "7.5vh"
+                : "0.5vh"
+              : wideimage
+                ? "3vh"
+                : screenWidth > FilterSliderContainerWidth
+                  ? "1.8vh"
+                  : "1vh",
+          }}
+        ></Grid>
+      </Grid>
 
       {startSuperSticker ? null :
 
@@ -1215,6 +1198,8 @@ function FilterModex({
               }}
             >
               <Superstickers
+
+
                 callInnerButton={callInnerButton}
                 setCurrentTimestamp={setCurrentTimestamp}
                 currentTimestamp={currentTimestamp}
@@ -1390,15 +1375,24 @@ function FilterModex({
             style={{
               height: "0px",
               position: "fixed",
-              top: "67vh",
+              top: matchMobile ? '14vh' : "20vh",
               zIndex: 11,
-              left: '14vw',
+              left: matchMobile ? '' : '18vw',
+              right: matchMobile ? '7vw' : '',
             }}
           >
             <TitleIcon
               onClick={() => {
                 superstickerz(0);
-                setTimeout(() => { setcallInnerButton(1); }, 25)
+
+                if (matchMobile) {
+
+                  setTimeout(() => { setcallInnerButton(1); }, 1000)
+                } else {
+
+                  setTimeout(() => { setcallInnerButton(1); }, 200)
+                }
+
 
               }}
               className={
@@ -1414,19 +1408,7 @@ function FilterModex({
               }}
             />
 
-            <p style={{
-              marginTop: '2vh',
-              fontFamily: "Roboto Condensed",
-              fontWeight: 'bolder',
-              fontSize: '2.4vh',
-              filter: darkmodeReducer
-                ? "drop-shadow(1.2px 0.1px 1.92px rgba(255, 255, 255, 0.6))"
-                : "drop-shadow(1.2px 0.1px 1.92px rgba(41, 53, 70, 8.35))",
-              marginLeft: '-1.2vw',
-              visibility: hidetextz ? 'hidden' : 'visible',
-              color: darkmodeReducer ? '#ffffff' : '#000000'
 
-            }}>Add Text</p>
           </Grid>
 
 
@@ -1441,15 +1423,26 @@ function FilterModex({
             style={{
               height: "0px",
               position: "fixed",
-              top: "50vh",
+              top: matchMobile ? '25vh' : "35vh",
               zIndex: 11,
-              left: '14vw',
+              left: matchMobile ? '' : '18vw',
+              right: matchMobile ? '7vw' : '',
             }}
           >
             <InsertPhotoIcon
               onClick={() => {
                 superstickerz(0);
-                setTimeout(() => { setcallInnerButton(2); }, 25)
+
+                if (matchMobile) {
+
+                  setTimeout(() => { setcallInnerButton(2); }, 1000)
+                } else {
+
+                  setTimeout(() => { setcallInnerButton(2); }, 200)
+                }
+
+
+
 
               }}
               className={
@@ -1465,19 +1458,7 @@ function FilterModex({
               }}
             />
 
-            <p style={{
-              marginTop: '2vh',
-              fontFamily: "Roboto Condensed",
-              fontWeight: 'bolder',
-              fontSize: '2.4vh',
-              filter: darkmodeReducer
-                ? "drop-shadow(1.2px 0.1px 1.92px rgba(255, 255, 255, 0.6))"
-                : "drop-shadow(1.2px 0.1px 1.92px rgba(41, 53, 70, 8.35))",
-              marginLeft: '-1.8vw',
-              visibility: hidetextz ? 'hidden' : 'visible',
-              color: darkmodeReducer ? '#ffffff' : '#000000'
 
-            }}>Add a Sticker</p>
           </Grid>
 
           <Grid
@@ -1491,15 +1472,27 @@ function FilterModex({
             style={{
               height: "0px",
               position: "fixed",
-              top: "33vh",
+              top: matchMobile ? '36vh' : "50vh",
               zIndex: 11,
-              left: '14vw',
+              left: matchMobile ? '' : '18vw',
+              right: matchMobile ? '7vw' : '',
             }}
           >
             <TouchAppIcon
               onClick={() => {
                 superstickerz(0);
-                setTimeout(() => { setcallInnerButton(3); }, 25)
+
+
+
+                if (matchMobile) {
+
+                  setTimeout(() => { setcallInnerButton(3); }, 1000)
+                } else {
+
+                  setTimeout(() => { setcallInnerButton(3); }, 200)
+                }
+
+
               }}
               className={
                 darkmodeReducer
@@ -1514,19 +1507,6 @@ function FilterModex({
               }}
             />
 
-            <p style={{
-              marginTop: '2vh',
-              fontFamily: "Roboto Condensed",
-              fontWeight: 'bolder',
-              fontSize: '2.4vh',
-              filter: darkmodeReducer
-                ? "drop-shadow(1.2px 0.1px 1.92px rgba(255, 255, 255, 0.6))"
-                : "drop-shadow(1.2px 0.1px 1.92px rgba(41, 53, 70, 8.35))",
-              marginLeft: '-2.7vw',
-              visibility: hidetextz ? 'hidden' : 'visible',
-              color: darkmodeReducer ? '#ffffff' : '#000000'
-
-            }}>Add interaction</p>
           </Grid>
 
 
@@ -1554,9 +1534,9 @@ function FilterModex({
             style={{
               height: "0px",
               position: "fixed",
-              top: "35vh",
+              top: matchMobile ? '3vh' : "21vh",
               zIndex: 11,
-              right: '10vw',
+              right: matchMobile ? '7vw' : '18vw',
             }}
           >
             <MusicNoteIcon
@@ -1591,30 +1571,41 @@ function FilterModex({
 
             {interactContentAudiotype === 1 ?
 
-              <p style={{
-                marginTop: '5vh',
-                fontFamily: "Roboto Condensed",
-                fontWeight: 'bolder', fontSize: '2.4vh',
-                filter: darkmodeReducer
-                  ? "drop-shadow(1.2px 0.1px 1.92px rgba(255, 255, 255, 0.6))"
-                  : "drop-shadow(1.2px 0.1px 1.92px rgba(41, 53, 70, 8.35))",
-                marginLeft: '-7vw',
-                position: 'absolute',
-                overflow: 'hidden',
-                width: '18vw'
+              <p
 
-              }}> {Audioname}</p> : <p style={{
-                marginTop: '5vh',
-                fontFamily: "Roboto Condensed",
-                fontWeight: 'bolder', fontSize: '3vh',
-                filter: darkmodeReducer
-                  ? "drop-shadow(1.2px 0.1px 1.92px rgba(255, 255, 255, 0.6))"
-                  : "drop-shadow(1.2px 0.1px 1.92px rgba(41, 53, 70, 8.35))",
-                marginLeft: '-1.4vw',
-                visibility: hidetextz ? 'hidden' : 'visible',
-                color: darkmodeReducer ? '#ffffff' : '#000000'
+                className={
 
-              }}>Add Audio</p>}
+
+                  darkmodeReducer
+                    ? "zuperkingIcon "
+                    : " zuperkingIcon  "
+                }
+                style={{
+                  marginTop: matchMobile ? '-6vh' : '5vh',
+                  fontFamily: "Roboto Condensed",
+                  fontWeight: 'bolder',
+                  fontSize: '2.4vh',
+                  filter: darkmodeReducer
+                    ? "drop-shadow(1.2px 0.1px 1.92px rgba(255, 255, 255, 0.6))"
+                    : "drop-shadow(1.2px 0.1px 1.92px rgba(41, 53, 70, 8.35))",
+                  marginLeft: matchMobile ? '-80vw' : '2vw',
+                  position: 'absolute',
+                  overflow: 'hidden',
+                  width: matchMobile ? '78vw' : '18vw',
+                  color: matchMobile ? '#ffffff' : darkmodeReducer ? '#ffffff' : '#000000'
+
+                }}> {Audioname}</p> : <p style={{
+                  marginTop: '5vh',
+                  fontFamily: "Roboto Condensed",
+                  fontWeight: 'bolder', fontSize: '3vh',
+                  filter: darkmodeReducer
+                    ? "drop-shadow(1.2px 0.1px 1.92px rgba(255, 255, 255, 0.6))"
+                    : "drop-shadow(1.2px 0.1px 1.92px rgba(41, 53, 70, 8.35))",
+                  marginLeft: '-1.4vw',
+                  visibility: hidetextz ? 'hidden' : 'visible',
+                  color: darkmodeReducer ? '#ffffff' : '#000000'
+
+                }}></p>}
 
           </Grid >
 
@@ -1624,9 +1615,9 @@ function FilterModex({
             style={{
               height: "0px",
               position: "fixed",
-              top: "55vh",
+              top: matchMobile ? '14vh' : "45vh",
               zIndex: 11,
-              right: '4vw',
+              right: matchMobile ? '9vw' : '4vw',
               display: interactContentAudiotype === 1 ? 'block' : 'none'
             }}
           >
@@ -1645,6 +1636,8 @@ function FilterModex({
                 }
               }
               className={
+
+
                 darkmodeReducer
                   ? "make-small-icons-clickable-lightCrop dontallowhighlighting zuperkingIcon "
                   : "make-small-icons-clickable-darkCrop dontallowhighlighting zuperkingIcon  "
@@ -1658,11 +1651,34 @@ function FilterModex({
 
             />
             <span
+
+              onClick={
+                () => {
+
+
+                  if (backgroudAudio === 1) {
+                    setbackgroudAudio(0);
+                  } else {
+                    setbackgroudAudio(1);
+                  }
+                }
+              }
+
+              className={
+
+
+                darkmodeReducer
+                  ? "make-small-icons-clickable-lightCrop dontallowhighlighting zuperkingIcon "
+                  : "make-small-icons-clickable-darkCrop dontallowhighlighting zuperkingIcon  "
+              }
+
               style={{
                 position: 'relative', // Absolute position for the text
                 top: '-10%', // Center vertically
-                fontFamily: 'fantasy',
-                fontSize: matchTabletMobile ? `${mobilefont}vh` : `1.2vw`,
+                fontFamily: "Roboto Condensed",
+                fontSize: matchTabletMobile ? `${mobilefont - 0.5}vh` : `1.2vw`,
+                color: darkmodeReducer ? '#ffffff' : '#000000',
+                visibility: matchMobile ? showpdi ? 'visible' : 'hidden' : 'visible'
               }}
             >
               {backgroudAudio === 0 ? ' Play During Interaction' : 'Stop During Interaction'}
@@ -1729,11 +1745,11 @@ function FilterModex({
                   fontSize: matchTabletMobile
                     ? `${mobilefont}vh`
                     : `${pcfont + 2.1}vw`,
-                  left: "84.5%",
+                  left: matchMobile ? '7%' : "87%",
                   position: 'absolute',
                   borderRadius: '80%',
                   zIndex: 2,
-                  bottom: '28vh',
+                  bottom: matchMobile ? '36vh' : '28vh',
                   display: startTopicCap ? 'none' : 'block',
 
                 }}
@@ -1775,7 +1791,7 @@ function FilterModex({
           <Grid
             item
             ref={getCropHeightRefmobile}
-            xs={11}
+            xs={12}
             style={{ padding: "0px", height: "78%" }}
           ></Grid>
 
@@ -1783,7 +1799,7 @@ function FilterModex({
             item
             ref={getCropHeightRef2}
             xs={5}
-            style={{ padding: "0px", height: matchMobile ? "23%" : "22%" }}
+            style={{ padding: "0px", height: matchMobile ? "23%" : "24%" }}
           ></Grid>
         </Grid>
       </Grid>
@@ -1810,7 +1826,8 @@ function FilterModex({
           ></Grid>
           <Grid
             item
-            xs={4}
+            xs={12}
+            sm={4}
             style={{
               marginTop: '12vh',
 
@@ -1852,11 +1869,11 @@ function FilterModex({
                 fontSize: matchTabletMobile
                   ? `${mobilefont}vh`
                   : `${pcfont}vw`,
-                left: "62%",
+                left: matchMobile ? '86%' : "62%",
                 position: 'absolute',
                 borderRadius: '80%',
                 zIndex: 2,
-                bottom: '80vh',
+                bottom: matchMobile ? '64vh' : '80vh',
                 display: startTopicCap ? 'none' : 'block',
 
               }}
@@ -1877,11 +1894,11 @@ function FilterModex({
                 fontSize: matchTabletMobile
                   ? `${mobilefont}vh`
                   : `${pcfont}vw`,
-                left: "62%",
+                left: matchMobile ? '86%' : "62%",
                 position: 'absolute',
                 borderRadius: '80%',
                 zIndex: 2,
-                bottom: '60vh',
+                bottom: matchMobile ? '44vh' : '60vh',
                 display: startTopicCap ? 'none' : 'block',
 
               }}

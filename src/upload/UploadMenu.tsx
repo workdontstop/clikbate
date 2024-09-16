@@ -82,6 +82,12 @@ function UploadMenux({
   const activatecropImageReducer = activatecropImage;
 
 
+
+
+
+
+
+
   //
   //
   //
@@ -112,7 +118,6 @@ function UploadMenux({
 
 
 
-
   return (
     <>
       <animated.div
@@ -125,6 +130,8 @@ function UploadMenux({
         }}
       >
         <FilterMode
+
+
           closeUploadModal={closeUploadModal}
           itemUploadRefThumb={itemUploadRefThumb}
           itemUploadRefSD={itemUploadRefSD}

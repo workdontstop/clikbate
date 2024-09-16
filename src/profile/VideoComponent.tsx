@@ -37,34 +37,27 @@ const VideoComponent: React.FC<VideoComponentProps> = ({ src, inView, setshow, v
 
         if (matchMobile) {
 
-            if (xl2) {
-                if (xl) {
+            if (xl) {
 
-                    setxl(false);
+                setxl(false);
 
 
-                    setxl2(false);
+                setxl2(false);
 
-                    setTimeout(() => {
+                setTimeout(() => {
 
-                        sethidePrevVid(true)
-                    }, 1500)
+                    sethidePrevVid(true)
+                }, 1500)
 
+            }
+            else {
+                if (InteractTimerxxhyx.current) {
+                    clearTimeout(InteractTimerxxhyx.current);
                 }
-                else {
-                    if (InteractTimerxxhyx.current) {
-                        clearTimeout(InteractTimerxxhyx.current);
-                    }
 
-                    setxl(true);
+                setxl(true);
 
 
-                }
-            } else {
-
-
-
-                setxl2(true);
             }
 
         }

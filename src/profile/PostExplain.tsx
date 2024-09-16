@@ -218,7 +218,7 @@ function PostExplainx({
 
 
                         // Default to any en-GB voice if no specific male or female voice is found
-                        const selectedVoice = femaleVoice || voices.find((voice) => voice.lang === "en-CA");
+                        const selectedVoice = femaleVoice || voices.find((voice) => voice.lang === "en-AU");
 
                         if (!selectedVoice) {
                             console.warn("No en-GB voice found. Using default voice.");
@@ -230,7 +230,7 @@ function PostExplainx({
                                 utterance.rate = 1; // Set the speech rate to make it last longer
                                 utterance.pitch = 1;
                                 utterance.volume = 1;
-                                utterance.lang = "en-GB";
+                                utterance.lang = "en-AU";
 
                                 if (selectedVoice) {
                                     utterance.voice = selectedVoice;

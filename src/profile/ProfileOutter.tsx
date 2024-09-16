@@ -1,6 +1,7 @@
 import React, { useRef, useState, useEffect, useCallback } from "react";
 import { matchMobile, matchPc, matchTablet } from "../DetectDevice";
 import { RootStateOrAny, useSelector, useDispatch } from "react-redux";
+import { useSpring, animated } from "react-spring";
 
 
 import { Menu } from "./Menu";
@@ -734,6 +735,43 @@ function ProfileOutter({ CallLoggedProfile }: any) {
     );
 
   }
+  const [showNavbar, setShowNavbar] = useState(false); // State to show/hide the navbar
+  const scrollTimeoutRef = useRef<NodeJS.Timeout | null>(null); // Ref to manage scroll timeout
+
+  // React Spring animation for fade in and fade out
+  const fadeStyles = useSpring({
+    opacity: showNavbar ? 1 : 0, // Fade in when showNavbar is true, fade out when false
+    config: { duration: 300 }, // Animation duration (300ms)
+  });
+
+  // Debounced scroll handler
+  const handleScroll = () => {
+    setShowNavbar(true); // Show navbar when user scrolls
+
+    // Clear any existing timeout
+    if (scrollTimeoutRef.current) clearTimeout(scrollTimeoutRef.current);
+
+    // Hide navbar after 3 seconds of no scrolling
+    scrollTimeoutRef.current = setTimeout(() => {
+      setShowNavbar(false);
+    }, 3000); // 3 seconds
+  };
+
+  useEffect(() => {
+    const scrollElement = paperPostScrollRef.current; // Reference to the scrollable div
+    if (scrollElement) {
+      const debouncedScroll = () => {
+        handleScroll(); // Handle scroll after debouncing
+      };
+
+      scrollElement.addEventListener('scroll', debouncedScroll); // Attach scroll event listener
+
+      return () => {
+        scrollElement.removeEventListener('scroll', debouncedScroll); // Cleanup on unmount
+        if (scrollTimeoutRef.current) clearTimeout(scrollTimeoutRef.current); // Cleanup timeout
+      };
+    }
+  }, [paperPostScrollRef]);
 
 
   return (
@@ -835,60 +873,63 @@ function ProfileOutter({ CallLoggedProfile }: any) {
                       width: "100%",
                       opacity: "1",
                       zIndex: 50000,
+                      display: 'block'
                     }}
                   >
+                    <animated.div style={fadeStyles}>
+
+                      <Menu
 
 
-                    <Menu
+                        setAutoGo={setAutoGo}
+                        AutoGo={AutoGo}
+                        FeedType={FeedType}
+                        zoomedModal={zoomedModal}
+                        mobileZoom={mobileZoom}
+                        setZoomedModal={setZoomedModal}
+                        setMobileZoom={setMobileZoom}
 
 
-                      setAutoGo={setAutoGo}
-                      AutoGo={AutoGo}
-                      FeedType={FeedType}
-                      zoomedModal={zoomedModal}
-                      mobileZoom={mobileZoom}
-                      setZoomedModal={setZoomedModal}
-                      setMobileZoom={setMobileZoom}
+                        CurrentPage={CurrentPage}
+                        ScrollIndexPusher={ScrollIndexPusher}
+                        PostPagenumPusher={PostPagenumPusher}
 
 
-                      CurrentPage={CurrentPage}
-                      ScrollIndexPusher={ScrollIndexPusher}
-                      PostPagenumPusher={PostPagenumPusher}
+                        setIdReactRouterAsInt={setIdReactRouterAsInt}
+                        setScrollReactRouter={setScrollReactRouter}
 
+                        minimise={minimise}
+                        setminimise={setminimise}
+                        pagenumReducer={pagenumReducer}
+                        setuptype={1}
+                        ActualpostDataAll={ActualpostDataAll}
+                        profileDataHold={profileDataHold}
+                        RandomColor={RandomColor}
+                        setUploadGPT={setUploadGPT}
+                        WebsiteMode={WebsiteMode}
+                        showModalForm={showModalForm}
+                        shownav={shownav}
+                        setShownav={setShownav}
+                        showModalFormMenu={showModalFormMenu}
+                        ShowBigPlay={ShowBigPlay}
+                        setShowModalFormMenu={setShowModalFormMenu}
+                        postData={postData}
+                        selectedImage={selectedImage}
+                        setselectedImage={setselectedImage}
+                        x={x}
+                        miniProfile={miniProfile}
+                        setminiProfile={setminiProfile}
+                        setzoomClickedIndex={setzoomClickedIndex}
+                        setSliderIndexMini={setSliderIndexMini}
+                        setx={setx}
+                        setsuperSettings={setsuperSettings}
+                        showModalUpload={showModalUpload}
+                        OpenUploadModal={OpenUploadModal}
+                        getSliderWidth={getSliderWidth}
+                        paperPostScrollRef={paperPostScrollRef}
+                      />
 
-                      setIdReactRouterAsInt={setIdReactRouterAsInt}
-                      setScrollReactRouter={setScrollReactRouter}
-
-                      minimise={minimise}
-                      setminimise={setminimise}
-                      pagenumReducer={pagenumReducer}
-                      setuptype={1}
-                      ActualpostDataAll={ActualpostDataAll}
-                      profileDataHold={profileDataHold}
-                      RandomColor={RandomColor}
-                      setUploadGPT={setUploadGPT}
-                      WebsiteMode={WebsiteMode}
-                      showModalForm={showModalForm}
-                      shownav={shownav}
-                      setShownav={setShownav}
-                      showModalFormMenu={showModalFormMenu}
-                      ShowBigPlay={ShowBigPlay}
-                      setShowModalFormMenu={setShowModalFormMenu}
-                      postData={postData}
-                      selectedImage={selectedImage}
-                      setselectedImage={setselectedImage}
-                      x={x}
-                      miniProfile={miniProfile}
-                      setminiProfile={setminiProfile}
-                      setzoomClickedIndex={setzoomClickedIndex}
-                      setSliderIndexMini={setSliderIndexMini}
-                      setx={setx}
-                      setsuperSettings={setsuperSettings}
-                      showModalUpload={showModalUpload}
-                      OpenUploadModal={OpenUploadModal}
-                      getSliderWidth={getSliderWidth}
-                      paperPostScrollRef={paperPostScrollRef}
-                    />
+                    </animated.div>
                   </Grid>
 
                   {
@@ -1316,46 +1357,6 @@ function ProfileOutter({ CallLoggedProfile }: any) {
 
 
 
-
-
-
-              <Grid
-                onClick={() => {
-                  setAutoGo(false)
-                }}
-                container
-
-                className={darkmodeReducer ? "post-background-darkPlay" : 'post-background-lightPlay'}
-                xs={12}
-                style={{
-                  height: "100%",
-                  width: '100%',
-                  display: AutoGo ? 'block' : 'none',
-                  position: 'fixed',
-                  top: '0vh',
-                  textAlign: 'center',
-                  padding: '0px',
-                  cursor: 'pointer'
-                }}
-
-              >
-
-                <Grid
-                  item
-                  xs={12}
-                  style={{ padding: '0px' }}
-                >
-
-
-
-
-
-                </Grid>
-
-
-
-
-              </Grid>
 
 
 

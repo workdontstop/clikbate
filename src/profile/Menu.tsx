@@ -644,6 +644,7 @@ function Menux({
   const [Zoom1, setZoom1] = useState(false);
   const [Zoom2, setZoom2] = useState(false);
   const [Zoom3, setZoom3] = useState(false);
+  const [Zoom3x, setZoom3x] = useState(false);
   const [Zoom4, setZoom4] = useState(false);
   const [Zoom5, setZoom5] = useState(false);
 
@@ -714,8 +715,8 @@ function Menux({
                   <animated.div
                     className={
                       darkmodeReducer
-                        ? `menutopdark ${superFont} turdark zupermenudark  dontallowhighlighting zuperkingIconPostLight `
-                        : `menutoplight ${superFont} turlight zupermenulight  dontallowhighlighting zuperkingIconPostLightx`
+                        ? `menutopdarkx ${superFont} turdark zupermenudark  dontallowhighlighting zuperkingIconPostLight `
+                        : `menutoplightx ${superFont} turlight zupermenulight  dontallowhighlighting zuperkingIconPostLightx`
                     } style={{ ...animationmenu, height: matchMobile ? '8vh' : '6vh', }}>
 
 
@@ -890,10 +891,10 @@ function Menux({
                           < PauseCircleOutlineIcon
 
                             onMouseEnter={(e: any) => {
-                              setZoom3(true);
+                              setZoom3x(true);
                             }}
                             onMouseLeave={(e: any) => {
-                              setZoom3(false);
+                              setZoom3x(false);
                             }}
 
 
@@ -917,11 +918,11 @@ function Menux({
                                 : "make-small-icons-clickable-darkCrop dontallowhighlighting  blinken "
                             }
                             style={{
-                              transform: matchMobile ? Zoom3 ? "scale(3)" : "scale(3)" :
-                                Zoom3 ? "scale(6)" : "scale(3.7)",
-                              fontSize: matchMobile ? Zoom3 ? '2rem' : '' : Zoom3 ? '' : '',
+                              transform: matchMobile ? Zoom3x ? "scale(3)" : "scale(3)" :
+                                Zoom3x ? "scale(6)" : "scale(3.7)",
+                              fontSize: matchMobile ? Zoom3x ? '2rem' : '' : Zoom3x ? '' : '',
                               transition: "transform 0.1s",
-                              color: Zoom3 ? blendedColor : darkmodeReducer
+                              color: Zoom3x ? blendedColor : darkmodeReducer
                                 ? "#ffffff"
                                 : "#000000",
                               zIndex: 30,

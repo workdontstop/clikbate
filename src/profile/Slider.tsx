@@ -110,6 +110,8 @@ function Sliderx({
   audionotify,
   setaudionotify,
 
+  allowInitialexplainIt
+
 
 
 }: any): JSX.Element {
@@ -375,11 +377,12 @@ function Sliderx({
 
     } else {
 
-
-      if (audioPlayerRef.current && audioPlayerRef.current.paused) {
-        // Set volume to desired level (between 0 and 1)
-        audioPlayerRef.current.play(); // Example: setting volume to 50%
-        setIsPaused(false);
+      if (audioPlayerRef.current) {
+        if (audioPlayerRef.current.paused) {
+          // Set volume to desired level (between 0 and 1)
+          audioPlayerRef.current.play(); // Example: setting volume to 50%
+          setIsPaused(false);
+        }
       }
 
     }
@@ -507,7 +510,7 @@ function Sliderx({
         }
         InteractTimerxxhyl.current = setTimeout(() => {
           setinV(true);
-        }, 7000)
+        }, 5000)
 
 
         if (minimise) {
@@ -1134,7 +1137,6 @@ function Sliderx({
 
     const previewFileReadimage: any = new Image();
     previewFileReadimage.crossOrigin = "anonymous";
-
     previewFileReadimage.src = pic.current.src;
 
 
@@ -2993,7 +2995,7 @@ function Sliderx({
 
 
 
-        {inView && post.mode === 1 ?
+        {inView && allowInitialexplainIt && post.mode === 1 ?
           <PostExplain
             audionotify={audionotify}
             setaudionotify={setaudionotify}

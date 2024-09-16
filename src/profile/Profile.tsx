@@ -119,7 +119,8 @@ function Profilex({
   PCZOOM,
   setPCZOOM,
   setAutoGo,
-  AutoGo
+  AutoGo,
+
 
 
 
@@ -146,6 +147,7 @@ function Profilex({
 
 
 
+  const [allowInitialexplainIt, setallowInitialexplainIt] = useState(false);
 
   ///
 
@@ -171,6 +173,7 @@ function Profilex({
   );
 
 
+  const [StopIntervalScroll, setStopIntervalScroll] = useState(false);
 
   const lastItemElement = useRef<any>();
 
@@ -414,10 +417,13 @@ function Profilex({
   const postTimer6 = useRef<ReturnType<typeof setTimeout> | null>(null);
   const postTimer6y = useRef<ReturnType<typeof setTimeout> | null>(null);
   const postTimer6x = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const postTimer6xv = useRef<ReturnType<typeof setTimeout> | null>(null);
   const postTimer7 = useRef<ReturnType<typeof setTimeout> | null>(null);
   const cloudTimer2 = useRef<ReturnType<typeof setTimeout> | null>(null);
 
+  const timeoutToClearInterval = useRef<ReturnType<typeof setTimeout> | null>(null);
 
+  const postTimer6I = useRef<ReturnType<typeof setInterval> | null>(null);
 
 
 
@@ -592,46 +598,90 @@ function Profilex({
       setActiveAutoPost(initialsetsetActiveAutoPost);
 
 
-      if (memeberPageidReducer === 0) { } else {
 
-        if (ScrollReactRouter === 0) {
+      if (ScrollReactRouter === 0) {
 
-        } else {
 
-          ///setminimise(true);
-        }
+        setminimise(true);
+      } else {
+
+        setminimise(false);
+
+
       }
 
 
 
-      if (StopRouterScroll === 2) {
-        ///alert('kkk');
-
-        setStopRouterScroll(1);
-      }
-      else {
-        setStopRouterScroll(1);
-        if (postTimer6.current) {
-          clearTimeout(postTimer6.current);
-        }
-        postTimer6.current = setTimeout(function () {
-          if (ScrollReactRouter === 0) {
-            paperPostScrollRef.current.scrollTop = ScrollReactRouter;
-          }
-          else {
-            var skroll = ScrollReactRouter - 1;
-
-            postDivRef.current[skroll].scrollIntoView({
-              behavior: "smooth",
-              block: "start",
-            });
-          }
-
-        }, 1000)
-      }
 
     }
   }, [postData, showProfiileData]);
+
+
+  // Refactored clearTimers function using useCallback
+  const clearTimers = useCallback(() => {
+    if (postTimer6I.current !== null) {
+      clearInterval(postTimer6I.current);
+      postTimer6I.current = null; // Ensure it is null after clearing
+    }
+    if (postTimer6.current !== null) {
+      clearTimeout(postTimer6.current);
+      postTimer6.current = null; // Ensure it is null after clearing
+    }
+    if (timeoutToClearInterval.current !== null) {
+      clearTimeout(timeoutToClearInterval.current);
+      timeoutToClearInterval.current = null; // Clear the timeout
+    }
+  }, [postData, ScrollReactRouter]);
+
+  useEffect(() => {
+    clearTimers(); // Clear timers before setting new ones
+
+    if (postData.length > 0 && postDivRef.current) {
+      // Set the interval
+      postTimer6I.current = setInterval(() => {
+        if (StopRouterScroll === 2) {
+          setStopRouterScroll(1);
+        } else {
+          setStopRouterScroll(1);
+
+          // Clear any existing timeout before setting a new one
+          if (postTimer6.current !== null) {
+            clearTimeout(postTimer6.current);
+            postTimer6.current = null;
+          }
+
+          postTimer6.current = setTimeout(() => {
+            if (ScrollReactRouter === 0) {
+              paperPostScrollRef.current.scrollTop = ScrollReactRouter;
+            } else {
+              var skroll = ScrollReactRouter - 1;
+              if (postDivRef.current[skroll]) {
+                postDivRef.current[skroll].scrollIntoView({
+                  behavior: "smooth",
+                  block: "start",
+                });
+              }
+            }
+          }, 50);
+        }
+      }, matchMobile ? 400 : 300);
+
+      // Clear the interval after 4 seconds
+      timeoutToClearInterval.current = setTimeout(() => {
+        if (postTimer6I.current) {
+          clearInterval(postTimer6I.current);
+          postTimer6I.current = null; // Ensure it is cleared
+        }
+      }, 3000);
+    }
+
+    // Cleanup function to clear timers when the component unmounts or dependencies change
+    return () => {
+      clearTimers();
+    };
+  }, [postData, ScrollReactRouter, memeberPageidReducer, postDivRef, matchMobile]);
+
+
 
   const newArraa = [...itemheight];
 
@@ -820,6 +870,18 @@ function Profilex({
 
           if (postData.length - 1 === index) {
 
+            ///alert(ScrollReactRouter);
+
+            if (postTimer6xv.current) {
+              clearTimeout(postTimer6xv.current);
+            }
+
+            postTimer6xv.current = setTimeout(() => {
+
+              setallowInitialexplainIt(true);
+
+            }, 8000)
+
 
             if (ScrollReactRouter === 0) {
 
@@ -854,6 +916,7 @@ function Profilex({
 
 
 
+
             if (StopRouterScroll === 2) {
               ///alert('kkk');
 
@@ -861,23 +924,32 @@ function Profilex({
             }
             else {
               setStopRouterScroll(1);
+
+
               if (postTimer6.current) {
                 clearTimeout(postTimer6.current);
               }
               postTimer6.current = setTimeout(function () {
+
+
                 if (ScrollReactRouter === 0) {
                   paperPostScrollRef.current.scrollTop = ScrollReactRouter;
                 }
                 else {
-                  var skroll = ScrollReactRouter - 1;
 
-                  postDivRef.current[skroll].scrollIntoView({
-                    behavior: "smooth",
-                    block: "start",
-                  });
+
+                  ///setStopIntervalScroll(true);
+
+                  ///var skroll = 0;
+                  /// skroll = ScrollReactRouter - 1;
+
+                  ///    postDivRef.current[skroll].scrollIntoView({
+                  ////     behavior: "smooth",
+                  ////     block: "start",
+                  ////   });
                 }
 
-              }, 2000)
+              }, 1000)
             }
 
 
@@ -1550,6 +1622,8 @@ function Profilex({
                         }}
                       >
                         <Post
+
+                          allowInitialexplainIt={allowInitialexplainIt}
                           TopRef={TopRef}
                           AutoGo={AutoGo}
                           setAutoGo={setAutoGo}

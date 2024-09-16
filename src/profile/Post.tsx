@@ -173,7 +173,9 @@ function Postx({
 
   AutoGo,
   setAutoGo,
-  TopRef
+  TopRef,
+
+  allowInitialexplainIt
 
 
 
@@ -296,6 +298,7 @@ function Postx({
 
 
 
+
   useEffect(() => {
     if (post) {
       setdateint(new Date().getTime());
@@ -368,7 +371,7 @@ function Postx({
     };
   }
 
-
+  ///alert(postDatainner[pey]);
 
   ///
   ///
@@ -1426,10 +1429,16 @@ function Postx({
 
 
 
-  const GoToMember = () => {
+  const GoToMember = useCallback(() => {
+
+
+
+
+
 
     const id = post.sender; // Replace with the actual ID you want to navigate to
     const encodedId = encodeBase64(id.toString());
+
 
 
     // Update the current URL with the scroll position and page number
@@ -1440,7 +1449,9 @@ function Postx({
     dispatch(UserInfoUpdateMEMBER(post.sender));
     setIdReactRouterAsInt(post.sender);
     setScrollReactRouter(0);
-  };
+
+
+  }, [paperPostScrollRef]);
 
 
 
@@ -1533,9 +1544,12 @@ function Postx({
   };
 
   const GoToMemberLoaderUp = () => {
+
     if (Timervv.current) {
       clearTimeout(Timervv.current);
     }
+
+
 
     dispatch(UpdateLoader(true));
 
@@ -1672,6 +1686,8 @@ function Postx({
             {/*///////////////////////////////////////////////////////////////////////////POST DATA*/}
 
             <Slider
+              allowInitialexplainIt={allowInitialexplainIt}
+
               audionotify={audionotify}
               setaudionotify={setaudionotify}
 
@@ -2417,7 +2433,8 @@ function Postx({
                             style={{
                               fontSize: matchMobile ? '0.95rem' : '1.06rem',
                               cursor: 'pointer',
-                              fontFamily: "Roboto, Arial, Helvetica, sans-serif",
+                              ////  fontFamily: "Roboto, Arial, Helvetica, sans-serif",
+                              fontFamily: "kaushan_scriptregular",
                               opacity: darkmodeReducer ? '0.4' : '0.6',
                               fontWeight: "bold",
                             }}
