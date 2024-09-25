@@ -213,7 +213,6 @@ const CommentImage = `SELECT item2,sender,item1,thumb1,interact1a,interact1b FRO
 const ProfileImage = `SELECT profile_image,biography,username  FROM members WHERE  members.id=?`;
 
 ///checkIsLogged
-
 const postsxExplain = `
 SELECT
   (SELECT COUNT(*) FROM fan WHERE favid = posts.sender AND userid = ?) AS favCount,
@@ -237,13 +236,11 @@ SELECT
   interact1ax, interact1ay, interact1b, interact1bx, interact1by, item2, vid1backup, vid2backup, time, 
   mode, x1, xt1, x2, xt2, x3, xt3, x4, xt4, x5, xt5, x6, xt6
 FROM posts 
-INNER JOIN members ON posts.sender = members.id 
+INNER JOIN members ON posts.sender = members.id
 LEFT JOIN members AS m ON m.id = (SELECT commented_by FROM comments WHERE post = posts.id ORDER BY date DESC LIMIT 1)
-WHERE posts.mode = 1
+WHERE posts.private = 0 AND posts.mode = 1
 ORDER BY posts.id DESC
 LIMIT 21;
-
-
 `;
 
 const postsx = `
@@ -265,28 +262,23 @@ SELECT
   (SELECT COUNT(*) FROM emotions WHERE post = posts.id AND type = 4) AS funny,
 
   (SELECT file FROM audio WHERE post = posts.id) AS audioData,
-   (SELECT name FROM audio WHERE post = posts.id) AS audioDataName,
+  (SELECT name FROM audio WHERE post = posts.id) AS audioDataName,
   (SELECT backgroudaudio FROM audio WHERE post = posts.id) AS backgroudaudio,
 
   interacttype1, interacttype2, rad1, rad2, members.profile_image, members.username, members.color1, 
   posts.id, sender, post_count, topic, caption, item1, thumb1, itemtype1, interact1a, 
   interact1ax, interact1ay, interact1b, interact1bx, interact1by, item2, vid1backup, vid2backup, time, 
-  mode, x1,xt1, x2,xt2, x3,xt3, x4,xt4, x5,xt5, x6,xt6
+  mode, x1, xt1, x2, xt2, x3, xt3, x4, xt4, x5, xt5, x6, xt6
 FROM posts
-
-INNER JOIN members ON posts.sender = members.id 
-
+INNER JOIN members ON posts.sender = members.id
 LEFT JOIN members AS m ON m.id = (SELECT commented_by FROM comments WHERE post = posts.id ORDER BY date DESC LIMIT 1)
-
-
+WHERE posts.private = 0
 ORDER BY posts.id DESC
 LIMIT 21;
-
-
-
 `;
 
-const posts_moreExplain = `SELECT
+const posts_moreExplain = `
+SELECT
   (SELECT COUNT(*) FROM fan WHERE favid = posts.sender AND userid = ?) AS favCount,
   (SELECT type FROM emotions WHERE post = posts.id AND user = ?) AS EmoIn,
   (SELECT COUNT(*) FROM comments WHERE post = posts.id) AS commentCount,
@@ -308,14 +300,15 @@ const posts_moreExplain = `SELECT
   interact1ax, interact1ay, interact1b, interact1bx, interact1by, item2, vid1backup, vid2backup, time,
   mode, x1, xt1, x2, xt2, x3, xt3, x4, xt4, x5, xt5, x6, xt6
 FROM posts
-INNER JOIN members ON posts.sender = members.id 
+INNER JOIN members ON posts.sender = members.id
 LEFT JOIN members AS m ON m.id = (SELECT commented_by FROM comments WHERE post = posts.id ORDER BY date DESC LIMIT 1)
-WHERE posts.mode = 1 AND posts.id < ?
+WHERE posts.private = 0 AND posts.mode = 1 AND posts.id < ?
 ORDER BY posts.id DESC
 LIMIT 21;
 `;
 
-const posts_more = `SELECT
+const posts_more = `
+SELECT
   (SELECT COUNT(*) FROM fan WHERE favid = posts.sender AND userid = ?) AS favCount,
   (SELECT type FROM emotions WHERE post = posts.id AND user = ?) AS EmoIn,
   (SELECT COUNT(*) FROM comments WHERE post = posts.id) AS commentCount,
@@ -333,23 +326,21 @@ const posts_more = `SELECT
   (SELECT COUNT(*) FROM emotions WHERE post = posts.id AND type = 4) AS funny,
 
   (SELECT file FROM audio WHERE post = posts.id) AS audioData,
-   (SELECT name FROM audio WHERE post = posts.id) AS audioDataName,
+  (SELECT name FROM audio WHERE post = posts.id) AS audioDataName,
   (SELECT backgroudaudio FROM audio WHERE post = posts.id) AS backgroudaudio,
 
   interacttype1, interacttype2, rad1, rad2, members.profile_image, members.username, members.color1, 
   posts.id, sender, post_count, topic, caption, item1, thumb1, itemtype1, interact1a, 
   interact1ax, interact1ay, interact1b, interact1bx, interact1by, item2, vid1backup, vid2backup, time,
-    mode, x1,xt1, x2,xt2, x3,xt3, x4,xt4, x5,xt5, x6,xt6
+  mode, x1, xt1, x2, xt2, x3, xt3, x4, xt4, x5, xt5, x6, xt6
 
 FROM posts
-
-INNER JOIN members ON posts.sender = members.id AND posts.id < ?  
-
+INNER JOIN members ON posts.sender = members.id AND posts.id < ?
 LEFT JOIN members AS m ON m.id = (SELECT commented_by FROM comments WHERE post = posts.id ORDER BY date DESC LIMIT 1)
-
-
+WHERE posts.private = 0
 ORDER BY posts.id DESC
-LIMIT 21`;
+LIMIT 21;
+`;
 
 const posts_moreOld = `SELECT
 (SELECT COUNT(*)   
@@ -395,6 +386,8 @@ caption,item1,thumb1,itemtype1,interact1a,interact1ax,interact1ay,interact1b,int
 
 const updateColor = `UPDATE members SET  color1 = ? WHERE (id = ?)`;
 
+const updatePriv = `UPDATE posts SET  private = ? WHERE  (id = ?) `;
+
 const updateReg = `UPDATE members SET  reg = 0 WHERE (id = ?)`;
 
 const updateBasicpage = `UPDATE members SET username = ?, quote=?, biography=?   WHERE (id = ?)`;
@@ -413,8 +406,8 @@ const createpost = `INSERT INTO posts (sender,post_count,topic,caption,item1,thu
 
 const createpostX = `INSERT INTO posts (sender,post_count,topic,caption,item1,thumb1,itemtype1,interact1a,interact1ax,interact1ay,
   interact1b,interact1bx,interact1by,rad1,rad2,interacttype1,interacttype2,item2,vid1backup,vid2backup,time, 
-  mode,x1,xt1,x2,xt2,x3,xt3,x4,xt4,x5,xt5,x6,xt6)
-   VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`;
+  mode,x1,xt1,x2,xt2,x3,xt3,x4,xt4,x5,xt5,x6,xt6,private)
+   VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`;
 
 const y = `INSERT INTO audio (file,name,sender,post,backgroudAudio,time)
 VALUES (?,?,?,?,?,?)`;
@@ -530,7 +523,7 @@ SELECT
   members.profile_image, members.username, members.color1,
   posts.id, sender, post_count, topic, caption, item1, thumb1, itemtype1, interact1a,
   interact1ax, interact1ay, interact1b, interact1bx, interact1by, item2, vid1backup, vid2backup, time,
-  mode, x1, xt1, x2, xt2, x3, xt3, x4, xt4, x5, xt5, x6, xt6
+  mode, x1, xt1, x2, xt2, x3, xt3, x4, xt4, x5, xt5, x6, xt6,private 
 FROM posts
 INNER JOIN members ON posts.sender = members.id
 LEFT JOIN members AS m ON m.id = (SELECT commented_by FROM comments WHERE post = posts.id ORDER BY date DESC LIMIT 1)
@@ -566,7 +559,7 @@ SELECT
   interacttype1, interacttype2, rad1, rad2, members.profile_image, members.username, members.color1, 
   posts.id, sender, post_count, topic, caption, item1, thumb1, itemtype1, interact1a, 
   interact1ax, interact1ay, interact1b, interact1bx, interact1by, item2, vid1backup, vid2backup, time,
-    mode, x1,xt1, x2,xt2, x3,xt3, x4,xt4, x5,xt5, x6,xt6
+    mode, x1,xt1, x2,xt2, x3,xt3, x4,xt4, x5,xt5, x6,xt6,private 
 
 FROM posts
 
@@ -602,7 +595,7 @@ const profile_moreExplain = `SELECT
   members.profile_image, members.username, members.color1,
   posts.id, sender, post_count, topic, caption, item1, thumb1, itemtype1, interact1a,
   interact1ax, interact1ay, interact1b, interact1bx, interact1by, item2, vid1backup, vid2backup, time,
-  mode, x1, xt1, x2, xt2, x3, xt3, x4, xt4, x5, xt5, x6, xt6
+  mode, x1, xt1, x2, xt2, x3, xt3, x4, xt4, x5, xt5, x6, xt6,private 
 FROM posts
 INNER JOIN members ON posts.sender = members.id 
 LEFT JOIN members AS m ON m.id = (SELECT commented_by FROM comments WHERE post = posts.id ORDER BY date DESC LIMIT 1)
@@ -637,7 +630,7 @@ const profile_more = `SELECT
   interacttype1, interacttype2, rad1, rad2, members.profile_image, members.username, members.color1, 
   posts.id, sender, post_count, topic, caption, item1, thumb1, itemtype1, interact1a, 
   interact1ax, interact1ay, interact1b, interact1bx, interact1by, item2, vid1backup, vid2backup, time,
-    mode, x1,xt1, x2,xt2, x3,xt3, x4,xt4, x5,xt5, x6,xt6
+    mode, x1,xt1, x2,xt2, x3,xt3, x4,xt4, x5,xt5, x6,xt6,private 
     
 FROM posts
 
@@ -1666,6 +1659,7 @@ app.post("/post_upload_dataX", async (req: any, res: any, next: any) => {
       values.xt5,
       values.x6,
       values.xt6,
+      1,
     ]);
 
     const insertedId = result.insertId;
@@ -1712,6 +1706,17 @@ app.put("/update_color", async (req: Request, res: Response) => {
     return res.send({ message: "color updated" });
   } catch {
     return res.send({ message: "colorFailed" });
+  }
+});
+
+app.put("/update_private", async (req: Request, res: Response) => {
+  const { values } = req.body;
+
+  try {
+    await execPoolQuery(updatePriv, [values.key, values.postid]);
+    return res.send({ message: "updated" });
+  } catch {
+    return res.send({ message: "private Failed" });
   }
 });
 
@@ -2115,7 +2120,7 @@ async function generateImagexImage(
 
   const form = new FormData();
   form.append("prompt", prompt);
-  form.append("model", "sd3-large-turbo"); // Use the SD3 Large Turbo model
+  form.append("model", "sd3-large"); // Use the SD3 Large model
   form.append("output_format", "jpeg");
   form.append("mode", "image-to-image"); // Set mode to 'image-to-image'
   form.append("strength", strength); // Add the strength parameter

@@ -45,7 +45,7 @@ import {
 
 import { InteractMenu } from "./InteractMenu";
 
-
+import { InteractMenux } from "./InteractMenux";
 
 
 import { useInView } from "react-intersection-observer";
@@ -99,7 +99,8 @@ function InteractCreatex({
   setTouched,
   showArc,
   canvasInteractWidthCss,
-  setstickerOPtionsDefault
+  setstickerOPtionsDefault,
+  ratiox
 
 }: any) {
   ///
@@ -262,7 +263,10 @@ function InteractCreatex({
           });
 
           if (e.target) {
-            triggerFileInput(1);
+
+            if (matchMobile) { } else {
+              triggerFileInput(1);
+            }
             // Handle other interactions
           }
         }
@@ -301,9 +305,8 @@ function InteractCreatex({
             return newArray;
           });
 
-          if (e.target) {
+          if (matchMobile) { } else {
             triggerFileInput(2);
-            // Handle other interactions
           }
         }
       }
@@ -319,7 +322,9 @@ function InteractCreatex({
 
       if (e.target) {
 
-        triggerFileInput(1);
+        if (matchMobile) { } else {
+          triggerFileInput(1);
+        }
         /// alert('jjk');
         // Handle additional logic here
       }
@@ -345,6 +350,8 @@ function InteractCreatex({
 
 
 
+
+
   useLayoutEffect(() => {
     if (dat) {
 
@@ -354,6 +361,9 @@ function InteractCreatex({
 
     }
   }, [showBorder, dat, Touched, canvasInteractWidth, interactHeightResolution, interactContent, interactContent2, cropInitialIn, cropInitialIn2, valuex, valuex2]);
+
+
+
 
 
 
@@ -757,7 +767,7 @@ function InteractCreatex({
 
 
 
-
+  const [startdown, setstartdown] = useState(false);
 
 
   return <>
@@ -765,142 +775,189 @@ function InteractCreatex({
 
     <canvas
       className={TouchedOpacity ? 'changeOpacityEdit' : ""}
-      onMouseDown={(e: any) => {
-        // You can handle mouse down events here if necessary
-      }}
+
+
 
       onMouseUp={(e: any) => {
         if (matchMobile) { } else {
           handleTouchStartIn(e, 0);
+          setstartdown(false);
         }// Handle mouse up with type 0 for mouse event
       }}
+
+      onMouseMove={(e: any) => {
+
+        if (startdown) {
+          if (matchMobile) { } else {
+
+
+            setstartdown(true);
+            handleTouchStartIn(e, 0);
+
+          }// Handle mouse up with type 0 for mouse event
+        }
+      }
+      }
+
+
+      onMouseDown={(e: any) => {
+        if (matchMobile) { } else {
+
+          setstartdown(true);
+          handleTouchStartIn(e, 0);
+
+        }// Handle mouse up with type 0 for mouse event
+      }}
+
       onTouchStart={(e: any) => {
+
+
 
         if (matchMobile) {
           e.preventDefault(); // Prevent default behaviors like page scroll
           handleTouchStartIn(e, 1); // Handle touch end with type 1 for touch event }
         } else { }
 
+
       }}
+
+      onTouchMove={(e: any) => {
+
+        if (matchMobile) {
+          e.preventDefault(); // Prevent default behaviors like page scroll
+          handleTouchStartIn(e, 1); // Handle touch end with type 1 for touch event }
+        } else { }
+
+
+      }}
+
+
+
+
+
+      onTouchEnd={((e: any) => {
+
+        if (interactContent[index]) {
+
+          if (e.target) {
+            triggerFileInput(2);
+            // Handle other interactions
+          }
+        } else {
+
+          if (e.target) {
+            triggerFileInput(1);
+            // Handle other interactions
+          }
+
+
+
+        }
+
+      })}
 
       ref={canvasRefIn}
       style={{
-        transform: matchMobile ? 'scale(0.7)' : '',
+        transform: matchMobile ?
+
+          ratiox === 1 ? 'scale(0.82)' :
+            ratiox === 2 ? 'scale(0.66)' :
+              ratiox === 3 ? 'scale(0.56)' :
+                ratiox === 4 ? 'scale(0.49)' :
+                  'scale(0.417)'
+
+
+          : 'scale(1)',
         padding: "0px",
         position: 'relative',
         zIndex: 11,
         top: '0vh',
         margin: matchMobile ? '' : 'left',
-        left: matchMobile ? '-18vw' : '',
+        left: matchMobile ?
+
+          ratiox === 1 ? '-11vw' :
+            ratiox === 2 ? '-27vw' :
+              ratiox === 3 ? '-42.5vw' :
+                ratiox === 4 ? '-59vw' :
+                  '-73.5vw' :
+
+
+          '',
         backgroundColor: 'rgb(0,0,0,0)',
         display: stickerOPtionsDefault === 4 ? 'block' : 'none',
       }}
     />
 
 
-    {openMenu ?
-      <InteractMenu
-        interactContenttype={interactContenttype}
-        interactContentvideo={interactContentvideo}
-        interactContenttype2={interactContenttype2}
-        interactContentvideo2={interactContentvideo2}
-        percentageCoveragex={percentageCoveragex}
-        callDelInteract={callDelInteract}
-        colorx={colorx}
-        setadjustinteract2={setadjustinteract2}
-        setcropInitialIn2={setcropInitialIn2}
-        interactContent2={interactContent2}
-        stickerOPtionsDefault={stickerOPtionsDefault}
-        setcropInitialIn={setcropInitialIn} index={index}
-        moveCordinatesMultiple={moveCordinatesMultiple}
-        showBorder={showBorder}
-        setshowBorder={setshowBorder}
-        canxxtim={canxxtim}
-        canxxTime={canxxTime}
-        valuex={valuex}
-        valuex2={valuex2}
-        handleChange={handleChange}
-        adjustinteract1={adjustinteract1}
-        adjustinteract2={adjustinteract2}
-        interactContent={interactContent}
-        setadjustinteract1={setadjustinteract1}
-        mobilefont={mobilefont}
-        pcfont={pcfont}
-        handleChange2x={handleChange2x}
-
-      /> : null}
+    {
+      openMenu ?
 
 
+        matchMobile ? <InteractMenux
+          ratiox={ratiox}
+
+          interactContenttype={interactContenttype}
+          interactContentvideo={interactContentvideo}
+          interactContenttype2={interactContenttype2}
+          interactContentvideo2={interactContentvideo2}
+          percentageCoveragex={percentageCoveragex}
+          callDelInteract={callDelInteract}
+          colorx={colorx}
+          setadjustinteract2={setadjustinteract2}
+          setcropInitialIn2={setcropInitialIn2}
+          interactContent2={interactContent2}
+          stickerOPtionsDefault={stickerOPtionsDefault}
+          setcropInitialIn={setcropInitialIn} index={index}
+          moveCordinatesMultiple={moveCordinatesMultiple}
+          showBorder={showBorder}
+          setshowBorder={setshowBorder}
+          canxxtim={canxxtim}
+          canxxTime={canxxTime}
+          valuex={valuex}
+          valuex2={valuex2}
+          handleChange={handleChange}
+          adjustinteract1={adjustinteract1}
+          adjustinteract2={adjustinteract2}
+          interactContent={interactContent}
+          setadjustinteract1={setadjustinteract1}
+          mobilefont={mobilefont}
+          pcfont={pcfont}
+          handleChange2x={handleChange2x}
+        /> :
+          <InteractMenu
+            interactContenttype={interactContenttype}
+            interactContentvideo={interactContentvideo}
+            interactContenttype2={interactContenttype2}
+            interactContentvideo2={interactContentvideo2}
+            percentageCoveragex={percentageCoveragex}
+            callDelInteract={callDelInteract}
+            colorx={colorx}
+            setadjustinteract2={setadjustinteract2}
+            setcropInitialIn2={setcropInitialIn2}
+            interactContent2={interactContent2}
+            stickerOPtionsDefault={stickerOPtionsDefault}
+            setcropInitialIn={setcropInitialIn} index={index}
+            moveCordinatesMultiple={moveCordinatesMultiple}
+            showBorder={showBorder}
+            setshowBorder={setshowBorder}
+            canxxtim={canxxtim}
+            canxxTime={canxxTime}
+            valuex={valuex}
+            valuex2={valuex2}
+            handleChange={handleChange}
+            adjustinteract1={adjustinteract1}
+            adjustinteract2={adjustinteract2}
+            interactContent={interactContent}
+            setadjustinteract1={setadjustinteract1}
+            mobilefont={mobilefont}
+            pcfont={pcfont}
+            handleChange2x={handleChange2x}
+          /> : null}
 
 
-    {openMenu ?
-      < Grid
-        item
-        xs={12}
-        style={{
 
-          textAlign: 'center',
-          left: '37vw',
-          height: "20px",
-          position: 'relative',
-          bottom: '21vh',
-          width: '100%',
-          zIndex: 20,
-          display: matchMobile ? 'block' : 'none'
-        }}
-      >
-        <CancelPresentationIcon
-          onClick={() => {
-            setopenMenu(false);
-          }}
-          className={
-            darkmodeReducer
-              ? " dontallowhighlighting zuperkingIcon "
-              : " dontallowhighlighting zuperkingIcon  "
-          }
-          style={{
-            margin: "auto",
-            color: "#ffffff",
-            fontSize: matchMobile
-              ? `${mobilefont + 10}vh`
-              : `${pcfont}vw`,
 
-          }}
-        />
-      </Grid>
-      : < Grid
-        item
-        xs={12}
-        style={{
-          margin: "auto",
-          textAlign: 'center',
-          left: '40vw',
-          height: "20px",
-          position: 'relative',
-          bottom: matchMobile ? '16.1vh' : '8vh',
-          width: '100%',
-          zIndex: 20
-        }}
-      >
-        <KeyboardArrowUpIcon
-          onClick={() => {
-            setopenMenu(true);
-          }}
-          className={
-            darkmodeReducer
-              ? "make-small-icons-clickable-lightCrop dontallowhighlighting zuperkingIcon "
-              : "make-small-icons-clickable-darkCrop dontallowhighlighting zuperkingIcon  "
-          }
-          style={{
-            margin: "auto",
-            color: "#ffffff",
-            fontSize: matchMobile
-              ? `${mobilefont}vh`
-              : `${pcfont}vw`,
 
-          }}
-        />
-      </Grid>}
 
 
     {stickerOPtionsDefault === 4 ?
@@ -953,14 +1010,16 @@ function InteractCreatex({
 
         <Grid
           item
-          xs={9}
+          xs={12}
           style={{
             margin: "auto",
             textAlign: 'center',
             left: '0px',
             height: "20px",
             position: 'fixed',
-            bottom: matchMobile ? '15vh' : '8vh',
+            bottom: matchMobile ?
+
+              ratiox >= 3 ? '30vh' : '15vh' : '8vh',
             width: '100%',
             zIndex: 200
           }}
@@ -1012,6 +1071,7 @@ function InteractCreatex({
                 ? `${mobilefont}vh`
                 : `${pcfont}vw`,
               display: adjustinteract1 || adjustinteract2 ? 'none' : 'block',
+
             }}
           />}
 

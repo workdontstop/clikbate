@@ -18,6 +18,8 @@ import CommentIcon from "@mui/icons-material/Comment";
 import ChatBubbleOutlineIcon from '@material-ui/icons/ChatBubbleOutline';
 import VolumeOffIcon from '@material-ui/icons/VolumeOff';
 
+import PlayArrowIcon from '@material-ui/icons/PlayArrow';
+
 import VolumeUpIcon from '@material-ui/icons/VolumeUp';
 
 import VisibilityIcon from '@material-ui/icons/Visibility';
@@ -31,6 +33,7 @@ import { useNavigate } from 'react-router-dom';
 import { encodeBase64 } from './utils'; // Ensure this is the correct path to your utils
 
 
+import { Button } from "@material-ui/core";
 
 import { IconButton, InputAdornment, TextField } from "@material-ui/core";
 
@@ -175,7 +178,11 @@ function Postx({
   setAutoGo,
   TopRef,
 
-  allowInitialexplainIt
+  allowInitialexplainIt,
+  localPostId,
+  localProfileId,
+
+  showMonoPc
 
 
 
@@ -217,6 +224,11 @@ function Postx({
   const [LockCaption, setLockCaption] = useState('');
 
   const [LockTopic, setLockTopic] = useState('');
+
+
+  const [imageActive, setImageActive] = useState<boolean>(false);
+
+
 
 
   useEffect(() => {
@@ -264,6 +276,8 @@ function Postx({
   const [Maximisefromcanvas, setMaximisefromcanvas] = useState(false);
 
 
+  const [PlayClik, setPlayClik] = useState(false);
+
 
   const [ShowReactionsIcon, setShowReactionsIcon] = useState(true);
 
@@ -277,23 +291,32 @@ function Postx({
 
 
 
+
   const updateCurrentURLWithScrollPosition = useCallback(() => {
     var indexplus1 = pey + 1;
+
+    var l = localPostId;
+    var lx = localProfileId;
+
+
 
 
 
     const currentPath = location.pathname.split('/');
-    const currentIdRoute1 = currentPath[currentPath.length - 4]; // Assuming idRoute1 is the fourth last segment
-    const currentIdRoute2 = currentPath[currentPath.length - 3]; // Assuming idRoute2 is the third last segment
-    const currentIdRoute3 = currentPath[currentPath.length - 2]; // Assuming idRoute3 is the second last segment
-    const currentIdRoute4 = currentPath[currentPath.length - 1]; // Assuming idRoute4 is the last segment
+    const currentIdRoute1 = currentPath[currentPath.length - 6]; // Assuming idRoute1 is the fourth last segment
+    const currentIdRoute2 = currentPath[currentPath.length - 5]; // Assuming idRoute2 is the third last segment
+    const currentIdRoute3 = currentPath[currentPath.length - 4]; // Assuming idRoute3 is the second last segment
+    const currentIdRoute4 = currentPath[currentPath.length - 3]; // Assuming idRoute4 is the last segment
 
     const encodedScrollIndex = encodeBase64(indexplus1.toString());
     const encodedPageNumber = encodeBase64(PostPagenumPusher.toString());
     const encodedFeedtype = encodeBase64(FeedType.toString());
 
-    navigate(`/Feeds/${currentIdRoute1}/${encodedScrollIndex}/${encodedPageNumber}/${encodedFeedtype}`, { replace: true });
-  }, [FeedType, PostPagenumPusher]);
+    const localpost = encodeBase64(l.toString());
+    const localprofile = encodeBase64(lx.toString());
+
+    navigate(`/Feeds/${currentIdRoute1}/${encodedScrollIndex}/${encodedPageNumber}/${encodedFeedtype}/${localpost}/${localprofile}`, { replace: true });
+  }, [FeedType, PostPagenumPusher, localPostId, localProfileId]);
 
 
 
@@ -495,6 +518,66 @@ function Postx({
 
 
 
+  ///
+  ///
+  ///
+  /// GET  SIGNUP BUTTON AND LOGIN BUTTON STYLE FROM REDUX
+  const { MozBoxShadowSD, WebkitBoxShadowSD, boxShadowSD } = useSelector(
+    (state: RootStateOrAny) => ({
+      ...state.ButtonsSignUpReducerDark,
+    })
+  );
+
+  const { MozBoxShadowSL, WebkitBoxShadowSL, boxShadowSL } = useSelector(
+    (state: RootStateOrAny) => ({
+      ...state.ButtonsSignUpReducerLight,
+    })
+  );
+
+  const { MozBoxShadowLD, WebkitBoxShadowLD, boxShadowLD } = useSelector(
+    (state: RootStateOrAny) => ({
+      ...state.ButtonsLoginReducerDark,
+    })
+  );
+
+  const { MozBoxShadowLL, WebkitBoxShadowLL, boxShadowLL } = useSelector(
+    (state: RootStateOrAny) => ({
+      ...state.ButtonsLoginReducerLight,
+    })
+  );
+
+
+
+  var MozBoxShadowReducerLogin = " ";
+  var WebkitBoxShadowReducerLogin = " ";
+  var boxShadowReducerLogin = " ";
+
+  var MozBoxShadowReducerSign = " ";
+  var WebkitBoxShadowReducerSign = " ";
+  var boxShadowReducerSign = " ";
+
+  if (darkmodeReducer) {
+    MozBoxShadowReducerLogin = MozBoxShadowLD;
+    WebkitBoxShadowReducerLogin = WebkitBoxShadowLD;
+    boxShadowReducerLogin = boxShadowLD;
+
+    MozBoxShadowReducerSign = MozBoxShadowSD;
+    WebkitBoxShadowReducerSign = WebkitBoxShadowSD;
+    boxShadowReducerSign = boxShadowSD;
+  } else {
+    MozBoxShadowReducerLogin = MozBoxShadowLD;
+    WebkitBoxShadowReducerLogin = WebkitBoxShadowLD;
+    boxShadowReducerLogin = boxShadowLD;
+
+    MozBoxShadowReducerSign = MozBoxShadowSD;
+    WebkitBoxShadowReducerSign = WebkitBoxShadowSD;
+    boxShadowReducerSign = boxShadowSD;
+  }
+
+
+
+
+
 
   const [charCount, setCharCount] = useState(0);
 
@@ -564,6 +647,25 @@ function Postx({
   const [profileImagethumbLeft, setprofileImagethumbLeft] = useState<number>(0);
 
   const [ShowPost, setShowPost] = useState(false);
+
+
+
+  const [Private, setPrivate] = useState(1);
+
+
+
+  useEffect(() => {
+
+
+    setPrivate(post.private);
+
+
+
+
+  }, [post])
+
+
+
 
   ///
   ///
@@ -668,6 +770,9 @@ function Postx({
   const ComUsername = post.commentorUsername ? post.commentorUsername : usernameReducer;
 
 
+  const wax = useRef<ReturnType<typeof setTimeout> | null>(
+    null
+  );
 
 
   const wa = useRef<ReturnType<typeof setTimeout> | null>(
@@ -704,7 +809,48 @@ function Postx({
 
     }
 
-  }, [minimise])
+  }, [minimise]);
+
+
+  const privateClik = useCallback(() => {
+
+    var k = 0;
+
+    if (Private === 1) {
+      k = 0
+    } else {
+      k = 1
+    }
+
+    var xx = {
+      postid: post.id,
+      id: idReducer,
+      key: k,
+    };
+
+    Axios.put(
+      `${REACT_APP_SUPERSTARZ_URL}/update_private`,
+      { values: xx },
+      {}
+    )
+      .then((response) => {
+        if (response.data.message === "updated") {
+          setPrivate(k);
+        }
+      })
+      .catch(function (error) {
+        ///  alert("profileoutter color  error");
+      });
+
+  }
+    , [
+      post,
+      Private,
+      idReducer,
+    ]);
+
+
+
 
 
   useEffect(() => {
@@ -728,15 +874,121 @@ function Postx({
             behavior: "smooth",
             block: "start",
           });
+        }, 500)
+
+        wa.current = setTimeout(() => {
+          postDivRef.current[pey].scrollIntoView({
+            behavior: "smooth",
+            block: "start",
+          });
         }, 1000)
 
+        wa.current = setTimeout(() => {
+          postDivRef.current[pey].scrollIntoView({
+            behavior: "smooth",
+            block: "start",
+          });
+        }, 1500)
 
+        wa.current = setTimeout(() => {
+          postDivRef.current[pey].scrollIntoView({
+            behavior: "smooth",
+            block: "start",
+          });
+        }, 2000)
+
+        wa.current = setTimeout(() => {
+          postDivRef.current[pey].scrollIntoView({
+            behavior: "smooth",
+            block: "start",
+          });
+        }, 2500)
+
+        wa.current = setTimeout(() => {
+          postDivRef.current[pey].scrollIntoView({
+            behavior: "smooth",
+            block: "start",
+          });
+        }, 2800)
 
       }
     }
 
 
   }, [minimise])
+
+
+
+
+  useEffect(() => {
+
+    if (matchMobile) {
+
+      ///setminimiseSpecificScroll(false);
+    }
+
+    else {
+      if (ActiveCanvas === pey) {
+
+        /// alert('jj');
+
+        if (wax.current) {
+          clearTimeout(wax.current);
+        }
+
+        wax.current = setTimeout(() => {
+          postDivRef.current[pey].scrollIntoView({
+            behavior: "smooth",
+            block: "start",
+          });
+        }, 500)
+
+
+        if (wax.current) {
+          clearTimeout(wax.current);
+        }
+        wax.current = setTimeout(() => {
+          postDivRef.current[pey].scrollIntoView({
+            behavior: "smooth",
+            block: "start",
+          });
+        }, 1000)
+
+
+        wax.current = setTimeout(() => {
+          postDivRef.current[pey].scrollIntoView({
+            behavior: "smooth",
+            block: "start",
+          });
+        }, 1500)
+
+        wax.current = setTimeout(() => {
+          postDivRef.current[pey].scrollIntoView({
+            behavior: "smooth",
+            block: "start",
+          });
+        }, 2000)
+
+        wax.current = setTimeout(() => {
+          postDivRef.current[pey].scrollIntoView({
+            behavior: "smooth",
+            block: "start",
+          });
+        }, 2500)
+
+        wax.current = setTimeout(() => {
+          postDivRef.current[pey].scrollIntoView({
+            behavior: "smooth",
+            block: "start",
+          });
+        }, 2800)
+
+      }
+    }
+
+
+  }, [showMonoPc])
+
 
 
 
@@ -1258,7 +1510,7 @@ function Postx({
 
   var postprofiletop = matchPc ? "3vh" : matchTablet ? "-9.3vh" : "-10vh";
 
-  var postusernametop = matchPc ? "-0.5vh" : matchTablet ? "-11.9vh" : "-13.6vh";
+  var postusernametop = matchPc ? "-1vh" : matchTablet ? "-11.9vh" : "-13.6vh";
 
   var topV = matchPc ? "0.6vh" : "-13vh";
 
@@ -1445,13 +1697,13 @@ function Postx({
     updateCurrentURLWithScrollPosition();
 
     // Navigate to the new URL with the new ID
-    navigate(`/Feeds/${encodedId}/${encodeBase64('0')}/${encodeBase64('0')}/${encodeBase64('0')}`);
+    navigate(`/Feeds/${encodedId}/${encodeBase64('0')}/${encodeBase64('0')}/${encodeBase64('0')}/${encodeBase64('0')}/${encodeBase64('0')}`);
     dispatch(UserInfoUpdateMEMBER(post.sender));
     setIdReactRouterAsInt(post.sender);
     setScrollReactRouter(0);
 
 
-  }, [paperPostScrollRef]);
+  }, [paperPostScrollRef, localPostId]);
 
 
 
@@ -1686,6 +1938,13 @@ function Postx({
             {/*///////////////////////////////////////////////////////////////////////////POST DATA*/}
 
             <Slider
+              PlayClik={PlayClik}
+              imageActive={imageActive}
+              setImageActive={setImageActive}
+
+              scrollToPost={scrollToPost}
+              showMonoPc={showMonoPc}
+
               allowInitialexplainIt={allowInitialexplainIt}
 
               audionotify={audionotify}
@@ -1897,7 +2156,7 @@ function Postx({
 
               style={{
                 marginLeft: matchMobile ? minimise ? '80vw' : '90vw'
-                  : minimise ? '28vw' : "46vw",
+                  : minimise ? '27.35vw' : "46vw",
 
                 top: minimise ? matchMobile ? '2.8vh' : `5.2vh` : matchMobile ? '-15.05vh' : `-12vh`,
 
@@ -2039,6 +2298,7 @@ function Postx({
 
 
 
+
               {playXAudio ? null :
                 <VolumeOffIcon
                   className={
@@ -2065,8 +2325,12 @@ function Postx({
 
 
 
-
             </span>
+
+
+
+
+
             {/*///////////////////////////////////////////////////////////////////////////EXPLAIN MUTE AUDIO*/}
 
 
@@ -2102,6 +2366,10 @@ function Postx({
 
               }}
             >
+
+
+
+
 
 
 
@@ -2171,6 +2439,37 @@ function Postx({
             </span>
             {/*///////////////////////////////////////////////////////////////////////////EXPLAIN PLAY PAUSE*/}
 
+
+            < PlayArrowIcon
+              className={
+                darkmodeReducer
+                  ? " dontallowhighlighting zuperkingIcon  zuperkingIconPostDark "
+                  : "  dontallowhighlighting zuperkingIcon  zuperkingIconPostLight "
+              }
+              onClick={() => {
+                setPlayClik(true);
+
+                setTimeout(() => {
+                  setPlayClik(false);
+                }, 500)
+              }}
+              style={{
+                position: "absolute",
+                transform: matchMobile ? "scale(2.5)" : "scale(3)",
+                transition: "transform 0.1s",
+                zIndex: 20,
+                verticalAlign: "middle",
+                fontSize: minimise ? '0px' : postcommentfont,
+                top: matchMobile ? '25vh' : '50vh',
+                left: matchMobile ? '25vh' : '50vh',
+                opacity: 1,
+                color: darkmodeReducer ? "#000000" : "#dddddd",
+                cursor: 'pointer',
+                display: post.mode === 1 ? 'block' : 'none',
+                visibility: imageActive ? 'hidden' : 'visible',
+
+              }}
+            />
 
 
             {/*///////////////////////////////////////////////////////////////////////////Profile pic minimise*/}
@@ -2381,13 +2680,81 @@ function Postx({
                             }}
                           >
 
-                            <span onClick={() => {
-                              GoToMemberLoaderUp();
-                            }}
+                            <span
                               style={{
                                 padding: '0px',
                                 visibility: minimise ? 'hidden' : 'visible'
-                              }}> {post.username}</span>
+                              }}>
+
+
+                              {idReducer === memeberPageidReducer && post.mode === 1 ?
+
+
+
+
+                                Private === 1 ?
+                                  <Button
+
+
+
+                                    style={{
+                                      fontSize: matchMobile ? '1.4vh' : '0.9vw',
+                                      padding: '1.4vh',
+                                      borderRadius: "50px",
+
+                                      MozBoxShadow: MozBoxShadowReducerSign,
+                                      WebkitBoxShadow: WebkitBoxShadowReducerSign,
+                                      boxShadow: boxShadowReducerSign,
+                                      left: '-0.9vw',
+                                      top: '-3vh'
+                                    }}
+                                    variant="contained"
+                                    size="large"
+                                    color="secondary"
+                                    onClick={() => {
+                                      privateClik();
+                                    }}
+                                  >
+                                    PRIVATE
+
+                                  </Button> :
+
+                                  <Button
+
+
+
+                                    style={{
+                                      fontSize: matchMobile ? '1.4vh' : '0.9vw',
+                                      padding: '1.4vh',
+                                      borderRadius: "50px",
+
+                                      MozBoxShadow: MozBoxShadowReducerLogin,
+                                      WebkitBoxShadow: WebkitBoxShadowReducerLogin,
+                                      boxShadow: boxShadowReducerLogin,
+                                      left: '-0.9vw',
+                                      top: '-3vh'
+                                    }}
+                                    variant="outlined"
+                                    size="large"
+                                    color="primary"
+                                    onClick={() => {
+                                      privateClik();
+                                    }}
+                                  >
+                                    PUBLIC
+
+                                  </Button>
+
+
+                                :
+
+                                <span onClick={() => {
+                                  GoToMemberLoaderUp();
+                                }} >
+
+                                  {post.username}
+
+                                </span>}</span>
                           </span>
                         </span>
                       </span>

@@ -106,8 +106,9 @@ function ProfileSetupx({
     NavUsed,
 
     setAutoGo,
-    AutoGo
-
+    AutoGo,
+    localPostId,
+    localProfileId
 
 
 
@@ -346,6 +347,10 @@ function ProfileSetupx({
                     position: "relative", zIndex: 1, padding: "0px"
                 }}>
                     <Profile
+
+                        localPostId={localPostId}
+                        localProfileId={localProfileId}
+
                         setAutoGo={setAutoGo}
                         AutoGo={AutoGo}
 

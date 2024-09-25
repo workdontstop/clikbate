@@ -1049,7 +1049,8 @@ function Captionx({
 
         <Grid
           item
-          xs={6}
+          xs={5}
+          sm={6}
           style={{
             padding: "0px",
             backgroundColor: '#00ccff',
@@ -1063,8 +1064,8 @@ function Captionx({
           {finalImageData[0] ? < img
             src={URL.createObjectURL(finalImageData[0])}
             style={{
-              width: "65%",
-              height: "53vh",
+              width: matchMobile ? '100%' : "65%",
+              height: matchMobile ? 'auto' : "53vh",
               objectFit: 'cover',
               marginLeft: '10vw',
               borderRadius: '10%'
@@ -1080,12 +1081,13 @@ function Captionx({
 
         <Grid
           item
-          xs={6}
+          xs={7}
+          sm={6}
           style={{
             padding: "0px",
             height: '0vh',
             marginTop: '5vh',
-            paddingLeft: '8vw',
+            paddingLeft: matchMobile ? '0px' : '8vw',
           }}
         >
 
@@ -1115,7 +1117,7 @@ function Captionx({
               }
               style={{
                 color: "#ffffff",
-                fontSize: matchTabletMobile ? `${mobilefont}vh` : `${pcfont - 1}vw`,
+                fontSize: matchTabletMobile ? `2vh` : `${pcfont - 1}vw`,
                 marginRight: "5vw",
               }}
             />
@@ -1123,8 +1125,8 @@ function Captionx({
               style={{
                 position: 'relative', // Absolute position for the text
                 top: '-10%', // Center vertically
-                fontFamily: 'fantasy',
-                fontSize: matchTabletMobile ? `${mobilefont}vh` : `1.3vw`,
+                fontFamily: 'kaushan_scriptregular',
+                fontSize: matchTabletMobile ? `2vh` : `1.3vw`,
               }}
             >
               {interactContentAudiotype === 1 ? Audioname : 'Uploading Post'}
@@ -1149,12 +1151,25 @@ function Captionx({
             >
 
 
+              <Grid
+                item
+                xs={3}
+                sm={12}
+                style={{
+                  padding: "0px",
+
+                  height: '0vh',
+                  position: 'relative',
+
+                }}
+              ></Grid>
 
 
 
               <Grid
                 item
-                xs={6}
+                xs={9}
+                sm={6}
                 style={{
                   padding: "0px",
 
@@ -1169,7 +1184,7 @@ function Captionx({
                     <video
                       src={interactContentvideo ? URL.createObjectURL(interactContentvideo) : ''}   // Using the blob URL from interactContentvideo
                       style={{
-                        width: "90%", // Set thevideo width to 100%
+                        width: matchMobile ? '70%' : "90%", // Set thevideo width to 100%
                         height: "auto",
                         display: "block", // Ensure proper rendering in some browsers
                         margin: "0 auto", // Center the video
@@ -1180,7 +1195,7 @@ function Captionx({
                     interactContent.length > 0 ? <img
                       src={URL.createObjectURL(interactContent[0])}
                       style={{
-                        width: "90%",
+                        width: matchMobile ? '70%' : "90%",
                         height: "21vh",
                         objectFit: 'cover',
 
@@ -1193,7 +1208,7 @@ function Captionx({
                   <video
                     src={interactContentvideo2 ? URL.createObjectURL(interactContentvideo2) : ''}   // Using the blob URL from interactContentvideo
                     style={{
-                      width: "90%", // Set thevideo width to 100%
+                      width: matchMobile ? '70%' : "90%",// Set thevideo width to 100%
                       height: "auto",
                       display: "block", // Ensure proper rendering in some browsers
                       margin: "0 auto", // Center the video
@@ -1205,7 +1220,7 @@ function Captionx({
                     src={URL.createObjectURL(interactContent2[0])}
 
                     style={{
-                      width: "90%",
+                      width: matchMobile ? '70%' : "90%",
                       height: "21vh",
                       objectFit: 'cover',
                     }}
@@ -1275,7 +1290,7 @@ function Captionx({
             style={{
               margin: "auto",
               color: "#ffffff",
-              fontSize: matchTabletMobile ? `${mobilefont}vh` : `${pcfont}vw`,
+              fontSize: matchTabletMobile ? `2vh` : `${pcfont}vw`,
               marginLeft: "5vw",
             }}
           />
@@ -1301,7 +1316,7 @@ function Captionx({
             >
 
 
-              <h2 className='blinken' style={{ textAlign: 'center', margin: 'auto', fontFamily: 'fantasy', }}>
+              <h2 className='blinken' style={{ textAlign: 'center', margin: 'auto', fontFamily: 'kaushan_scriptregular', }}>
                 {loadmode}..
               </h2>
 

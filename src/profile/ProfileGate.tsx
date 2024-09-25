@@ -43,7 +43,7 @@ import AddIcon from "@mui/icons-material/Add";
 
 import { OptionsSlider } from "./OptionsSlider";
 
-import { UpdateNavFilterReducer, UpdateSign } from "../GlobalActions";
+import { UpdateNavFilterReducer, UpdateSign, addPostData } from "../GlobalActions";
 import { UpdateNavCropReducer } from "../GlobalActions";
 import LogoutIcon from "@mui/icons-material/Logout";
 import PublicIcon from '@material-ui/icons/Public';
@@ -57,7 +57,7 @@ import { ServerError } from "../log/ServerError";
 import { UserInfoUpdateMEMBERDATA } from "../log/actions/UserdataAction";
 import { UserInfoUpdateMEMBER } from "../log/actions/UserdataAction";
 import { LoaderPost } from "./LoaderPost";
-import { UpdateLoader, UpdateMenuData, Updatepagenum } from ".././GlobalActions";
+import { UpdateLoader, UpdateMenuData, Updatepagenum, addNavigationData, removePostDataByTimestamp } from ".././GlobalActions";
 import { Taskbar } from "./Taskbar";
 import { UpdateInteract, UpdateAlertReducer } from ".././GlobalActions";
 import SlowMotionVideoIcon from '@material-ui/icons/SlowMotionVideo';
@@ -157,7 +157,13 @@ function ProfileGatex({
     setPCZOOM,
 
     setAutoGo,
-    AutoGo
+    AutoGo,
+
+    localPostId,
+    setlocalPostId,
+    localProfileId,
+    setlocalProfileId,
+
 
 }: any): JSX.Element {
 
@@ -173,6 +179,9 @@ function ProfileGatex({
 
 
 
+
+    const [ReactRouterPost, setReactRouterPost] = useState(0);
+    const [ReactRouterProfile, setReactRouterProfile] = useState(0);
 
     /////
     ///////
@@ -225,7 +234,7 @@ function ProfileGatex({
 
     const isAppleDevice = /Mac|iPhone|iPad|iPod/.test(navigator.userAgent);
 
-    const { idRoute1, idRoute2, idRoute3, idRoute4 } = useParams();
+    const { idRoute1, idRoute2, idRoute3, idRoute4, idRoute5, idRoute6 } = useParams();
     let idReactRouter: string | undefined;
     let PagenumRouter: string | undefined;
     let scrollRouter: string | undefined;
@@ -250,10 +259,13 @@ function ProfileGatex({
 
             // Extract IDs from the pathname
             const pathSegments = window.location.pathname.split('/');
-            const idRoute1 = pathSegments[pathSegments.length - 4]; // Adjust index based on your route structure
-            const idRoute2 = pathSegments[pathSegments.length - 3]; // Adjust index based on your route structure
-            const idRoute3 = pathSegments[pathSegments.length - 2]; // Adjust index based on your route structure
-            const idRoute4 = pathSegments[pathSegments.length - 1]; // Adjust index based on your route structure
+
+            const idRoute1 = pathSegments[pathSegments.length - 6]; // Adjust index based on your route structure
+            const idRoute2 = pathSegments[pathSegments.length - 5]; // Adjust index based on your route structure
+            const idRoute3 = pathSegments[pathSegments.length - 4]; // Adjust index based on your route structure
+            const idRoute4 = pathSegments[pathSegments.length - 3]; // Adjust index based on your route structure
+            const idRoute5 = pathSegments[pathSegments.length - 2]; // Adjust index based on your route structure
+            const idRoute6 = pathSegments[pathSegments.length - 1]; // Adjust index based on your route structure
 
             if (idRoute1) {
 
@@ -298,6 +310,26 @@ function ProfileGatex({
                     }
                 }
             }
+
+            if (idRoute5) {
+                const decodedId5 = decodeBase64(idRoute5);
+                if (decodedId5) {
+                    const parsedInt5 = parseInt(decodedId5, 10);
+                    if (!isNaN(parsedInt5)) {
+                        setReactRouterPost(parsedInt5);
+                    }
+                }
+            }
+
+            if (idRoute6) {
+                const decodedId6 = decodeBase64(idRoute6);
+                if (decodedId6) {
+                    const parsedInt6 = parseInt(decodedId6, 10);
+                    if (!isNaN(parsedInt6)) {
+                        setReactRouterProfile(parsedInt6);
+                    }
+                }
+            }
         };
 
         // Add an event listener for the popstate event
@@ -313,6 +345,80 @@ function ProfileGatex({
     const [RandomFromPostData2, setRandomFromPostData2] = useState('');
 
     const [loaderx, setloader] = useState(false);
+
+
+    // Use useSelector at the top level of the component to access all post entries
+    const postEntries = useSelector((state: RootStateOrAny) => state.postData.postEntries);
+
+    // Define the PostItem type as 'any'
+    type PostItem = [];
+
+    // Define the PostDataLocal type as an array of 'PostItem' objects
+    type PostDataLocal = PostItem[];
+
+
+    // Create a local state to store the filtered post data
+    const [postItems, setPostItems] = useState<PostDataLocal>([]);
+
+
+
+
+    // Function to remove data from Redux and update the URL
+    const handleRemoveAndUpdateURL = useCallback(() => {
+        // Remove post data from Redux by timestamp
+        dispatch(removePostDataByTimestamp(ReactRouterPost));
+
+        // Update the URL with localPostId set to 0
+        const currentPath = location.pathname.split('/');
+        const currentIdRoute1 = currentPath[currentPath.length - 6]; // Assuming idRoute1 is the fourth last segment
+        const currentIdRoute2 = currentPath[currentPath.length - 5]; // Assuming idRoute2 is the third last segment
+        const currentIdRoute3 = currentPath[currentPath.length - 4]; // Assuming idRoute3 is the second last segment
+        const currentIdRoute4 = currentPath[currentPath.length - 3]; // Assuming idRoute4 is the last segment
+        const currentIdRoute6 = currentPath[currentPath.length - 1]; // Assuming idRoute4 is the last segment
+
+
+
+        // Update localPostId to 0
+        const localPostId = 0;
+        /// const localProfileId = lx; // Assuming lx is defined somewhere in the component
+
+        const localpost = encodeBase64(localPostId.toString());
+        /// const localprofile = encodeBase64(localProfileId.toString());
+
+        const newURL = `/Feeds/${currentIdRoute1}/${currentIdRoute2}/${currentIdRoute3}/${currentIdRoute4}/${localpost}/${currentIdRoute6}`;
+
+        // Use history.replaceState to update the URL without causing a re-render
+        window.history.replaceState(null, '', newURL);
+
+    }, [dispatch, location, ReactRouterPost]); // Add any other dependencies needed
+
+
+
+
+    // Use useEffect to update postItems based on ReactRouterPost
+    useEffect(() => {
+
+        // Find the post items that match the idTimestamp
+        const foundPostItems = postEntries.find(
+            (entry: { idTimestamp: number }) => entry.idTimestamp === ReactRouterPost
+        )?.postdataLocal;
+
+        // Set the found post items to the state
+        /// alert(foundPostItems);
+
+
+        setPostItems(foundPostItems);
+
+
+
+        // console.log(foundPostItems);
+
+    }, [ReactRouterPost, postEntries]); // Dependencies: ReactRouterPost and postEntries
+
+
+
+
+
 
     useEffect(() => {
 
@@ -356,7 +462,32 @@ function ProfileGatex({
                 }
             }
         }
-    }, [idRoute1, idRoute2, idRoute3, idRoute4, location.pathname]);
+
+
+
+        if (idRoute5) {
+            const decodedId5 = decodeBase64(idRoute5);
+            if (decodedId5) {
+                const parsedInt5 = parseInt(decodedId5, 10);
+                if (!isNaN(parsedInt5)) {
+                    setReactRouterPost(parsedInt5);
+                }
+            }
+        }
+
+        if (idRoute6) {
+            const decodedId6 = decodeBase64(idRoute6);
+            if (decodedId6) {
+                const parsedInt6 = parseInt(decodedId6, 10);
+                if (!isNaN(parsedInt6)) {
+                    setReactRouterProfile(parsedInt6);
+                }
+            }
+        }
+
+
+
+    }, [idRoute1, idRoute2, idRoute3, idRoute4, idRoute5, idRoute6, location.pathname]);
 
     ///alert(idReactRouterAsInt);
 
@@ -590,6 +721,7 @@ function ProfileGatex({
 
     const Timervv = useRef<ReturnType<typeof setTimeout> | null>(null);
 
+    const Timervvb = useRef<ReturnType<typeof setTimeout> | null>(null);
 
 
     const [quoteReducer, setquoteReducer] = useState("");
@@ -1285,7 +1417,12 @@ function ProfileGatex({
                 .then((response) => {
                     if (response.data.message === "logged in") {
 
+                        ///console.log(response.data.payload);
+
                         paperPostScrollRef.current.scrollTop = 0;
+
+                        console.log('wjjj');
+
 
                         //alert(IdReactRouterAsInt);
 
@@ -1312,7 +1449,7 @@ function ProfileGatex({
                     console.error("Error in checkIsLogged:", error);
                 });
 
-        }, 500)
+        }, 50)
     }, [idReducer, IdReactRouterAsInt, memeberPageidReducer, PagenumReactRouter]);
 
 
@@ -2033,49 +2170,109 @@ function ProfileGatex({
             //setScrollTo(0);
 
 
-
-            Axios.post(
-                `${REACT_APP_SUPERSTARZ_URL}/${tt}`,
-                {
-                    values: cboy,
-                },
-                {
-                    withCredentials: true,
-                }
-            )
-                .then((response) => {
-                    if (response.data.message === "feeds fetched") {
-
-
-
-                        var postdataRep = response.data.payload;
-
-
-                        if (postdataRep.length === 0) {
-
-                            dispatch(UpdateLoader(false));
-
-                        } else {
-                            CallFirstFeed(postdataRep, postPageLimitx);
-
-                        }
+            // Find the post items that match the idTimestamp
+            const foundPostItems = postEntries.find(
+                (entry: { idTimestamp: number }) => entry.idTimestamp === ReactRouterPost
+            )?.postdataLocal;
 
 
 
 
+            if (!foundPostItems) {
 
-
-                    } else if (response.data.message === "error in fetching feeds") {
-                        alert("Ongoing Security Updates, Pls Try Again Later");
+                Axios.post(
+                    `${REACT_APP_SUPERSTARZ_URL}/${tt}`,
+                    {
+                        values: cboy,
+                    },
+                    {
+                        withCredentials: true,
                     }
-                })
-                .catch(function (error) {
-                    console.log("Connection malfunction profile outter 2");
-                });
+                )
+                    .then((response) => {
+                        if (response.data.message === "feeds fetched") {
 
 
+
+                            ///console.log(response.data.payload);
+
+
+
+                            var postdataRep = response.data.payload;
+
+
+                            const idTimestamp = Date.now(); // Unique timestamp for each entry
+
+                            dispatch(addPostData(idTimestamp, postdataRep));
+
+                            setlocalPostId(idTimestamp);
+
+
+                            if (postdataRep.length === 0) {
+
+                                dispatch(UpdateLoader(false));
+
+                            } else {
+                                CallFirstFeed(postdataRep, postPageLimitx);
+
+                            }
+
+
+
+
+
+
+                        } else if (response.data.message === "error in fetching feeds") {
+                            alert("Ongoing Security Updates, Pls Try Again Later");
+                        }
+                    })
+                    .catch(function (error) {
+                        console.log("Connection malfunction profile outter 2");
+                    });
+
+
+            } else {
+
+
+                //alert('kk');
+
+                ///console.log(response.data.payload);
+
+
+
+
+                const postdataRep = postItems; // This assignment is correct and will copy the value of postItems to postdataRep
+
+
+                const idTimestamp = Date.now(); // Unique timestamp for each entry
+
+                dispatch(addPostData(idTimestamp, postdataRep));
+
+                setlocalPostId(idTimestamp);
+
+
+
+                if (postdataRep.length === 0) {
+
+                    dispatch(UpdateLoader(false));
+
+                } else {
+                    CallFirstFeed(postdataRep, postPageLimitx);
+
+                }
+
+
+
+
+
+
+
+
+
+
+            }
         },
-        [idReducer, REACT_APP_SUPERSTARZ_URL, memeberPageidReducer, postPageLimit, historyDataPost, PostLocalNav, FeedType]
+        [idReducer, REACT_APP_SUPERSTARZ_URL, memeberPageidReducer, postPageLimit, historyDataPost, PostLocalNav, FeedType, ReactRouterPost, postItems]
     );
 
     //// scrollSnapAlign
@@ -2135,10 +2332,16 @@ function ProfileGatex({
         const encodedScrollIndex = encodeBase64(x.toString());
         const encodedFeedtype = encodeBase64(FeedType.toString());
 
+        var l = localPostId;
+        var lx = localProfileId;
 
 
-        navigate(`/Feeds/${currentIdRoute1}/${encodedScrollIndex}/${currentIdRoute3}/${encodedFeedtype}`, { replace: true });
-    }, [FeedType]);
+        const localpost = encodeBase64(l.toString());
+        const localprofile = encodeBase64(lx.toString());
+
+
+        navigate(`/Feeds/${currentIdRoute1}/${encodedScrollIndex}/${currentIdRoute3}/${encodedFeedtype}/${localpost}/${localprofile}`, { replace: true });
+    }, [FeedType, localPostId, localProfileId]);
 
 
     const callPagination = useCallback((explain: boolean) => {
@@ -3078,6 +3281,7 @@ function ProfileGatex({
 
                     <ImageSlider
 
+                        ActualpostDataAll={ActualpostDataAll}
                         Explainx={Explainx}
                         callPaginationx={callPaginationx}
                         RandomColor={RandomColor} FeedType={FeedType} setFeedType={setFeedType} />
@@ -3162,6 +3366,7 @@ function ProfileGatex({
                                         AImodel == 2 ?
 
                                             <Button
+
 
 
 
@@ -3423,6 +3628,9 @@ function ProfileGatex({
 
                         }}>
                             <ProfileSetup
+
+                                localPostId={localPostId}
+                                localProfileId={localProfileId}
 
                                 setAutoGo={setAutoGo}
                                 AutoGo={AutoGo}

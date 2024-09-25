@@ -981,11 +981,11 @@ function FilterModex({
                         color: "#ffffff",
                         fontSize: matchTabletMobile
                           ? `${mobilefont / 2}vh`
-                          : `${pcfont / 2}vw`,
+                          : `${pcfont / 1.4}vw`,
                         marginRight: "5vw",
-                        marginTop: '20px',
+                        marginTop: matchMobile ? '25vh' : '12vh',
                         position: 'fixed',
-                        marginLeft: '2vh',
+                        marginLeft: matchMobile ? '4.5vh' : '2vh',
                         zIndex: 500,
                         display: interactContent[index] || interactContent2[index] ? 'block' : 'none'
 
@@ -1167,10 +1167,7 @@ function FilterModex({
         ></Grid>
       </Grid>
 
-      {startSuperSticker ? null :
 
-        startTopicCap ? null :
-          <Tutorial type={5} index={0} />}
 
       {startSuperSticker ? (
         <>
@@ -1200,6 +1197,7 @@ function FilterModex({
               <Superstickers
 
 
+                ratiox={ratiox}
                 callInnerButton={callInnerButton}
                 setCurrentTimestamp={setCurrentTimestamp}
                 currentTimestamp={currentTimestamp}
@@ -1476,6 +1474,7 @@ function FilterModex({
               zIndex: 11,
               left: matchMobile ? '' : '18vw',
               right: matchMobile ? '7vw' : '',
+              visibility: matchMobile ? 'visible' : 'visible'
             }}
           >
             <TouchAppIcon

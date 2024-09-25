@@ -9,13 +9,16 @@ interface ImageSliderProps {
     setFeedType: any;
     Explainx: any;
     callPaginationx: any;
+    ActualpostDataAll: any
 
 }
 
 
 
 
-const ImageSlider: React.FC<ImageSliderProps> = ({ RandomColor, FeedType, setFeedType, Explainx, callPaginationx }) => {
+const ImageSlider: React.FC<ImageSliderProps> = ({ RandomColor, FeedType, setFeedType, Explainx, callPaginationx, ActualpostDataAll }) => {
+
+
     const { REACT_APP_CLOUNDFRONT } = process.env;
 
     interface RootStateReducerImage {
@@ -58,12 +61,44 @@ const ImageSlider: React.FC<ImageSliderProps> = ({ RandomColor, FeedType, setFee
     const refs = useRef<(HTMLDivElement | null)[]>([]);
 
 
+    const [imagedatapost, setimagedatapost] = useState('');
+
+    const [imagedatapost2, setimagedatapost2] = useState('');
+
+
+
+    useEffect(() => {
+
+        setimagedatapost('');
+        setimagedatapost2('');
+
+    }, [memeberPageid])
+
+
 
     useEffect(() => {
 
         setActiveIndex(FeedType)
 
-    }, [FeedType])
+        if (ActualpostDataAll && ActualpostDataAll.length > 0) {
+            // Generate a random number between 0 and ActualpostDataAll.length - 1
+            const randomIndex = Math.floor(Math.random() * ActualpostDataAll.length);
+
+            // Set the data with the randomly selected item
+            if (FeedType === 0) {
+                setimagedatapost(ActualpostDataAll[randomIndex].item2);
+            }
+
+            if (FeedType === 1) {
+                setimagedatapost2(ActualpostDataAll[randomIndex].item2);
+            }
+
+
+        }
+
+
+
+    }, [FeedType, ActualpostDataAll])
 
     ///
     ///
@@ -83,8 +118,6 @@ const ImageSlider: React.FC<ImageSliderProps> = ({ RandomColor, FeedType, setFee
     const colorReducer = color;
     const colorReducerdark = colordark;
     const colortypeReducer = colortype;
-
-
 
 
 
@@ -177,10 +210,26 @@ const ImageSlider: React.FC<ImageSliderProps> = ({ RandomColor, FeedType, setFee
 
                         }}>
 
-                        <img src={image} alt={`Slide ${index + 1}`} className="image"
+
+                        <img
+
+
+                            src={
+
+                                imagedatapost && ActualpostDataAll.length > 0 && index === 0 ?
+                                    `${REACT_APP_CLOUNDFRONT}${imagedatapost}`
+                                    :
+                                    imagedatapost2 && ActualpostDataAll.length > 0 && index === 1 ?
+                                        `${REACT_APP_CLOUNDFRONT}${imagedatapost2}`
+                                        :
+                                        image}
+
+
+                            alt={`Slide ${index + 1}`} className="image"
                             style={{
                                 transform: activeIndex === index ? 'scale(1)' : 'scale(0.8)',
                                 transition: "transform 0.09s",
+
 
                             }} />
 

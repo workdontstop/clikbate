@@ -70,8 +70,35 @@ export const minimiseHintState_LOADER = "minimiseHintState_LOADER";
 export const UPDATE_MuteAUDIO = "UPDATE_MuteAUDIO";
 
 
-export const UPDATE_AUDIOINDEX = " UPDATE_AUDIOINDEX";
+export const UPDATE_AUDIOINDEX = "UPDATE_AUDIOINDEX";
 
 
+
+
+
+export const UPDATE_RAD1 = "UPDATE_RAD1";
+
+
+export const UPDATE_RAD2 = "UPDATE_RAD2";
+
+
+
+export const ADD_NAVIGATION_DATA = 'ADD_NAVIGATION_DATA';
+
+export const CLEAR_NAVIGATION_DATA = 'CLEAR_NAVIGATION_DATA';
+
+
+
+
+// Action types for post data
+export const ADD_POST_DATA = 'ADD_POST_DATA';
+
+export const CLEAR_POST_DATA = 'CLEAR_POST_DATA';
+export const REMOVE_POST_DATA_BY_TIMESTAMP = 'REMOVE_POST_DATA_BY_TIMESTAMP'; // Optional action to remove by timestamp
+
+// Action types for profile data
+export const ADD_PROFILE_DATA = 'ADD_PROFILE_DATA';
+export const CLEAR_PROFILE_DATA = 'CLEAR_PROFILE_DATA';
+export const REMOVE_PROFILE_DATA_BY_TIMESTAMP = 'REMOVE_PROFILE_DATA_BY_TIMESTAMP'; // Optional action to remove by timestamp
 
 

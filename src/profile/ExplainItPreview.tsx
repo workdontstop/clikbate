@@ -401,38 +401,114 @@ const ExplainItPreview: React.FC<ExplainItPreviewProps> = ({
         }
     }, [initialSteps]);
 
-    const GenerateImageGpt = useCallback(
-        async (i: number, pp: any) => {
-            const par = { prompt: pp, n: Total, size: pxResolution };
-            console.log("go to backend dalle");
+    const GenerateImageGpt = useCallback(async (i: number, pp: any) => {
+        const par = {
+            prompt: pp,
+            n: Total,
+            size: pxResolution,
+        };
 
-            try {
-                const response = await Axios.post(`${REACT_APP_SUPERSTARZ_URL}/DalleApi`, {
-                    values: par,
+        console.log("go to backend dalle");
+
+        try {
+            // Step 1: Generate image using DALL-E API
+            const response = await Axios.post(`${REACT_APP_SUPERSTARZ_URL}/DalleApi`, {
+                values: par,
+            });
+
+            if (response.data.message === "Done") {
+                const imageD = response.data.payload.data[0].url;
+
+                // Step 2: Fetch the image as binary data
+                const parProxy = { dalle: imageD };
+                const proxyResponse = await Axios.get(`${REACT_APP_SUPERSTARZ_URL}/ProxyDalle`, {
+                    params: parProxy,
+                    responseType: 'arraybuffer',
                 });
-                if (response.data.message === "Done") {
-                    const imageD = response.data.payload.data[0].url;
-                    setLoader(false);
-                    setExplainItIMG((prevState) => {
-                        const newState = [...prevState];
-                        newState[i] = imageD;
-                        return newState;
-                    });
-                    setExplainItLoaded((prevState) => {
-                        const newState = [...prevState];
-                        newState[i] = 1;
-                        return newState;
-                    });
 
-                    Save(i);
-                }
-            } catch (error) {
-                setLoader(false);
-                console.log(error);
+                // Step 3: Convert binary data to base64 data URL
+                const base64Data = `data:image/png;base64,${Buffer.from(proxyResponse.data, 'binary').toString('base64')}`;
+
+                // Step 4: Create a new image element using base64 data URL
+                const img = new Image();
+                img.crossOrigin = "anonymous"; // To handle CORS issues
+
+                img.onload = async () => {
+                    // Step 5: Create a canvas and draw the image on it
+                    const canvas = document.createElement("canvas");
+                    canvas.width = img.width;
+                    canvas.height = img.height;
+
+                    const ctx = canvas.getContext("2d");
+                    if (ctx) {
+                        ctx.drawImage(img, 0, 0);
+
+                        // Step 6: Convert canvas to a blob
+                        canvas.toBlob(async (blob) => {
+                            if (blob) {
+                                // Step 7: Get secure URL before uploading to S3
+                                const hdBlobs = [blob];
+                                const secureURLResponse = await GetSecureURLx(hdBlobs);
+
+                                if (secureURLResponse && secureURLResponse.holder) {
+                                    // Step 8: Upload the image blob to S3 using the secure URL
+                                    PutImageInS3WithURL(secureURLResponse.holder, blob, i);
+                                } else {
+                                    console.error("Failed to get secure URL for S3 upload.");
+                                }
+                            }
+                        }, "image/png");
+                    }
+                };
+
+                // Step 9: Set the source of the image to trigger the loading process
+                img.src = base64Data;
+
+                // Update the state with the generated image URL for display purposes
+                setExplainItIMG((prevState) => {
+                    const newState = [...prevState];
+                    newState[i] = base64Data;
+                    return newState;
+                });
+                setExplainItLoaded((prevState) => {
+                    const newState = [...prevState];
+                    newState[i] = 1;
+                    return newState;
+                });
+
+                Save(i);
             }
-        },
-        [Total, pxResolution]
-    );
+        } catch (error) {
+            setLoader(false);
+            console.error("Error generating image with DALL-E and converting to canvas blob:", error);
+        }
+    }, [Total, pxResolution]);
+
+    // Helper function to get secure URLs for S3 upload
+    const GetSecureURLx = async (hdBlobs: Blob[]) => {
+        try {
+            const response = await Axios.post(
+                `${REACT_APP_SUPERSTARZ_URL}/get_signed_url_4upload_Explain`,
+                {
+                    values: { count: hdBlobs.length },
+                }
+            );
+
+            const holder = response.data.holder;
+
+            // Verify the holder contains the correct number of URLs
+            if (!holder || holder.length !== hdBlobs.length) {
+                console.error("Mismatch between blobs and signed URLs.");
+                return null;
+            }
+
+            return response.data; // Return the response data containing the holder
+        } catch (error) {
+            console.error("Error getting signed URLs:", error);
+            return null;
+        }
+    };
+
 
 
     const GenerateImageStableSDXL = useCallback(async (i: number, pp: any, model: string, height: number, width: number) => {
@@ -817,7 +893,7 @@ const ExplainItPreview: React.FC<ExplainItPreviewProps> = ({
 
 
         // Navigate to the new URL with the new ID
-        navigate(`/Feeds/${encodedId}/${encodeBase64('0')}/${encodeBase64('0')}/${encodeBase64('1')}`);
+        navigate(`/Feeds/${encodedId}/${encodeBase64('0')}/${encodeBase64('0')}/${encodeBase64('1')}/${encodeBase64('0')}/${encodeBase64('0')}`);
 
         dispatch(UserInfoUpdateMEMBER(idReducer));
         ///setIdReactRouterAsInt(idReducer);

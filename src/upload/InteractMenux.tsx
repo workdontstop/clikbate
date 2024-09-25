@@ -13,6 +13,7 @@ import StarIcon from "@mui/icons-material/Star";
 import Brightness2Icon from "@mui/icons-material/Brightness2";
 import AlbumIcon from "@mui/icons-material/Album";
 import CheckIcon from "@mui/icons-material/Check";
+import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import BentoIcon from "@mui/icons-material/Bento";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import CommentIcon from "@mui/icons-material/Comment";
@@ -36,7 +37,7 @@ import {
 
 import { useInView } from "react-intersection-observer";
 
-function InteractMenux({
+function InteractMenuxx({
     stickerOPtionsDefault,
     setcropInitialIn,
     setcropInitialIn2,
@@ -65,7 +66,7 @@ function InteractMenux({
     interactContentvideo,
     interactContenttype2,
     interactContentvideo2,
-
+    ratiox
 }: any) {
 
     ///
@@ -80,6 +81,7 @@ function InteractMenux({
         ...state.GlobalReducer,
     }));
 
+    //alert('jj');
     const darkmodeReducer = darkmode;
 
     const [AllowDel, setAllowDel] = useState(false);
@@ -94,10 +96,10 @@ function InteractMenux({
 
     const videoRefjja = useRef<HTMLVideoElement>(null);
 
-
-
     const [Pop, setPop] = useState(false);
 
+
+    const [HideIcon, setHideIcon] = useState(false);
 
 
     useEffect(() => {
@@ -112,11 +114,13 @@ function InteractMenux({
             setTimeout(() => {
 
                 setPop(false);
-            }, 8000)
+            }, 4000)
 
         }
 
-    }, [stickerOPtionsDefault])
+    }, [stickerOPtionsDefault]);
+
+
 
 
     return (
@@ -132,12 +136,12 @@ function InteractMenux({
                 item
                 xs={12}
                 style={{
-                    width: "26%",
+                    width: "100%",
                     padding: "0px",
                     position: "absolute",
-                    top: "0vh",
+                    top: ratiox >= 3 ? '-15vh' : "-5vh",
                     right: "0px",
-                    height: "100vh",
+                    height: "0vh",
                     zIndex: 20,
                     display: stickerOPtionsDefault === 4 ? "block" : "none",
                 }}
@@ -195,15 +199,17 @@ function InteractMenux({
                         }
                     }}
                     style={{
-                        top: "4vh",
-                        width: "50px",
+                        top: "64vh",
+                        width: "60px",
+                        left: '28vw',
                         backgroundColor: "",
                         border: darkmodeReducer ? "solid #ffffff" : "solid #000000",
-                        height: "50px",
+                        height: "60px",
                         margin: "auto",
                         borderRadius: "50%",
                         position: "relative",
                         cursor: "pointer",
+                        display: HideIcon ? 'none' : 'block'
                     }}
                 ></Grid>
 
@@ -211,6 +217,7 @@ function InteractMenux({
                     item
                     xs={12}
                     onClick={() => {
+                        //alert('jj');
                         if (adjustinteract1) {
                             setcropInitialIn((prevArray: any) => {
                                 const newArray = [...prevArray];
@@ -259,15 +266,16 @@ function InteractMenux({
                         }
                     }}
                     style={{
-                        top: "5vh",
-                        width: "50px",
+                        top: "63.5vh",
+                        width: "60px",
                         backgroundColor: "",
                         border: darkmodeReducer ? "solid #ffffff" : "solid #000000",
-                        height: "50px",
-                        left: "8vw",
+                        height: "60px",
+                        left: "57vw",
                         borderRadius: "50%",
                         position: "relative",
                         cursor: "pointer",
+                        display: HideIcon ? 'none' : 'block'
                     }}
                 ></Grid>
 
@@ -324,15 +332,16 @@ function InteractMenux({
                     }
                     }
                     style={{
-                        top: "-1vh",
-                        width: "50px",
+                        top: "55vh",
+                        width: "60px",
                         backgroundColor: "",
                         border: darkmodeReducer ? "solid #ffffff" : "solid #000000",
-                        height: "50px",
-                        left: "15vw",
+                        height: "60px",
+                        left: "85vw",
                         borderRadius: "50%",
                         position: "relative",
                         cursor: "pointer",
+                        display: HideIcon ? 'none' : 'block'
                     }}
                 ></Grid>
 
@@ -392,15 +401,17 @@ function InteractMenux({
                         }
                     }}
                     style={{
-                        top: "-0vh",
-                        width: "50px",
+                        top: "55vh",
+                        width: "60px",
+                        left: '28vw',
                         backgroundColor: "",
                         border: darkmodeReducer ? "solid #ffffff" : "solid #000000",
-                        height: "50px",
+                        height: "60px",
                         borderRadius: "50%",
                         margin: "auto",
                         position: "relative",
                         cursor: "pointer",
+                        display: HideIcon ? 'none' : 'block'
                     }}
                 ></Grid>
 
@@ -408,9 +419,12 @@ function InteractMenux({
                     item
                     xs={6}
                     style={{
-                        position: "relative",
-                        top: "9vh",
+                        position: "fixed",
+                        width: '100%',
+                        top: "4vh",
                         margin: "auto",
+                        left: '25vw',
+                        display: HideIcon ? 'none' : 'block'
                     }}
                 >
 
@@ -448,27 +462,36 @@ function InteractMenux({
                         margin: "auto",
                         textAlign: "center",
                         justifyContent: "center",
+
                     }}
                 >
                     {adjustinteract1 && interactContent ?
 
                         interactContenttype === 1 ?
                             <video
+                                controls playsInline muted autoPlay
                                 src={interactContentvideo ? URL.createObjectURL(interactContentvideo) : ''}   // Using the blob URL from interactContentvideo
                                 style={{
-                                    width: "100%", // Set thevideo width to 100%
+                                    width: "10%", // Set thevideo width to 100%
                                     height: "auto",
-                                    display: "block", // Ensure proper rendering in some browsers
+                                    display: HideIcon ? 'none' : 'block',
                                     margin: "0 auto", // Center the video
-                                    cursor: 'pointer'
+                                    cursor: 'pointer',
+                                    top: '4vh',
+                                    left: '90vw',
+                                    position: 'fixed'
                                 }}
                             // Add if you want video controls like play, pause, etc.
                             /> :
                             <img
                                 src={interactContent}
                                 style={{
-                                    width: "40%",
+                                    width: "10%",
                                     height: "auto",
+                                    position: 'fixed',
+                                    top: '0vh',
+                                    left: '90vw',
+                                    display: HideIcon ? 'none' : 'block'
                                 }}
                             />
                         : null}
@@ -479,24 +502,58 @@ function InteractMenux({
 
                         interactContenttype2 === 1 ?
                             <video
+                                controls playsInline muted autoPlay
                                 src={interactContentvideo2 ? URL.createObjectURL(interactContentvideo2) : ''}   // Using the blob URL from interactContentvideo
                                 style={{
-                                    width: "100%", // Set thevideo width to 100%
+                                    width: "10%", // Set thevideo width to 100%
                                     height: "auto",
-                                    display: "block", // Ensure proper rendering in some browsers
+                                    display: HideIcon ? 'none' : 'block',
                                     margin: "0 auto", // Center the video
-                                    cursor: 'pointer'
+                                    cursor: 'pointer',
+                                    top: '4vh',
+                                    left: '90vw',
+                                    position: 'fixed'
                                 }}
                             // Add if you want video controls like play, pause, etc.
                             /> :
                             <img
                                 src={interactContent2}
                                 style={{
-                                    width: "40%",
+                                    width: "10%",
                                     height: "auto",
+                                    position: 'fixed',
+                                    top: '0vh',
+                                    left: '90vw',
+                                    display: HideIcon ? 'none' : 'block'
                                 }}
                             />
                     ) : null}
+
+
+
+
+                    <ExpandLessIcon
+                        onClick={() => {
+                            setHideIcon(!HideIcon);
+                        }}
+                        className={
+                            darkmodeReducer
+                                ? "make-small-icons-clickable-lightCrop dontallowhighlighting zuperkingIcon "
+                                : "make-small-icons-clickable-darkCrop dontallowhighlighting zuperkingIcon  "
+                        }
+                        style={{
+                            margin: "auto",
+                            color: "#ffffff",
+                            fontSize: matchMobile ? `${mobilefont}vh` : `${pcfont}vw`,
+                            position: "fixed",
+                            bottom: HideIcon ?
+                                '27vh'
+                                : ratiox >= 3 ? '77vh' : "47.5vh",
+                            textAlign: "center",
+                            left: "7vw",
+                        }}
+                    />
+
 
                     <CheckIcon
                         onClick={() => {
@@ -512,10 +569,11 @@ function InteractMenux({
                             margin: "auto",
                             color: "#ffffff",
                             fontSize: matchMobile ? `${mobilefont}vh` : `${pcfont}vw`,
-                            position: "absolute",
-                            bottom: "-12vh",
+                            position: "fixed",
+                            bottom: ratiox >= 3 ? '37vh' : "18.5vh",
                             textAlign: "center",
-                            left: "12vw",
+                            left: "7vw",
+                            display: HideIcon ? 'none' : 'block'
                         }}
                     />
                 </Grid>
@@ -529,12 +587,12 @@ function InteractMenux({
                     item
                     xs={12}
                     style={{
-                        width: "26%",
+                        width: "100%",
                         padding: "0px",
                         position: "absolute",
                         top: "0vh",
                         right: "0px",
-                        height: "100vh",
+                        height: "0vh",
                         zIndex: 20,
                         display: stickerOPtionsDefault === 4 ? "block" : "none",
                     }}
@@ -547,9 +605,9 @@ function InteractMenux({
                         ////////////////////////////////////////////////VIDEO////////////////////////////////////////////////
                         <>
                             < Grid container>
-                                <Grid item xs={6}>
+                                <Grid item xs={2}>
                                     <video ref={videoRefjj}
-                                        controls
+                                        controls playsInline
                                         onClick={(e: any) => {
                                             setadjustinteract1(true);
                                             if (videoRefjj.current) {
@@ -634,37 +692,9 @@ function InteractMenux({
 
                         interactContent.length > 0 ?
                             interactContent[index] === '' ?
-                                <Grid container style={{ paddingTop: '5vh' }}>
-                                    <Grid item xs={3}
-                                    ></Grid>
-
-                                    <Grid item xs={6}
-                                        style={{
-                                            textAlign: "center",
-                                            height: '20vh'
-
-                                        }}>
-                                        <PanoramaIcon
-                                            className={
-                                                darkmodeReducer
-                                                    ? " dontallowhighlighting zuperkingIcon "
-                                                    : " dontallowhighlighting zuperkingIcon  "
-                                            }
-                                            style={{
-                                                color: darkmodeReducer ? '#ffffff' : '#000000',
-                                                margin: "auto",
-                                                marginTop: '4vh',
-                                                fontSize: matchMobile ? `${mobilefont}vh` : `${pcfont + 2}vw`,
-                                                textAlign: "center",
-                                                opacity: '0.1'
-
-                                            }}
-                                        />
-                                    </Grid>
-
-                                </Grid> :
+                                null :
                                 < Grid container>
-                                    <Grid item xs={6}>
+                                    <Grid item xs={2}>
                                         <img
                                             onClick={
                                                 () => {
@@ -673,11 +703,14 @@ function InteractMenux({
                                             }
                                             src={interactContent[index]}
                                             style={{
-                                                width: "80%", // Set the image width to 100%
+                                                width: "100%", // Set the image width to 100%
                                                 height: "auto",
                                                 display: "block", // Ensure proper rendering in some browsers
                                                 margin: "0 auto", // Center the image
-                                                cursor: 'pointer'
+                                                cursor: 'pointer',
+
+
+
                                             }}
                                             alt="Interact Content"
                                         />
@@ -756,9 +789,9 @@ function InteractMenux({
 
                         interactContenttype2 === 1 ?
                             < Grid container>
-                                <Grid item xs={6}>
+                                <Grid item xs={2}>
                                     <video ref={videoRefjja}
-                                        controls
+                                        controls playsInline
                                         onClick={(e: any) => {
                                             setadjustinteract2(true);
                                             if (videoRefjja.current) {
@@ -841,52 +874,29 @@ function InteractMenux({
 
 
                                 interactContent2[index] === "" ? (
-                                    <Grid container>
-                                        <Grid item xs={3}></Grid>
-                                        <Grid
-                                            item
-                                            xs={6}
-                                            style={{
-                                                textAlign: "center",
-                                                height: "20px",
-                                            }}
-                                        >
-                                            <PanoramaIcon
-                                                className={
-                                                    darkmodeReducer
-                                                        ? " dontallowhighlighting zuperkingIcon "
-                                                        : " dontallowhighlighting zuperkingIcon  "
-                                                }
-                                                style={{
-                                                    margin: "auto",
-                                                    marginTop: "4vh",
-                                                    color: darkmodeReducer ? '#ffffff' : '#000000',
-                                                    fontSize: matchMobile ? `${mobilefont}vh` : `${pcfont + 2}vw`,
-                                                    textAlign: "center",
-                                                    opacity: "0.1",
-                                                }}
-                                            />
-                                        </Grid>
-                                    </Grid>
+                                    null
                                 ) : (
                                     <Grid container>
-                                        <Grid item xs={6}>
+                                        <Grid item xs={2} className="zuperxy">
                                             <img
                                                 onClick={() => {
                                                     setadjustinteract2(true);
                                                 }}
                                                 src={interactContent2[index]}
                                                 style={{
-                                                    width: "80%", // Set the image width to 100%
+                                                    width: "100%", // Set the image width to 100%
                                                     height: "auto",
                                                     display: "block", // Ensure proper rendering in some browsers
                                                     margin: "0 auto", // Center the image
-                                                    cursor: 'pointer'
+                                                    cursor: 'pointer',
+
+
+
                                                 }}
                                                 alt="Interact Content"
                                             />
                                         </Grid>
-                                        <Grid item xs={6}>
+                                        <Grid item xs={6} className="zuperxy">
                                             <Grid
                                                 item
                                                 xs={12}
@@ -944,41 +954,15 @@ function InteractMenux({
                                         </Grid>
                                     </Grid>
                                 ) :
-                                <Grid container>
-                                    <Grid item xs={3}
-                                    ></Grid>
-                                    <Grid item xs={6}
-                                        style={{
-                                            textAlign: "center",
-                                            height: '20px'
-
-                                        }}>
-                                        <PanoramaIcon
-                                            className={
-                                                darkmodeReducer
-                                                    ? " dontallowhighlighting zuperkingIcon "
-                                                    : " dontallowhighlighting zuperkingIcon  "
-                                            }
-                                            style={{
-                                                margin: "auto",
-                                                marginTop: '4vh',
-                                                color: darkmodeReducer ? '#ffffff' : '#000000',
-                                                fontSize: matchMobile ? `${mobilefont}vh` : `${pcfont + 2}vw`,
-                                                textAlign: "center",
-                                                opacity: '0.1'
-
-                                            }}
-                                        />
-                                    </Grid>
-                                </Grid>}
+                                null}
 
 
-                    <Grid item xs={12} style={{ bottom: '-20vh', position: 'relative', }}>
-                        <Grid item xs={12} sm={12} style={{
+                    <Grid item xs={12} style={{ bottom: '-20vh', position: 'relative', display: Pop ? 'block' : 'none' }}>
+                        <Grid item xs={12} sm={3} style={{
                             height: '15vh', border: darkmodeReducer ? '2px solid white' : '2px solid black', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '24px',
                             fontFamily: 'Helvetica, Arial, sans-serif', color: darkmodeReducer ? '#ffffff' : '#000000'
                         }}>
-                            {Pop ? 'Click On Image' : 'BOP'}
+                            Click On Image
                         </Grid>
 
                     </Grid>
@@ -993,4 +977,4 @@ function InteractMenux({
 
 }
 
-export const InteractMenu = React.memo(InteractMenux);
+export const InteractMenux = React.memo(InteractMenuxx);

@@ -86,7 +86,12 @@ function ActualMenux({ showModalFormMenu,
   PostPagenumPusher,
   ScrollIndexPusher,
   CurrentPage,
-  FeedType
+  FeedType,
+
+  localPostId,
+  setlocalPostId,
+  localProfileId,
+  setlocalProfileId
 }: any): JSX.Element {
 
 
@@ -236,8 +241,19 @@ function ActualMenux({ showModalFormMenu,
     const encodedPageNumber = encodeBase64(PostPagenumPusher.toString());
     const encodedFeedtype = encodeBase64(FeedType.toString());
 
-    navigate(`/Feeds/${currentIdRoute1}/${encodedScrollIndex}/${encodedPageNumber}/${encodedFeedtype}`, { replace: true });
-  }, [FeedType, PostPagenumPusher, ScrollIndexPusher]);
+    var l = localPostId;
+    var lx = localProfileId;
+
+
+
+
+    const localpost = encodeBase64(l.toString());
+    const localprofile = encodeBase64(lx.toString());
+
+
+
+    navigate(`/Feeds/${currentIdRoute1}/${encodedScrollIndex}/${encodedPageNumber}/${encodedFeedtype}/${localpost}/${localprofile}`, { replace: true });
+  }, [FeedType, PostPagenumPusher, ScrollIndexPusher, localPostId, localProfileId]);
 
 
 
@@ -255,7 +271,7 @@ function ActualMenux({ showModalFormMenu,
     }
 
     // Navigate to the new URL with the new ID
-    navigate(`/Feeds/${encodedId}/${encodeBase64('0')}/${encodeBase64('0')}/${encodeBase64('0')}`);
+    navigate(`/Feeds/${encodedId}/${encodeBase64('0')}/${encodeBase64('0')}/${encodeBase64('0')}/${encodeBase64('0')}/${encodeBase64('0')}`);
     dispatch(UserInfoUpdateMEMBER(0));
     setIdReactRouterAsInt(0);
     setScrollReactRouter(0)
@@ -324,35 +340,30 @@ function ActualMenux({ showModalFormMenu,
 
   const GoToMemberP = () => {
 
-    if (idReducer === GuestReducer) {
 
-      dispatch(UpdateSign(true));
-
-
-      // commentClickedNew();
-    } else {
+    dispatch(UpdateSign(true));
 
 
 
-      dispatch(UserInfoUpdateMEMBER(-1));
-      const id = idReducer; // Replace with the actual ID you want to navigate to
-      const encodedId = encodeBase64(id.toString());
+    dispatch(UserInfoUpdateMEMBER(-1));
+    const id = idReducer; // Replace with the actual ID you want to navigate to
+    const encodedId = encodeBase64(id.toString());
 
-      // Update the current URL with the scroll position
-      //updateCurrentURLWithScrollPosition();
-      // Update the current URL with the scroll position
+    // Update the current URL with the scroll position
+    //updateCurrentURLWithScrollPosition();
+    // Update the current URL with the scroll position
 
-      if (CurrentPage === 'feeds') {
-        updateCurrentURLWithScrollPosition();
-      }
-
-      // Navigate to the new URL with the new ID
-      navigate(`/Feeds/${encodedId}/${encodeBase64('0')}/${encodeBase64('0')}/${encodeBase64('0')}`);
-
-      dispatch(UserInfoUpdateMEMBER(idReducer));
-      setIdReactRouterAsInt(idReducer);
-      setScrollReactRouter(0)
+    if (CurrentPage === 'feeds') {
+      updateCurrentURLWithScrollPosition();
     }
+
+    // Navigate to the new URL with the new ID
+    navigate(`/Feeds/${encodedId}/${encodeBase64('0')}/${encodeBase64('0')}/${encodeBase64('0')}/${encodeBase64('0')}/${encodeBase64('0')}`);
+
+    dispatch(UserInfoUpdateMEMBER(idReducer));
+    setIdReactRouterAsInt(idReducer);
+    setScrollReactRouter(0)
+
   };
 
 
@@ -682,8 +693,8 @@ function ActualMenux({ showModalFormMenu,
           xs={12}
           className={
             darkmodeReducer
-              ? ` ${superFont}  dontallowhighlighting `
-              : ` ${superFont}  dontallowhighlighting `
+              ? ` ${superFont}  dontallowhighlighting`
+              : ` ${superFont}  dontallowhighlighting`
           }
           style={{
             height: '10vh',
@@ -862,7 +873,7 @@ function ActualMenux({ showModalFormMenu,
 
                         opacity: i === 1 || i === 2 || i === 3 || i === 5 ? '1' : '0.3'
                       }}>
-                      {idReducer === GuestReducer && i == 2 ? 'Log In' : Title}
+                      {Title}
                     </span>
 
 
@@ -873,12 +884,12 @@ function ActualMenux({ showModalFormMenu,
                           height: '5px',
 
                           padding: '0px',
-                          backgroundImage: PadIndex === i ? `linear-gradient(45deg, ${RandomColor}, ${colorReducer})` :
+                          backgroundImage: PadIndex === i ? `linear - gradient(45deg, ${RandomColor}, ${colorReducer})` :
                             PadIndex !== -1 ? '' :
-                              memeberPageidReducer === 0 && i === 3 ? darkmodeReducer ? `linear-gradient(45deg, ${RandomColor}, ${colorReducer})` :
-                                `linear-gradient(45deg, ${RandomColor}, ${colorReducer})` :
-                                memeberPageidReducer !== 0 && i === 2 && idReducer === memeberPageidReducer ? darkmodeReducer ? `linear-gradient(45deg, ${RandomColor}, ${colorReducer})` :
-                                  `linear-gradient(45deg, ${RandomColor}, ${colorReducer})` : 'none',
+                              memeberPageidReducer === 0 && i === 3 ? darkmodeReducer ? `linear - gradient(45deg, ${RandomColor}, ${colorReducer})` :
+                                `linear - gradient(45deg, ${RandomColor}, ${colorReducer})` :
+                                memeberPageidReducer !== 0 && i === 2 && idReducer === memeberPageidReducer ? darkmodeReducer ? `linear - gradient(45deg, ${RandomColor}, ${colorReducer})` :
+                                  `linear - gradient(45deg, ${RandomColor}, ${colorReducer})` : 'none',
 
                         }}></Grid></Grid> : null}
 

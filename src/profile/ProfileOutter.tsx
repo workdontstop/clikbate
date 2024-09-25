@@ -90,7 +90,7 @@ function ProfileOutter({ CallLoggedProfile }: any) {
   const { REACT_APP_SUPERSTARZ_URL, REACT_APP_CLOUNDFRONT, REACT_APP_APPX_STATE } = process.env;
 
 
-  var AiLock = true;
+  var AiLock = false;
 
 
   const isAppleDevice = /Mac|iPhone|iPad|iPod/.test(navigator.userAgent);
@@ -436,6 +436,9 @@ function ProfileOutter({ CallLoggedProfile }: any) {
 
   const [FeedType, setFeedType] = useState(0);
 
+
+  const [localPostId, setlocalPostId] = useState(0);
+  const [localProfileId, setlocalProfileId] = useState(0);
 
 
 
@@ -832,6 +835,14 @@ function ProfileOutter({ CallLoggedProfile }: any) {
                       }}
                     >
                       <ActualMenu
+
+
+                        localPostId={localPostId}
+                        setlocalPostId={setlocalPostId}
+                        localProfileId={localProfileId}
+                        setlocalProfileId={setlocalProfileId}
+
+
                         FeedType={FeedType}
                         CurrentPage={CurrentPage}
 
@@ -879,6 +890,12 @@ function ProfileOutter({ CallLoggedProfile }: any) {
                     <animated.div style={fadeStyles}>
 
                       <Menu
+
+
+                        localPostId={localPostId}
+                        setlocalPostId={setlocalPostId}
+                        localProfileId={localProfileId}
+                        setlocalProfileId={setlocalProfileId}
 
 
                         setAutoGo={setAutoGo}
@@ -941,7 +958,7 @@ function ProfileOutter({ CallLoggedProfile }: any) {
 
                         }}
                         style={{
-                          height: "23vh",
+                          height: "26vh",
                           width: '100%',
                           marginLeft: '0px',
                           zIndex: 600,
@@ -1046,11 +1063,19 @@ function ProfileOutter({ CallLoggedProfile }: any) {
                   <Routes>
                     <Route element={<ProtectedRoute />}>
                       <Route
-                        path="/Feeds/:idRoute1/:idRoute2/:idRoute3/:idRoute4"
+                        path="/Feeds/:idRoute1/:idRoute2/:idRoute3/:idRoute4/:idRoute5/:idRoute6"
                         element={
 
 
                           <ProfileGate
+
+                            localPostId={localPostId}
+                            setlocalPostId={setlocalPostId}
+                            localProfileId={localProfileId}
+                            setlocalProfileId={setlocalProfileId}
+
+
+
                             setAutoGo={setAutoGo}
                             AutoGo={AutoGo}
                             PCZOOM={PCZOOM}
@@ -1343,7 +1368,7 @@ function ProfileOutter({ CallLoggedProfile }: any) {
 
                     <Route
                       path="/"
-                      element={<Navigate to={`/Feeds/${encodeBase64('0')}/${encodeBase64('0')}/${encodeBase64('0')}/${encodeBase64('0')}`} />}
+                      element={<Navigate to={`/Feeds/${encodeBase64('0')}/${encodeBase64('0')}/${encodeBase64('0')}/${encodeBase64('0')}/${encodeBase64('0')}/${encodeBase64('0')}`} />}
                     />
                   </Routes>
                 </div>
@@ -1714,12 +1739,18 @@ function ProfileOutter({ CallLoggedProfile }: any) {
                           marginLeft: '0vw',
                           zIndex: 5,
                           position: 'fixed',
-                          top: '1vh',
+                          top: '0vh',
                           backgroundColor: darkmodeReducer
                             ? "rgba(50,50,50,0.95)"
                             : "rgba(250,250,250,0.9)",
 
                           borderRadius: '5vh',
+                          borderTopLeftRadius: '0vh',
+                          borderTopRightRadius: '0vh',
+                          borderBottomLeftRadius: '5vh',
+                          borderBottomRightRadius: '5vh',
+
+
 
 
                         }}

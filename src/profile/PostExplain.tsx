@@ -15,14 +15,17 @@ function PostExplainx({
     playXAudio,
     setplayXAudio,
     audionotify,
-    setaudionotify
+    setaudionotify,
+
+    imageActive,
+    setImageActive,
+    PlayClik
 }: any): JSX.Element {
 
     const { REACT_APP_CLOUNDFRONT } = process.env;
 
     const [images, setImages] = useState<string[]>([]);
     const [texts, setTexts] = useState<string[]>([]);
-    const [imageActive, setImageActive] = useState<boolean>(false);
 
     const [AllowAudio, setAllowAudio] = useState<boolean>(false);
 
@@ -111,29 +114,28 @@ function PostExplainx({
     const waxk = useRef<ReturnType<typeof setTimeout> | null>(null);
     const wa22 = useRef<ReturnType<typeof setTimeout> | null>(null);
 
+
+    useEffect(() => {
+        if (PlayClik) {
+            handleImageClick(0);
+        }
+    }, [PlayClik])
+
     const handleImageClick = (index: number) => {
         if (minimise) {
-            if (matchMobile) {
-                setMaximisefromcanvas(true);
-                if (wa22.current) {
-                    clearTimeout(wa22.current);
-                }
-                wa22.current = setTimeout(() => {
-                    setMaximisefromcanvas(false);
-                }, 4000);
-            } else {
-                setminimiseSpecificScroll(true);
-                setminimise(false);
-                if (wa.current) {
-                    clearTimeout(wa.current);
-                }
-                wa.current = setTimeout(() => {
-                    postDivRef.current[pey].scrollIntoView({
-                        behavior: "smooth",
-                        block: "start",
-                    });
-                }, 1000);
+
+            setminimiseSpecificScroll(true);
+            setminimise(false);
+            if (wa.current) {
+                clearTimeout(wa.current);
             }
+            wa.current = setTimeout(() => {
+                postDivRef.current[pey].scrollIntoView({
+                    behavior: "smooth",
+                    block: "start",
+                });
+            }, 1000);
+
         } else {
             if (!imageActive) {
                 setCurrentImage(0);
@@ -202,7 +204,7 @@ function PostExplainx({
                             return text.match(regex) || [];
                         };
 
-                        const chunks = splitText(textToSpeak, 260);
+                        const chunks = splitText(textToSpeak, 220);
 
                         const voices = window.speechSynthesis.getVoices();
                         if (!voices.length) {

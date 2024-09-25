@@ -32,7 +32,21 @@ import {
   EditHintState_LOADER,
   interactionstartHintState_LOADER,
   UPDATE_MuteAUDIO,
-  UPDATE_AUDIOINDEX
+  UPDATE_AUDIOINDEX,
+  UPDATE_RAD2,
+  UPDATE_RAD1,
+  ADD_NAVIGATION_DATA,
+  CLEAR_NAVIGATION_DATA,
+
+  ADD_POST_DATA,
+  CLEAR_POST_DATA,
+  REMOVE_POST_DATA_BY_TIMESTAMP,
+  ADD_PROFILE_DATA,
+  CLEAR_PROFILE_DATA,
+  REMOVE_PROFILE_DATA_BY_TIMESTAMP
+
+
+
 } from "./global_ActionTypes";
 
 ////////////OPTIONS TOP SHOW  DATA////////////////
@@ -236,12 +250,140 @@ export const GlobalReducerColor = (
   }
 };
 
+
+
+//////NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN COLOR REDUCER
+// Define the shape of the navigation data object
+// Define the shape of the profiledataLocal object
+// Define the ProfileDataLocal type as 'any'
+type ProfileDataLocal = any;
+
+// Define the PostItem type as 'any'
+type PostItem = any;
+
+// Define the PostDataLocal type as an array of 'PostItem' objects
+type PostDataLocal = PostItem[];
+
+
+// Define the PostDataItem type
+type PostDataItem = {
+  idTimestamp: number;
+  postdataLocal: PostDataLocal;
+};
+
+// Define the ProfileDataItem type
+type ProfileDataItem = {
+  idTimestamp: number;
+  profiledataLocal: ProfileDataLocal;
+};
+
+// Initial state for post data with timestamps
+const initialPostDataState = {
+  postEntries: [] as PostDataItem[] // Array to hold post data items with timestamps
+};
+
+// Initial state for profile data with timestamps
+const initialProfileDataState = {
+  profileEntries: [] as ProfileDataItem[] // Array to hold profile data items with timestamps
+};
+
+
+
+
+type PostDataState = typeof initialPostDataState;
+
+export const postDataReducer = (
+  state = initialPostDataState,
+  action: any
+): PostDataState => {
+  switch (action.type) {
+    case ADD_POST_DATA:
+      return {
+        ...state,
+        postEntries: [
+          ...state.postEntries,
+          action.payload
+        ].slice(-4000) // Keep only the last 4000 entries
+      };
+
+    case CLEAR_POST_DATA:
+      return {
+        ...state,
+        postEntries: []
+      };
+
+    case REMOVE_POST_DATA_BY_TIMESTAMP:
+      return {
+        ...state,
+        postEntries: state.postEntries.filter(
+          entry => entry.idTimestamp !== action.payload
+        )
+      };
+
+    default:
+      return state;
+  }
+};
+
+
+
+type ProfileDataState = typeof initialProfileDataState;
+
+export const profileDataReducer = (
+  state = initialProfileDataState,
+  action: any
+): ProfileDataState => {
+  switch (action.type) {
+    case ADD_PROFILE_DATA:
+      return {
+        ...state,
+        profileEntries: [
+          ...state.profileEntries,
+          action.payload
+        ].slice(-4000) // Keep only the last 4000 entries
+      };
+
+    case CLEAR_PROFILE_DATA:
+      return {
+        ...state,
+        profileEntries: []
+      };
+
+    case REMOVE_PROFILE_DATA_BY_TIMESTAMP:
+      return {
+        ...state,
+        profileEntries: state.profileEntries.filter(
+          entry => entry.idTimestamp !== action.payload
+        )
+      };
+
+    default:
+      return state;
+  }
+};
+
+
+//////NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN COLOR REDUCER
+
+
+
+
+
 //////GLOBAL COLOR REDUCER
 
 ///
 ///
 ///
-//////GLOBAL LOADER  DATA
+//////GLOBAL LOADER  REDUCER
+
+// Define the shape of the navigation data object with 'any' types
+type NavigationDataItem = {
+  idTimestamp: number;
+  postdataLocal: any; // Accepts any array structure for post data
+  profiledataLocal: any; // Accepts any structure for profile data
+};
+
+// Initial state with typed navigation data array
 const initialStateLoader = {
   loader: false,
   clickPostHint: '',
@@ -259,8 +401,12 @@ const initialStateLoader = {
   adjustinteractionHint: '',
   adjustinteractionHintState: true,
 
-
+  // Typed navigation data array
+  navigationData: [] as NavigationDataItem[]
 };
+
+
+
 type MYGlobalReducerLoader = typeof initialStateLoader;
 
 export const GlobalReducerLoader = (
@@ -284,10 +430,29 @@ export const GlobalReducerLoader = (
       return { ...state, EditHintState: action.payload2 };
     case interactionstartHintState_LOADER:
       return { ...state, interactionstartHintState: action.payload2 };
+
+    // Handle navigation data update
+    case ADD_NAVIGATION_DATA:
+      return {
+        ...state,
+        navigationData: [
+          ...state.navigationData,
+          action.payload
+        ].slice(-4000) // Keep only the last 4000 entries
+      };
+
+    // Clear navigation data
+    case CLEAR_NAVIGATION_DATA:
+      return {
+        ...state,
+        navigationData: []
+      };
+
     default:
       return state;
   }
 };
+
 
 //////GLOBAL LOADER REDUCER
 
@@ -298,7 +463,7 @@ export const GlobalReducerLoader = (
 const initialState = {
   snapStart: true,
   screenHeight: 0,
-  darkmode: true,
+  darkmode: false,
   AlertData: null,
   AlertEmojiType: 0,
   activateLoader: false,
@@ -319,6 +484,8 @@ const initialState = {
   interactContentAudiotypex: 0,
   muteaudio: false,
   ActiveAudioIndex: 1000,
+  rad1: 0,
+  rad2: 2,
 
   ////For example const initialState = { person: null as Person };
 };
@@ -412,6 +579,22 @@ export const GlobalReducer = (
         ...state,
         ActiveAudioIndex: action.payload,
       };
+
+    case UPDATE_RAD1:
+      return {
+        ...state,
+        rad1: action.payload,
+
+      };
+
+    case UPDATE_RAD2:
+      return {
+        ...state,
+        rad2: action.payload,
+
+      };
+
+
 
 
     default:

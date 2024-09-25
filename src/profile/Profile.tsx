@@ -120,6 +120,8 @@ function Profilex({
   setPCZOOM,
   setAutoGo,
   AutoGo,
+  localPostId,
+  localProfileId,
 
 
 
@@ -182,7 +184,14 @@ function Profilex({
 
 
 
+  const [showMonoPc, setshowMonoPc] = useState(false);
 
+  useEffect(() => {
+    if (matchPc) {
+      setshowMonoPc(false);
+
+    }
+  }, [minimise])
 
 
   const [showMoreIndicator, setshowMoreIndicator] = useState(false);
@@ -636,7 +645,7 @@ function Profilex({
   useEffect(() => {
     clearTimers(); // Clear timers before setting new ones
 
-    if (postData.length > 0 && postDivRef.current) {
+    if (ActualpostDataAll.length > 0 && postDivRef.current) {
       // Set the interval
       postTimer6I.current = setInterval(() => {
         if (StopRouterScroll === 2) {
@@ -649,7 +658,7 @@ function Profilex({
             clearTimeout(postTimer6.current);
             postTimer6.current = null;
           }
-
+          //alert('jj');
           postTimer6.current = setTimeout(() => {
             if (ScrollReactRouter === 0) {
               paperPostScrollRef.current.scrollTop = ScrollReactRouter;
@@ -672,14 +681,14 @@ function Profilex({
           clearInterval(postTimer6I.current);
           postTimer6I.current = null; // Ensure it is cleared
         }
-      }, 3000);
+      }, 10000);
     }
 
     // Cleanup function to clear timers when the component unmounts or dependencies change
     return () => {
       clearTimers();
     };
-  }, [postData, ScrollReactRouter, memeberPageidReducer, postDivRef, matchMobile]);
+  }, [ActualpostDataAll, ScrollReactRouter, memeberPageidReducer, postDivRef, matchMobile]);
 
 
 
@@ -880,7 +889,7 @@ function Profilex({
 
               setallowInitialexplainIt(true);
 
-            }, 8000)
+            }, 4000)
 
 
             if (ScrollReactRouter === 0) {
@@ -1538,7 +1547,17 @@ function Profilex({
 
   return (
     <>
-      <Grid container className="dontallowhighlighting" style={{ backgroundColor: '', padding: '0px' }}>
+      <Grid container onClick={() => {
+
+
+        if (showMonoPc) { } else {
+          setshowMonoPc(true);
+
+
+        }
+
+
+      }} className="dontallowhighlighting" style={{ backgroundColor: '', padding: '0px' }}>
         <Grid
           item
 
@@ -1558,25 +1577,26 @@ function Profilex({
           ref={TopRef}
           className="parent-containerEffect effect"
           item
-          xs={12}
+          xs={matchPc ? showMonoPc && !minimise ? 6 : 12 : 12}
           style={{
             padding: matchMobile ? (minimise ? '2vh' : '0px') : minimise ? '7vh' : '0px',
             height: 'auto',
-            marginTop: matchMobile ? (minimise ? '8.4vh' : '33vh') : minimise ? '0vh' : '18vh',
+            marginTop: matchMobile ? (minimise ? '8.4vh' : '33vh') : minimise ? '0vh' : '32vh',
             transform: 'scale(1)',
 
             transition: 'transform 0.1s',
-            marginLeft: miniProfile && matchPc ? '1.5vw' : '0px',
+            marginLeft: matchPc ? showMonoPc && !minimise ? '25vw' : minimise ? '1.5vw' : '0px' : '0px',
             overflowX: 'hidden',
             overflowY: 'auto',
-            overflow: 'visible'
+            overflow: 'visible',
+
 
           }}
         >
-          <div className="scroll-container">
+          <div className="scroll-container" style={{}}>
             {postData.length > 0 ? (
               <Masonry
-                columns={matchPc ? (minimise ? 3 : 2) : minimise ? 2 : 1}
+                columns={matchPc ? (minimise ? 3 : showMonoPc ? 1 : 2) : minimise ? 2 : 1}
                 spacing={matchPc ? (minimise ? 1 : 0) : minimise ? 0.2 : 0}
                 style={{
                   padding: '0px',
@@ -1622,6 +1642,10 @@ function Profilex({
                         }}
                       >
                         <Post
+
+                          showMonoPc={showMonoPc}
+                          localPostId={localPostId}
+                          localProfileId={localProfileId}
 
                           allowInitialexplainIt={allowInitialexplainIt}
                           TopRef={TopRef}

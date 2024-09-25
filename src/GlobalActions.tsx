@@ -32,7 +32,19 @@ import {
   EditHintState_LOADER,
   interactionstartHintState_LOADER,
   UPDATE_MuteAUDIO,
-  UPDATE_AUDIOINDEX
+  UPDATE_AUDIOINDEX,
+  UPDATE_RAD1,
+  UPDATE_RAD2,
+  ADD_NAVIGATION_DATA,
+  CLEAR_NAVIGATION_DATA,
+
+
+  ADD_POST_DATA,
+  CLEAR_POST_DATA,
+  REMOVE_POST_DATA_BY_TIMESTAMP,
+  ADD_PROFILE_DATA,
+  CLEAR_PROFILE_DATA,
+  REMOVE_PROFILE_DATA_BY_TIMESTAMP
 } from "./global_ActionTypes";
 
 export function DarkmodeAction(newDarkModeData: boolean) {
@@ -288,3 +300,66 @@ export function MuteIndexAudio(Payload: any) {
     payload: Payload,
   };
 }
+
+
+
+export function UpdateRad1(Payload: any,) {
+  return {
+    type: UPDATE_RAD1,
+    payload: Payload,
+
+  };
+}
+
+
+
+export function UpdateRad2(Payload: any) {
+  return {
+    type: UPDATE_RAD2,
+    payload: Payload,
+
+  };
+}
+
+
+
+export const addNavigationData = (
+  idTimestamp: any,
+  postdataLocal: any,
+  profiledataLocal: any
+) => ({
+  type: ADD_NAVIGATION_DATA,
+  payload: { idTimestamp, postdataLocal, profiledataLocal }
+});
+
+
+
+// Action creators for post data
+export const addPostData = (idTimestamp: number, postdataLocal: any) => ({
+  type: ADD_POST_DATA,
+  payload: { idTimestamp, postdataLocal }
+});
+
+export const clearPostData = () => ({
+  type: CLEAR_POST_DATA
+});
+
+export const removePostDataByTimestamp = (idTimestamp: number) => ({
+  type: REMOVE_POST_DATA_BY_TIMESTAMP,
+  payload: idTimestamp
+});
+
+// Action creators for profile data
+export const addProfileData = (idTimestamp: number, profiledataLocal: any) => ({
+  type: ADD_PROFILE_DATA,
+  payload: { idTimestamp, profiledataLocal }
+});
+
+export const clearProfileData = () => ({
+  type: CLEAR_PROFILE_DATA
+});
+
+export const removeProfileDataByTimestamp = (idTimestamp: number) => ({
+  type: REMOVE_PROFILE_DATA_BY_TIMESTAMP,
+  payload: idTimestamp
+});

@@ -110,7 +110,13 @@ function Sliderx({
   audionotify,
   setaudionotify,
 
-  allowInitialexplainIt
+  allowInitialexplainIt,
+
+  showMonoPc,
+
+  imageActive,
+  setImageActive,
+  PlayClik
 
 
 
@@ -314,7 +320,7 @@ function Sliderx({
 
   const { ref, inView, entry } = useInView({
     /* Optional options */
-    threshold: matchMobile ? 0.50 : 0.4,
+    threshold: minimise ? 1 : matchMobile ? 0.50 : 0.4,
 
 
   });
@@ -510,7 +516,7 @@ function Sliderx({
         }
         InteractTimerxxhyl.current = setTimeout(() => {
           setinV(true);
-        }, 5000)
+        }, 2500)
 
 
         if (minimise) {
@@ -2997,6 +3003,11 @@ function Sliderx({
 
         {inView && allowInitialexplainIt && post.mode === 1 ?
           <PostExplain
+
+            PlayClik={PlayClik}
+            imageActive={imageActive}
+            setImageActive={setImageActive}
+
             audionotify={audionotify}
             setaudionotify={setaudionotify}
 

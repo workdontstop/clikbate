@@ -115,7 +115,8 @@ function Superstickersx({
   setCurrentTimestamp2,
   currentTimestamp2,
   setDuration2,
-  callInnerButton
+  callInnerButton,
+  ratiox
 }: any): JSX.Element {
   const [superundoArray, setsuperundoArray] = useState<any>([]);
 
@@ -1704,8 +1705,12 @@ function Superstickersx({
   const [VideoUrl, setVideoUrl] = useState<any>(null);
   const [VideoUrl2, setVideoUrl2] = useState<any>(null);
 
+  const [VideoBlob, setVideoBlob] = useState<any>(null);
+  const [VideoBlob2, setVideoBlob2] = useState<any>(null);
+
   const [ShowVideo2, setShowVideo2] = useState(false);
   const [ShowVideo, setShowVideo] = useState(false);
+
 
 
 
@@ -1714,7 +1719,8 @@ function Superstickersx({
       // Create a blob URL when new video data is set
       const newVideoUrl = URL.createObjectURL(VideoData2);
       setVideoUrl2(newVideoUrl);
-      setShowVideo2(true);
+
+
 
       // Cleanup function to revoke the blob URL
       return () => {
@@ -1732,21 +1738,18 @@ function Superstickersx({
     }
 
     if (file) {
-
       try {
         if (file.type.startsWith('video/')) {
-
-
           setShowVideo(false);
           setVideoData(file);
 
+          // Directly set the video blob for further processing
+          setVideoBlob2(file); // `file` is already a Blob object
 
           setShowVideo2(true);
 
-
           interactContentxx2[index] = file;
           setinteractContent2(interactContentxx);
-
 
           // Proceed with your video handling logic
         } else {
@@ -1754,22 +1757,23 @@ function Superstickersx({
           const res = await fetch(dataUrl);
           const dataxs = await res.blob();
 
+          // Set the Blob for non-video files
+          setVideoBlob2(dataxs); // Set the blob object directly here
 
           interactContentxx2Blob[index] = dataxs;
           interactContentxx2[index] = dataUrl;
-
 
           setinteractContent2(interactContentxx2);
           setinteractContent2Blob(interactContentxx2Blob);
 
           setadjustinteract2(true);
-
         }
       } catch (error: any) {
         console.error('Error reading the file:', error);
       }
     }
   };
+
 
 
   useEffect(() => {
@@ -1779,16 +1783,14 @@ function Superstickersx({
       setVideoUrl(newVideoUrl);
       setShowVideo(true);
 
+
+
       // Cleanup function to revoke the blob URL
       return () => {
         URL.revokeObjectURL(newVideoUrl);
       };
     }
   }, [VideoData]);
-
-
-
-
 
 
   const handleFileChange = async (event: ChangeEvent<HTMLInputElement>) => {
@@ -1800,44 +1802,40 @@ function Superstickersx({
     }
 
     if (file) {
-
       try {
-
         if (file.type.startsWith('video/')) {
-
-
           setShowVideo(false);
           setVideoData(file);
+
+          // Directly set the video blob for further processing
+          setVideoBlob(file); // `file` is already a Blob object
 
           interactContentxx[index] = file;
           setinteractContent(interactContentxx);
 
-
-
-
           // Proceed with your video handling logic
         } else {
           const dataUrl: any = await readFileAsDataUrl(file);
-
           const res = await fetch(dataUrl);
           const dataxs = await res.blob();
 
+          // Set the Blob for non-video files
+          setVideoBlob(dataxs); // Set the blob object directly here
 
           interactContentxxBlob[index] = dataxs;
-          interactContentxx[index] = dataUrl
-
+          interactContentxx[index] = dataUrl;
 
           setinteractContent(interactContentxx);
           setinteractContentBlob(interactContentxxBlob);
 
           setadjustinteract1(true);
         }
-
       } catch (error) {
         console.error('Error reading the file:', error);
       }
     }
   };
+
 
   const triggerFileInput = useCallback((type: any) => {
 
@@ -2983,6 +2981,7 @@ function Superstickersx({
                 fontSize: matchTabletMobile
                   ? `${mobilefont}vh`
                   : `${pcfont}vw`,
+                visibility: matchMobile ? 'visible' : 'visible'
               }}
             />
           </Grid></> : null}
@@ -3350,6 +3349,7 @@ function Superstickersx({
 
         <InteractCreate
 
+          ratiox={ratiox}
           dat={dat}
           cropInitialIn={cropInitialIn}
           cropInitialIn2={cropInitialIn2}
@@ -3449,13 +3449,16 @@ function Superstickersx({
 
         <Grid item
           xs={12}
-          style={{ position: 'relative', bottom: '60vh', zIndex: 20000000, height: '0px' }}>
+          style={{ position: 'relative', bottom: matchMobile ? '0px' : '60vh', zIndex: 20000000, height: '0px' }}>
 
 
 
 
 
           <VideoEditor
+            VideoBlob={VideoBlob}
+            VideoBlob2={VideoBlob2}
+
             setCurrentTimestamp={setCurrentTimestamp}
             currentTimestamp={currentTimestamp}
             setDuration={setDuration}
@@ -3474,8 +3477,11 @@ function Superstickersx({
             setinteractContenttype={setinteractContenttype}
             setinteractContenttype2={setinteractContenttype2}
             setinteractContentvideo2={setinteractContentvideo2}
-            callDelInteract={callDelInteract} VideoUrl={VideoUrl}
-            ShowVideo2={ShowVideo2} ShowVideo={ShowVideo} VideoUrl2={VideoUrl2}
+            callDelInteract={callDelInteract}
+            VideoUrl={VideoUrl}
+            ShowVideo2={ShowVideo2}
+            ShowVideo={ShowVideo}
+            VideoUrl2={VideoUrl2}
             setShowVideo2={setShowVideo2} setShowVideo={setShowVideo} />
 
 
@@ -3571,7 +3577,6 @@ function Superstickersx({
 
 
 
-        {stickerOPtionsDefault === 4 ? <Tutorial type={6} index={0} /> : null}
 
 
 

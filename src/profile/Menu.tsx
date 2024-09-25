@@ -95,7 +95,15 @@ function Menux({
   mobileZoom,
   FeedType,
   AutoGo,
-  setAutoGo
+  setAutoGo,
+
+
+
+  localPostId,
+  setlocalPostId,
+  localProfileId,
+  setlocalProfileId
+
 
 
 
@@ -199,18 +207,28 @@ function Menux({
     var indexplus1 = ScrollIndexPusher + 1;
 
     const currentPath = location.pathname.split('/');
-    const currentIdRoute1 = currentPath[currentPath.length - 4]; // Assuming idRoute1 is the fourth last segment
-    const currentIdRoute2 = currentPath[currentPath.length - 3]; // Assuming idRoute2 is the third last segment
-    const currentIdRoute3 = currentPath[currentPath.length - 2]; // Assuming idRoute3 is the second last segment
-    const currentIdRoute4 = currentPath[currentPath.length - 1]; // Assuming idRoute4 is the last segment
+
 
     const p = encodeBase64(memeberPageidReducer.toString());
     const encodedScrollIndex = encodeBase64(indexplus1.toString());
     const encodedPageNumber = encodeBase64(PostPagenumPusher.toString());
     const encodedFeedtype = encodeBase64(FeedType.toString());
 
-    navigate(`/Feeds/${p}/${encodedScrollIndex}/${encodedPageNumber}/${encodedFeedtype}`, { replace: true });
-  }, [FeedType, PostPagenumPusher, ScrollIndexPusher, memeberPageidReducer]);
+
+
+    var l = localPostId;
+    var lx = localProfileId;
+
+
+
+
+    const localpost = encodeBase64(l.toString());
+    const localprofile = encodeBase64(lx.toString());
+
+
+    navigate(`/Feeds/${p}/${encodedScrollIndex}/${encodedPageNumber}/${encodedFeedtype}/${localpost}/${localprofile}`, { replace: true });
+
+  }, [FeedType, PostPagenumPusher, ScrollIndexPusher, memeberPageidReducer, localPostId.localProfileId]);
 
 
 
@@ -230,7 +248,7 @@ function Menux({
     setTimeout(() => {
 
       // Navigate to the new URL with the new ID
-      navigate(`/Feeds/${encodedId}/${encodeBase64('0')}/${encodeBase64('0')}/${encodeBase64('0')}`);
+      navigate(`/Feeds/${encodedId}/${encodeBase64('0')}/${encodeBase64('0')}/${encodeBase64('0')}/${encodeBase64('0')}/${encodeBase64('0')}`);
       dispatch(UserInfoUpdateMEMBER(0));
       setIdReactRouterAsInt(0);
       setScrollReactRouter(0)
@@ -299,37 +317,32 @@ function Menux({
 
 
   const GoToMemberP = () => {
-    if (idReducer === GuestReducer) {
 
-      dispatch(UpdateSign(true));
-
-
-      // commentClickedNew();
-    } else {
+    dispatch(UpdateSign(true));
 
 
 
 
-      dispatch(UserInfoUpdateMEMBER(-1));
-      const id = idReducer; // Replace with the actual ID you want to navigate to
-      const encodedId = encodeBase64(id.toString());
+    dispatch(UserInfoUpdateMEMBER(-1));
+    const id = idReducer; // Replace with the actual ID you want to navigate to
+    const encodedId = encodeBase64(id.toString());
 
-      // Update the current URL with the scroll position
-      //updateCurrentURLWithScrollPosition();
-      // Update the current URL with the scroll position
+    // Update the current URL with the scroll position
+    //updateCurrentURLWithScrollPosition();
+    // Update the current URL with the scroll position
 
-      if (CurrentPage === 'feeds') {
-        updateCurrentURLWithScrollPosition();
-      }
-
-
-      // Navigate to the new URL with the new ID
-      navigate(`/Feeds/${encodedId}/${encodeBase64('0')}/${encodeBase64('0')}/${encodeBase64('0')}`);
-
-      dispatch(UserInfoUpdateMEMBER(idReducer));
-      setIdReactRouterAsInt(idReducer);
-      setScrollReactRouter(0)
+    if (CurrentPage === 'feeds') {
+      updateCurrentURLWithScrollPosition();
     }
+
+
+    // Navigate to the new URL with the new ID
+    navigate(`/Feeds/${encodedId}/${encodeBase64('0')}/${encodeBase64('0')}/${encodeBase64('0')}/${encodeBase64('0')}/${encodeBase64('0')}`);
+
+    dispatch(UserInfoUpdateMEMBER(idReducer));
+    setIdReactRouterAsInt(idReducer);
+    setScrollReactRouter(0)
+
   };
 
   const GoToMemberPn = useCallback(() => {
@@ -749,21 +762,21 @@ function Menux({
                             title={username}
                             onClick={() => {
                               ///GoToMemberLoaderUpP();
+
                               if (idReducer === GuestReducer) {
                                 dispatch(UpdateSign(true));
 
                               }
-                              else {
-                                if (CurrentPage === 'feeds') {
-                                  ///  paperPostScrollRef.current.scrollTop = 0;
-                                  ///setZoom1(false);
+                              if (CurrentPage === 'feeds') {
+                                ///  paperPostScrollRef.current.scrollTop = 0;
+                                ///setZoom1(false);
 
-                                  GoToMemberLoaderUpP();
+                                GoToMemberLoaderUpP();
 
-                                } else {
-                                  GoToMemberLoaderUpP();
-                                }
+                              } else {
+                                GoToMemberLoaderUpP();
                               }
+
 
                             }}
                             style={{

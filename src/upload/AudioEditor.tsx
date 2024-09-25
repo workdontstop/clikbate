@@ -271,6 +271,71 @@ function AudioEditorx({
         }}
       >
 
+
+
+
+        <Grid
+          item
+          xs={12}
+          style={{
+            position: "relative",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            fontSize: "24px",
+            fontFamily: "Helvetica, Arial, sans-serif",
+            color: darkmodeReducer ? "#ffffff" : '#000000',
+          }}
+        >
+
+
+
+        </Grid>
+
+        <Grid
+          item
+          xs={12}
+          style={{
+            margin: "auto",
+            textAlign: "right",
+
+            height: "auto",
+            position: "fixed",
+            top: matchMobile ? '5vh' : "3vh",
+            right: matchMobile ? '45vw' : "3vw",
+            display: matchMobile ? 'block' : "none",
+            zIndex: 500000
+
+          }}
+        >
+          <DeleteOutlineIcon
+            onClick={() => {
+
+              const audio = audioPlayerRef.current;
+              if (audio) {
+                audio.pause();
+              }
+
+              setShowAudio(false)
+              setAudioUrl(null);
+              setAudioname('');
+
+              setinteractContentAudio(null);
+              setinteractContentAudiotype(0);
+
+              dispatch(UpdateA(null, 0));
+              ///closeEditor
+            }}
+            className={
+              darkmode
+                ? "make-small-icons-clickable-lightCrop dontallowhighlighting zuperkingIcon "
+                : "make-small-icons-clickable-darkCrop dontallowhighlighting zuperkingIcon  "
+            }
+            style={{ margin: "auto", color: darkmodeReducer ? "#ffffff" : '#000000', fontSize: "9.5vw" }}
+          />
+        </Grid>
+
+
         <img
           src={`${REACT_APP_CLOUNDFRONT}${imageThumb}`}
 
@@ -382,7 +447,7 @@ function AudioEditorx({
           </Grid>
 
 
-          {recording ? <Grid className="blinking" item xs={4} sm={1} style={{
+          {recording ? <Grid className="blinking" item xs={2} sm={1} style={{
             height: '15vh', border: '0px solid white', borderRadius: '8px',
             display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '24px', visibility: 'visible'
           }}>
@@ -461,9 +526,10 @@ function AudioEditorx({
             left: "5px",
             height: "20px",
             position: "fixed",
-            top: "3vh",
-            right: "3vw",
-            display: "block",
+            top: matchMobile ? '50vh' : "3vh",
+            right: matchMobile ? '5vw' : "3vw",
+            display: matchMobile ? 'none' : "block",
+
           }}
         >
           <DeleteOutlineIcon

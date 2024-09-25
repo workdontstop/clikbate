@@ -16,6 +16,9 @@ import {
   GlobalReducerColor,
   GlobalReducerLoader,
   OptionsTopShowReducer,
+  postDataReducer,
+  profileDataReducer,
+
 } from "./GlobalReducer";
 //////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////
@@ -40,6 +43,8 @@ const AllReducers = combineReducers({
   IsLoggedProfileReducer,
   GlobalReducerLoader,
   OptionsTopShowReducer,
+  postData: postDataReducer,
+  profileData: profileDataReducer,
 });
 
 export default AllReducers;

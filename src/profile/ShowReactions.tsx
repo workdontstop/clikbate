@@ -195,6 +195,8 @@ function ShowReactionsx({
 
   const GoToMember = () => {
 
+
+
     const id = post.reactId; // Replace with the actual ID you want to navigate to
     const encodedId = encodeBase64(id);
 
@@ -203,7 +205,7 @@ function ShowReactionsx({
     //updateCurrentURLWithScrollPosition();
 
     // Navigate to the new URL with the new ID
-    navigate(`/Feeds/${encodedId}/${encodeBase64('0')}/${encodeBase64('0')}/${encodeBase64('0')}`);
+    navigate(`/Feeds/${encodedId}/${encodeBase64('0')}/${encodeBase64('0')}/${encodeBase64('0')}/${encodeBase64('0')}/${encodeBase64('0')}`);
     dispatch(UserInfoUpdateMEMBER(post.reactId));
     /// setIdReactRouterAsInt(0);
     ///setScrollReactRouter(0);

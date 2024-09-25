@@ -38,7 +38,12 @@ function VideoEditorx({ VideoUrl, VideoUrl2, ShowVideo2, ShowVideo, setShowVideo
   setDuration,
   setCurrentTimestamp2,
   currentTimestamp2,
-  setDuration2 }: any): JSX.Element {
+  setDuration2,
+
+  VideoBlob,
+  VideoBlob2
+
+}: any): JSX.Element {
 
   ///
 
@@ -54,6 +59,21 @@ function VideoEditorx({ VideoUrl, VideoUrl2, ShowVideo2, ShowVideo, setShowVideo
   const Timer1 = useRef<ReturnType<typeof setTimeout> | null>(null);
   const Timer3 = useRef<ReturnType<typeof setTimeout> | null>(null);
   const wait = 50;
+
+
+  const [pop, setpop] = useState(false);
+
+
+  useEffect(() => {
+
+    setpop(true);
+    setTimeout(() => {
+
+      setpop(false);
+    }, 1600);
+
+
+  }, [VideoUrl]);
 
   ///
   ///DARKMODE FROM REDUX
@@ -188,58 +208,82 @@ function VideoEditorx({ VideoUrl, VideoUrl2, ShowVideo2, ShowVideo, setShowVideo
   }
 
 
-  async function fetchVideoAsBlob(videoUrl: any) {
-    try {
-      // Fetch the video data from the URL
-      const response = await fetch(videoUrl);
 
-      // Convert the response data into a Blob object
-      const videoBlob = await response.blob();
-
-      return videoBlob;
-    } catch (error) {
-      console.error('Error fetching video:', error);
-      return null;
-    }
-  }
-
-  const Save = useCallback(() => {
-
-
-    fetchVideoAsBlob(VideoUrl)
-      .then(blob => {
-        if (blob) {
-          if (ShowVideo2) {
-            var Durationxxx = EndTimestamp - currentTimestamp2;
-            setDuration2(Durationxxx);
-          } else {
-            var Durationxxx = EndTimestamp - currentTimestamp;
-            setDuration(Durationxxx);
-          }
-
-
-          /// alert(`Video  start from: ${currentTimestamp} with duration:   ${Durationxxx}`);
-          if (ShowVideo2) {
-            setinteractContentvideo2(blob);
-            setinteractContenttype2(1);
-            setadjustinteract2(true);
-            close(true);
-          } else {
-            setinteractContentvideo(blob);
-            setinteractContenttype(1);
-            setadjustinteract1(true);
-            close(true);
-          }
-        } else {
-          console.log('Failed to fetch video or convert to Blob.');
+  // Mock fetchVideoAsBlob function
+  const fetchVideoAsBlob = (url: any) => {
+    return fetch(url)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
         }
+        return response.blob();
+      })
+      .catch(error => {
+        console.error('Error fetching the video:', error);
+        return null;
       });
+  };
+
+  const fetchVideoMetadata = async (url: any) => {
+    try {
+      const response = await fetch(url, { method: 'HEAD' });
+      const contentLength = response.headers.get('content-length');
+      if (contentLength) {
+        return parseInt(contentLength, 10);
+      }
+      return 0; // Return 0 if the size couldn't be determined
+    } catch (error) {
+      console.error('Error fetching video metadata:', error);
+      return 0;
+    }
+  };
+
+  const [loading, setLoading] = useState(false);
+  const maxBlobSize = 50 * 1024 * 1024; // 50MB limit for example
+
+  const Save = useCallback(async () => {
+
+    let Durationxxx;
+    if (ShowVideo2) {
+      Durationxxx = EndTimestamp - currentTimestamp2;
+      setDuration2(Durationxxx);
+    } else {
+      Durationxxx = EndTimestamp - currentTimestamp;
+      setDuration(Durationxxx);
+    }
+
+    if (ShowVideo2) {
+      setinteractContentvideo2(VideoBlob2);
+      setinteractContenttype2(1);
+      setadjustinteract2(true);
+      close(true);
+    } else {
+      setinteractContentvideo(VideoBlob);
+      setinteractContenttype(1);
+      setadjustinteract1(true);
+      close(true);
+    }
 
 
-
-  }, [RecordedBlob, ShowVideo2, VideoUrl, currentTimestamp, currentTimestamp2, EndTimestamp])
-
-
+  }, [
+    RecordedBlob,
+    ShowVideo2,
+    VideoUrl,
+    currentTimestamp,
+    currentTimestamp2,
+    EndTimestamp,
+    setDuration,
+    setDuration2,
+    setinteractContentvideo,
+    setinteractContentvideo2,
+    setinteractContenttype,
+    setinteractContenttype2,
+    setadjustinteract1,
+    setadjustinteract2,
+    close,
+    VideoBlob,
+    VideoBlob2
+  ]);
 
 
   const { PaperStyleLight, PaperStyleDark } = useSelector(
@@ -309,25 +353,39 @@ function VideoEditorx({ VideoUrl, VideoUrl2, ShowVideo2, ShowVideo, setShowVideo
       <div>
         <video ref={videoRef} style={{ display: 'none' }} />
         <canvas ref={canvasRef} style={{ position: 'fixed', top: '-400000000vh', zIndex: 0, }} />
-        {vidBackUpURL && <img src={vidBackUpURL} style={{ width: '30%', height: 'auto', position: 'fixed', top: '0vh', zIndex: 0, display: 'none' }} alt="Captured frame" />} {/* Display the captured image */}
+        {vidBackUpURL && <img src={vidBackUpURL} style={{ width: matchMobile ? '100%' : '30%', height: 'auto', position: 'fixed', top: '0vh', zIndex: 0, display: 'none' }} alt="Captured frame" />} {/* Display the captured image */}
       </div>
       <Grid xs={12} style={{
         display: ShowVideo ? 'block' : 'none', position: 'fixed', top: '0vh', height: '100vh',
         backgroundImage: darkmodeReducer ? PaperStyleDark : PaperStyleLight,
-        width: '100%', margin: 'auto', textAlign: 'center'
+        width: '100%', margin: 'auto', textAlign: 'center', backgroundColor: '#00ccff'
       }} >
 
 
 
-        <video ref={videoPlayerRef} src={VideoUrl} controls style={{
-          width: '50%', margin: 'auto', textAlign: 'center', display: Preview ? 'none' : 'block'
 
-        }}></video>
 
-        {recordedVideoUrl && rec ? <video ref={videoPlayerRefx} src={recordedVideoUrl} controls style={{
-          width: '50%', margin: 'auto', textAlign: 'center', display: Preview ? 'block' : 'none'
+        <video
+          ref={videoPlayerRef}
+          src={VideoUrl}
+          controls
+          playsInline
+          autoPlay
+          style={{
+            width: matchMobile ? '100%' : '50%',
+            height: matchMobile ? '40%' : 'auto',
+            margin: 'auto',
+            textAlign: 'center',
+            display: Preview ? 'none' : 'block'
+          }}
+        ></video>
 
-        }}></video> : null}
+
+        {recordedVideoUrl && rec ?
+          <video ref={videoPlayerRefx} src={recordedVideoUrl} controls playsInline autoPlay style={{
+            width: matchMobile ? '100%' : '50%', height: matchMobile ? '40%' : 'auto', margin: 'auto', textAlign: 'center', display: Preview ? 'block' : 'none'
+
+          }}></video> : null}
 
 
 
@@ -338,7 +396,9 @@ function VideoEditorx({ VideoUrl, VideoUrl2, ShowVideo2, ShowVideo, setShowVideo
           bottom: '-7vh', position: 'relative', display: 'flex', alignItems: 'center',
           justifyContent: 'center', fontSize: '24px', fontFamily: 'Helvetica, Arial, sans-serif', color: darkmodeReducer ? "#ffffff" : '#000000',
         }}>
-          <Grid item xs={1}
+          <Grid item xs={3}
+            sm={1}
+
             onClick={() => {
               ////setRec(false);
               /////setRecordedVideoUrl(null);
@@ -350,7 +410,7 @@ function VideoEditorx({ VideoUrl, VideoUrl2, ShowVideo2, ShowVideo, setShowVideo
             style={{
               border: darkmodeReducer ? '2px solid white' : '2px solid black',
               cursor: 'pointer',
-              height: '15vh', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center',
+              height: '15vh', borderRadius: '8px', display: pop ? 'none' : 'flex', alignItems: 'center', justifyContent: 'center',
 
             }}>
             EDIT
@@ -358,15 +418,22 @@ function VideoEditorx({ VideoUrl, VideoUrl2, ShowVideo2, ShowVideo, setShowVideo
 
 
           <Grid item onClick={() => {
-            if (videoPlayerRefx.current) {
-              videoPlayerRefx.current.pause();
+            if (matchMobile) { }
+            else {
+              if (videoPlayerRefx.current) {
+                videoPlayerRefx.current.pause();
+              }
             }
+
             Save();
-          }} xs={3} style={{
-            cursor: 'pointer',
-            height: '15vh', border: darkmodeReducer ? '2px solid white' : '2px solid black', borderRadius: '8px',
-            display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '24px',
-          }}>
+          }} xs={5}
+            sm={3}
+            style={{
+              cursor: 'pointer',
+              height: '15vh', border: darkmodeReducer ? '2px solid white' : '2px solid black', borderRadius: '8px',
+              display: pop ? 'none' : 'flex',
+              alignItems: 'center', justifyContent: 'center', fontSize: '24px',
+            }}>
             SAVE
           </Grid>
         </Grid> : <Grid item xs={12} style={{
@@ -374,7 +441,10 @@ function VideoEditorx({ VideoUrl, VideoUrl2, ShowVideo2, ShowVideo, setShowVideo
           justifyContent: 'center', fontSize: '24px', fontFamily: 'Helvetica, Arial, sans-serif',
           color: darkmodeReducer ? "#ffffff" : '#000000',
         }}>
-          <Grid item xs={2}
+          <Grid item
+
+            xs={4}
+            sm={2}
 
             onClick={() => {
               if (processing) { } else {
@@ -387,7 +457,7 @@ function VideoEditorx({ VideoUrl, VideoUrl2, ShowVideo2, ShowVideo, setShowVideo
               opacity: processing ? 0.25 : 1,
               height: '15vh', border: darkmodeReducer ? '2px solid white' : '2px solid black',
 
-              borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center',
+              borderRadius: '8px', display: pop ? 'none' : 'flex', alignItems: 'center', justifyContent: 'center',
 
             }}>
             START
@@ -396,7 +466,7 @@ function VideoEditorx({ VideoUrl, VideoUrl2, ShowVideo2, ShowVideo, setShowVideo
 
           {processing ? <Grid className="blinking" item xs={2} style={{
             height: '15vh', border: '0px solid white', borderRadius: '8px',
-            display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '24px', visibility: 'visible'
+            display: pop ? 'none' : 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '24px', visibility: 'visible'
           }}>
 
             <AdjustIcon
@@ -415,7 +485,9 @@ function VideoEditorx({ VideoUrl, VideoUrl2, ShowVideo2, ShowVideo, setShowVideo
               }}
             />
           </Grid> :
-            <Grid item xs={2}
+            <Grid item xs={4}
+              sm={2}
+
               onClick={() => {
                 if (videoPlayerRef.current) {
                   videoPlayerRef.current.pause();
@@ -424,23 +496,28 @@ function VideoEditorx({ VideoUrl, VideoUrl2, ShowVideo2, ShowVideo, setShowVideo
               }} style={{
                 cursor: 'pointer',
                 height: '15vh', border: darkmodeReducer ? '2px solid white' : '2px solid black', borderRadius: '8px',
-                display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '24px',
+                display: pop ? 'none' : 'flex',
+                alignItems: 'center', justifyContent: 'center', fontSize: '24px',
                 visibility: recordedVideoUrl && rec ? 'visible' : 'hidden'
               }}>
               PREVIEW
             </Grid>}
           <Grid item onClick={() => {
             if (hideend) { } else { stopRecording(); }
-          }} xs={2} style={{
-            cursor: processing ? hideend ? 'default' : 'pointer' : 'default',
-            opacity: processing ? hideend ? 0.25 : 1 : 0.25,
-            height: '15vh', border: darkmodeReducer ? '2px solid white' : '2px solid black', borderRadius: '8px',
-            display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '24px',
-          }}>
+          }} xs={4}
+            sm={2}
+            style={{
+              cursor: processing ? hideend ? 'default' : 'pointer' : 'default',
+              opacity: processing ? hideend ? 0.25 : 1 : 0.25,
+              height: '15vh', border: darkmodeReducer ? '2px solid white' : '2px solid black', borderRadius: '8px',
+              display: pop ? 'none' : 'flex',
+              alignItems: 'center', justifyContent: 'center', fontSize: '24px',
+            }}>
             END
           </Grid>
         </Grid>}
       </Grid >
+
 
 
 
@@ -461,7 +538,7 @@ function VideoEditorx({ VideoUrl, VideoUrl2, ShowVideo2, ShowVideo, setShowVideo
           height: "20px",
           position: 'fixed',
           top: '3vh',
-          right: '3vw',
+          right: matchMobile ? '45vw' : '26vw',
           display: ShowVideo ? 'block' : 'none',
         }}
       >
@@ -481,7 +558,7 @@ function VideoEditorx({ VideoUrl, VideoUrl2, ShowVideo2, ShowVideo, setShowVideo
             margin: "auto",
             color: "#ffffff",
             fontSize: matchMobile
-              ? `3vh`
+              ? `5vh`
               : `2.5vw`,
 
           }}

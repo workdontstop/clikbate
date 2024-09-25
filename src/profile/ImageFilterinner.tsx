@@ -329,9 +329,10 @@ function ImageFilterinnerx({
       gradient.addColorStop(0.8, reducedColor3);
     } else if (type === "mint") {
 
-      gradient.addColorStop(0.5, "#21483e");
-      gradient.addColorStop(0.65, "#302831");
-      gradient.addColorStop(0.1, "#203131");
+      gradient.addColorStop(0.5, "#10241f"); // 50% darker version of #21483e
+      gradient.addColorStop(0.65, "#181418"); // 50% darker version of #302831
+      gradient.addColorStop(0.1, "#101818"); // 50% darker version of #203131
+
     } else if (type === "nebula") {
       const reducedColor1 = convertColor('#3b1858', filtercolorMode);
       const reducedColor2 = convertColor('#151569', filtercolorMode);
@@ -658,10 +659,10 @@ function ImageFilterinnerx({
                 gradient.addColorStop(0.3, "rgba(255, 255, 200, 0.1)");  // Bright yellowish tone for brightness
 
                 // Darker contrast at the edge, more contrast effect
-                gradient.addColorStop(0.7, "rgba(100, 100, 100, 0.3)");  // Darker to simulate contrast
+                gradient.addColorStop(0.7, "rgba(100, 100, 100, 0.2)");  // Darker to simulate contrast
 
                 // More intense saturation with a bit of color
-                gradient.addColorStop(1, "rgba(200, 180, 180, 0.6)");    // Slight color tint for saturation
+                gradient.addColorStop(1, "rgba(200, 180, 180, 0.2)");    // Slight color tint for saturation
               }
 
               ctx.fillStyle = gradient;
@@ -684,13 +685,16 @@ function ImageFilterinnerx({
                 // Modify gradient stops for mobile to simulate contrast, brightness, saturation, and blur
 
                 // Slight reduction in contrast, hence making the colors less distinct
-                gradient.addColorStop(0.8, "rgba(240, 240, 240, 0.1)");  // Slightly less contrast
+                gradient.addColorStop(0.8, "rgba(200, 240, 90, 0.02)");  // Slightly less contrast
 
                 // Increased saturation with more intense tones
-                gradient.addColorStop(0.75, "rgba(240, 240, 240, 0.1)"); // More saturation, richer tones
+                gradient.addColorStop(0.65, "rgba(240, 240, 240, 0.05)"); // More saturation, richer tones
+
+                // Increased saturation with more intense tones
+                gradient.addColorStop(0.45, "rgba(40, 140, 240, 0.02)"); // More saturation, richer tones
 
                 // Subtle blur effect can’t be directly simulated in gradient, but we use softer transitions
-                gradient.addColorStop(1, 'rgba(250, 200, 200, 0.1)');    // Softer transition for blur effect
+                gradient.addColorStop(1, 'rgba(250, 200, 200, 0.2)');    // Softer transition for blur effect
               }
 
               ctx.fillStyle = gradient;
@@ -851,8 +855,9 @@ function ImageFilterinnerx({
                 gradient.addColorStop(0, "#c9d6df11");
                 gradient.addColorStop(1, "#bef0ce13");
               } else if (type === "jentle") {
-                gradient.addColorStop(0, "rgba(255, 255, 255,0.001)");
-                gradient.addColorStop(1, "rgba(255, 255, 255,0.001)");
+                gradient.addColorStop(0, "rgba(153, 153, 153, 0.001)"); // 40% reduced brightness
+                gradient.addColorStop(1, "rgba(153, 153, 153, 0.001)"); // 40% reduced brightness
+
               } else if (type === "vintage") {
 
               } else if (
