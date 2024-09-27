@@ -59,6 +59,8 @@ function FilterModex({
 
 
 
+
+
 }: any): JSX.Element {
   var newitemUploadRef = useRef<any>(null);
 
@@ -68,10 +70,6 @@ function FilterModex({
   };
 
 
-
-  const [radius1, setradius1] = useState(0);
-
-  const [radius2, setradius2] = useState(0);
 
 
 
@@ -249,6 +247,13 @@ function FilterModex({
 
 
 
+  const [radius1, setradius1] = useState(0);
+
+  const [radius2, setradius2] = useState(0);
+
+
+
+
 
   const [AudioUrl, setAudioUrl] = useState<any>(null);
 
@@ -390,7 +395,8 @@ function FilterModex({
 
 
 
-      let usernameCleaner = /[^a-zA-Z0-9\s.,!?'"“”‘’–—:;()[\]{}<>\/\\`~@#$%^&*_+=|\-😀🙏👍🙌💩🦄\u{1F600}-\u{1F64F}\u{1F300}-\u{1F5FF}\u{1F680}-\u{1F6FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}]/gu;
+      let usernameCleaner = /[^a-zA-Z0-9\s.,!?'"“”‘’–—:;()[\]{}<>\/\\`~@#$%^&*_+=|\-😀🙏👍🙌💩🦄\u{1F600}-\u{1F64F}\u{1F300}-\u{1F5FF}\u{1F680}-\u{1F6FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{1F1E6}-\u{1F1FF}]/gu;
+
 
 
       // Updated regex to allow emojis

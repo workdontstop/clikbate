@@ -4,6 +4,7 @@ import { RootStateOrAny, useSelector, useDispatch } from "react-redux";
 import { useSpring, animated } from "react-spring";
 
 
+
 import { Menu } from "./Menu";
 import { Billboard } from "./Billboard";
 import "./profile.css";
@@ -37,6 +38,9 @@ import AddIcon from "@mui/icons-material/Add";
 import { OptionsSlider } from "./OptionsSlider";
 import { UpdateNavFilterReducer, UpdateSign } from "../GlobalActions";
 import { UpdateNavCropReducer } from "../GlobalActions";
+
+import { UpdateUploadData } from "../GlobalActions";
+
 import LogoutIcon from "@mui/icons-material/Logout";
 import PublicIcon from '@material-ui/icons/Public';
 
@@ -84,6 +88,10 @@ import {
 
 
 
+
+
+
+
 function ProfileOutter({ CallLoggedProfile }: any) {
 
 
@@ -124,6 +132,10 @@ function ProfileOutter({ CallLoggedProfile }: any) {
 
 
   const [CurrentPage, setCurrentPage] = useState('');
+
+
+
+
 
   ///
   ///
@@ -175,6 +187,8 @@ function ProfileOutter({ CallLoggedProfile }: any) {
   const regReducer = reg;
 
 
+
+  const [inputId, setInputId] = useState('fileoo'); // Initial id value
   ///
   ///
   /// GET COLOR FROM REDUX STORE
@@ -361,6 +375,9 @@ function ProfileOutter({ CallLoggedProfile }: any) {
   });
 
 
+  const handleInputClick = (e: any) => {
+    e.target.value = ""; // Reset the value before clicking
+  };
 
 
   const paperPostScrollRef = useRef<any>(null);
@@ -369,6 +386,10 @@ function ProfileOutter({ CallLoggedProfile }: any) {
 
   ////true stops snap
   const [snapallow, setsnapallow] = useState(true);
+
+
+
+
 
 
 
@@ -1046,6 +1067,8 @@ function ProfileOutter({ CallLoggedProfile }: any) {
                     :
                     null}
                   <Upload
+
+
                     selectedImage={selectedImage}
                     setselectedImage={setselectedImage}
                     setShowModalUpload={setShowModalUpload}
@@ -1697,14 +1720,6 @@ function ProfileOutter({ CallLoggedProfile }: any) {
 
 
 
-
-
-
-
-
-
-
-
                 {
                   UploadGPT ? matchMobile ?
 
@@ -1756,8 +1771,12 @@ function ProfileOutter({ CallLoggedProfile }: any) {
                         }}
                       >
                         <GenerateAndUpload
-                          AiLock={AiLock}
 
+
+
+
+                          AiLock={AiLock}
+                          fileoo={inputId}
                           setUploadGPT={setUploadGPT}
                           Loader={Loaderx}
                           setLoader={setLoaderx}
@@ -1808,7 +1827,7 @@ function ProfileOutter({ CallLoggedProfile }: any) {
 
                         <GenerateAndUpload
                           AiLock={AiLock}
-
+                          fileoo={inputId}
                           setUploadGPT={setUploadGPT}
                           Loader={Loaderx}
                           setLoader={setLoaderx}

@@ -467,8 +467,13 @@ function InteractCreatex({
             // Calculate the percentage coverage
             const percentageCoverage1 = (2 * r / canvasWidth) * 100;
             ///setpercentageCoveragex(percentageCoverage);
-            setradius1(percentageCoverage1);
 
+
+
+            if (stickerOPtionsDefault === 4) {
+
+              setradius1(percentageCoverage1);
+            }
 
             if (typex === 0 || typex === 3) {
 
@@ -557,6 +562,8 @@ function InteractCreatex({
             }
           }
 
+
+
           if (interactContent2[index]) {
 
             var r = valuex2;
@@ -565,7 +572,14 @@ function InteractCreatex({
             // Calculate the percentage coverage
             const percentageCoverage2 = (2 * r / canvasWidth) * 100;
             ///setpercentageCoveragex(percentageCoverage);
-            setradius2(percentageCoverage2);
+
+
+
+            if (stickerOPtionsDefault === 4) {
+
+              setradius2(percentageCoverage2);
+            }
+
 
             if (typex === 0 || typex === 3) {
 
@@ -763,7 +777,7 @@ function InteractCreatex({
     }
 
   }, [showBorder, valuex2, valuex, dat, cropInitialIn, cropInitialIn2, interactContent2, interactContent, canvasRefIn,
-    showArc, canvasInteractWidth, interactHeightResolution, Touched, canvasInteractWidthCss]);
+    showArc, canvasInteractWidth, interactHeightResolution, Touched, canvasInteractWidthCss, stickerOPtionsDefault]);
 
 
 
@@ -970,7 +984,7 @@ function InteractCreatex({
           left: '0px',
           height: "20px",
           position: 'relative',
-          bottom: matchMobile ? '19vh' : '8vh',
+          bottom: matchMobile ? '30vh' : '8vh',
           width: '100%',
           zIndex: 20
         }}
@@ -1019,7 +1033,7 @@ function InteractCreatex({
             position: 'fixed',
             bottom: matchMobile ?
 
-              ratiox >= 3 ? '30vh' : '15vh' : '8vh',
+              ratiox >= 3 ? '33vh' : '20vh' : '8vh',
             width: '100%',
             zIndex: 200
           }}

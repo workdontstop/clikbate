@@ -558,6 +558,8 @@ function Profilex({
 
   useEffect(() => {
     if (postData.length > 0 && showProfiileData) {
+      setshowMonoPc(false);
+
       const initialItemheight = postData.map((obj: any) => obj.itemheight);
       setitemheight(initialItemheight);
 
@@ -620,6 +622,7 @@ function Profilex({
       }
 
 
+      setshowMonoPc(false);
 
 
     }
@@ -681,7 +684,7 @@ function Profilex({
           clearInterval(postTimer6I.current);
           postTimer6I.current = null; // Ensure it is cleared
         }
-      }, 10000);
+      }, 5000);
     }
 
     // Cleanup function to clear timers when the component unmounts or dependencies change
@@ -1547,11 +1550,18 @@ function Profilex({
 
   return (
     <>
-      <Grid container onClick={() => {
+      <Grid container onMouseDown={() => {
 
 
-        if (showMonoPc) { } else {
-          setshowMonoPc(true);
+        if (minimise) { }
+        else {
+
+          if (showMonoPc) { } else {
+
+
+
+            setshowMonoPc(true);
+          }
 
 
         }

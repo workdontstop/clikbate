@@ -3565,6 +3565,8 @@ function Superstickersx({
                 bottom: matchMobile ? '17vh' : "3.5vh",
                 left: matchMobile ? '' : "40vw",
                 zIndex: 26,
+                color: darkmodeReducer ? '#ffffff' : '#000000'
+
               }}
               label="Input Text"
               type="text"

@@ -81,7 +81,9 @@ function OptionsSliderx({
 
   setIdReactRouterAsInt,
   setScrollReactRouter,
-  setConfirmUpload
+  setConfirmUpload,
+
+
 
 }: any) {
   ///
@@ -186,6 +188,10 @@ function OptionsSliderx({
   ///
   ///OPTIONS SLIDER VARIABLES DISCRIBING ITEMS
   const [CropSaved, setCropSaved] = useState(false);
+
+
+
+
 
 
 
@@ -535,6 +541,9 @@ function OptionsSliderx({
       {typeUpload === 1 ? (
         <>
           <UploadMenu
+
+
+
             selectedImage={selectedImage}
             setselectedImage={setselectedImage}
             setShowModalUpload={setShowModalUpload}

@@ -54,7 +54,9 @@ function UploadMenux({
   setShowModalUpload,
   setStopBodyScroll,
   selectedImage,
-  setselectedImage
+  setselectedImage,
+
+
 }: any): JSX.Element {
   const [filterImage, setfilterImage] = useState<Array<any>>([]);
 
@@ -67,6 +69,8 @@ function UploadMenux({
 
   const [ActivatefilterImage, setActivatefilterImage] =
     useState<boolean>(false);
+
+
 
   ///
   ///
@@ -130,6 +134,7 @@ function UploadMenux({
         }}
       >
         <FilterMode
+
 
 
           closeUploadModal={closeUploadModal}

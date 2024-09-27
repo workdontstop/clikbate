@@ -2461,7 +2461,7 @@ function Postx({
                 verticalAlign: "middle",
                 fontSize: minimise ? '0px' : postcommentfont,
                 top: matchMobile ? '25vh' : '50vh',
-                left: matchMobile ? '25vh' : '50vh',
+                left: matchMobile ? '46.8vw' : '24vw',
                 opacity: 1,
                 color: darkmodeReducer ? "#000000" : "#dddddd",
                 cursor: 'pointer',

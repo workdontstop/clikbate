@@ -28,7 +28,10 @@ import { setTimeout } from "timers";
 
 
 
-function GenerateAndUploadx({ setUploadGPT, OpenUploadModal, Loader, setLoader, AiLock }: any) {
+function GenerateAndUploadx({ setUploadGPT, OpenUploadModal, Loader, setLoader, AiLock,
+
+
+}: any) {
 
 
   const { REACT_APP_SUPERSTARZ_URL } = process.env;
@@ -38,6 +41,7 @@ function GenerateAndUploadx({ setUploadGPT, OpenUploadModal, Loader, setLoader, 
   const dispatch = useDispatch();
 
 
+  const [shownote, setshownote] = useState(false);
 
   const [Total, setTotal] = useState(4);
 
@@ -622,10 +626,15 @@ function GenerateAndUploadx({ setUploadGPT, OpenUploadModal, Loader, setLoader, 
 
           <input
             onChange={imageHandleChange}
+
+            onClick={() => {
+
+              setshownote(true);
+            }}
             type="file"
             name="superImages"
             accept="image/*"
-            multiple
+
             id="fileoo"
             style={{ visibility: "hidden", display: "none" }}
           />

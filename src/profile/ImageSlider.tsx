@@ -160,6 +160,23 @@ const ImageSlider: React.FC<ImageSliderProps> = ({ RandomColor, FeedType, setFee
         setActiveIndex(index);
         setFeedType(index);
 
+
+        if (index === 0) {
+
+            callPaginationx();
+        }
+        else if (index === 1) {
+
+
+
+            Explainx();
+
+        } else {
+
+
+        }
+
+
         const imageContainer = refs.current[index];
         if (imageContainer) {
             const parent = imageContainer.parentElement;
@@ -176,20 +193,6 @@ const ImageSlider: React.FC<ImageSliderProps> = ({ RandomColor, FeedType, setFee
 
 
 
-        if (index === 0) {
-
-            callPaginationx();
-        }
-        else if (index === 1) {
-
-
-
-            Explainx();
-
-        } else {
-
-
-        }
 
 
 

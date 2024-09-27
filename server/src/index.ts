@@ -272,7 +272,7 @@ SELECT
 FROM posts
 INNER JOIN members ON posts.sender = members.id
 LEFT JOIN members AS m ON m.id = (SELECT commented_by FROM comments WHERE post = posts.id ORDER BY date DESC LIMIT 1)
-WHERE posts.private = 0
+WHERE posts.mode = 0
 ORDER BY posts.id DESC
 LIMIT 21;
 `;
@@ -337,7 +337,7 @@ SELECT
 FROM posts
 INNER JOIN members ON posts.sender = members.id AND posts.id < ?
 LEFT JOIN members AS m ON m.id = (SELECT commented_by FROM comments WHERE post = posts.id ORDER BY date DESC LIMIT 1)
-WHERE posts.private = 0
+WHERE posts.mode = 0
 ORDER BY posts.id DESC
 LIMIT 21;
 `;
@@ -567,8 +567,7 @@ INNER JOIN members ON posts.sender = members.id
 
 LEFT JOIN members AS m ON m.id = (SELECT commented_by FROM comments WHERE post = posts.id ORDER BY date DESC LIMIT 1)
 
-WHERE posts.sender = ?
-
+WHERE posts.sender = ? AND posts.mode = 0
 ORDER BY posts.id DESC
 LIMIT 21;
 
@@ -638,7 +637,7 @@ INNER JOIN members ON posts.sender = members.id
 
 LEFT JOIN members AS m ON m.id = (SELECT commented_by FROM comments WHERE post = posts.id ORDER BY date DESC LIMIT 1)
 
-WHERE posts.sender = ? AND posts.id < ? 
+WHERE posts.sender = ? AND posts.id < ?  AND  posts.mode = 0
 
 ORDER BY posts.id DESC
 LIMIT 21;

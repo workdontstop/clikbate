@@ -17,6 +17,9 @@ function Uploadx({
   setStopBodyScroll,
   selectedImage,
   setselectedImage,
+
+
+
 }: any): JSX.Element {
   const [allowOverflow, setallowOverflow] = useState(true);
 
@@ -61,6 +64,10 @@ function Uploadx({
     },
     [showModalUpload, closeUploadModal]
   );
+
+
+
+
 
   useEffect(() => {
     document.addEventListener("keydown", escapePress);
@@ -123,6 +130,9 @@ function Uploadx({
             >
               <form onSubmit={handlePreventReload}>
                 <OptionsSlider
+
+
+
                   selectedImage={selectedImage}
                   setselectedImage={setselectedImage}
                   setShowModalUpload={setShowModalUpload}

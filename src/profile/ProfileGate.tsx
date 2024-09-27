@@ -2414,7 +2414,7 @@ function ProfileGatex({
 
 
     const Explainx = useCallback(() => {
-        var time = 100;
+        var time = 500;
         if (memeberPageidReducer === 0) {
 
             setTimeout(() => {
@@ -2425,13 +2425,13 @@ function ProfileGatex({
                 callfeeds(memeberPageidReducer, 0, 1, true);
             }, time);
         }
-    }, [postPageLimit, memeberPageidReducer, FeedType]);
+    }, [postPageLimit, memeberPageidReducer]);
 
 
 
 
     const callPaginationx = useCallback(() => {
-        var time = 100;
+        var time = 500;
         if (memeberPageidReducer === 0) {
 
             setTimeout(() => {
@@ -2442,7 +2442,7 @@ function ProfileGatex({
                 callfeeds(memeberPageidReducer, 0, 1, false);
             }, time);
         }
-    }, [postPageLimit, memeberPageidReducer, FeedType])
+    }, [postPageLimit, memeberPageidReducer])
 
     ///
     ///

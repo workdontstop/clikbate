@@ -470,11 +470,11 @@ function ImageFilterinnerx({
       var height: number;
       /////////////////////////////////////////adjust resolution canvas filter mode//////////////////////////////////////////////
       var dynamicDimensions = matchMobile
-        ? window.innerHeight * 6.5
-        : window.innerHeight * 1.95;
+        ? window.innerHeight * 8
+        : window.innerHeight * 2;
       var dynamicDimensionsx = matchMobile
-        ? window.innerWidth * 6.5
-        : window.innerWidth * 1.5;
+        ? window.innerWidth * 8
+        : window.innerWidth * 1.6;
       ////////
       /////////////////////////////////////////adjust resolution canvas filter mode//////////////////////////////////////////////
       if (canvasRef.current) {
@@ -484,7 +484,7 @@ function ImageFilterinnerx({
 
 
           const ctx = canvasRef.current.getContext("2d");
-          const qualityValue = matchMobile ? 0.92 : 0.92;
+          const qualityValue = matchMobile ? 0.94 : 0.92;
 
           if (
             previewFileReadimage.naturalWidth > previewFileReadimage.naturalHeight
@@ -650,19 +650,19 @@ function ImageFilterinnerx({
 
               // Add original color stops (unchanged for PC)
               gradient.addColorStop(0, "rgba(205, 205, 205,0.0001)");
-              gradient.addColorStop(1, "rgba(255, 255, 255,0.03)");
+              gradient.addColorStop(1, "rgba(255, 255, 255,0.003)");
 
               if (matchMobile) {
                 // Modify gradient for mobile to simulate brightness, contrast, and saturation
 
                 // Brighter color stop to simulate brightness
-                gradient.addColorStop(0.3, "rgba(255, 255, 200, 0.1)");  // Bright yellowish tone for brightness
+                gradient.addColorStop(0.3, "rgba(255, 255, 200, 0.05)");  // Bright yellowish tone for brightness
 
                 // Darker contrast at the edge, more contrast effect
-                gradient.addColorStop(0.7, "rgba(100, 100, 100, 0.2)");  // Darker to simulate contrast
+                gradient.addColorStop(0.7, "rgba(100, 100, 100, 0.07)");  // Darker to simulate contrast
 
                 // More intense saturation with a bit of color
-                gradient.addColorStop(1, "rgba(200, 180, 180, 0.2)");    // Slight color tint for saturation
+                gradient.addColorStop(1, "rgba(200, 180, 180, 0.05)");    // Slight color tint for saturation
               }
 
               ctx.fillStyle = gradient;
@@ -682,19 +682,19 @@ function ImageFilterinnerx({
               gradient.addColorStop(1, "rgba(255, 255, 255,0.001)");
 
               if (matchMobile) {
-                // Modify gradient stops for mobile to simulate contrast, brightness, saturation, and blur
+                // Increase intensity of contrast, brightness, saturation, and blur simulation
 
-                // Slight reduction in contrast, hence making the colors less distinct
-                gradient.addColorStop(0.8, "rgba(200, 240, 90, 0.02)");  // Slightly less contrast
+                // Increase contrast by making colors more distinct
+                gradient.addColorStop(0.8, "rgba(180, 220, 70, 0.04)");  // Increase contrast, slightly more distinct
 
-                // Increased saturation with more intense tones
-                gradient.addColorStop(0.65, "rgba(240, 240, 240, 0.05)"); // More saturation, richer tones
+                // Further increase saturation with more intense tones
+                gradient.addColorStop(0.65, "rgba(255, 255, 255, 0.065)"); // Higher saturation, more intense tones
 
-                // Increased saturation with more intense tones
-                gradient.addColorStop(0.45, "rgba(40, 140, 240, 0.02)"); // More saturation, richer tones
+                // Further increase saturation with more intense tones
+                gradient.addColorStop(0.45, "rgba(60, 160, 255, 0.026)"); // Higher saturation, more intense tones
 
-                // Subtle blur effect can’t be directly simulated in gradient, but we use softer transitions
-                gradient.addColorStop(1, 'rgba(250, 200, 200, 0.2)');    // Softer transition for blur effect
+                // Subtle blur effect intensified with stronger transitions
+                gradient.addColorStop(1, 'rgba(255, 220, 220, 0.26)');    // Stronger transition for blur effect
               }
 
               ctx.fillStyle = gradient;
